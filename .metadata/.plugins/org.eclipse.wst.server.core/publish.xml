@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<publish-info>
+  <server id="gift" path="publish2.dat"/>
+  <server id="sds" path="publish4.dat"/>
+  <server id="bims" path="publish12.dat"/>
+  <server id="scms" path="publish0.dat"/>
+  <server id="ejms" path="publish8.dat"/>
+  <server id="vbms" path="publish4.dat"/>
+  <server id="ffems" path="publish3.dat"/>
+  <server id="oms" path="publish5.dat"/>
+  <server id="fds" path="publish7.dat"/>
+  <server id="service" path="publish10.dat"/>
+  <server id="socket" path="publish6.dat"/>
+  <server id="manpower" path="publish11.dat"/>
+  <server id="sktest2" path="publish9.dat"/>
+  <server id="corona" path="publish13.dat"/>
+  <server id="sosong" path="publish4.dat"/>
+</publish-info>

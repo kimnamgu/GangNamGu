@@ -1,0 +1,533 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<html>
+<head>
+<%@ include file="/WEB-INF/include/include-header.jspf" %>
+
+
+<script type="text/javascript">
+		var sel_fucnm = "";
+		$(document).ready(function(){
+			fn_selectBoardList();
+			fn_selectBoardList2();
+			
+			$("#write1").on("click", function(e){ //글쓰기 버튼
+				
+				if( $('#SAUP_DEPT').val() == $('#LOGIN_DEPT').val() || $('#USER_RIGHT').val() == 'A')
+				{	
+					e.preventDefault();				
+					fn_consignStatusWrite();
+				}
+				else{
+					alert('권한이 없습니다.');
+				}
+				
+			});	
+			
+			$("#write2").on("click", function(e){ //글쓰기 버튼
+				
+				if( $('#SAUP_DEPT').val() == $('#LOGIN_DEPT').val() || $('#USER_RIGHT').val() == 'A')
+				{	
+					e.preventDefault();				
+					fn_budgetStatusWrite();					
+				}
+				else{
+					alert('권한이 없습니다.');
+				}
+			});	
+			
+			$("#basic").on("click", function(e){ //위탁사무기본현황
+				e.preventDefault();				
+				fn_officeworkBasicDetail();
+			});	
+			
+			
+			$("#mng").on("click", function(e){ //운영현황
+				e.preventDefault();				
+				fn_superviseStatusList();
+			});
+			
+			$("#delib").on("click", function(e){ //심의현황
+				e.preventDefault();				
+				fn_qualiDelibStatusList();
+			});
+			
+			
+			$("a.pad_5").click(function(e){				
+				alert($(this).closest('div').attr('id'));
+				if( $(this).closest('div').attr('id') == "PAGE_NAVI")
+					sel_fucnm = "fn_selectBoardList";
+				else
+					sel_fucnm = "fn_selectBoardList2";
+				
+				//alert(sel_fucnm);
+			}); 
+
+			
+		});
+		
+		
+		function fn_consignStatusWrite(){			
+			var comSubmit = new ComSubmit();			
+			comSubmit.setUrl("<c:url value='/officework/consignStatusWrite.do' />");
+			comSubmit.addParam("ID", $("#BID").val());
+			comSubmit.addParam("WDID", $('#WRITE_DEPT').val());
+			comSubmit.addParam("SAUP_DEPT", $('#SAUP_DEPT').val());
+			comSubmit.submit();
+		}
+		
+		
+		function fn_budgetStatusWrite(){			
+			var comSubmit = new ComSubmit();			
+			comSubmit.setUrl("<c:url value='/officework/budgetStatusWrite.do' />");
+			comSubmit.addParam("ID", $("#BID").val());
+			comSubmit.addParam("WDID", $('#WRITE_DEPT').val());
+			comSubmit.addParam("SAUP_DEPT", $('#SAUP_DEPT').val());
+			comSubmit.submit();
+		}
+		
+		function fn_officeworkBasicDetail(obj){
+			var comSubmit = new ComSubmit();
+			
+			comSubmit.setUrl("/oms/officework/officeworkBasicDetail.do");
+			comSubmit.addParam("ID", $("#BID").val());			
+			comSubmit.submit();
+		}
+
+		
+		function fn_consignStatusDetail(obj){
+			var comSubmit = new ComSubmit();
+			
+			comSubmit.setUrl("<c:url value='/officework/consignStatusDetail.do' />");
+			comSubmit.addParam("ID", obj.parent().find("#ID").val());			
+			comSubmit.addParam("BDID", $("#BOARD_ID").val());
+			comSubmit.addParam("SAUP_DEPT", $('#SAUP_DEPT').val());
+			comSubmit.submit();
+		}
+		
+		
+		function fn_budgetStatusUpdate(obj){
+			var comSubmit = new ComSubmit();
+			
+			comSubmit.setUrl("<c:url value='/officework/budgetStatusUpdate.do' />");
+			comSubmit.addParam("ID", obj.parent().find("#ID").val());			
+			comSubmit.addParam("BDID", $("#BOARD_ID").val());
+			comSubmit.addParam("SAUP_DEPT", $('#SAUP_DEPT').val());
+			comSubmit.submit();
+		}
+		
+		
+		function fn_superviseStatusList(obj){
+			var comSubmit = new ComSubmit();
+			
+			comSubmit.setUrl("<c:url value='/officework/superviseStatusList.do' />");
+			comSubmit.addParam("ID", $("#BID").val());
+			comSubmit.addParam("WDID", $('#WRITE_DEPT').val());
+			comSubmit.addParam("SAUP_DEPT", $('#SAUP_DEPT').val());
+			comSubmit.submit();
+		}
+		
+		
+		function fn_qualiDelibStatusList(obj){			
+			var comSubmit = new ComSubmit();
+			
+			comSubmit.setUrl("<c:url value='/officework/qualiDelibStatusList.do' />");
+			comSubmit.addParam("ID", $("#BID").val());
+			comSubmit.addParam("WDID", $('#WRITE_DEPT').val());
+			comSubmit.addParam("SAUP_DEPT", $('#SAUP_DEPT').val());
+			comSubmit.submit();
+		}
+		
+		function fn_selectBoardList(){			
+			var comAjax = new ComAjax();
+			comAjax.setUrl("<c:url value='/officework/selectConsignStatusList.do' />");
+			comAjax.setCallback("fn_selectBoardListCallback");
+			comAjax.addParam("PAGE_INDEX",$("#PAGE_INDEX").val());
+			//alert($("#PAGE_INDEX").val());
+			comAjax.addParam("PAGE_ROW", $("#RECORD_COUNT").val());
+			//alert($("#BID").val());
+			comAjax.addParam("BOARD_ID", $("#BOARD_ID").val());
+			comAjax.addParam("OW_ID", $("#BID").val());
+			comAjax.ajax();
+		}
+		
+		function fn_selectBoardList2(){			
+			var comAjax = new ComAjax();
+			comAjax.setUrl("<c:url value='/officework/selectBudgetStatusList.do' />");
+			comAjax.setCallback("fn_selectBoardListCallback2");
+			comAjax.addParam("PAGE_INDEX2",$("#PAGE_INDEX2").val());
+			comAjax.addParam("PAGE_ROW", $("#RECORD_COUNT").val());
+			//alert($("#PAGE_INDEX2").val());
+			comAjax.addParam("OW_ID", $("#BID").val());
+			comAjax.ajax();
+		}
+		
+		function fn_sesiondelete(){
+			alert('bb');
+			$.session.clear();
+			alert('cc');
+		}
+		
+		function fn_selectBoardListCallback(data){			
+			var total = data.TOTAL;	
+			//alert("total1=[" + total + "]");
+			var body = $("#mytable1");
+			var recordcnt = $("#RECORD_COUNT").val();
+			
+			body.empty();
+			
+			if(total == 0){
+				var str = "<tr class=\"list1\" onmouseover=\"this.className='list_over'\" onmouseout=\"this.className='list1'\">" + 
+								"<td colspan=\"7\" class=\"list_center\" nowrap>조회된 결과가 없습니다.</td>" +
+						  "</tr>" +
+						  "<tr>" + 
+							    "<td colspan=\"7\" class=\"list_line\"></td>" + 
+						  "</tr>";
+						  
+				body.append(str);
+			}
+			else{
+				var params = {
+					divId : "PAGE_NAVI",
+					pageIndex : "PAGE_INDEX",
+					totalCount : total,
+					recordCount : recordcnt,
+					eventName : "fn_selectBoardList"
+				};
+				gfn_renderPaging(params);
+				
+				var str = "";
+				var mthd_str = "";
+				var attach = "";
+				//alert("1=");
+				
+				$.each(data.list, function(key, value){
+					
+					        if(value.CS_CHOICE_METHOD == '01')
+					        	mthd_str = "공개모집";
+					        else if(value.CS_CHOICE_METHOD == '02')
+					        	mthd_str = "수의계약";
+					        else if(value.CS_CHOICE_METHOD == '03')
+					        	mthd_str = "재계약";
+					        else if(value.CS_CHOICE_METHOD == '04')
+					        	mthd_str = "기타";
+							
+					        attach = "";
+							if(NvlStr(value.ATTACH) == 'Y')
+								attach = "<img src=\"/oms/images/ico_att.gif\" align=\"absmiddle\">";
+								
+							str += "<tr class=\"list1\" onmouseover=\"this.className='list_over'\" onmouseout=\"this.className='list1'\">" +
+					                   "<td class=\"list_center\" nowrap>" + value.RNUM + "</td>" +
+					                   "<td class=\"list_center\" nowrap>" + mthd_str +  "</td>" +
+					                   "<td class=\"list_center\" nowrap>" + formatDate(value.CUR_TRUST_STDATE, ".") + " ~ " + formatDate(value.CUR_TRUST_EDDATE,".") + "</td>" + 
+									   "<td class=\"list_center\"'>" + 
+									   "<a href='#this' name='title' >" + NvlStr(value.CS_INST_NAME)  + "</a>" + 									  
+									   "<input type='hidden' name='title' id='ID' value=" + value.ID + ">" + 
+									   "</td>" +									   
+									   "<td class=\"list_center\" nowrap>" + NvlStr(value.CS_HEADER_NAME) +  "</td>" +
+									   "<td class=\"list_center\" nowrap>" + NvlStr(value.CS_INST_CHG) +  "</td>" +									 
+									   "<td class=\"list_center\" nowrap>" + attach +  "</td>" +
+									   "</tr>" +
+									   "<tr>" + 
+								       "<td colspan=\"7\" class=\"list_line\"></td>" + 
+									   "</tr>";
+							
+							
+				});
+				body.append(str);
+				
+				$("a[name='title']").on("click", function(e){ //제목 
+					e.preventDefault();
+					fn_consignStatusDetail($(this));
+				});
+			}
+		}
+		
+		
+		function fn_selectBoardListCallback2(data){			
+			var total = data.TOTAL;
+			//alert("total2=[" + total + "]");
+			var body = $("#mytable2");
+			var recordcnt = $("#RECORD_COUNT").val();
+			
+			body.empty();
+			
+			if(total == 0){
+				var str = "<tr class=\"list1\" onmouseover=\"this.className='list_over'\" onmouseout=\"this.className='list1'\">" + 
+								"<td colspan=\"9\" class=\"list_center\" nowrap>조회된 결과가 없습니다.</td>" +
+						  "</tr>" +
+						  "<tr>" + 
+							    "<td colspan=\"9\" class=\"list_line\"></td>" + 
+						  "</tr>";
+						  
+				body.append(str);
+			}
+			else{
+				var params = {
+					divId : "PAGE_NAVI2",
+					pageIndex : "PAGE_INDEX2",
+					totalCount : total,
+					recordCount : recordcnt,
+					eventName : "fn_selectBoardList2"
+				};
+				gfn_renderPaging(params);
+				
+				var str = "";
+				var evalu_str = "";
+				var mthd_str = "";
+				var stdrd_str = "";
+				
+				//alert("2=");
+				$.each(data.list, function(key, value){
+					
+							if(value.CONT_EVALU_YN == "1")
+								evalu_str = "O";
+							else if(value.CONT_EVALU_YN == "2")
+								evalu_str = "X";
+							else
+								evalu_str = "";
+					
+							if(value.WON_CHOICE_METHOD == "01")
+								mthd_str = "내부산정";
+							else if(value.WON_CHOICE_METHOD == "02")
+								mthd_str = "외부산정";
+							else
+								mthd_str = "";
+							
+							if(value.WON_CHOICE_STANDARD == "1")
+								stdrd_str = "O";
+							else if(value.WON_CHOICE_STANDARD == "2")
+								stdrd_str = "X";
+							else
+								stdrd_str = "";
+							
+							str += "<tr class=\"list1\" onmouseover=\"this.className='list_over'\" onmouseout=\"this.className='list1'\">" +
+					                   "<td class=\"list_center\" nowrap>" + value.RNUM + "</td>" +					                   
+					                   "<td class=\"list_center\">" + 
+					                   "<a href='#this' name='title2' >" + value.BG_YEAR + "</a>" +
+					                   "<input type='hidden' name='title' id='ID' value=" + value.ID + ">" +
+					                   "</td>" +
+					                   "<td class=\"list_center\">" + comma(value.BG_TOTAL_COST)  + "</td>" +									  
+									   "<td class=\"list_center\" nowrap>" + comma(NvlStr(value.BG_GUK_COST)) +  "</td>" +
+									   "<td class=\"list_center\" nowrap>" + comma(NvlStr(value.BG_SI_COST)) +  "</td>" +	
+									   "<td class=\"list_center\" nowrap>" + comma(NvlStr(value.BG_GU_COST)) +  "</td>" +	
+									   "<td class=\"list_center\" nowrap>" + evalu_str +  "</td>" +	
+									   "<td class=\"list_center\" nowrap>" + mthd_str + "</td>" +	
+									   "<td class=\"list_center\" nowrap>" + stdrd_str + "</td>" +	
+									   "</tr>" +
+									   "<tr>" + 
+								       "<td colspan=\"9\" class=\"list_line\"></td>" + 
+									   "</tr>";											
+									   
+									   
+				});
+				body.append(str);
+				
+				$("a[name='title2']").on("click", function(e){ //제목 
+					e.preventDefault();
+					fn_budgetStatusUpdate($(this));
+				});
+			}
+		}
+	</script>
+</head>
+<body bgcolor="#FFFFFF">
+<input type="hidden" id="BOARD_ID" name="BOARD_ID" value="3">
+<input type="hidden" id="WRITE_DEPT" name="WRITE_DEPT" value="${param.WDID}">
+<input type="hidden" id="SAUP_DEPT" name="SAUP_DEPT" value="${param.SAUP_DEPT}">
+<input type="hidden" id="LOGIN_DEPT" name="LOGIN_DEPT" value="${sessionScope.userinfo.deptId}">
+<input type="hidden" id="USER_RIGHT" name="USER_RIGHT" value="${sessionScope.userinfo.userright}">
+
+<table  border="0" cellspacing="0" cellpadding="0" class="bodyframe_full">
+  <tr>
+    <td class="bodyframe">
+    <!--페이지 타이틀 시작 -->
+    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+      <tr>
+        <td class="pupup_title"><img src="/oms/images/popup_title.gif" align="absmiddle">위탁사무등록</td>
+      </tr>
+      <tr>
+        <td class="margin_title"></td>
+      </tr>
+    </table>
+    <!--페이지 타이틀 끝 -->
+    </td>
+  </tr>
+  
+  <tr>
+    <td class="pupup_frame" style="padding-right:12px">
+
+    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+      <tr>
+        <td height="15">
+        
+	        <div class="LblockTab" style="position: relative;">
+			<ul class="Lclear">
+				<li id='property'><span><a href="#this" class="btn" id="basic">위탁사무기본현황</a></span></li>
+				<li class="Lcurrent" id='maindoc1'><span><a href="#this" class="btn" id="sutak">수탁·예산현황</a></span></li>			
+				<li id='public'><span><a href="#this" class="btn" id="mng">운영현황</a></span></li>	
+				<li id='manage'><span><a href="#this" class="btn" id="delib">심의현황</a></span></li>			
+			</ul>
+			</div>    
+			
+			
+			<table width="100%" border="0" cellspacing="0" cellpadding="0">
+			<tr>
+				<td width="100%">
+				<table border="0" cellspacing="0" cellpadding="0">
+					<tr>
+						<td class="title"><img src="/oms/images/title_ico.gif" align="absmiddle">수탁이력</td>
+					</tr>
+				</table>
+				</td>				
+			</tr>
+			</table>
+						    
+	        <!-- -------------- 버튼 시작 --------------  -->
+	        <table width="100%" height="40" border="0" cellspacing="0" cellpadding="0">
+	          <tr>
+	            <td></td>
+	            <td align="right">
+	            <table border="0" cellspacing="0" cellpadding="0">
+	              <tr>
+	                <td>
+	                <table border="0" cellspacing="0" cellpadding="0" class="btn" id="tblAddMemo21" style="filter:none;">
+	                  <tr>
+	                    <td><img src="/oms/images/btn_type0_head.gif"></td>
+	                    <td background="/oms/images/btn_type0_bg.gif" class="btn_type1" nowrap><a href="#this" class="btn" id="write1"><font color="white">등록</font></a></td>
+	                    <td><img src="/oms/images/btn_type0_end.gif"></td>
+	                  </tr>
+	                </table>                
+	                </td>		
+	              </tr>
+	            </table>
+	            </td>
+	          </tr>
+	        </table>
+	        <!-- -------------- 버튼 끝 ---------------->	
+		
+
+			<table width="100%" border="0" cellspacing="0" cellpadding="0" style="TABLE-layout: fixed">
+				<tr>
+					<td class="list_tit_line_s" width="48"></td>
+					<td class="list_tit_line_s" width="100"></td>
+					<td class="list_tit_line_s" width="200"></td>
+					<td class="list_tit_line_s" width="100%"></td>
+					<td class="list_tit_line_s" width="120"></td>				
+					<td class="list_tit_line_s" width="100"></td>
+					<td class="list_tit_line_s" width="100"></td>							
+				</tr>
+				<tr class="list_tit_tr">
+					<td nowrap class="list_tit">번호</td>
+					<td nowrap class="list_tit_bar">선정방법</td>
+					<td nowrap class="list_tit_bar">위탁기간</td>
+					<td nowrap class="list_tit_bar">수탁기관명</td>
+					<td nowrap class="list_tit_bar">대표자성명</td>
+					<td nowrap class="list_tit_bar">담당자</td>					
+					<td nowrap class="list_tit_bar">파일</td>					
+				</tr>
+				<tr>
+					<td colspan="7" class="list_tit_line_e"></td>
+				</tr>
+			
+				<tbody id='mytable1'>
+				
+				</tbody>
+			</table>
+	
+		</td>
+		</tr>
+	</table>
+
+	<p></p>    
+	<div id="PAGE_NAVI" align='center'></div>
+	<input type="hidden" id="PAGE_INDEX" name="PAGE_INDEX"/>
+	<input type="hidden" id="BID" name="BID" value="${param.ID}">
+	
+	
+	<table width="100%" border="0" cellspacing="0" cellpadding="0">
+		<tr>
+			<td width="100%">
+			<table border="0" cellspacing="0" cellpadding="0">
+				<tr>
+					<td class="title"><img src="/oms/images/title_ico.gif" align="absmiddle">예산현황</td>
+				</tr>
+			</table>
+			</td>				
+		</tr>
+	</table>
+	
+	<!-- -------------- 버튼 시작 --------------  -->
+   	<table width="100%" height="40" border="0" cellspacing="0" cellpadding="0">
+     <tr>
+       <td></td>
+       <td align="right">
+       <table border="0" cellspacing="0" cellpadding="0">
+         <tr>
+           <td><b>(단위: 천원)</b> &nbsp;</td>
+           <td>
+           <table border="0" cellspacing="0" cellpadding="0" class="btn" id="tblAddMemo21" style="filter:none;">
+             <tr>
+               <td><img src="/oms/images/btn_type0_head.gif"></td>
+               <td background="/oms/images/btn_type0_bg.gif" class="btn_type1" nowrap><a href="#this" class="btn" id="write2"><font color="white">등록</font></a></td>
+               <td><img src="/oms/images/btn_type0_end.gif"></td>
+             </tr>
+           </table>                
+           </td>		
+         </tr>
+       </table>
+       </td>
+     </tr>
+    </table>
+        <!-- -------------- 버튼 끝 ---------------->
+		
+
+	<table width="100%" border="0" cellspacing="0" cellpadding="0" style="TABLE-layout: fixed">
+		<tr>
+			<td class="list_tit_line_s" width="48"></td>
+			<td class="list_tit_line_s" width="100%"></td>
+			<td class="list_tit_line_s" width="120"></td>
+			<td class="list_tit_line_s" width="120"></td>				
+			<td class="list_tit_line_s" width="120"></td>
+			<td class="list_tit_line_s" width="120"></td>
+			<td class="list_tit_line_s" width="100"></td>
+			<td class="list_tit_line_s" width="150"></td>
+			<td class="list_tit_line_s" width="100"></td>							
+		</tr>
+		<tr class="list_tit_tr">
+			<td nowrap rowspan="3" class="list_tit">번호</td>
+			<td nowrap rowspan="3" class="list_tit_bar">년도</td>			
+			<td nowrap colspan="4" class="list_tit_bar">예산현황</td>
+			<td nowrap rowspan="3" class="list_tit_bar">재무과<br>계약심사</td>
+			<td nowrap colspan="2" class="list_tit_bar">운영원가산정</td>					
+		</tr>
+		<tr>
+			<td colspan="4" class="list_tit_line_e"></td>
+			<td colspan="2" class="list_tit_line_e"></td>
+		</tr>
+		<tr class="list_tit_tr">			
+			<td nowrap class="list_tit_bar">총계</td>
+			<td nowrap class="list_tit_bar">국비</td>
+			<td nowrap class="list_tit_bar">시비</td>
+			<td nowrap class="list_tit_bar">구비</td>		
+			<td nowrap class="list_tit_bar">산정방법</td>
+			<td nowrap class="list_tit_bar">선정기준</td>					
+		</tr>
+		<tr>
+			<td colspan="9" class="list_tit_line_e"></td>
+		</tr>
+	
+		<tbody id='mytable2'>
+		
+		</tbody>
+	</table>
+			
+	<p></p>		
+	<div id="PAGE_NAVI2" align='center'></div>
+	<input type="hidden" id="PAGE_INDEX2" name="PAGE_INDEX2"/>
+	<input type="hidden" id="RECORD_COUNT" name="RECORD_COUNT" value="10"/>
+	</td>
+  </tr>
+</table>	
+<%@ include file="/WEB-INF/include/include-body.jspf" %>					
+</body>
+</html>

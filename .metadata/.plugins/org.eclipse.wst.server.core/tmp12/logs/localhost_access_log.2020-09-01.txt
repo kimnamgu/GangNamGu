@@ -1,0 +1,2 @@
+127.0.0.1 - - [01/Sep/2020:17:12:05 +0900] "GET / HTTP/1.1" 404 994
+0:0:0:0:0:0:0:1 - - [01/Sep/2020:17:12:08 +0900] "POST /service/api/iljali/insertTermOfficialInfo.do HTTP/1.1" 200 57

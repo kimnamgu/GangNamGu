@@ -1,0 +1,9 @@
+package corona.manage.service;
+
+import java.io.File;
+
+public interface ManageService {
+	
+	void excelUpload(File destFile,String ins_id,String ins_dept) throws Exception;
+
+}

@@ -1,0 +1,23 @@
+ .tblm { width: 90%;}
+ .tblm td { text-align:left; padding:13px 5px 5px 5px;}
+ 
+ .tbl1 { width: 100%; border-top: 1px solid #ddd; border-collapse: collapse; padding:10px 0px 0px 5px;}
+ .tbl1 th { border-bottom: 2px solid #ddd; padding: 5px; text-align: center; FONT-SIZE: 9pt;}
+ .tbl1 td { border-bottom: 1px solid #ddd; padding: 5px; text-align: center; }
+ .tbl1 thead tr { background-color: #0d47a1; color: #ffffff;height:50px;}
+ .tbl1 thead tr { background-color: #ddd; color: #000;height:50px;}
+ .tbl1 thead tr th {font-size: 15px; font-weight: bold;}
+ .tbl1 tr td {height: 40px; font-size: 14px}
+ .tbl1 tr td a{font-size: 14px}
+ .tr1 { background-color: #fafafa;}
+ /*.tr2 { background-color: #e3f2fd; }*/
+ 
+ 
+ .tbl2 { width: 100%; border-top: 1px solid #ddd; border-collapse: collapse; padding:10px 0px 0px 5px;}
+ .tbl2 th { background-color:#daf5fc; border-top: 1px solid #ddd; border-bottom: 1px solid #ddd; border-left: 1px solid #ddd; border-right: 1px solid #ddd; padding: 5px; text-align: center; FONT-SIZE: 9pt;}
+ .tbl2 td { border-bottom: 1px solid #ddd; border-left: 1px solid #ddd; border-right: 1px solid #ddd;padding: 5px; text-align: center; }
+ .tbl2 thead tr { background-color: #0d47a1; color: #ffffff; }
+ 
+ .info { text-decoration: line-through;color: #ff0000;}
+
+

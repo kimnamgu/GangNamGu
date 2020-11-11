@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="write">
+
+<!-- 공지사항 -->
+<insert id="insertNoticeWrite" parameterType="hashmap">
+		<selectKey keyProperty="SID" resultType="string" order="BEFORE">
+			SELECT MANPOWER_BOARD_SQ.NEXTVAL FROM DUAL
+		</selectKey>
+		<![CDATA[		
+			INSERT INTO MANPOWER_BOARD
+			(
+				ID
+				,TITLE
+				,NAME
+				,CONTENT
+				
+				,INS_ID
+				,INS_DATE
+				,DEL_YN	
+			)
+			VALUES
+			(
+				TRIM(#{SID})
+				
+				,TRIM(NVL(#{TITLE},''))
+				,TRIM(NVL(#{USER_NAME},''))
+				,TRIM(NVL(#{CONTENT},''))
+				
+				,#{INS_ID}
+				,SYSDATE
+				,0			
+			)
+			]]>
+	</insert>
+
+	<select id="selectNoticeDetail" parameterType="hashmap" resultType="hashmap">
+		<![CDATA[
+			SELECT
+				ID
+				,TITLE
+				,NAME
+				,CONTENT
+				,READ_COUNT
+				,INS_ID
+            FROM MANPOWER_BOARD     
+            WHERE DEL_YN = '0'            
+            AND ID = #{ID} 	
+		]]>
+	</select>
+
+
+</mapper>

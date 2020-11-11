@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<session version="1.0">
+<refactoring comment="Copy element &apos;mainSaupList.jsp&apos; to &apos;daejang&apos;&#x0D;&#x0A;- Original project: &apos;bims&apos;&#x0D;&#x0A;- Destination element: &apos;daejang&apos;&#x0D;&#x0A;- Original element: &apos;mainSaupList.jsp&apos;" description="Copy file" element1="src/main/webapp/WEB-INF/jsp/daejang/mainSaupList.jsp" files="1" flags="589830" folders="0" id="org.eclipse.jdt.ui.copy" policy="org.eclipse.jdt.ui.copyResources" stamp="1584322026544" target="/bims/src/main/webapp/WEB-INF/jsp/daejang" units="0" version="1.0"/>
+</session>

@@ -1,0 +1,353 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="daejang">
+	
+	<select id="selectViolBuildingList" parameterType="hashmap" resultType="hashmap">
+		<include refid="common.pagingPre"/> 
+		<![CDATA[			  
+			  SELECT COUNT(*) OVER() AS TOTAL_COUNT, 
+				  ID                     ,
+				  BLD_DONG				 ,
+				  BLD_ADDR1              ,
+				  BLD_ADDR2              ,
+				  BLD_ADDR_ROAD          ,
+				  BLD_OWNER              ,
+				  MBLD_DONG				 ,
+				  MBLD_ADDR1             ,
+				  MBLD_ADDR2             ,
+				  MBLD_ADDR_ROAD         ,
+				  ( SELECT CODE_NAME FROM BUILDING_CODE_LIST WHERE GROUP_ID = 2 AND CODE_ID = BLD_STRUCTURE ) S_BLD_STRUCTURE,
+				  DECODE(VIOL_AREA, NULL, 0, VIOL_AREA) VIOL_AREA,
+				  ( SELECT CODE_NAME FROM BUILDING_CODE_LIST WHERE GROUP_ID = 3 AND CODE_ID = PURPOSE ) S_PURPOSE,
+				  PURPOSE_DETAIL         ,
+				  LOCATION               ,
+				  EXPOSURE_DETAILS       ,
+				  PRE_CORRTN_ORDER       ,
+				  CORRTN_ORDER           ,
+				  VIOL_BUILDING_REGDATE  ,
+				  OPINION_STATE_LIMIT    ,
+				  EXEC_IMPOSE_DATE       ,
+				  DECODE(EXEC_IMPOSE_AMT, NULL, 0, EXEC_IMPOSE_AMT) EXEC_IMPOSE_AMT,
+				  TAX_DEP_NOTEDATE       ,
+				  STATE					 ,
+				  ( SELECT CODE_NAME FROM BUILDING_CODE_LIST WHERE GROUP_ID = 4 AND CODE_ID = STATE ) S_STATE,
+				  PERFORM_USERID         ,
+  				  PERFORM_PERSON         ,
+  				  PERFORM_USERHNO        ,  
+				  BIGO                   ,
+				  DISPLAY_YN             ,
+				  INS_ID                 ,
+				  INS_DEPT               ,
+				  INS_DATE               ,
+				  MOD_ID                 ,
+				  MOD_DEPT               ,
+				  MOD_DATE               ,
+				  DEL_ID                 ,
+				  DEL_DEPT               ,
+				  DEL_DATE               ,
+				  DEL_YN                 
+			  FROM BUILDING_MNG_DAEJANG
+			  WHERE DEL_YN = '0'			 
+		]]>		
+		<if test="BLD_DONG != null and BLD_DONG !=''">
+		AND BLD_DONG LIKE #{BLD_DONG} || '%'
+		</if>		
+		<if test="PERFORM_PERSON != null and PERFORM_PERSON !=''">
+		AND PERFORM_PERSON LIKE #{PERFORM_PERSON} || '%'
+		</if>
+		<if test="BLD_ADDR1 != null and BLD_ADDR1 !=''">
+		AND BLD_ADDR1 LIKE #{BLD_ADDR1} || '%'
+		</if>
+		ORDER BY ID DESC			
+		<include refid="common.pagingPost"/> 
+	</select>
+	
+	
+	
+	<select id="selectViolBuildingUpList" parameterType="hashmap" resultType="hashmap">
+		<include refid="common.pagingPre"/> 
+		<![CDATA[			  
+			  SELECT COUNT(*) OVER() AS TOTAL_COUNT, 
+				  	  ID                     ,
+					  ORIGINAL_FILE_NAME	 ,
+					  FILE_SIZE              ,		
+				      TO_CHAR(INS_DATE,'YYYYMMDD') INS_DATE,
+				      DEL_YN                 
+			  FROM BUILDING_ATTACH_FILE
+			  WHERE DEL_YN = '0'	
+		]]>
+		<if test="UP_DATE != null and UP_DATE !=''">
+		AND TO_CHAR(INS_DATE,'YYYYMMDD') = REPLACE(#{UP_DATE}, '-', '')
+		</if>		
+		<if test="FILE_NM != null and FILE_NM !=''">
+		AND ORIGINAL_FILE_NAME LIKE #{FILE_NM} || '%'
+		</if>			
+		<include refid="common.pagingPost"/> 
+	</select>
+	
+	
+	<select id="violBuildingContent" parameterType="hashmap" resultType="hashmap">
+		<![CDATA[			
+	        SELECT
+	              ID                     ,
+	              BLD_DONG               ,
+	              BLD_ZIPNO              ,	              
+				  BLD_ADDR1              ,
+				  BLD_ADDR2              ,
+				  BLD_ADDR_ROAD          ,
+				  FULL_BLD_ADDR          ,
+				  FULL_BLD_ADDR_ROAD	 ,			  
+				  MBLD_DONG			     ,
+	              MBLD_ZIPNO    		 ,
+				  MBLD_ADDR1             ,
+				  MBLD_ADDR2             ,
+				  MBLD_ADDR_ROAD         ,
+				  MFULL_BLD_ADDR         ,
+				  MFULL_BLD_ADDR_ROAD	 ,			  
+				  BLD_OWNER              ,
+				  BLD_STRUCTURE		     ,
+				  TRIM(STRUCTURE_DETAIL) STRUCTURE_DETAIL,
+				  VIOL_AREA              ,
+				  PURPOSE				 ,
+				  TRIM(PURPOSE_DETAIL)   PURPOSE_DETAIL,
+				  LOCATION               ,
+				  EXPOSURE_DETAILS       ,
+				  PRE_CORRTN_ORDER       ,
+				  CORRTN_ORDER           ,				  
+				  OPINION_STATE_LIMIT    ,
+				  EXEC_IMPOSE_DATE       ,
+				  EXEC_IMPOSE_AMT        ,				 
+				  PERFORM_USERID         ,
+  				  PERFORM_PERSON         ,
+  				  PERFORM_USERHNO        ,   
+				  STATE					 ,
+				  STATE_DETAIL     		 ,
+				  BIGO                   ,
+				  DISPLAY_YN             ,
+				  INS_ID                 ,
+				  INS_DEPT               ,
+				  INS_DATE               ,
+				  MOD_ID                 ,
+				  MOD_DEPT               ,
+				  MOD_DATE               ,
+				  DEL_ID                 ,
+				  DEL_DEPT               ,
+				  DEL_DATE               ,
+				  DEL_YN                      
+	        FROM BUILDING_MNG_DAEJANG
+			WHERE ID = #{ID}		    		
+		]]>
+	</select>
+	
+	
+	
+	
+	
+	
+	<insert id="insBldMngDaejang" parameterType="hashmap">
+		<![CDATA[		
+			INSERT INTO BUILDING_MNG_DAEJANG
+			(
+				ID,
+				BLD_DONG,
+				BLD_ZIPNO,
+				BLD_ADDR1,
+				BLD_ADDR2,
+				BLD_ADDR_ROAD,
+				FULL_BLD_ADDR,
+				FULL_BLD_ADDR_ROAD,
+				MBLD_DONG,
+				MBLD_ZIPNO,
+				MBLD_ADDR1,
+				MBLD_ADDR2,
+				MBLD_ADDR_ROAD,
+				MFULL_BLD_ADDR,
+				MFULL_BLD_ADDR_ROAD,	
+				BLD_OWNER,
+				BLD_STRUCTURE,
+				STRUCTURE_DETAIL,				
+				VIOL_AREA,
+				PURPOSE,
+				PURPOSE_DETAIL,
+				LOCATION,
+				EXPOSURE_DETAILS,
+				PRE_CORRTN_ORDER,     
+				CORRTN_ORDER,				
+				OPINION_STATE_LIMIT,
+				EXEC_IMPOSE_DATE, 
+				EXEC_IMPOSE_AMT,				
+				STATE,
+				STATE_DETAIL,
+				PERFORM_USERID,
+  				PERFORM_PERSON,
+  				PERFORM_USERHNO,    
+				BIGO,               
+				DISPLAY_YN,
+				UPLOAD_FLAG,
+				INS_ID,
+				INS_DEPT,
+				INS_DATE																	  
+			)
+			VALUES
+			(
+				BUILDING_MNG_DAEJANG_SQ.NEXTVAL,
+				TRIM(#{BLD_DONG}),
+				TRIM(#{BLD_ZIPNO}),
+				TRIM(#{BLD_ADDR1}),
+				TRIM(#{BLD_ADDR2}),
+				TRIM(#{BLD_ADDR_ROAD}),				
+				TRIM(#{FULL_BLD_ADDR}),
+				TRIM(#{FULL_BLD_ADDR_ROAD}),								
+				TRIM(#{MBLD_DONG}),
+				TRIM(#{MBLD_ZIPNO}),
+				TRIM(#{MBLD_ADDR1}),
+				TRIM(#{MBLD_ADDR2}),
+				TRIM(#{MBLD_ADDR_ROAD}),
+				TRIM(#{MFULL_BLD_ADDR}),
+				TRIM(#{MFULL_BLD_ADDR_ROAD}),				
+				TRIM(#{BLD_OWNER}),
+				TRIM(#{BLD_STRUCTURE}),
+				TRIM(#{STRUCTURE_DETAIL}),				
+				TRIM(#{VIOL_AREA}),
+				TRIM(#{PURPOSE}),
+				TRIM(#{PURPOSE_DETAIL}),
+				TRIM(#{LOCATION}),
+				TRIM(#{EXPOSURE_DETAILS}),
+				TRIM(REPLACE(#{PRE_CORRTN_ORDER}, '-', '')),
+				TRIM(REPLACE(#{CORRTN_ORDER}, '-', '')),			
+				TRIM(REPLACE(#{OPINION_STATE_LIMIT}, '-', '' )),
+				TRIM(REPLACE(#{EXEC_IMPOSE_DATE}, '-', '' )),
+				TRIM(REPLACE(#{EXEC_IMPOSE_AMT}, ',', '')),			
+				TRIM(#{STATE}),
+				TRIM(#{STATE_DETAIL}),
+				TRIM(#{PERFORM_USERID}),
+  				TRIM(#{PERFORM_PERSON}),
+  				TRIM(#{PERFORM_USERHNO}), 
+				TRIM(#{BIGO}),
+				TRIM(#{DISPLAY_YN}),
+				TRIM(#{UPLOAD_FLAG}),
+				#{INS_ID},
+				#{INS_DEPT},
+				SYSDATE
+			)
+		]]>		
+	</insert>
+	
+	
+	
+	<update id="updateBldMngDaejang" parameterType="hashmap">
+		<![CDATA[
+			UPDATE BUILDING_MNG_DAEJANG
+			SET	BLD_DONG                = TRIM(#{BLD_DONG}),
+				BLD_ZIPNO               = TRIM(#{BLD_ZIPNO}),
+				BLD_ADDR1               = TRIM(#{BLD_ADDR1}),
+				BLD_ADDR2               = TRIM(#{BLD_ADDR2}),
+				BLD_ADDR_ROAD           = TRIM(#{BLD_ADDR_ROAD}),
+				FULL_BLD_ADDR           = TRIM(#{FULL_BLD_ADDR}),
+				FULL_BLD_ADDR_ROAD      = TRIM(#{FULL_BLD_ADDR_ROAD}),
+				MBLD_DONG                = TRIM(#{MBLD_DONG}),
+				MBLD_ZIPNO               = TRIM(#{MBLD_ZIPNO}),
+				MBLD_ADDR1               = TRIM(#{MBLD_ADDR1}),
+				MBLD_ADDR2               = TRIM(#{MBLD_ADDR2}),
+				MBLD_ADDR_ROAD           = TRIM(#{MBLD_ADDR_ROAD}),
+				MFULL_BLD_ADDR           = TRIM(#{MFULL_BLD_ADDR}),
+				MFULL_BLD_ADDR_ROAD      = TRIM(#{MFULL_BLD_ADDR_ROAD}),								
+				BLD_OWNER               = TRIM(#{BLD_OWNER}),
+				BLD_STRUCTURE           = TRIM(#{BLD_STRUCTURE}),
+				STRUCTURE_DETAIL        = TRIM(#{STRUCTURE_DETAIL}),
+				VIOL_AREA               = TRIM(#{VIOL_AREA}),
+				PURPOSE                 = TRIM(#{PURPOSE}),
+				PURPOSE_DETAIL          = TRIM(#{PURPOSE_DETAIL}),
+				LOCATION                = TRIM(#{LOCATION}),
+				EXPOSURE_DETAILS        = TRIM(#{EXPOSURE_DETAILS}),
+				PRE_CORRTN_ORDER        = TRIM(REPLACE(#{PRE_CORRTN_ORDER}, '-', '')),
+				CORRTN_ORDER            = TRIM(REPLACE(#{CORRTN_ORDER}, '-', '')),				
+				OPINION_STATE_LIMIT     = TRIM(REPLACE(#{OPINION_STATE_LIMIT}, '-', '')),
+				EXEC_IMPOSE_DATE        = TRIM(REPLACE(#{EXEC_IMPOSE_DATE}, '-', '')),
+				EXEC_IMPOSE_AMT         = TRIM(REPLACE(#{EXEC_IMPOSE_AMT}, ',', '')),				
+				STATE                   = TRIM(#{STATE}),
+				STATE_DETAIL            = TRIM(#{STATE_DETAIL}),
+				PERFORM_USERID          = TRIM(#{PERFORM_USERID}),
+  				PERFORM_PERSON          = TRIM(#{PERFORM_PERSON}),
+  				PERFORM_USERHNO         = TRIM(#{PERFORM_USERHNO}),  
+				BIGO                    = TRIM(#{BIGO}),
+				DISPLAY_YN              = TRIM(#{DISPLAY_YN}),
+				MOD_ID = #{DEL_ID},
+				MOD_DEPT = #{DEL_DEPT},
+				MOD_DATE = SYSDATE		
+			WHERE  
+				ID = #{ID}
+		]]>		   		
+	</update>
+	
+	
+	<update id="deleteBldMngDaejang" parameterType="hashmap">
+		<![CDATA[
+			UPDATE BUILDING_MNG_DAEJANG
+			SET	DEL_YN = '1',
+				DEL_ID = #{DEL_ID},
+				DEL_DEPT = #{DEL_DEPT},
+				DEL_DATE = SYSDATE		
+			WHERE  
+				ID = #{ID}
+		]]>	
+	</update>
+	
+	
+	<update id="deleteBldMngDaejangData" parameterType="hashmap">
+		<![CDATA[
+			UPDATE BUILDING_MNG_DAEJANG
+			SET	DEL_YN = '1',
+				DEL_ID = #{DEL_ID},
+				DEL_DEPT = #{DEL_DEPT},
+				DEL_DATE = SYSDATE		
+			WHERE  
+				UPLOAD_FLAG = #{ID}
+		]]>	
+	</update>
+	
+	
+	<insert id="insertFile" parameterType="hashmap">		
+		<![CDATA[
+			INSERT INTO BUILDING_ATTACH_FILE
+			(
+				ID,
+				PARENT_ID,
+				BOARD_GB,
+				ORIGINAL_FILE_NAME,
+				STORED_FILE_NAME,
+				FILE_SIZE,
+				INS_DATE,
+				DEL_YN
+			)
+			VALUES
+			(
+				BUILDING_ATTACH_FILE_SQ.NEXTVAL,
+				'11111',
+				'X',
+				#{ORIGINAL_FILE_NAME},
+				#{STORED_FILE_NAME},
+				#{FILE_SIZE},
+				SYSDATE,
+				'0'
+			)
+		]]>
+		<selectKey keyProperty="FID" resultType="Integer" order="AFTER">
+			SELECT BUILDING_ATTACH_FILE_SQ.CURRVAL AS FID FROM DUAL
+		</selectKey>
+	</insert>
+	
+	
+	<update id="deleteFile" parameterType="hashmap">
+		<![CDATA[
+			UPDATE BUILDING_ATTACH_FILE
+			SET 
+				DEL_YN = '1',
+				DEL_DATE = SYSDATE 
+			WHERE 
+				ID = #{ID}			
+		]]>
+	</update>
+
+</mapper>

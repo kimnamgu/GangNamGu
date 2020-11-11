@@ -1,0 +1,2237 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="manage">
+
+	<resultMap id="clobHashMap" type="HashMap">
+		<result property="CONTENTS" column="CONTENTS" jdbcType="CLOB"
+			javaType="java.lang.String" />
+	</resultMap>
+
+
+	<select id="selectPrvCnrtCompList" parameterType="hashmap"
+		resultType="hashmap">
+		<include refid="common.pagingPre" /> 
+		<![CDATA[			  
+			  SELECT COUNT(*) OVER() AS TOTAL_COUNT, 
+					A.ID,
+					A.COMP_SAUP_NO,
+					A.COMP_BUBIN_NO,
+					A.COMP_NM,
+					A.COMP_HEAD_NM,
+					A.COMP_FIELD1_GB,
+					A.COMP_FIELD2_GB,
+					A.COMP_FIELD2_DETAIL,
+					A.COMP_ZIP_CD,
+					A.COMP_ADDR,
+					A.COMP_ADDR_ROAD,
+					A.COMP_SIZE,
+					A.COMP_TEL,					
+					DECODE(A.COMP_CAPITAL, NULL, 0, A.COMP_CAPITAL) COMP_CAPITAL,
+					(SELECT AVG(DECODE(CNRT_EVAL,'S',4,'A',3,'B',2,'C',1)) AS CNRT_EVAL_AVG  FROM PRIVATE_CONTRACT_CONCLUSION WHERE DEL_YN = '0' AND DATA_GB = '2' AND COMP_ID = A.ID GROUP BY COMP_ID ) AS CNRT_EVAL_AVG,
+					A.COMP_CAPITAL_DETAIL,
+					A.COMP_EMPLOYEE_CNT,
+					A.COMP_MAIN_WORK,
+					A.BIGO,
+					DECODE(B.CNT, NULL, 0, B.CNT) CNT,
+					DECODE(C.CNT2, NULL, 0, C.CNT2) CNT2		
+			  FROM PRIVATE_CONTRACT_COMP_MASTER A
+			  LEFT OUTER JOIN                
+              (
+                  SELECT 
+	              COMP_ID, COUNT(*) CNT
+	              FROM 
+				  (
+					  SELECT      COMP_ID
+					  FROM PRIVATE_CONTRACT_CONCLUSION
+					  WHERE DEL_YN = '0'
+					  AND DATA_GB = '1'
+					  AND STATE_GB = '2'
+					  UNION ALL
+					  SELECT      COMP_ID
+					  FROM PRIVATE_CONTRACT_CONCLUSION
+					  WHERE DEL_YN = '0'
+					  AND DATA_GB = '2'
+	              )
+              	  GROUP BY COMP_ID 
+              ) B ON A.ID = B.COMP_ID              
+              LEFT OUTER JOIN
+              (
+	              SELECT PARENT_ID, COUNT(*) CNT2 
+	              FROM PRIVATE_CONTRACT_ATTACH_FILE
+	              WHERE DEL_YN = '0'
+	              AND BOARD_GB = '6'
+	              GROUP BY PARENT_ID
+              ) C ON A.ID = C.PARENT_ID
+              WHERE A.DEL_YN = '0'              			  			  
+		]]>
+		<if test="COMP_NM != null and COMP_NM !=''">
+			AND A.COMP_NM LIKE '%'|| #{COMP_NM} ||'%'
+		</if>
+		<if test="COMP_SAUP_NO != null and COMP_SAUP_NO !=''">
+			AND A.COMP_SAUP_NO = #{COMP_SAUP_NO}
+		</if>
+		<if test="COMP_KEYWORD != null and COMP_KEYWORD !=''">
+			AND ( COMP_MAIN_WORK LIKE '%' || #{COMP_KEYWORD} || '%' OR
+			ID IN ( SELECT DISTINCT COMP_ID FROM PRIVATE_CONTRACT_CONCLUSION WHERE
+			DEL_YN = '0'
+			AND ( CNRT_NM LIKE '%'|| #{COMP_KEYWORD} || '%' OR CNRT_DETAIL LIKE '%'
+			|| #{COMP_KEYWORD} || '%' )))
+		</if>
+		<choose>
+			<when test="COMP_FIELD1_GB.equals('AA')">
+				AND COMP_FIELD1_GB LIKE '1__'
+			</when>
+			<when test="COMP_FIELD1_GB.equals('BB')">
+				AND COMP_FIELD1_GB LIKE '_1_'
+			</when>
+			<when test="COMP_FIELD1_GB.equals('CC')">
+				AND COMP_FIELD1_GB LIKE '__1'
+			</when>
+			<when test="COMP_FIELD1_GB.equals('DD')">
+				AND ( COMP_FIELD1_GB LIKE '1__' OR COMP_FIELD1_GB LIKE '_1_' )
+			</when>
+			<when test="COMP_FIELD1_GB.equals('EE')">
+				AND ( COMP_FIELD1_GB LIKE '1__' OR COMP_FIELD1_GB LIKE '__1' )
+			</when>
+			<when test="COMP_FIELD1_GB.equals('FF')">
+				AND ( COMP_FIELD1_GB LIKE '_1_' OR COMP_FIELD1_GB LIKE '__1' )
+			</when>
+		</choose>
+		<choose>
+			<when test="COMP_FIELD2_GB.equals('100000')">
+				AND COMP_FIELD2_GB LIKE '1%'
+			</when>
+			<when test="COMP_FIELD2_GB.equals('010000')">
+				AND COMP_FIELD2_GB LIKE '_1%'
+			</when>
+			<when test="COMP_FIELD2_GB.equals('001000')">
+				AND COMP_FIELD2_GB LIKE '__1%'
+			</when>
+			<when test="COMP_FIELD2_GB.equals('000100')">
+				AND COMP_FIELD2_GB LIKE '___1%'
+			</when>
+			<when test="COMP_FIELD2_GB.equals('000010')">
+				AND COMP_FIELD2_GB LIKE '____1%'
+			</when>
+			<when test="COMP_FIELD2_GB.equals('000001')">
+				AND COMP_FIELD2_GB LIKE '%1'
+			</when>
+			<when test="COMP_FIELD2_GB.equals('110000')">
+				AND ( COMP_FIELD2_GB LIKE '1%' OR COMP_FIELD2_GB LIKE '_1%' )
+			</when>
+			<when test="COMP_FIELD2_GB.equals('101000')">
+				AND ( COMP_FIELD2_GB LIKE '1%' OR COMP_FIELD2_GB LIKE '__1%' )
+			</when>
+			<when test="COMP_FIELD2_GB.equals('100100')">
+				AND ( COMP_FIELD2_GB LIKE '1%' OR COMP_FIELD2_GB LIKE '___1%' )
+			</when>
+			<when test="COMP_FIELD2_GB.equals('100010')">
+				AND ( COMP_FIELD2_GB LIKE '1%' OR COMP_FIELD2_GB LIKE '____1%' )
+			</when>
+			<when test="COMP_FIELD2_GB.equals('100001')">
+				AND ( COMP_FIELD2_GB LIKE '1%' OR COMP_FIELD2_GB LIKE '_____1' )
+			</when>
+			<when test="COMP_FIELD2_GB.equals('011000')">
+				AND ( COMP_FIELD2_GB LIKE '_1%' OR COMP_FIELD2_GB LIKE '__1%' )
+			</when>
+			<when test="COMP_FIELD2_GB.equals('010100')">
+				AND ( COMP_FIELD2_GB LIKE '_1%' OR COMP_FIELD2_GB LIKE '___1%' )
+			</when>
+			<when test="COMP_FIELD2_GB.equals('010010')">
+				AND ( COMP_FIELD2_GB LIKE '_1%' OR COMP_FIELD2_GB LIKE '____1%' )
+			</when>
+			<when test="COMP_FIELD2_GB.equals('010001')">
+				AND ( COMP_FIELD2_GB LIKE '_1%' OR COMP_FIELD2_GB LIKE '_____1' )
+			</when>
+			<when test="COMP_FIELD2_GB.equals('001100')">
+				AND ( COMP_FIELD2_GB LIKE '__1%' OR COMP_FIELD2_GB LIKE '___1%' )
+			</when>
+			<when test="COMP_FIELD2_GB.equals('001010')">
+				AND ( COMP_FIELD2_GB LIKE '__1%' OR COMP_FIELD2_GB LIKE '____1%' )
+			</when>
+			<when test="COMP_FIELD2_GB.equals('001001')">
+				AND ( COMP_FIELD2_GB LIKE '__1%' OR COMP_FIELD2_GB LIKE '_____1' )
+			</when>
+			<when test="COMP_FIELD2_GB.equals('000110')">
+				AND ( COMP_FIELD2_GB LIKE '___1%' OR COMP_FIELD2_GB LIKE '____1%' )
+			</when>
+			<when test="COMP_FIELD2_GB.equals('000101')">
+				AND ( COMP_FIELD2_GB LIKE '___1%' OR COMP_FIELD2_GB LIKE '_____1' )
+			</when>
+			<when test="COMP_FIELD2_GB.equals('000011')">
+				AND ( COMP_FIELD2_GB LIKE '____1%' OR COMP_FIELD2_GB LIKE '_____1' )
+			</when>
+			<when test="COMP_FIELD2_GB.equals('111000')">
+				AND ( COMP_FIELD2_GB LIKE '1%' OR COMP_FIELD2_GB LIKE '_1%' OR
+				COMP_FIELD2_GB LIKE '__1%' )
+			</when>
+			<when test="COMP_FIELD2_GB.equals('110100')">
+				AND ( COMP_FIELD2_GB LIKE '1%' OR COMP_FIELD2_GB LIKE '_1%' OR
+				COMP_FIELD2_GB LIKE '___1%' )
+			</when>
+			<when test="COMP_FIELD2_GB.equals('110010')">
+				AND ( COMP_FIELD2_GB LIKE '1%' OR COMP_FIELD2_GB LIKE '_1%' OR
+				COMP_FIELD2_GB LIKE '____1%' )
+			</when>
+			<when test="COMP_FIELD2_GB.equals('110001')">
+				AND ( COMP_FIELD2_GB LIKE '1%' OR COMP_FIELD2_GB LIKE '_1%' OR
+				COMP_FIELD2_GB LIKE '_____1' )
+			</when>
+			<when test="COMP_FIELD2_GB.equals('101100')">
+				AND ( COMP_FIELD2_GB LIKE '1%' OR COMP_FIELD2_GB LIKE '__1%' OR
+				COMP_FIELD2_GB LIKE '___1%' )
+			</when>
+			<when test="COMP_FIELD2_GB.equals('100110')">
+				AND ( COMP_FIELD2_GB LIKE '1%' OR COMP_FIELD2_GB LIKE '___1%' OR
+				COMP_FIELD2_GB LIKE '____1%' )
+			</when>
+			<when test="COMP_FIELD2_GB.equals('100011')">
+				AND ( COMP_FIELD2_GB LIKE '1%' OR COMP_FIELD2_GB LIKE '____1%' OR
+				COMP_FIELD2_GB LIKE '_____1' )
+			</when>
+			<when test="COMP_FIELD2_GB.equals('101010')">
+				AND ( COMP_FIELD2_GB LIKE '1%' OR COMP_FIELD2_GB LIKE '__1%' OR
+				COMP_FIELD2_GB LIKE '____1%' )
+			</when>
+			<when test="COMP_FIELD2_GB.equals('101001')">
+				AND ( COMP_FIELD2_GB LIKE '1%' OR COMP_FIELD2_GB LIKE '__1%' OR
+				COMP_FIELD2_GB LIKE '_____1' )
+			</when>
+			<when test="COMP_FIELD2_GB.equals('011100')">
+				AND ( COMP_FIELD2_GB LIKE '_1%' OR COMP_FIELD2_GB LIKE '__1%' OR
+				COMP_FIELD2_GB LIKE '___1%' )
+			</when>
+			<when test="COMP_FIELD2_GB.equals('011010')">
+				AND ( COMP_FIELD2_GB LIKE '_1%' OR COMP_FIELD2_GB LIKE '__1%' OR
+				COMP_FIELD2_GB LIKE '____1%' )
+			</when>
+			<when test="COMP_FIELD2_GB.equals('011001')">
+				AND ( COMP_FIELD2_GB LIKE '_1%' OR COMP_FIELD2_GB LIKE '__1%' OR
+				COMP_FIELD2_GB LIKE '_____1' )
+			</when>
+			<when test="COMP_FIELD2_GB.equals('010110')">
+				AND ( COMP_FIELD2_GB LIKE '_1%' OR COMP_FIELD2_GB LIKE '___1%' OR
+				COMP_FIELD2_GB LIKE '____1%' )
+			</when>
+			<when test="COMP_FIELD2_GB.equals('010011')">
+				AND ( COMP_FIELD2_GB LIKE '_1%' OR COMP_FIELD2_GB LIKE '____1%' OR
+				COMP_FIELD2_GB LIKE '_____1' )
+			</when>
+			<when test="COMP_FIELD2_GB.equals('010101')">
+				AND ( COMP_FIELD2_GB LIKE '_1%' OR COMP_FIELD2_GB LIKE '___1%' OR
+				COMP_FIELD2_GB LIKE '_____1' )
+			</when>
+			<when test="COMP_FIELD2_GB.equals('001110')">
+				AND ( COMP_FIELD2_GB LIKE '__1%' OR COMP_FIELD2_GB LIKE '___1%' OR
+				COMP_FIELD2_GB LIKE '____1%' )
+			</when>
+			<when test="COMP_FIELD2_GB.equals('001101')">
+				AND ( COMP_FIELD2_GB LIKE '__1%' OR COMP_FIELD2_GB LIKE '___1%' OR
+				COMP_FIELD2_GB LIKE '_____1' )
+			</when>
+			<when test="COMP_FIELD2_GB.equals('001011')">
+				AND ( COMP_FIELD2_GB LIKE '__1%' OR COMP_FIELD2_GB LIKE '____1%' OR
+				COMP_FIELD2_GB LIKE '_____1' )
+			</when>
+			<when test="COMP_FIELD2_GB.equals('000111')">
+				AND ( COMP_FIELD2_GB LIKE '___1%' OR COMP_FIELD2_GB LIKE '____1%' OR
+				COMP_FIELD2_GB LIKE '_____1' )
+			</when>
+			<when test="COMP_FIELD2_GB.equals('111100')">
+				AND ( COMP_FIELD2_GB LIKE '1%' OR COMP_FIELD2_GB LIKE '_1%' OR
+				COMP_FIELD2_GB LIKE '__1%' OR COMP_FIELD2_GB LIKE '___1%' )
+			</when>
+			<when test="COMP_FIELD2_GB.equals('111010')">
+				AND ( COMP_FIELD2_GB LIKE '1%' OR COMP_FIELD2_GB LIKE '_1%' OR
+				COMP_FIELD2_GB LIKE '__1%' OR COMP_FIELD2_GB LIKE '____1%' )
+			</when>
+			<when test="COMP_FIELD2_GB.equals('111001')">
+				AND ( COMP_FIELD2_GB LIKE '1%' OR COMP_FIELD2_GB LIKE '_1%' OR
+				COMP_FIELD2_GB LIKE '__1%' OR COMP_FIELD2_GB LIKE '_____1' )
+			</when>
+			<when test="COMP_FIELD2_GB.equals('011110')">
+				AND ( COMP_FIELD2_GB LIKE '_1%' OR COMP_FIELD2_GB LIKE '__1%' OR
+				COMP_FIELD2_GB LIKE '___1%' OR COMP_FIELD2_GB LIKE '____1%' )
+			</when>
+			<when test="COMP_FIELD2_GB.equals('011101')">
+				AND ( COMP_FIELD2_GB LIKE '_1%' OR COMP_FIELD2_GB LIKE '__1%' OR
+				COMP_FIELD2_GB LIKE '___1%' OR COMP_FIELD2_GB LIKE '_____1' )
+			</when>
+			<when test="COMP_FIELD2_GB.equals('001111')">
+				AND ( COMP_FIELD2_GB LIKE '__1%' OR COMP_FIELD2_GB LIKE '___1%' OR
+				COMP_FIELD2_GB LIKE '____1%' OR COMP_FIELD2_GB LIKE '_____1' )
+			</when>
+			<when test="COMP_FIELD2_GB.equals('111110')">
+				AND COMP_FIELD2_GB NOT LIKE '_____1' AND COMP_FIELD2_GB != '000000'
+			</when>
+			<when test="COMP_FIELD2_GB.equals('101111')">
+				AND COMP_FIELD2_GB NOT LIKE '_1____' AND COMP_FIELD2_GB != '000000'
+			</when>
+			<when test="COMP_FIELD2_GB.equals('110111')">
+				AND COMP_FIELD2_GB NOT LIKE '__1___' AND COMP_FIELD2_GB != '000000'
+			</when>
+			<when test="COMP_FIELD2_GB.equals('111011')">
+				AND COMP_FIELD2_GB NOT LIKE '___1__' AND COMP_FIELD2_GB != '000000'
+			</when>
+			<when test="COMP_FIELD2_GB.equals('111101')">
+				AND COMP_FIELD2_GB NOT LIKE '____1_' AND COMP_FIELD2_GB != '000000'
+			</when>
+			<when test="COMP_FIELD2_GB.equals('011111')">
+				AND COMP_FIELD2_GB NOT LIKE '1_____' AND COMP_FIELD2_GB != '000000'
+			</when>
+		</choose>
+		ORDER BY A.ID ASC
+		<include refid="common.pagingPost" />
+	</select>
+
+
+	<select id="selectPrvCnrtCompInsList" parameterType="hashmap"
+		resultType="hashmap">
+		<include refid="common.pagingPre" /> 
+		<![CDATA[			  
+			  SELECT COUNT(*) OVER() AS TOTAL_COUNT, 
+					ID,
+					COMP_SAUP_NO,
+					COMP_BUBIN_NO,
+					COMP_NM,
+					COMP_HEAD_NM,
+					COMP_FIELD1_GB,
+					COMP_FIELD2_GB,
+					COMP_FIELD2_DETAIL,
+					COMP_ZIP_CD,
+					COMP_ADDR,
+					COMP_ADDR_ROAD,
+					COMP_SIZE,
+					COMP_TEL,		
+					COMP_CAPITAL,
+					COMP_CAPITAL_DETAIL,
+					COMP_EMPLOYEE_CNT,
+					COMP_MAIN_WORK,
+					BIGO					
+			  FROM PRIVATE_CONTRACT_COMP_MASTER
+			  WHERE DEL_YN = '0'			  
+		]]>
+		<choose>
+			<when test="COMP_FIELD1_GB.equals('AA')">
+				AND COMP_FIELD1_GB LIKE '1__'
+			</when>
+			<when test="COMP_FIELD1_GB.equals('BB')">
+				AND COMP_FIELD1_GB LIKE '_1_'
+			</when>
+			<when test="COMP_FIELD1_GB.equals('CC')">
+				AND COMP_FIELD1_GB LIKE '__1'
+			</when>
+			<when test="COMP_FIELD1_GB.equals('DD')">
+				AND ( COMP_FIELD1_GB LIKE '1__' OR COMP_FIELD1_GB LIKE '_1_' )
+			</when>
+			<when test="COMP_FIELD1_GB.equals('EE')">
+				AND ( COMP_FIELD1_GB LIKE '1__' OR COMP_FIELD1_GB LIKE '__1' )
+			</when>
+			<when test="COMP_FIELD1_GB.equals('FF')">
+				AND ( COMP_FIELD1_GB LIKE '_1_' OR COMP_FIELD1_GB LIKE '__1' )
+			</when>
+		</choose>
+		<choose>
+			<when test="COMP_FIELD2_GB.equals('100000')">
+				AND COMP_FIELD2_GB LIKE '1%'
+			</when>
+			<when test="COMP_FIELD2_GB.equals('010000')">
+				AND COMP_FIELD2_GB LIKE '_1%'
+			</when>
+			<when test="COMP_FIELD2_GB.equals('001000')">
+				AND COMP_FIELD2_GB LIKE '__1%'
+			</when>
+			<when test="COMP_FIELD2_GB.equals('000100')">
+				AND COMP_FIELD2_GB LIKE '___1%'
+			</when>
+			<when test="COMP_FIELD2_GB.equals('000010')">
+				AND COMP_FIELD2_GB LIKE '____1%'
+			</when>
+			<when test="COMP_FIELD2_GB.equals('000001')">
+				AND COMP_FIELD2_GB LIKE '%1'
+			</when>
+			<when test="COMP_FIELD2_GB.equals('110000')">
+				AND ( COMP_FIELD2_GB LIKE '1%' OR COMP_FIELD2_GB LIKE '_1%' )
+			</when>
+			<when test="COMP_FIELD2_GB.equals('101000')">
+				AND ( COMP_FIELD2_GB LIKE '1%' OR COMP_FIELD2_GB LIKE '__1%' )
+			</when>
+			<when test="COMP_FIELD2_GB.equals('100100')">
+				AND ( COMP_FIELD2_GB LIKE '1%' OR COMP_FIELD2_GB LIKE '___1%' )
+			</when>
+			<when test="COMP_FIELD2_GB.equals('100010')">
+				AND ( COMP_FIELD2_GB LIKE '1%' OR COMP_FIELD2_GB LIKE '____1%' )
+			</when>
+			<when test="COMP_FIELD2_GB.equals('100001')">
+				AND ( COMP_FIELD2_GB LIKE '1%' OR COMP_FIELD2_GB LIKE '_____1' )
+			</when>
+			<when test="COMP_FIELD2_GB.equals('011000')">
+				AND ( COMP_FIELD2_GB LIKE '_1%' OR COMP_FIELD2_GB LIKE '__1%' )
+			</when>
+			<when test="COMP_FIELD2_GB.equals('010100')">
+				AND ( COMP_FIELD2_GB LIKE '_1%' OR COMP_FIELD2_GB LIKE '___1%' )
+			</when>
+			<when test="COMP_FIELD2_GB.equals('010010')">
+				AND ( COMP_FIELD2_GB LIKE '_1%' OR COMP_FIELD2_GB LIKE '____1%' )
+			</when>
+			<when test="COMP_FIELD2_GB.equals('010001')">
+				AND ( COMP_FIELD2_GB LIKE '_1%' OR COMP_FIELD2_GB LIKE '_____1' )
+			</when>
+			<when test="COMP_FIELD2_GB.equals('001100')">
+				AND ( COMP_FIELD2_GB LIKE '__1%' OR COMP_FIELD2_GB LIKE '___1%' )
+			</when>
+			<when test="COMP_FIELD2_GB.equals('001010')">
+				AND ( COMP_FIELD2_GB LIKE '__1%' OR COMP_FIELD2_GB LIKE '____1%' )
+			</when>
+			<when test="COMP_FIELD2_GB.equals('001001')">
+				AND ( COMP_FIELD2_GB LIKE '__1%' OR COMP_FIELD2_GB LIKE '_____1' )
+			</when>
+			<when test="COMP_FIELD2_GB.equals('000110')">
+				AND ( COMP_FIELD2_GB LIKE '___1%' OR COMP_FIELD2_GB LIKE '____1%' )
+			</when>
+			<when test="COMP_FIELD2_GB.equals('000101')">
+				AND ( COMP_FIELD2_GB LIKE '___1%' OR COMP_FIELD2_GB LIKE '_____1' )
+			</when>
+			<when test="COMP_FIELD2_GB.equals('000011')">
+				AND ( COMP_FIELD2_GB LIKE '____1%' OR COMP_FIELD2_GB LIKE '_____1' )
+			</when>
+			<when test="COMP_FIELD2_GB.equals('111000')">
+				AND ( COMP_FIELD2_GB LIKE '1%' OR COMP_FIELD2_GB LIKE '_1%' OR
+				COMP_FIELD2_GB LIKE '__1%' )
+			</when>
+			<when test="COMP_FIELD2_GB.equals('110100')">
+				AND ( COMP_FIELD2_GB LIKE '1%' OR COMP_FIELD2_GB LIKE '_1%' OR
+				COMP_FIELD2_GB LIKE '___1%' )
+			</when>
+			<when test="COMP_FIELD2_GB.equals('110010')">
+				AND ( COMP_FIELD2_GB LIKE '1%' OR COMP_FIELD2_GB LIKE '_1%' OR
+				COMP_FIELD2_GB LIKE '____1%' )
+			</when>
+			<when test="COMP_FIELD2_GB.equals('110001')">
+				AND ( COMP_FIELD2_GB LIKE '1%' OR COMP_FIELD2_GB LIKE '_1%' OR
+				COMP_FIELD2_GB LIKE '_____1' )
+			</when>
+			<when test="COMP_FIELD2_GB.equals('101100')">
+				AND ( COMP_FIELD2_GB LIKE '1%' OR COMP_FIELD2_GB LIKE '__1%' OR
+				COMP_FIELD2_GB LIKE '___1%' )
+			</when>
+			<when test="COMP_FIELD2_GB.equals('100110')">
+				AND ( COMP_FIELD2_GB LIKE '1%' OR COMP_FIELD2_GB LIKE '___1%' OR
+				COMP_FIELD2_GB LIKE '____1%' )
+			</when>
+			<when test="COMP_FIELD2_GB.equals('100011')">
+				AND ( COMP_FIELD2_GB LIKE '1%' OR COMP_FIELD2_GB LIKE '____1%' OR
+				COMP_FIELD2_GB LIKE '_____1' )
+			</when>
+			<when test="COMP_FIELD2_GB.equals('101010')">
+				AND ( COMP_FIELD2_GB LIKE '1%' OR COMP_FIELD2_GB LIKE '__1%' OR
+				COMP_FIELD2_GB LIKE '____1%' )
+			</when>
+			<when test="COMP_FIELD2_GB.equals('101001')">
+				AND ( COMP_FIELD2_GB LIKE '1%' OR COMP_FIELD2_GB LIKE '__1%' OR
+				COMP_FIELD2_GB LIKE '_____1' )
+			</when>
+			<when test="COMP_FIELD2_GB.equals('011100')">
+				AND ( COMP_FIELD2_GB LIKE '_1%' OR COMP_FIELD2_GB LIKE '__1%' OR
+				COMP_FIELD2_GB LIKE '___1%' )
+			</when>
+			<when test="COMP_FIELD2_GB.equals('011010')">
+				AND ( COMP_FIELD2_GB LIKE '_1%' OR COMP_FIELD2_GB LIKE '__1%' OR
+				COMP_FIELD2_GB LIKE '____1%' )
+			</when>
+			<when test="COMP_FIELD2_GB.equals('011001')">
+				AND ( COMP_FIELD2_GB LIKE '_1%' OR COMP_FIELD2_GB LIKE '__1%' OR
+				COMP_FIELD2_GB LIKE '_____1' )
+			</when>
+			<when test="COMP_FIELD2_GB.equals('010110')">
+				AND ( COMP_FIELD2_GB LIKE '_1%' OR COMP_FIELD2_GB LIKE '___1%' OR
+				COMP_FIELD2_GB LIKE '____1%' )
+			</when>
+			<when test="COMP_FIELD2_GB.equals('010011')">
+				AND ( COMP_FIELD2_GB LIKE '_1%' OR COMP_FIELD2_GB LIKE '____1%' OR
+				COMP_FIELD2_GB LIKE '_____1' )
+			</when>
+			<when test="COMP_FIELD2_GB.equals('010101')">
+				AND ( COMP_FIELD2_GB LIKE '_1%' OR COMP_FIELD2_GB LIKE '___1%' OR
+				COMP_FIELD2_GB LIKE '_____1' )
+			</when>
+			<when test="COMP_FIELD2_GB.equals('001110')">
+				AND ( COMP_FIELD2_GB LIKE '__1%' OR COMP_FIELD2_GB LIKE '___1%' OR
+				COMP_FIELD2_GB LIKE '____1%' )
+			</when>
+			<when test="COMP_FIELD2_GB.equals('001101')">
+				AND ( COMP_FIELD2_GB LIKE '__1%' OR COMP_FIELD2_GB LIKE '___1%' OR
+				COMP_FIELD2_GB LIKE '_____1' )
+			</when>
+			<when test="COMP_FIELD2_GB.equals('001011')">
+				AND ( COMP_FIELD2_GB LIKE '__1%' OR COMP_FIELD2_GB LIKE '____1%' OR
+				COMP_FIELD2_GB LIKE '_____1' )
+			</when>
+			<when test="COMP_FIELD2_GB.equals('000111')">
+				AND ( COMP_FIELD2_GB LIKE '___1%' OR COMP_FIELD2_GB LIKE '____1%' OR
+				COMP_FIELD2_GB LIKE '_____1' )
+			</when>
+			<when test="COMP_FIELD2_GB.equals('111100')">
+				AND ( COMP_FIELD2_GB LIKE '1%' OR COMP_FIELD2_GB LIKE '_1%' OR
+				COMP_FIELD2_GB LIKE '__1%' OR COMP_FIELD2_GB LIKE '___1%' )
+			</when>
+			<when test="COMP_FIELD2_GB.equals('111010')">
+				AND ( COMP_FIELD2_GB LIKE '1%' OR COMP_FIELD2_GB LIKE '_1%' OR
+				COMP_FIELD2_GB LIKE '__1%' OR COMP_FIELD2_GB LIKE '____1%' )
+			</when>
+			<when test="COMP_FIELD2_GB.equals('111001')">
+				AND ( COMP_FIELD2_GB LIKE '1%' OR COMP_FIELD2_GB LIKE '_1%' OR
+				COMP_FIELD2_GB LIKE '__1%' OR COMP_FIELD2_GB LIKE '_____1' )
+			</when>
+			<when test="COMP_FIELD2_GB.equals('011110')">
+				AND ( COMP_FIELD2_GB LIKE '_1%' OR COMP_FIELD2_GB LIKE '__1%' OR
+				COMP_FIELD2_GB LIKE '___1%' OR COMP_FIELD2_GB LIKE '____1%' )
+			</when>
+			<when test="COMP_FIELD2_GB.equals('011101')">
+				AND ( COMP_FIELD2_GB LIKE '_1%' OR COMP_FIELD2_GB LIKE '__1%' OR
+				COMP_FIELD2_GB LIKE '___1%' OR COMP_FIELD2_GB LIKE '_____1' )
+			</when>
+			<when test="COMP_FIELD2_GB.equals('001111')">
+				AND ( COMP_FIELD2_GB LIKE '__1%' OR COMP_FIELD2_GB LIKE '___1%' OR
+				COMP_FIELD2_GB LIKE '____1%' OR COMP_FIELD2_GB LIKE '_____1' )
+			</when>
+			<when test="COMP_FIELD2_GB.equals('111110')">
+				AND COMP_FIELD2_GB NOT LIKE '_____1' AND COMP_FIELD2_GB != '000000'
+			</when>
+			<when test="COMP_FIELD2_GB.equals('101111')">
+				AND COMP_FIELD2_GB NOT LIKE '_1____' AND COMP_FIELD2_GB != '000000'
+			</when>
+			<when test="COMP_FIELD2_GB.equals('110111')">
+				AND COMP_FIELD2_GB NOT LIKE '__1___' AND COMP_FIELD2_GB != '000000'
+			</when>
+			<when test="COMP_FIELD2_GB.equals('111011')">
+				AND COMP_FIELD2_GB NOT LIKE '___1__' AND COMP_FIELD2_GB != '000000'
+			</when>
+			<when test="COMP_FIELD2_GB.equals('111101')">
+				AND COMP_FIELD2_GB NOT LIKE '____1_' AND COMP_FIELD2_GB != '000000'
+			</when>
+			<when test="COMP_FIELD2_GB.equals('011111')">
+				AND COMP_FIELD2_GB NOT LIKE '1_____' AND COMP_FIELD2_GB != '000000'
+			</when>
+		</choose>
+		<if test="COMP_NM != null and COMP_NM !=''">
+			AND COMP_NM LIKE '%'|| #{COMP_NM} ||'%'
+		</if>
+		<if test="COMP_SAUP_NO != null and COMP_SAUP_NO !=''">
+			AND COMP_SAUP_NO = #{COMP_SAUP_NO}
+		</if>
+		ORDER BY ID ASC
+		<include refid="common.pagingPost" />
+	</select>
+
+
+	<select id="selectPrvCnrtContractList" parameterType="hashmap"
+		resultType="hashmap">
+		<include refid="common.pagingPre" /> 
+		<![CDATA[			  
+			    SELECT   COUNT(*) OVER() AS TOTAL_COUNT, 
+			    		 A.CNRT_YEAR          ,                                        
+				         A.CNRT_AGENCY_NM     ,        
+				         A.CNRT_NM            ,
+				         A.CNRT_AMT           ,
+				         A.CNRT_DETAIL        ,
+				         A.STATE_GB           ,  
+				         A.CNRT_CHOOSE_REASON ,
+				         A.CNRT_EVAL          ,
+				         A.CNRT_DEPT_NM       ,
+				         B.ID                 ,       
+				         B.COMP_NM            ,
+				         B.COMP_FIELD1_GB     ,
+				         B.COMP_FIELD2_GB                        
+				FROM PRIVATE_CONTRACT_CONCLUSION A 
+				LEFT OUTER JOIN PRIVATE_CONTRACT_COMP_MASTER B  
+				ON A.COMP_ID = B.ID
+				WHERE A.DEL_YN = '0'
+				AND B.DEL_YN = '0'
+		]]>
+		<choose>
+			<when test='WGB.equals("1")'>
+				AND A.DATA_GB = '1' AND A.STATE_GB = '1'
+			</when>
+			<when test='WGB.equals("2")'>
+				AND ( ( A.DATA_GB = '1' AND A.STATE_GB = '2' ) OR A.DATA_GB = '2' )
+			</when>
+		</choose>
+		<if test="CNRT_NM != null and CNRT_NM !=''">
+			AND A.CNRT_NM LIKE '%'|| #{CNRT_NM} ||'%'
+		</if>
+		<if test="COMP_NM != null and COMP_NM !=''">
+			AND B.COMP_NM LIKE '%'|| #{COMP_NM} ||'%'
+		</if>
+		<if test="CNRT_DEPT_NM != null and CNRT_DEPT_NM !=''">
+			AND A.CNRT_DEPT_NM LIKE '%'|| #{CNRT_DEPT_NM} ||'%'
+		</if>
+		ORDER BY B.COMP_NM ASC
+		<include refid="common.pagingPost" />
+	</select>
+
+
+
+
+
+	<select id="selectPrvCnrtDutyList" parameterType="hashmap"
+		resultType="hashmap">
+		<include refid="common.pagingPre" /> 
+		<![CDATA[			  
+			  	 SELECT COUNT(*) OVER() AS TOTAL_COUNT,
+			            A.ID                ,
+			            A.COMP_ID           ,
+			            A.SAUP_ID           ,
+			            A.DATA_GB    ,
+			            A.CNRT_AGENCY_NM    ,
+			            A.STATE_GB          ,
+			            A.CNRT_YEAR         ,
+			            A.CNRT_NM           ,
+			            A.CNRT_AMT          ,
+			            A.CNRT_DETAIL       ,
+			            A.CNRT_CHOOSE_REASON,
+			            A.CNRT_EVAL         ,
+			            A.CNRT_DEPT_CD      ,
+			            A.CNRT_DEPT_NM      ,
+			            A.CNRT_PERSON_ID    ,
+			            A.CNRT_PERSON_NM    ,
+			            A.CNRT_PERSON_TEL   ,                                
+                    	DECODE(B.ORIGINAL_FILE_NAME, NULL, '', 'Y') ATTACH,
+                    	B.ID  FID			,
+                    	A.BIGO              ,
+						A.INS_ID            ,
+						A.INS_DEPT          ,
+						A.INS_DATE 
+                 FROM PRIVATE_CONTRACT_CONCLUSION A LEFT OUTER JOIN (  
+                        SELECT ID, PARENT_ID, ORIGINAL_FILE_NAME
+                        FROM PRIVATE_CONTRACT_ATTACH_FILE
+                        WHERE ID IN ( SELECT MIN(ID) FROM PRIVATE_CONTRACT_ATTACH_FILE WHERE DEL_YN = '0' AND BOARD_GB = '1' GROUP BY PARENT_ID ) 
+                ) B ON A.ID = B.PARENT_ID
+                  WHERE A.DEL_YN = '0'
+                  AND A.DATA_GB = #{DATA_GB}
+                  AND A.COMP_ID = #{COMP_ID}
+                  ORDER BY A.ID DESC
+		]]>
+		<include refid="common.pagingPost" />
+	</select>
+
+
+
+	<select id="selectPrvCnrtExpertList" parameterType="hashmap"
+		resultType="hashmap">
+		<include refid="common.pagingPre" /> 
+		<![CDATA[			  
+			  SELECT COUNT(*) OVER() AS TOTAL_COUNT, 
+					ID,
+					COMP_ID,
+					EXPERT_NM,
+					RIGHT_CODE,
+					RIGHT_NM,
+					MAIN_CAREER,
+					BIGO,				
+					INS_DEPT,
+					INS_DATE
+			  FROM PRIVATE_CONTRACT_OWN_EXPERT
+			  WHERE DEL_YN = '0'
+			  AND COMP_ID = #{COMP_ID}
+			  ORDER BY ID DESC
+		]]>
+		<include refid="common.pagingPost" />
+	</select>
+
+
+
+	<select id="selectPrvCnrtReasonList" parameterType="hashmap"
+		resultType="hashmap">
+		<include refid="common.pagingPre" /> 
+		<![CDATA[			  
+			  SELECT COUNT(*) OVER() AS TOTAL_COUNT, 				
+					A.ID                , 
+					COMP_ID           ,
+					SAUP_ID           ,
+					DATA_GB           ,
+					CNRT_AGENCY_NM    ,
+					STATE_GB          ,
+					CNRT_YEAR         ,
+					CNRT_NM           ,
+					CNRT_AMT          ,
+					CNRT_DETAIL       ,
+					CNRT_CHOOSE_REASON,
+					CNRT_EVAL         ,
+					CNRT_DEPT_CD      ,
+					CNRT_DEPT_NM      ,
+					CNRT_PERSON_ID    ,
+					CNRT_PERSON_NM    ,
+					CNRT_PERSON_TEL   ,
+					BIGO              ,
+					INS_ID            ,
+					INS_DEPT          ,
+					DECODE(B.ORIGINAL_FILE_NAME, NULL, '', 'Y') ATTACH,
+					B.ID  FID         ,
+					INS_DATE
+			  FROM PRIVATE_CONTRACT_CONCLUSION A LEFT OUTER JOIN ( 
+			   SELECT ID, PARENT_ID, ORIGINAL_FILE_NAME
+                        FROM PRIVATE_CONTRACT_ATTACH_FILE
+                        WHERE ID IN ( SELECT MIN(ID) FROM PRIVATE_CONTRACT_ATTACH_FILE WHERE DEL_YN = '0' AND BOARD_GB = '9' GROUP BY PARENT_ID ) 
+                ) B ON A.ID = B.PARENT_ID
+                
+			  WHERE DEL_YN = '0'
+			  AND DATA_GB = '2'			
+			  AND COMP_ID = #{COMP_ID}
+			  ORDER BY ID DESC
+		]]>
+		<include refid="common.pagingPost" />
+	</select>
+
+
+
+	<select id="selectSatisfactionList" parameterType="hashmap"
+		resultType="hashmap">
+		<![CDATA[			  
+			 SELECT COUNT(*) OVER() AS TOTAL_COUNT, 				
+					A.ID                , 
+					COMP_ID           ,
+					SAUP_ID           ,
+					DATA_GB           ,
+					CNRT_AGENCY_NM    ,
+					STATE_GB          ,
+					CNRT_YEAR         ,
+					CNRT_NM           ,
+					CNRT_AMT          ,
+					CNRT_DETAIL       ,
+					CNRT_CHOOSE_REASON,
+					CNRT_EVAL         ,
+					CNRT_DEPT_CD      ,
+					CNRT_DEPT_NM      ,
+					CNRT_PERSON_ID    ,
+					CNRT_PERSON_NM    ,
+					CNRT_PERSON_TEL   ,
+					DECODE(B.ORIGINAL_FILE_NAME, NULL, '', 'Y') ATTACH,
+					B.ID  FID         ,
+					BIGO              ,
+					INS_ID            ,
+					INS_DEPT          ,
+					INS_DATE
+			  FROM PRIVATE_CONTRACT_CONCLUSION A LEFT OUTER JOIN (  
+                        SELECT ID, PARENT_ID, ORIGINAL_FILE_NAME
+                        FROM PRIVATE_CONTRACT_ATTACH_FILE
+                        WHERE ID IN ( SELECT MIN(ID) FROM PRIVATE_CONTRACT_ATTACH_FILE WHERE DEL_YN = '0' AND BOARD_GB = '2' GROUP BY PARENT_ID ) 
+                ) B ON A.ID = B.PARENT_ID					  
+			  WHERE DEL_YN = '0'
+			  AND DATA_GB = '2'			 		  
+			  AND COMP_ID = #{COMP_ID}			  			  
+		]]>
+		ORDER BY A.ID DESC
+	</select>
+	
+	<select id="selectPrvCnrtEvalList" parameterType="hashmap"
+		resultType="hashmap">
+		<include refid="common.pagingPre" /> 
+		<![CDATA[			  
+			 SELECT COUNT(*) OVER() AS TOTAL_COUNT, 				
+					A.ID                , 
+					COMP_ID           ,
+					SAUP_ID           ,
+					DATA_GB           ,
+					CNRT_AGENCY_NM    ,
+					STATE_GB          ,
+					CNRT_YEAR         ,
+					CNRT_NM           ,
+					CNRT_AMT          ,
+					CNRT_DETAIL       ,
+					CNRT_CHOOSE_REASON,
+					CNRT_EVAL         ,
+					CNRT_DEPT_CD      ,
+					CNRT_DEPT_NM      ,
+					CNRT_PERSON_ID    ,
+					CNRT_PERSON_NM    ,
+					CNRT_PERSON_TEL   ,
+					DECODE(B.ORIGINAL_FILE_NAME, NULL, '', 'Y') ATTACH,
+					B.ID  FID         ,
+					BIGO              ,
+					INS_ID            ,
+					INS_DEPT          ,
+					INS_DATE
+			  FROM PRIVATE_CONTRACT_CONCLUSION A LEFT OUTER JOIN (  
+                        SELECT ID, PARENT_ID, ORIGINAL_FILE_NAME
+                        FROM PRIVATE_CONTRACT_ATTACH_FILE
+                        WHERE ID IN ( SELECT MIN(ID) FROM PRIVATE_CONTRACT_ATTACH_FILE WHERE DEL_YN = '0' AND BOARD_GB = '2' GROUP BY PARENT_ID ) 
+                ) B ON A.ID = B.PARENT_ID					  
+			  WHERE DEL_YN = '0'
+			  AND DATA_GB = '2'			 		  
+			  AND COMP_ID = #{COMP_ID}			  			  
+		]]>
+		<if test="CNRT_EVAL != null and CNRT_EVAL !=''">
+			AND CNRT_EVAL IS NOT NULL
+		</if>
+		ORDER BY A.ID DESC
+		<include refid="common.pagingPost" />
+	</select>
+	
+
+
+
+
+	<select id="selectPrvCnrtPlanList" parameterType="hashmap"
+		resultType="hashmap">
+		<include refid="common.pagingPre" /> 
+		<![CDATA[			  
+			  SELECT COUNT(*) OVER() AS TOTAL_COUNT, 
+					 A.ID                ,
+					 A.SAUP_YEAR         ,
+					 A.SAUP_FIELD1_GB    ,
+					 A.SAUP_FIELD2_GB    ,
+					 A.SAUP_FIELD2_DETAIL,
+					 A.SAUP_NM           ,
+					 A.SAUP_BUDGET_AMT   ,
+					 A.SAUP_DETAIL       ,
+					 A.SAUP_DEPT_CD      ,
+					 A.SAUP_DEPT_NM      ,
+					 A.SAUP_PERSON_ID    ,
+					 A.SAUP_PERSON_NM    ,
+					 A.SAUP_PERSON_TEL   ,
+					 A.REG_DATE          ,
+					 A.ACCEPT_ST_DATE    ,
+					 A.ACCEPT_ED_DATE    ,
+					 DECODE(B.ORIGINAL_FILE_NAME, NULL, '', 'Y') ATTACH,
+					 B.ID  FID           ,
+					 A.BIGO              ,
+					 A.DISP_YN 
+			  FROM PRIVATE_CONTRACT_SAUP_MASTER A LEFT OUTER JOIN (  
+                        SELECT ID, PARENT_ID, ORIGINAL_FILE_NAME
+                        FROM PRIVATE_CONTRACT_ATTACH_FILE
+                        WHERE ID IN ( SELECT MIN(ID) FROM PRIVATE_CONTRACT_ATTACH_FILE WHERE DEL_YN = '0' AND BOARD_GB = '3' GROUP BY PARENT_ID ) 
+                ) B ON A.ID = B.PARENT_ID			  
+			  WHERE A.DEL_YN = '0'			 
+		]]>
+		<if test="SAUP_FIELD1_GB != null and SAUP_FIELD1_GB !=''">
+			AND SAUP_FIELD1_GB = #{SAUP_FIELD1_GB}
+		</if>
+		<if test="SAUP_DEPT_CD != null and SAUP_DEPT_CD !=''">
+			AND SAUP_DEPT_CD = #{SAUP_DEPT_CD}
+		</if>
+		<if test="SAUP_YEAR != null and SAUP_YEAR !=''">
+			AND SAUP_YEAR = #{SAUP_YEAR}
+		</if>
+		<if test="SAUP_NM != null and SAUP_NM !=''">
+			AND SAUP_NM LIKE '%'|| #{SAUP_NM} ||'%'
+		</if>
+		<if test="WHETHER_YN != null and WHETHER_YN !=''">
+			AND DISP_YN = #{WHETHER_YN}
+		</if>
+		ORDER BY A.SAUP_YEAR DESC, A.ACCEPT_ED_DATE DESC NULLS LAST
+		<include refid="common.pagingPost" />
+	</select>
+
+
+
+
+	<select id="selectPrvCnrtAcceptList" parameterType="hashmap"
+		resultType="hashmap">
+		<include refid="common.pagingPre" /> 
+		<![CDATA[			  
+		   SELECT COUNT(*) OVER() AS TOTAL_COUNT, 
+		   ID, 
+	       SAUP_YEAR, 
+	       SAUP_NM,
+	       SAUP_DEPT_NM, 
+	       CSP_PROPOSAL_ID,
+			(
+               SELECT MAX(ID)
+                     FROM PRIVATE_CONTRACT_COMP_MASTER
+                   WHERE del_yn = 0
+                   AND comp_nm = CSP_BUSINESS_NAME
+            ) AS COMP_ID,
+	       CSP_BUSINESS_NAME,
+	       CSP_USER_NAME,
+	       CSP_TEL_NO,
+	       CSP_REGI_DATE, 
+	       CSP_FILE_KEY,
+	       CSP_LOC_INFO,
+	       MIN(DECODE(COL_NUM, 1, SFS_ORD_IDX)) ATT1,
+	       MIN(DECODE(COL_NUM, 2, SFS_ORD_IDX)) ATT2,
+	       MIN(DECODE(COL_NUM, 3, SFS_ORD_IDX)) ATT3,
+	       MIN(DECODE(COL_NUM, 4, SFS_ORD_IDX)) ATT4,
+	       MIN(DECODE(COL_NUM, 5, SFS_ORD_IDX)) ATT5
+			FROM 
+			(
+			    SELECT 
+			    ID, SAUP_YEAR, SAUP_NM,SAUP_DEPT_NM, CSP_PROPOSAL_ID,  CSP_BUSINESS_NAME , CSP_USER_NAME, CSP_TEL_NO, CSP_REGI_DATE, CSP_FILE_KEY, CSP_LOC_INFO,
+			    ROW_NUMBER() OVER(PARTITION BY  ID, SAUP_YEAR, SAUP_NM, CSP_PROPOSAL_ID, CSP_BUSINESS_NAME, CSP_USER_NAME, CSP_LOC_INFO, CSP_TEL_NO, CSP_REGI_DATE, CSP_FILE_KEY ORDER BY ID DESC, CSP_BUSINESS_NAME, SFS_ORD_IDX) COL_NUM,
+			    SFS_ORD_IDX
+			    FROM
+			    (
+			        SELECT A.ID, A.SAUP_YEAR, A.SAUP_NM,A.SAUP_DEPT_NM, B.CSP_PROPOSAL_ID, B.CSP_MASTER_ID, B.CSP_LOC_INFO, B.CSP_BUSINESS_NAME, B.CSP_USER_NAME, B.CSP_TEL_NO, B.CSP_REGI_DATE, B.CSP_FILE_KEY, B.SFS_ORD_IDX
+			        FROM PRIVATE_CONTRACT_SAUP_MASTER A LEFT OUTER JOIN 
+			        (
+			            SELECT  CSP_PROPOSAL_ID, CSP_LOC_INFO, CSP_MASTER_ID, CSP_BUSINESS_NAME, SFS_ORD_IDX, CSP_USER_NAME, CSP_TEL_NO, TO_CHAR(CSP_REGI_DATE, 'YYYY.MM.DD HH24:MI:SS') CSP_REGI_DATE, CSP_USE_YN, CSP_FILE_KEY 
+			            FROM 
+			            PRIVATE_CONTRACT_SAUP_PROPOSAL X LEFT OUTER JOIN SITE_FILE_SET Y
+			            ON X.CSP_FILE_KEY = Y.SFS_FILE_KEY
+			            WHERE 1 = 1
+			            AND X.CSP_USE_YN = 'Y'
+			            ORDER BY CSP_PROPOSAL_ID ASC
+			        ) B ON A.ID = B.CSP_MASTER_ID
+			        WHERE A.DEL_YN = '0'			      
+			        ]]>
+		<if test="INS_ID != null and INS_ID !=''">
+			AND A.INS_ID = #{INS_ID}
+		</if>
+		<if test="SAUP_NM != null and SAUP_NM !=''">
+			AND SAUP_NM LIKE '%'|| #{SAUP_NM} ||'%'
+		</if>
+		<if test="COMP_NM != null and COMP_NM !=''">
+			AND CSP_BUSINESS_NAME LIKE '%'|| #{COMP_NM} ||'%'
+		</if>
+		)
+		)
+		GROUP BY ID, SAUP_YEAR, SAUP_NM,SAUP_DEPT_NM, CSP_PROPOSAL_ID,
+		CSP_BUSINESS_NAME, CSP_USER_NAME, CSP_TEL_NO, CSP_REGI_DATE,
+		CSP_FILE_KEY, CSP_LOC_INFO
+		ORDER BY ID DESC, SAUP_NM ASC, CSP_REGI_DATE ASC
+		<include refid="common.pagingPost" />
+	</select>
+
+
+
+
+	<select id="attachFileList" parameterType="hashmap" resultType="hashmap">		
+		<![CDATA[			  
+				SELECT
+				     SFI_FILE_KEY,
+				     SFI_REGI_DATE,
+				     NVL(SFI_USE_YN, 'N') AS SFI_USE_YN,        
+				     SFS_FILE_KEY,
+				     SFS_ORD_IDX,
+				     SFS_SAVE_PATH,
+				     SFS_REAL_NAME,        
+				     SFS_SAVE_NAME,        
+				     SFS_MIME_TYPE,        
+				     SFS_FILE_SIZE,        
+				     SFS_DOWN_CNT,      
+				     SFS_REGI_DATE,        
+				     SFS_ASIS_FILE_KEY,        
+				     SFS_WEB_PATH
+				FROM SITE_FILE_INFO, SITE_FILE_SET
+				WHERE SFI_FILE_KEY = SFS_FILE_KEY
+				AND SFS_FILE_KEY = #{SFS_FILE_KEY}
+				ORDER BY SFS_ORD_IDX ASC			 
+		]]>
+		<if test="SAUP_FIELD1_GB != null and SAUP_FIELD1_GB !=''">
+			AND SAUP_FIELD1_GB = #{SAUP_FIELD1_GB}
+		</if>
+	</select>
+
+
+
+
+	<select id="selectPrvCnrtStatistics1" parameterType="hashmap"
+		resultType="hashmap">		
+		<![CDATA[   
+		    SELECT 11, LISTAGG(CNT, ':') WITHIN GROUP (ORDER BY CNT) AS CNT, LISTAGG(NUM, ':') WITHIN GROUP (ORDER BY CNT) AS NUM, SUM(NUM) SNUM 
+		    FROM
+		    (			  
+				SELECT CNT, COUNT(CNT) NUM FROM 
+				(
+					SELECT COUNT(*) CNT FROM 
+					( 
+						SELECT A.ID, A.SAUP_NM, B.CSP_BUSINESS_NAME,B.CSP_USER_NAME  
+						FROM PRIVATE_CONTRACT_SAUP_MASTER A, PRIVATE_CONTRACT_SAUP_PROPOSAL B
+						WHERE A.ID = B.CSP_MASTER_ID
+						AND B.CSP_USE_YN = 'Y'
+						AND A.DEL_YN= '0'
+						AND TO_CHAR(CSP_REGI_DATE, 'YYYYMMDD') >= #{ST_DATE}
+						AND TO_CHAR(CSP_REGI_DATE, 'YYYYMMDD') <= #{ED_DATE}
+						ORDER BY ID ASC
+					)
+					GROUP BY ID
+				)
+				GROUP BY CNT						
+				UNION ALL
+				SELECT 0 CNT, COUNT(ID) NUM FROM PRIVATE_CONTRACT_SAUP_MASTER
+				WHERE DEL_YN = '0'
+				AND ACCEPT_ED_DATE >= #{ST_DATE}
+				AND ACCEPT_ST_DATE <= #{ED_DATE}
+				AND ACCEPT_ST_DATE IS NOT NULL
+				AND ID NOT IN (
+				SELECT ID FROM 
+				( 
+					SELECT DISTINCT(A.ID) ID
+					FROM PRIVATE_CONTRACT_SAUP_MASTER A, PRIVATE_CONTRACT_SAUP_PROPOSAL B
+					WHERE A.ID = B.CSP_MASTER_ID
+					AND B.CSP_USE_YN = 'Y'
+					AND A.DEL_YN= '0'
+					AND TO_CHAR(CSP_REGI_DATE, 'YYYYMMDD') >= #{ST_DATE}
+					AND TO_CHAR(CSP_REGI_DATE, 'YYYYMMDD') <= #{ED_DATE}
+					ORDER BY ID ASC
+					)
+				GROUP BY ID
+				)
+			)
+			ORDER BY CNT ASC
+		
+		]]>
+		<if test="SAUP_FIELD1_GB != null and SAUP_FIELD1_GB !=''">
+			AND SAUP_FIELD1_GB = #{SAUP_FIELD1_GB}
+		</if>
+	</select>
+
+
+	<select id="selectPrvCnrtStatistics1List" parameterType="hashmap"
+		resultType="hashmap">
+		<include refid="common.pagingPre" /> 		
+		<![CDATA[
+			    SELECT COUNT(*) OVER() AS TOTAL_COUNT,  
+			    	   ID, SAUP_NM, SAUP_DEPT_NM, SAUP_BUDGET_AMT, CNT 
+			    FROM
+				(
+					SELECT ID, SAUP_NM, SAUP_DEPT_NM, SAUP_BUDGET_AMT, COUNT(*) CNT FROM 
+					( 
+						SELECT A.ID, A.SAUP_NM, A.SAUP_DEPT_NM, A.SAUP_BUDGET_AMT, B.CSP_BUSINESS_NAME,B.CSP_USER_NAME  
+						FROM PRIVATE_CONTRACT_SAUP_MASTER A, PRIVATE_CONTRACT_SAUP_PROPOSAL B
+						WHERE A.ID = B.CSP_MASTER_ID
+						AND B.CSP_USE_YN = 'Y'
+						AND A.DEL_YN= '0'
+						AND TO_CHAR(CSP_REGI_DATE, 'YYYYMMDD') >= #{ST_DATE}
+						AND TO_CHAR(CSP_REGI_DATE, 'YYYYMMDD') <= #{ED_DATE}
+						ORDER BY ID ASC
+					)
+					GROUP BY ID, SAUP_NM, SAUP_DEPT_NM, SAUP_BUDGET_AMT
+					UNION ALL					
+					SELECT ID, SAUP_NM, SAUP_DEPT_NM, SAUP_BUDGET_AMT, 0 cnt FROM PRIVATE_CONTRACT_SAUP_MASTER
+					WHERE DEL_YN = '0'
+					AND ACCEPT_ED_DATE >= #{ST_DATE}
+					AND ACCEPT_ST_DATE <= #{ED_DATE}
+					AND ACCEPT_ST_DATE IS NOT NULL
+					AND ID NOT IN (
+					SELECT ID FROM 
+					( 
+						SELECT DISTINCT(A.ID) ID
+						FROM PRIVATE_CONTRACT_SAUP_MASTER A, PRIVATE_CONTRACT_SAUP_PROPOSAL B
+						WHERE A.ID = B.CSP_MASTER_ID
+						AND B.CSP_USE_YN = 'Y'
+						AND A.DEL_YN= '0'
+						AND TO_CHAR(CSP_REGI_DATE, 'YYYYMMDD') >= #{ST_DATE}
+						AND TO_CHAR(CSP_REGI_DATE, 'YYYYMMDD') <= #{ED_DATE}
+						ORDER BY ID ASC
+					)
+					GROUP BY ID
+					)					
+				)
+				WHERE 1 = 1
+		]]>
+		<if test="CNT != null and CNT !=''">
+			AND CNT = #{CNT}
+		</if>
+		<include refid="common.pagingPost" />
+	</select>
+
+
+	<select id="selectPrvCnrtStatistics2" parameterType="hashmap"
+		resultType="hashmap">
+		<include refid="common.pagingPre" />		
+		<![CDATA[   
+		    SELECT COUNT(*) OVER() AS TOTAL_COUNT,
+		    A.COMP_ID COMP_ID, B.COMP_NM COMP_NM, B.COMP_FIELD1_GB GB1, B.COMP_FIELD2_GB GB2, COUNT(A.COMP_ID) CNT
+			FROM PRIVATE_CONTRACT_COMP_MASTER B, PRIVATE_CONTRACT_CONCLUSION A 
+			WHERE A.COMP_ID = B.ID
+			AND A.DEL_YN = '0' 
+			AND B.DEL_YN = '0'
+			AND A.CNRT_EVAL IS NOT NULL				
+		]]>
+		<if test="COMP_NM != null and COMP_NM !=''">
+			AND B.COMP_NM LIKE '%' || #{COMP_NM} ||'%'
+		</if>
+		GROUP BY A.COMP_ID, B.COMP_NM, B.COMP_FIELD1_GB, B.COMP_FIELD2_GB
+		ORDER BY CNT DESC
+		<include refid="common.pagingPost" />
+	</select>
+
+	<select id="selectCountList" parameterType="hashmap" resultType="hashmap">
+		<include refid="common.pagingPre" />		
+		<![CDATA[			
+			SELECT COUNT(*) OVER() AS TOTAL_COUNT, 
+			CNRT_YEAR, CNRT_NM, CNRT_AMT, CNRT_EVAL, CNRT_DEPT_NM 
+			FROM PRIVATE_CONTRACT_CONCLUSION
+			WHERE COMP_ID = #{COMP_ID}
+			AND DEL_YN = '0'
+			AND CNRT_EVAL IS NOT NULL
+			ORDER BY CNRT_YEAR DESC
+		]]>
+		<include refid="common.pagingPost" />
+	</select>
+
+
+
+
+
+
+
+
+
+	<select id="prvCnrtPlanInfo" parameterType="hashmap" resultType="hashmap">
+		<![CDATA[			
+	        SELECT  ID                  ,     
+					SAUP_YEAR           ,
+					SAUP_FIELD1_GB      ,
+					SAUP_FIELD2_GB      ,
+					SAUP_FIELD2_DETAIL  ,
+					SAUP_NM             ,
+					SAUP_BUDGET_AMT     ,
+					SAUP_DETAIL         ,
+					SAUP_DEPT_CD        ,
+					SAUP_DEPT_NM        ,
+					SAUP_PERSON_ID      ,
+					SAUP_PERSON_NM      ,
+					SAUP_PERSON_TEL     ,
+					REG_DATE            ,
+					ACCEPT_ST_DATE      ,
+					ACCEPT_ED_DATE      ,
+					BIGO                ,
+					INS_ID              ,
+					INS_DEPT            ,
+					DISP_YN
+	        FROM PRIVATE_CONTRACT_SAUP_MASTER
+	        WHERE DEL_YN = '0'
+			AND ID = #{ID}
+		]]>
+	</select>
+
+
+	<select id="prvCnrtCompInfo" parameterType="hashmap" resultType="hashmap">
+		<![CDATA[			
+	        SELECT
+	                ID,
+					COMP_SAUP_NO,
+					COMP_BUBIN_NO,
+					COMP_NM,
+					COMP_HEAD_NM,
+					COMP_FIELD1_GB,
+					COMP_FIELD2_GB,
+					COMP_FIELD2_DETAIL,
+					COMP_ZIP_CD,
+					COMP_ADDR,
+					COMP_ADDR_ROAD,
+					COMP_SIZE,
+					COMP_TEL,
+					COMP_CAPITAL,
+					COMP_CAPITAL_DETAIL,
+					COMP_EMPLOYEE_CNT,
+					COMP_MAIN_WORK,					
+					BIGO,
+					INS_ID,
+					INS_DEPT
+	        FROM PRIVATE_CONTRACT_COMP_MASTER
+			WHERE ID = #{ID}		    		
+		]]>
+	</select>
+
+
+
+	<select id="prvCnrtDutyUpdate" parameterType="hashmap"
+		resultType="hashmap">
+		<![CDATA[	       
+			SELECT
+                    ID                , 
+                    COMP_ID           ,                                  
+                    DATA_GB           ,
+                    CNRT_AGENCY_NM    ,
+                    STATE_GB          ,
+                    CNRT_YEAR         ,
+                    CNRT_NM           ,
+                    CNRT_AMT          ,
+                    CNRT_DETAIL       ,                   
+                    BIGO              ,
+                    INS_ID            ,
+                    INS_DEPT                
+            FROM PRIVATE_CONTRACT_CONCLUSION
+            WHERE  DEL_YN = '0'
+            AND ID = #{CON_ID}				    		
+		]]>
+	</select>
+
+
+
+	<select id="prvCnrtExpertUpdate" parameterType="hashmap"
+		resultType="hashmap">
+		<![CDATA[	       
+			SELECT  ID          ,
+					COMP_ID     ,
+					EXPERT_NM   ,
+					RIGHT_CODE  ,
+					RIGHT_NM    ,
+					MAIN_CAREER ,
+					BIGO        ,
+					INS_ID      ,
+					INS_DEPT
+            FROM PRIVATE_CONTRACT_OWN_EXPERT
+            WHERE  DEL_YN = '0'
+            AND ID = #{CON_ID}				    		
+		]]>
+	</select>
+
+
+
+
+	<select id="prvCnrtEvalUpdate" parameterType="hashmap"
+		resultType="hashmap">
+		<![CDATA[	       
+			SELECT
+                    A.ID                , 
+                    A.COMP_ID           ,
+                    A.SAUP_ID           ,
+                    B.SAUP_NM           ,
+                    B.SAUP_BUDGET_AMT   ,
+                    A.DATA_GB           ,
+                    A.CNRT_AGENCY_NM    ,
+                    A.STATE_GB          ,
+                    A.CNRT_YEAR         ,
+                    A.CNRT_NM           ,
+                    A.CNRT_AMT          ,
+                    A.CNRT_DETAIL       ,
+                    A.CNRT_CHOOSE_REASON,
+                    A.CNRT_EVAL         ,
+                    A.CNRT_DEPT_CD      ,
+                    A.CNRT_DEPT_NM      ,
+                    A.CNRT_PERSON_ID    ,
+                    A.CNRT_PERSON_NM    ,
+                    A.CNRT_PERSON_TEL   ,
+                    A.BIGO              ,
+                    A.INS_ID            ,
+                    A.INS_DEPT  
+            FROM PRIVATE_CONTRACT_CONCLUSION A
+            LEFT OUTER JOIN              
+            ( SELECT
+                    ID                  ,                  
+                    SAUP_YEAR           ,                                        
+                    SAUP_NM             ,
+                    SAUP_BUDGET_AMT
+            FROM PRIVATE_CONTRACT_SAUP_MASTER
+            WHERE DEL_YN = '0' ) B ON A.SAUP_ID = B.ID
+            WHERE A.DEL_YN = '0'
+            AND A.ID = #{CON_ID}					    		
+		]]>
+	</select>
+
+
+
+
+
+	<insert id="insertPrvCnrtComp" parameterType="hashmap">
+		<selectKey keyProperty="SID" resultType="string" order="BEFORE">
+			SELECT PRIVATE_CONTRACT_COMP_MST_SQ.NEXTVAL FROM DUAL
+		</selectKey>
+		<![CDATA[		
+			INSERT INTO PRIVATE_CONTRACT_COMP_MASTER
+			(
+				ID,
+				COMP_SAUP_NO,
+				COMP_BUBIN_NO,
+				COMP_NM,
+				COMP_HEAD_NM,
+				COMP_FIELD1_GB,
+				COMP_FIELD2_GB,
+				COMP_FIELD2_DETAIL,
+				COMP_ZIP_CD,
+				COMP_ADDR,
+				COMP_ADDR_ROAD,
+				COMP_SIZE,
+				COMP_TEL,				
+				COMP_CAPITAL,
+				COMP_CAPITAL_DETAIL,
+				COMP_EMPLOYEE_CNT,
+				COMP_MAIN_WORK,
+				BIGO,               				
+				INS_ID,
+				INS_DEPT,
+				INS_DATE																	  
+			)
+			VALUES
+			(
+				TRIM(#{SID}),
+				TRIM(REPLACE(#{COMP_SAUP_NO}, '-', '')),
+				TRIM(REPLACE(#{COMP_BUBIN_NO}, '-', '')),						
+				TRIM(#{COMP_NM}),
+				TRIM(#{COMP_HEAD_NM}),
+				TRIM(#{COMP_FIELD1_GB}),
+				TRIM(#{COMP_FIELD2_GB}),
+				TRIM(#{COMP_FIELD2_DETAIL}),								
+				TRIM(#{COMP_ZIP_CD}),
+				TRIM(#{COMP_ADDR}),
+				TRIM(#{COMP_ADDR_ROAD}),
+				TRIM(#{COMP_SIZE}),
+				TRIM(#{COMP_TEL}),
+				TRIM(#{COMP_CAPITAL}),
+				TRIM(#{COMP_CAPITAL_DETAIL}),
+				TRIM(#{COMP_EMPLOYEE_CNT}),
+				TRIM(#{COMP_MAIN_WORK}),		
+				TRIM(#{BIGO}),
+				TRIM(#{INS_ID}),
+				TRIM(#{INS_DEPT}),
+				SYSDATE
+			)
+		]]>
+	</insert>
+
+
+
+	<insert id="insertPrvCnrtContract" parameterType="hashmap">
+		<selectKey keyProperty="SID" resultType="string" order="BEFORE">
+			SELECT PRIVATE_CONTRACT_CNCLSN_SQ.NEXTVAL FROM DUAL
+		</selectKey>
+		<![CDATA[		
+			INSERT INTO PRIVATE_CONTRACT_CONCLUSION
+			(
+				ID                 ,            
+				COMP_ID            ,
+				SAUP_ID            ,
+				DATA_GB     ,
+				CNRT_AGENCY_NM     ,
+				STATE_GB           ,
+				CNRT_YEAR          ,
+				CNRT_NM            ,
+				CNRT_AMT           ,
+				CNRT_DETAIL        ,
+				CNRT_CHOOSE_REASON ,
+				CNRT_EVAL          ,
+				CNRT_DEPT_CD       ,
+				CNRT_DEPT_NM       ,
+				CNRT_PERSON_ID     ,
+				CNRT_PERSON_NM     ,
+				CNRT_PERSON_TEL    ,				
+				BIGO               ,      				
+				INS_ID             ,
+				INS_DEPT           ,
+				INS_DATE																	  
+			)
+			VALUES
+			(
+				TRIM(#{SID}),
+				TRIM(#{COMP_ID}),
+				TRIM(#{SAUP_ID}),
+				TRIM(#{DATA_GB}),
+				TRIM(#{CNRT_AGENCY_NM}),
+				TRIM(#{STATE_GB}),
+				TRIM(#{CNRT_YEAR}),
+				TRIM(#{CNRT_NM}),
+				TRIM(REPLACE(#{CNRT_AMT}, ',', '')),
+				TRIM(#{CNRT_DETAIL}),
+				TRIM(#{CNRT_CHOOSE_REASON}),
+				TRIM(#{CNRT_EVAL}),
+				TRIM(#{CNRT_DEPT_CD}),
+				TRIM(#{CNRT_DEPT_NM}),
+				TRIM(#{CNRT_PERSON_ID}),
+				TRIM(#{CNRT_PERSON_NM}),
+				TRIM(#{CNRT_PERSON_TEL}),				
+				TRIM(#{BIGO}),
+				TRIM(#{INS_ID}),
+				TRIM(#{INS_DEPT}),
+				SYSDATE
+			)
+		]]>
+	</insert>
+
+
+
+	<update id="updatePrvCnrtPlan" parameterType="hashmap">
+		<![CDATA[		
+			UPDATE PRIVATE_CONTRACT_SAUP_MASTER
+			SET SAUP_YEAR           = #{SAUP_YEAR},
+				SAUP_FIELD1_GB      = #{SAUP_FIELD1_GB},
+				SAUP_FIELD2_GB      = #{SAUP_FIELD2_GB},
+				SAUP_FIELD2_DETAIL  = #{SAUP_FIELD2_DETAIL},
+				SAUP_NM             = #{SAUP_NM},
+				SAUP_BUDGET_AMT     = TRIM(REPLACE(#{SAUP_BUDGET_AMT}, ',', '')),
+				SAUP_DETAIL         = #{SAUP_DETAIL},
+				SAUP_DEPT_CD        = #{SAUP_DEPT_CD},
+				SAUP_DEPT_NM        = #{SAUP_DEPT_NM},
+				SAUP_PERSON_ID      = #{SAUP_PERSON_ID},
+				SAUP_PERSON_NM      = #{SAUP_PERSON_NM},
+				SAUP_PERSON_TEL     = #{SAUP_PERSON_TEL},						
+		]]>
+		<if test="REG_DATE != null and REG_DATE !=''">
+			REG_DATE = TRIM(REPLACE(#{REG_DATE}, '-', '')),
+		</if>
+		ACCEPT_ST_DATE = TRIM(REPLACE(#{ACCEPT_ST_DATE}, '-', '')),
+		ACCEPT_ED_DATE = TRIM(REPLACE(#{ACCEPT_ED_DATE}, '-', '')),
+		BIGO = #{BIGO},
+		MOD_ID = #{MOD_ID},
+		MOD_DEPT = #{MOD_DEPT},
+		MOD_DATE = SYSDATE
+		WHERE ID = #{ID}
+
+	</update>
+
+
+	<update id="updatePrvCnrtComp" parameterType="hashmap">
+		<![CDATA[		
+			UPDATE PRIVATE_CONTRACT_COMP_MASTER
+			SET   COMP_SAUP_NO          = TRIM(REPLACE(#{COMP_SAUP_NO}, '-', '')),       
+				  COMP_BUBIN_NO         = TRIM(REPLACE(#{COMP_BUBIN_NO}, '-', '')),       
+				  COMP_NM               = #{COMP_NM},     
+				  COMP_HEAD_NM          = #{COMP_HEAD_NM},
+				  COMP_FIELD1_GB        = #{COMP_FIELD1_GB},
+				  COMP_FIELD2_GB        = #{COMP_FIELD2_GB},
+				  COMP_FIELD2_DETAIL    = #{COMP_FIELD2_DETAIL},
+				  COMP_ZIP_CD           = #{COMP_ZIP_CD},
+				  COMP_ADDR             = #{COMP_ADDR},           
+				  COMP_ADDR_ROAD        = #{COMP_ADDR_ROAD},   
+				  COMP_SIZE             = #{COMP_SIZE},
+				  COMP_TEL              = #{COMP_TEL},
+				  COMP_CAPITAL          = #{COMP_CAPITAL},
+				  COMP_CAPITAL_DETAIL   = #{COMP_CAPITAL_DETAIL},
+				  COMP_EMPLOYEE_CNT     = #{COMP_EMPLOYEE_CNT},
+				  COMP_MAIN_WORK        = #{COMP_MAIN_WORK},
+				  BIGO                  = #{BIGO},
+				  MOD_ID                = #{MOD_ID},
+				  MOD_DEPT              = #{MOD_DEPT},
+				  MOD_DATE              = SYSDATE
+			WHERE ID = #{ID}
+		]]>
+	</update>
+
+
+
+	<update id="updatePrvCnrtDuty" parameterType="hashmap">
+		<![CDATA[		
+			UPDATE PRIVATE_CONTRACT_CONCLUSION
+			SET CNRT_AGENCY_NM = #{CNRT_AGENCY_NM},
+				CNRT_YEAR = #{CNRT_YEAR},
+			    CNRT_NM = #{CNRT_NM},
+			    CNRT_AMT = TRIM(REPLACE(#{CNRT_AMT}, ',', '')),
+			    CNRT_DETAIL = #{CNRT_DETAIL},			    
+			    BIGO = #{BIGO},
+			    MOD_ID = #{MOD_ID},
+				MOD_DEPT = #{MOD_DEPT},
+				MOD_DATE = SYSDATE
+			WHERE ID = #{CON_ID}
+		]]>
+	</update>
+
+
+
+	<update id="updatePrvCnrtExpert" parameterType="hashmap">
+		<![CDATA[		
+			UPDATE PRIVATE_CONTRACT_OWN_EXPERT
+			SET EXPERT_NM = #{EXPERT_NM},
+				RIGHT_CODE = #{RIGHT_CODE},
+			    RIGHT_NM = #{RIGHT_NM},
+			    MAIN_CAREER = #{MAIN_CAREER},					   
+			    BIGO = #{BIGO},
+			    MOD_ID = #{MOD_ID},
+				MOD_DEPT = #{MOD_DEPT},
+				MOD_DATE = SYSDATE
+			WHERE ID = #{CON_ID}
+		]]>
+	</update>
+
+
+	<update id="updatePrvCnrtReason" parameterType="hashmap">
+		<![CDATA[		
+			UPDATE PRIVATE_CONTRACT_CONCLUSION
+			SET SAUP_ID = #{SAUP_ID},
+			    CNRT_YEAR = #{CNRT_YEAR},
+			    CNRT_NM = #{CNRT_NM},
+			    CNRT_AMT = TRIM(REPLACE(#{CNRT_AMT}, ',', '')),
+			    CNRT_DETAIL = #{CNRT_DETAIL},
+			    CNRT_CHOOSE_REASON = #{CNRT_CHOOSE_REASON},
+			    CNRT_DEPT_CD = #{CNRT_DEPT_CD},
+			    CNRT_DEPT_NM = #{CNRT_DEPT_NM},
+			    CNRT_PERSON_ID = #{CNRT_PERSON_ID},
+			    CNRT_PERSON_NM = #{CNRT_PERSON_NM},
+			    CNRT_PERSON_TEL = #{CNRT_PERSON_TEL},
+			    BIGO = #{BIGO},
+			    MOD_ID = #{MOD_ID},
+				MOD_DEPT = #{MOD_DEPT},
+				MOD_DATE = SYSDATE
+			WHERE ID = #{CON_ID}
+		]]>
+	</update>
+
+
+
+	<update id="updatePrvCnrtEval" parameterType="hashmap">
+		<![CDATA[		
+			UPDATE PRIVATE_CONTRACT_CONCLUSION
+			SET CNRT_EVAL = #{CNRT_EVAL},
+			    STATE_GB = '2',
+			    BIGO = #{BIGO},
+			    MOD2_ID = #{MOD_ID},
+				MOD2_DEPT = #{MOD_DEPT},
+				MOD2_DATE = SYSDATE
+			WHERE ID = #{CON_ID}			 			
+		]]>
+	</update>
+
+
+
+
+	<update id="deletePrvCnrtPlan" parameterType="hashmap">
+		<![CDATA[		
+			UPDATE PRIVATE_CONTRACT_SAUP_MASTER
+			SET DEL_YN = '1',
+			DEL_ID = #{MOD_ID},
+			DEL_DEPT = #{MOD_DEPT},
+			DEL_DATE = SYSDATE			
+			WHERE ID = #{ID}
+		]]>
+	</update>
+
+
+	<update id="deletePrvCnrtComp" parameterType="hashmap">
+		<![CDATA[		
+			UPDATE PRIVATE_CONTRACT_COMP_MASTER
+			SET DEL_YN = '1',
+			DEL_ID = #{MOD_ID},
+			DEL_DEPT = #{MOD_DEPT},
+			DEL_DATE = SYSDATE			
+			WHERE ID = #{ID}
+		]]>
+	</update>
+
+
+	<update id="deletePrvCnrtDuty" parameterType="hashmap">
+		<![CDATA[		
+			UPDATE PRIVATE_CONTRACT_CONCLUSION
+			SET DEL_YN = '1',
+			DEL_ID = #{MOD_ID},
+			DEL_DEPT = #{MOD_DEPT},
+			DEL_DATE = SYSDATE
+			WHERE ID = #{CON_ID}
+		]]>
+	</update>
+
+
+	<update id="deletePrvCnrtExpert" parameterType="hashmap">
+		<![CDATA[		
+			UPDATE PRIVATE_CONTRACT_OWN_EXPERT
+			SET DEL_YN = '1',
+			DEL_ID = #{MOD_ID},
+			DEL_DEPT = #{MOD_DEPT},
+			DEL_DATE = SYSDATE			
+			WHERE ID = #{CON_ID}
+		]]>
+	</update>
+
+
+
+
+
+
+
+	<insert id="insScOtherWork" parameterType="hashmap"
+		useGeneratedKeys="true">
+		<selectKey keyProperty="SID" resultType="string" order="BEFORE">
+			SELECT PRIVATE_CONTRACT_CNCLSN_SQ.NEXTVAL FROM DUAL
+		</selectKey>
+	
+		<![CDATA[		
+			INSERT INTO SERVICE_CONTRACT_COMP_SUB
+			(
+				ID,
+				MAST_ID,
+				DUTY_GB,				
+				DUTY_YEAR,				
+				DUTY_NAME,
+				DUTY_DEPT_CD,
+				DUTY_DEPT_NM,				
+				DUTY_EVAL,
+				DUTY_AMT,
+				DUTY_DETAIL,				
+				DUTY_PERSON_ID,
+				DUTY_PERSON_NM,
+				DUTY_PERSON_TEL,
+				DUTY_CHOOSE_REASON,
+				BIGO,
+				INS_ID,
+				INS_DEPT,
+				INS_DATE																  
+			)
+			VALUES
+			(					
+				#{SID},
+				#{MAST_ID},
+				#{DUTY_GB},				
+				#{DUTY_YEAR},				
+				#{DUTY_NAME},
+				#{DUTY_DEPT_CD},
+				#{DUTY_DEPT_NM},				
+				#{DUTY_EVAL},
+				TRIM(REPLACE(#{DUTY_AMT}, ',', '')),
+				#{DUTY_DETAIL},
+				#{DUTY_PERSON_ID},
+				#{DUTY_PERSON_NM},
+				#{DUTY_PERSON_TEL},
+				#{DUTY_CHOOSE_REASON},				
+				#{BIGO},						
+				#{INS_ID},
+				#{INS_DEPT},
+				SYSDATE			    
+			)
+		]]>
+	</insert>
+
+
+
+	<insert id="insertPrvCnrtExpert" parameterType="hashmap">
+		<selectKey keyProperty="SID" resultType="string" order="BEFORE">
+			SELECT PRIVATE_CONTRACT_OWN_EXPERT_SQ.NEXTVAL FROM DUAL
+		</selectKey>
+		<![CDATA[		
+			INSERT INTO PRIVATE_CONTRACT_OWN_EXPERT
+			(
+				ID,
+				COMP_ID,
+				EXPERT_NM,
+				RIGHT_CODE,
+				RIGHT_NM,
+				MAIN_CAREER,
+				BIGO,				
+				INS_ID,
+				INS_DEPT,
+				INS_DATE																	  
+			)
+			VALUES
+			(
+				#{SID},				
+				#{COMP_ID},
+				#{EXPERT_NM},
+				#{RIGHT_CODE},
+				#{RIGHT_NM},
+				#{MAIN_CAREER},
+				#{BIGO},							
+				#{INS_ID},
+				#{INS_DEPT},
+				SYSDATE			    
+			)
+		]]>
+	</insert>
+
+
+
+
+	<insert id="insertPrvCnrtPlanBack" parameterType="hashmap">
+		<selectKey keyProperty="SID" resultType="string" order="BEFORE">
+			SELECT PRIVATE_CONTRACT_SAUP_MST_SQ.NEXTVAL FROM DUAL
+		</selectKey>
+		
+		<![CDATA[		
+			INSERT INTO PRIVATE_CONTRACT_SAUP_MASTER
+			(
+			    ID                , 
+				SAUP_YEAR         , 
+				SAUP_FIELD1_GB    , 
+				SAUP_FIELD2_GB    , 
+				SAUP_FIELD2_DETAIL, 
+				SAUP_NM           , 
+				SAUP_BUDGET_AMT   , 
+				SAUP_DETAIL       , 
+				SAUP_DEPT_CD      , 
+				SAUP_DEPT_NM      , 
+				SAUP_PERSON_ID    , 
+				SAUP_PERSON_NM    , 
+				SAUP_PERSON_TEL   , 
+				REG_DATE          ,
+				ACCEPT_ST_DATE    ,
+				ACCEPT_ED_DATE    ,
+				BIGO              ,  			    
+				INS_ID            ,
+			    INS_DEPT          ,
+			    INS_DATE          ,			   
+			    DEL_YN     																  
+			)
+			VALUES
+			(
+				 #{SID},				 
+ 				 #{SAUP_YEAR},
+ 				 #{SAUP_FIELD1_GB},
+ 				 #{SAUP_FIELD2_GB},
+ 			     #{SAUP_FIELD2_DETAIL},
+                 #{SAUP_NM},
+ 				 TRIM(REPLACE(#{SAUP_BUDGET_AMT}, ',', '')),
+ 		         #{SAUP_DETAIL},
+                 #{SAUP_DEPT_CD},
+ 		         #{SAUP_DEPT_NM},
+ 				 #{SAUP_PERSON_ID},
+ 	             #{SAUP_PERSON_NM},
+ 				 #{SAUP_PERSON_TEL},
+ 				 TO_CHAR(SYSDATE, 'YYYYMMDD'),
+ 				 TRIM(REPLACE(#{ACCEPT_ST_DATE}, '-', '')),
+ 				 TRIM(REPLACE(#{ACCEPT_ED_DATE}, '-', '')),
+ 				 #{BIGO}, 					
+				 #{INS_ID},
+				 #{INS_DEPT},
+				 SYSDATE,
+				 '0'			    
+			)
+		]]>
+	</insert>
+
+
+
+	<insert id="insertPrvCnrtPlan" parameterType="hashmap">
+		<selectKey keyProperty="SID" resultType="string" order="BEFORE">
+			SELECT PRIVATE_CONTRACT_SAUP_MST_SQ.NEXTVAL FROM DUAL
+		</selectKey>
+		
+		<![CDATA[		
+			INSERT INTO PRIVATE_CONTRACT_SAUP_MASTER
+			(
+			    ID                , 
+				SAUP_YEAR         , 
+				SAUP_FIELD1_GB    , 
+				SAUP_FIELD2_GB    , 
+				SAUP_FIELD2_DETAIL, 
+				SAUP_NM           , 
+				SAUP_BUDGET_AMT   , 
+				SAUP_DETAIL       , 
+				SAUP_DEPT_CD      , 
+				SAUP_DEPT_NM      , 
+				SAUP_PERSON_ID    , 
+				SAUP_PERSON_NM    , 
+				SAUP_PERSON_TEL   , 
+				REG_DATE          ,
+				ACCEPT_ST_DATE    ,
+				ACCEPT_ED_DATE    ,
+				BIGO              ,  			    
+				INS_ID            ,
+			    INS_DEPT          ,
+			    INS_DATE          ,			   
+			    DEL_YN     																  
+			)
+			SELECT 
+			 #{SID},
+			 SAUP_YEAR         , 
+				SAUP_FIELD1_GB    , 
+				SAUP_FIELD2_GB    , 
+				SAUP_FIELD2_DETAIL, 
+				SAUP_NM           , 
+				SAUP_BUDGET_AMT   , 
+				SAUP_DETAIL       , 
+				SAUP_DEPT_CD      , 
+				SAUP_DEPT_NM      , 
+				SAUP_PERSON_ID    , 
+				SAUP_PERSON_NM    , 
+				SAUP_PERSON_TEL   , 
+				REG_DATE          ,
+				ACCEPT_ST_DATE    ,
+				ACCEPT_ED_DATE    ,
+				BIGO              ,  			    
+				INS_ID            ,
+			    INS_DEPT          ,
+			    INS_DATE          ,			   
+			    DEL_YN     			
+			  FROM PRIVATE_CONTRACT_SAUP_MASTER
+			  WHERE ID = #{ID}
+			
+		]]>
+	</insert>
+
+
+
+	<select id="chkSaup" parameterType="hashmap" resultType="hashmap">		
+		<![CDATA[			
+			SELECT COMP_SAUP_NO, COMP_NM, COUNT(*) OVER() AS TOTAL_COUNT
+			FROM PRIVATE_CONTRACT_COMP_MASTER
+			WHERE DEL_YN = '0'			
+		]]>
+		<if test="COMP_SAUP_NO != null and COMP_SAUP_NO !=''">
+			AND COMP_SAUP_NO = #{COMP_SAUP_NO}
+		</if>
+		<if test="COMP_NM != null and COMP_NM !=''">
+			AND COMP_NM = #{COMP_NM}
+		</if>
+	</select>
+
+
+
+
+
+
+
+	<select id="selectPrvCnrtBoardList" parameterType="hashmap"
+		resultType="hashmap">
+		<include refid="common.pagingPre" /> 
+		<![CDATA[
+			 SELECT COUNT(*) OVER() AS TOTAL_COUNT, 
+				TID ID,                
+                BOARD_ID,
+                TITLE,
+                HIT_CNT,
+                INS_DATE,
+                USER_NAME,
+                D.ID  FID,
+                DECODE(D.ORIGINAL_FILE_NAME, NULL, '', 'Y') ATTACH            
+         	 FROM 
+              	( SELECT                
+	                A.ID TID,
+	                A.BOARD_ID BOARD_ID,
+	                A.TITLE TITLE,
+	                A.HIT_CNT HIT_CNT,	                
+	                TO_CHAR(A.INS_DATE, 'YYYYMMDD') INS_DATE,
+	                B.USER_NAME  USER_NAME                      
+            	 FROM
+                	PRIVATE_CONTRACT_BOARD_LIST A, PRIVATE_CONTRACT_USER_MASTER B
+	            WHERE
+	                A.INS_ID = B.USER_ID
+	            AND A.BOARD_ID = #{BOARD_ID}    
+	            AND A.DEL_YN = '0' 
+            	) C LEFT OUTER JOIN (  
+            			SELECT ID, PARENT_ID, ORIGINAL_FILE_NAME
+			            FROM PRIVATE_CONTRACT_ATTACH_FILE
+			            WHERE ID IN ( SELECT MAX(ID) FROM PRIVATE_CONTRACT_ATTACH_FILE WHERE DEL_YN = '0' AND BOARD_GB = #{BOARD_GB} GROUP BY PARENT_ID ) 
+			    ) D ON C.TID = D.PARENT_ID
+			    WHERE 1 = 1			    
+		]]>
+		<if test="TITLE != null and TITLE !=''">
+			AND TITLE LIKE '%'|| #{TITLE} ||'%'
+		</if>
+		ORDER BY ID DESC
+		<include refid="common.pagingPost" />
+	</select>
+
+	<insert id="insertPrvCnrtBoard" parameterType="hashmap">
+		<selectKey keyProperty="SID" resultType="string" order="BEFORE">
+			SELECT PRIVATE_CONTRACT_BOARD_LIST_SQ.NEXTVAL FROM DUAL
+		</selectKey>
+		<![CDATA[
+			INSERT INTO PRIVATE_CONTRACT_BOARD_LIST
+			(
+				ID,
+				BOARD_ID,
+			    TITLE, 
+			    CONTENTS, 
+			    HIT_CNT,
+			    INS_ID,
+			    INS_DEPT,
+			    INS_DATE, 
+			    DEL_YN		    
+			)
+			VALUES
+			(
+				#{SID},
+				#{BOARD_ID},
+				#{TITLE},
+				#{CONTENTS},
+			    0, 
+			    #{INS_ID},
+			    #{INS_DEPT},
+			    SYSDATE, 
+			    '0'
+			)
+		]]>
+	</insert>
+
+	<update id="updateHitCnt" parameterType="hashmap">
+		<![CDATA[
+			UPDATE PRIVATE_CONTRACT_BOARD_LIST 
+			SET
+				HIT_CNT = NVL(HIT_CNT, 0) + 1
+			WHERE
+				ID = #{ID}	
+		]]>
+	</update>
+
+
+	<select id="selectPrvCnrtBoardDetail" parameterType="hashmap"
+		resultMap="clobHashMap">
+		<![CDATA[
+			SELECT
+                A.ID ID,
+                A.BOARD_ID BOARD_ID,
+                A.HIT_CNT HIT_CNT,
+                B.USER_NAME USER_NAME,
+                TO_CHAR(A.INS_DATE, 'YYYY.MM.DD HH24:MI:SS') INS_DATE,
+                A.TITLE TITLE,
+                A.CONTENTS CONTENTS
+            FROM
+                PRIVATE_CONTRACT_BOARD_LIST A, PRIVATE_CONTRACT_USER_MASTER B                
+            WHERE
+                A.INS_ID = B.USER_ID 
+			AND	ID = #{ID}		
+		]]>
+	</select>
+
+	<update id="updatePrvCnrtBoard" parameterType="hashmap">
+		<![CDATA[
+			UPDATE PRIVATE_CONTRACT_BOARD_LIST 
+			SET
+				TITLE = #{TITLE},
+				CONTENTS = #{CONTENTS},
+				MOD_ID = #{DEL_ID},
+				MOD_DEPT = #{DEL_DEPT},
+				MOD_DATE = SYSDATE		
+			WHERE
+				ID = #{ID}	
+		]]>
+	</update>
+
+	<update id="deletePrvCnrtBoard" parameterType="hashmap">
+		<![CDATA[
+			UPDATE PRIVATE_CONTRACT_BOARD_LIST
+			SET
+				DEL_YN = '1',
+				DEL_ID = #{DEL_ID},
+				DEL_DEPT = #{DEL_DEPT},
+				DEL_DATE = SYSDATE				
+			WHERE
+				ID = #{ID}
+		]]>
+	</update>
+
+
+
+	<insert id="insertFile" parameterType="hashmap">
+		<![CDATA[
+			INSERT INTO PRIVATE_CONTRACT_ATTACH_FILE
+			(
+				ID,
+				PARENT_ID,
+				BOARD_GB,
+				ORIGINAL_FILE_NAME,
+				STORED_FILE_NAME,
+				FILE_SIZE,
+				INS_DATE,
+				DEL_YN
+			)
+			VALUES
+			(
+				PRIVATE_CONTRACT_ATTACH_SQ.NEXTVAL,
+				#{PARENT_ID},
+				#{BOARD_GB},
+				#{ORIGINAL_FILE_NAME},
+				#{STORED_FILE_NAME},
+				#{FILE_SIZE},
+				SYSDATE,
+				'0'
+			)
+		]]>
+	</insert>
+
+
+	<select id="selectFileList" parameterType="hashmap" resultType="hashmap">
+		<![CDATA[
+			SELECT
+			    ID,
+			    ORIGINAL_FILE_NAME,
+			    ROUND(FILE_SIZE/1024,1) AS FILE_SIZE
+			FROM
+			    PRIVATE_CONTRACT_ATTACH_FILE
+			WHERE
+			    PARENT_ID = #{PARENT_ID}
+			AND BOARD_GB = #{BOARD_GB}
+			AND DEL_YN = '0'
+		]]>
+	</select>
+
+	<update id="deleteFileList" parameterType="hashmap">
+		<![CDATA[
+			UPDATE PRIVATE_CONTRACT_ATTACH_FILE
+			SET 
+				DEL_YN = '1',
+				DEL_DATE = SYSDATE 
+			WHERE 
+				PARENT_ID = #{PARENT_ID}
+			AND	BOARD_GB = #{BOARD_GB}
+			AND DEL_YN = '0'
+		]]>
+	</update>
+
+	<update id="updateFile" parameterType="hashmap">
+		<![CDATA[
+			UPDATE PRIVATE_CONTRACT_ATTACH_FILE 
+			SET
+				DEL_YN = '0',
+				MOD_DATE = SYSDATE
+			WHERE				
+				ID = #{FILE_ID}
+			
+		]]>
+	</update>
+
+	<insert id="insertExcel" parameterType="hashmap">
+		<selectKey keyProperty="SID" resultType="string" order="BEFORE">
+			SELECT PRIVATE_DONG_ORDER_LIST_SEQ.NEXTVAL FROM DUAL
+		</selectKey>
+		<![CDATA[		
+			INSERT INTO PRIVATE_DONG_ORDER_LIST
+			(
+				ID
+				,SEQ
+				,YEAR
+				,CONSTRUCT_NAME
+				,CONSTRUCT_LOCATION
+				,IMPORTANT_CONSTRUCT
+				,CONSTRUCT_COST
+				,INS_ID
+				,INS_DEPT
+				,INS_DATE
+				,DEL_YN														  
+			)
+			VALUES
+			(
+				TRIM(#{SID})
+				,TO_NUMBER(#{A})
+				,TO_NUMBER(#{B})
+				,TRIM(#{C})
+				,TRIM(#{D})
+				,TRIM(#{E})
+				,TO_NUMBER(#{F})
+				,#{INS_ID}
+				,#{INS_DEPT}
+				,SYSDATE
+				,0		
+			)
+			]]>
+	</insert>
+
+
+	<select id="selectPrvCnrtCurrentBuildList" parameterType="hashmap" resultType="hashmap">
+		<include refid="common.pagingPre" /> 
+		<![CDATA[			  
+              SELECT COUNT(*) OVER() AS TOTAL_COUNT 
+                    ,PDOL.ID
+                    ,PDOL.SEQ
+                    ,PDOL.YEAR
+                    ,PDOL.CONSTRUCT_NAME
+                    ,PDOL.CONSTRUCT_LOCATION
+                    ,PDOL.IMPORTANT_CONSTRUCT
+                    ,TO_CHAR( PDOL.CONSTRUCT_COST , '999,999,999,999,999') as CONSTRUCT_COST
+                    ,PCAF.ID AS FILE_ID
+                    ,PCAF.PARENT_ID
+                    ,PCAF.ORIGINAL_FILE_NAME
+                    ,PDOL.INS_ID
+                    ,PDOL.INS_DEPT
+                    ,PDOL.INS_DATE
+              FROM PRIVATE_DONG_ORDER_LIST PDOL
+                , (SELECT * FROM PRIVATE_CONTRACT_ATTACH_FILE WHERE board_gb = 8 AND DEL_YN = '0') PCAF
+              WHERE PDOL.id = PCAF.parent_id(+)
+              AND PDOL.DEL_YN = 0
+		]]>
+			<if test="GONGSA_NM != null and GONGSA_NM !=''">
+				AND  PDOL.CONSTRUCT_NAME LIKE '%'|| #{GONGSA_NM} ||'%'
+			</if>
+              
+              
+		ORDER BY TO_CHAR(PDOL.INS_DATE,'YYYYMMDD') DESC,PDOL.SEQ ASC
+		<include refid="common.pagingPost" />
+	</select>
+
+	<select id="selectExPrvCnrtCurrentBuildList" parameterType="hashmap"
+		resultType="hashmap">
+		<![CDATA[			  
+              SELECT COUNT(*) OVER() AS TOTAL_COUNT 
+                    ,PDOL.ID
+                    ,PDOL.SEQ
+                    ,PDOL.YEAR
+                    ,PDOL.CONSTRUCT_NAME
+                    ,PDOL.CONSTRUCT_LOCATION
+                    ,PDOL.IMPORTANT_CONSTRUCT
+                    ,TO_CHAR( PDOL.CONSTRUCT_COST , '999,999,999,999,999') as CONSTRUCT_COST
+                    ,PCAF.ID AS FILE_ID
+                    ,PCAF.PARENT_ID
+                    ,PCAF.ORIGINAL_FILE_NAME
+                    ,PDOL.INS_ID
+                    ,PDOL.INS_DEPT
+                    ,PDOL.INS_DATE
+              FROM PRIVATE_DONG_ORDER_LIST PDOL
+                , (SELECT * FROM PRIVATE_CONTRACT_ATTACH_FILE WHERE board_gb = 8 AND DEL_YN = '0') PCAF
+              WHERE PDOL.id = PCAF.parent_id(+)
+		]]>
+		ORDER BY TO_CHAR(PDOL.INS_DATE,'YYYYMMDD') DESC,PDOL.SEQ ASC
+	</select>
+
+	<select id="selectUpFileInfo" parameterType="hashmap"
+		resultType="hashmap">
+		<![CDATA[
+			SELECT 
+			    ID AS FILE_ID
+			    , PARENT_ID
+			    , ORIGINAL_FILE_NAME
+			FROM PRIVATE_CONTRACT_ATTACH_FILE
+			WHERE PARENT_ID = #{PARENT_ID}
+			AND BOARD_GB = 8
+		 	AND DEL_YN = '0'
+		]]>
+	</select>
+	
+	
+	<update id="updateDelAllFileList" parameterType="hashmap">
+	<![CDATA[		
+		UPDATE PRIVATE_CONTRACT_ATTACH_FILE
+		SET del_yn = 1,
+			del_date = sysdate
+		WHERE board_gb = 8
+		and del_yn = 0
+		AND PARENT_ID = #{selId}
+	]]>
+	</update>
+	
+	<update id="updateDelAllList" parameterType="hashmap">
+	<![CDATA[		
+		UPDATE PRIVATE_DONG_ORDER_LIST
+		SET del_yn = 1,
+			del_date = sysdate
+		WHERE del_yn = 0
+		AND ID = #{selId}
+	]]>
+	</update>
+
+
+
+
+	<insert id="orderPlanPriorApprovalInsert" parameterType="hashmap">
+		<selectKey keyProperty="SID" resultType="string" order="BEFORE">
+			SELECT PRIVATE_CONTRACT_SAUP_MST_SQ.NEXTVAL FROM DUAL
+		</selectKey>
+		
+		<![CDATA[		
+			INSERT INTO PRIVATE_CONTRACT_SAUP_MASTER
+			(
+			    ID                , 
+				SAUP_YEAR         , 
+				SAUP_FIELD1_GB    , 
+				SAUP_FIELD2_GB    , 
+				SAUP_FIELD2_DETAIL, 
+				SAUP_NM           , 
+				SAUP_BUDGET_AMT   , 
+				SAUP_DETAIL       , 
+				SAUP_DEPT_CD      , 
+				SAUP_DEPT_NM      , 
+				SAUP_PERSON_ID    , 
+				SAUP_PERSON_NM    , 
+				SAUP_PERSON_TEL   , 
+				REG_DATE          ,
+				ACCEPT_ST_DATE    ,
+				ACCEPT_ED_DATE    ,
+				BIGO              ,  			    
+				INS_ID            ,
+			    INS_DEPT          ,
+			    INS_DATE          ,			   
+			    DEL_YN     																  
+			)
+			VALUES
+			(
+				 #{SID},				 
+ 				 #{SAUP_YEAR},
+ 				 #{SAUP_FIELD1_GB},
+ 				 #{SAUP_FIELD2_GB},
+ 			     #{SAUP_FIELD2_DETAIL},
+                 #{SAUP_NM},
+ 				 TRIM(REPLACE(#{SAUP_BUDGET_AMT}, ',', '')),
+ 		         #{SAUP_DETAIL},
+                 #{SAUP_DEPT_CD},
+ 		         #{SAUP_DEPT_NM},
+ 				 #{SAUP_PERSON_ID},
+ 	             #{SAUP_PERSON_NM},
+ 				 #{SAUP_PERSON_TEL},
+ 				 TO_CHAR(SYSDATE, 'YYYYMMDD'),
+ 				 TRIM(REPLACE(#{ACCEPT_ST_DATE}, '-', '')),
+ 				 TRIM(REPLACE(#{ACCEPT_ED_DATE}, '-', '')),
+ 				 #{BIGO}, 					
+				 #{INS_ID},
+				 #{INS_DEPT},
+				 SYSDATE,
+				 '0'			    
+			)
+		]]>
+	</insert>
+	
+
+
+	<select id="orderPlanPriorApprovalList" parameterType="hashmap"
+		resultType="hashmap">
+		<include refid="common.pagingPre" /> 
+		<![CDATA[			  
+			  SELECT COUNT(*) OVER() AS TOTAL_COUNT, 
+					 A.ID                ,
+					 A.SAUP_YEAR         ,
+					 A.SAUP_FIELD1_GB    ,
+					 A.SAUP_FIELD2_GB    ,
+					 A.SAUP_FIELD2_DETAIL,
+					 A.SAUP_NM           ,
+					 A.SAUP_BUDGET_AMT   ,
+					 A.SAUP_DETAIL       ,
+					 A.SAUP_DEPT_CD      ,
+					 A.SAUP_DEPT_NM      ,
+					 A.SAUP_PERSON_ID    ,
+					 A.SAUP_PERSON_NM    ,
+					 A.SAUP_PERSON_TEL   ,
+					 A.REG_DATE          ,
+					 A.ACCEPT_ST_DATE    ,
+					 A.ACCEPT_ED_DATE    ,
+					 DECODE(B.ORIGINAL_FILE_NAME, NULL, '', 'Y') ATTACH,
+					 B.ID  FID           ,
+					 A.BIGO              ,
+					 A.DISP_YN 
+			  FROM PRIVATE_CONTRACT_SAUP_MASTER A LEFT OUTER JOIN (  
+                        SELECT ID, PARENT_ID, ORIGINAL_FILE_NAME
+                        FROM PRIVATE_CONTRACT_ATTACH_FILE
+                        WHERE ID IN ( SELECT MIN(ID) FROM PRIVATE_CONTRACT_ATTACH_FILE WHERE DEL_YN = '0' AND BOARD_GB = '3' GROUP BY PARENT_ID ) 
+                ) B ON A.ID = B.PARENT_ID			  
+			  WHERE A.DEL_YN = '0'	 
+		]]>
+		<if test="SAUP_FIELD1_GB != null and SAUP_FIELD1_GB !=''">
+			AND SAUP_FIELD1_GB = #{SAUP_FIELD1_GB}
+		</if>
+		<if test="SAUP_DEPT_CD != null and SAUP_DEPT_CD !=''">
+			AND SAUP_DEPT_CD = #{SAUP_DEPT_CD}
+		</if>
+		<if test="SAUP_YEAR != null and SAUP_YEAR !=''">
+			AND SAUP_YEAR = #{SAUP_YEAR}
+		</if>
+		<if test="SAUP_NM != null and SAUP_NM !=''">
+			AND SAUP_NM LIKE '%'|| #{SAUP_NM} ||'%'
+		</if>
+		<if test="WHETHER_YN != null and WHETHER_YN !=''">
+			AND DISP_YN = #{WHETHER_YN}
+		</if>
+		ORDER BY A.SAUP_YEAR DESC, A.ACCEPT_ED_DATE DESC NULLS LAST
+		<include refid="common.pagingPost" />
+	</select>
+	
+	
+		<select id="rderPlanPriorAppInfo" parameterType="hashmap" resultType="hashmap">
+		<![CDATA[			
+	        SELECT  ID                  ,     
+					SAUP_YEAR           ,
+					SAUP_FIELD1_GB      ,
+					SAUP_FIELD2_GB      ,
+					SAUP_FIELD2_DETAIL  ,
+					SAUP_NM             ,
+					SAUP_BUDGET_AMT     ,
+					SAUP_DETAIL         ,
+					SAUP_DEPT_CD        ,
+					SAUP_DEPT_NM        ,
+					SAUP_PERSON_ID      ,
+					SAUP_PERSON_NM      ,
+					SAUP_PERSON_TEL     ,
+					REG_DATE            ,
+					ACCEPT_ST_DATE      ,
+					ACCEPT_ED_DATE      ,
+					BIGO                ,
+					INS_ID              ,
+					INS_DEPT            ,
+					DISP_YN    
+	        FROM PRIVATE_CONTRACT_SAUP_MASTER
+	        WHERE DEL_YN = '0'
+			AND ID = #{ID}
+		]]>
+	</select>
+	
+	
+	
+	<update id="updatePrivateSaup" parameterType="hashmap">
+		<![CDATA[		
+			UPDATE PRIVATE_CONTRACT_SAUP_MASTER
+			SET DISP_YN           = 'Y',
+			    DISP_DATE		  = SYSDATE,
+			    DISP_ID			  =  #{SAUP_PERSON_NM}
+			   
+		]]>
+		WHERE ID = #{ID}
+
+	</update>
+	
+</mapper>

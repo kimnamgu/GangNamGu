@@ -1,0 +1,275 @@
+package corona.manage.service;
+
+import java.io.File;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import javax.annotation.Resource;
+
+import org.apache.log4j.Logger;
+import org.springframework.stereotype.Service;
+
+import corona.common.util.ExcelRead;
+import corona.common.util.ExcelReadOption;
+import corona.common.util.FileUtils;
+import corona.manage.dao.ManageDAO;
+
+@Service("manageService")
+public class ManageServiceImpl implements ManageService{
+	Logger log = Logger.getLogger(this.getClass());
+	
+	@Resource(name="fileUtils")
+	private FileUtils fileUtils;
+	
+	@Resource(name="manageDAO")
+	private ManageDAO manageDAO;
+	
+	/*확진자*/
+	@Override
+	public List<Map<String, Object>> selectConfirmList(Map<String, Object> map) throws Exception {
+		return manageDAO.selectConfirmList(map);
+	}
+	
+	
+	@Override
+	public Map<String, Object> confirmManageExcelUp(File destFile,String ins_id){
+		System.out.println("confirmManageExcelUp service 탐");
+		System.out.println("ins_id 확인 : " + ins_id);
+		
+	    	ExcelReadOption excelReadOption = new ExcelReadOption();
+
+	        excelReadOption.setFilePath(destFile.getAbsolutePath());
+ 
+	        excelReadOption.setOutputColumns("A","B","C","D","E","F","G","H","I","J","K","L","M","N","O","P","Q","R","S","T","U","V","W","X","Y","Z");
+
+
+	        excelReadOption.setStartRow(2);
+
+	        List<Map<String, String>>excelContent = ExcelRead.read(excelReadOption);
+
+	        Map<String, Object> paramMap = new HashMap<String, Object>();
+	        paramMap.put("excelContent", excelContent);
+
+	        int rtn=1;
+	        Map<String, Object> resultMap = new HashMap<String, Object>();
+	        
+	        String name="";
+	        String err_column="";
+	        
+	        try {
+
+	            for (Map<String, String> map : excelContent) {
+	            	map.put("INS_ID", ins_id);
+	            	System.out.println("map 확인 : " + map.toString());
+	            	name = map.get("D");
+	            	
+	            	manageDAO.insertConfirmManageExcel(map);
+	            }
+	            
+		    } catch (Exception e) {
+		    	rtn = 0;
+		    	
+		    	
+		    	resultMap.put("exception", e.getMessage());
+		    	
+		    	if(e.getMessage().contains("WRITE_DATE")) {err_column="입력일";}
+		    	if(e.getMessage().contains("CELL_NUM")) {err_column="핸드폰번호";}
+		    	if(e.getMessage().contains("PATIENT_NUM")) {err_column="환자번호";}
+		    	if(e.getMessage().contains("PATIENT_NAME")) {err_column="환자명";}
+		    	if(e.getMessage().contains("CONTACT_NUM")) {err_column="접촉자번호";}
+		    	if(e.getMessage().contains("CONTACT_NAME")) {err_column="접촉자명";}
+		    	if(e.getMessage().contains("CONFIRM_GRADE")) {err_column="확진차수";}
+		    	if(e.getMessage().contains("SEX")) {err_column="성별";}
+		    	if(e.getMessage().contains("BIRTH")) {err_column="생년월일";}
+		    	if(e.getMessage().contains("JOB")) {err_column="직업";}
+		    	if(e.getMessage().contains("ORG_GUBUN")) {err_column="주소구분";}
+		    	if(e.getMessage().contains("ORG_DONG")) {err_column="주소동";}
+		    	if(e.getMessage().contains("ORG_ADDRESS")) {err_column="주소";}
+		    	if(e.getMessage().contains("ORG_ADDRESS_DTL")) {err_column="주소상세";}
+		    	if(e.getMessage().contains("INFECT_GUBUN")) {err_column="감염경로구분";}
+		    	if(e.getMessage().contains("INFECT_DONG")) {err_column="감염경로동";}
+		    	if(e.getMessage().contains("INFECT_DAE")) {err_column="감염경로대구분";}
+		    	if(e.getMessage().contains("INFECT_SO")) {err_column="감염경로소구분";}
+		    	if(e.getMessage().contains("INFECT_ASFECT_AREA")) {err_column="추정감염경로";}
+		    	if(e.getMessage().contains("INFECT_ASFECT_AREA_DTL")) {err_column="추정감염경로상세주소";}
+		    	if(e.getMessage().contains("INFECT_JIPDAN_GUBUN")) {err_column="집단감염구분";}
+		    	if(e.getMessage().contains("INFECT_JIPDAN_GUBUN_FACILITY")) {err_column="감염시설";}
+		    	if(e.getMessage().contains("CONFIRM_DATE")) {err_column="확진 판정일";}
+		    	if(e.getMessage().contains("HOSPITAL")) {err_column="입원병원";}
+		    	if(e.getMessage().contains("DISCHARGE_DATE")) {err_column="퇴원일자";}
+		    	if(e.getMessage().contains("REMARK")) {err_column="비고";}
+		    	
+		    	resultMap.put("err_msg", "엑셀 업로드중 " + name + "님 의 "+err_column + " 자료에서 에러가 발생하였습니다.");
+		    	
+
+		      // TODO Auto-generated catch block
+		      e.printStackTrace();
+		    }
+	        
+	        resultMap.put("rtn", rtn);
+	        
+	        return resultMap;
+	  }
+	
+	
+	/*국내자가격리자*/
+	@Override
+	public List<Map<String, Object>> selectDomesticContactList(Map<String, Object> map) throws Exception {
+		return manageDAO.selectDomesticContactList(map);
+	}
+	
+	
+	@Override
+	public void domesticContactExcelUp(File destFile,String ins_id){
+		System.out.println("domesticContactExcelUp service 탐");
+		System.out.println("ins_id 확인 : " + ins_id);
+		
+	    	ExcelReadOption excelReadOption = new ExcelReadOption();
+
+	        excelReadOption.setFilePath(destFile.getAbsolutePath());
+ 
+	        excelReadOption.setOutputColumns("A","B","C","D","E","F","G","H","I","J","K","L","M","N","O","P","Q","R","S","T","U","V","W","X","Y","Z","AA","AB","AC","AD");
+
+
+	        excelReadOption.setStartRow(2);
+
+	        List<Map<String, String>>excelContent = ExcelRead.read(excelReadOption);
+
+	        Map<String, Object> paramMap = new HashMap<String, Object>();
+	        paramMap.put("excelContent", excelContent);
+
+	        try {
+
+	            for (Map<String, String> map : excelContent) {
+	            	map.put("INS_ID", ins_id);
+	            	System.out.println("map 확인 : " + map.toString());
+	            	
+	            	manageDAO.insertDomesticContactManageExcel(map);
+	            }
+
+		    } catch (Exception e) {
+		      // TODO Auto-generated catch block
+		      e.printStackTrace();
+		    }
+	  }
+	
+	/*해외입국자*/
+	@Override
+	public List<Map<String, Object>> selectOverseaList(Map<String, Object> map) throws Exception {
+		return manageDAO.selectOverseaList(map);
+	}
+	
+	
+	@Override
+	public void overseaExcelUp(File destFile,String ins_id){
+		System.out.println("overseaExcelUp service 탐");
+		System.out.println("ins_id 확인 : " + ins_id);
+		
+	    	ExcelReadOption excelReadOption = new ExcelReadOption();
+
+	        excelReadOption.setFilePath(destFile.getAbsolutePath());
+ 
+	        excelReadOption.setOutputColumns("A","B","C","D","E","F","G","H","I","J","K","L","M","N","O","P","Q","R","S");
+
+
+	        excelReadOption.setStartRow(2);
+
+	        List<Map<String, String>>excelContent = ExcelRead.read(excelReadOption);
+
+	        Map<String, Object> paramMap = new HashMap<String, Object>();
+	        paramMap.put("excelContent", excelContent);
+
+	        try {
+
+	            for (Map<String, String> map : excelContent) {
+	            	map.put("INS_ID", ins_id);
+	            	System.out.println("map 확인 : " + map.toString());
+	            	
+	            	manageDAO.insertOverseaManageExcel(map);
+	            }
+
+		    } catch (Exception e) {
+		      // TODO Auto-generated catch block
+		      e.printStackTrace();
+		    }
+	  }
+	
+	/*상담민원*/
+	@Override
+	public List<Map<String, Object>> selectConsultList(Map<String, Object> map) throws Exception {
+		return manageDAO.selectConsultList(map);
+	}
+	
+	
+	@Override
+	public void consultExcelUp(File destFile,String ins_id){
+	    	ExcelReadOption excelReadOption = new ExcelReadOption();
+
+	        excelReadOption.setFilePath(destFile.getAbsolutePath());
+ 
+	        excelReadOption.setOutputColumns("A","B","C","D","E","F","G","H","I","J");
+
+
+	        excelReadOption.setStartRow(2);
+
+	        List<Map<String, String>>excelContent = ExcelRead.read(excelReadOption);
+
+	        Map<String, Object> paramMap = new HashMap<String, Object>();
+	        paramMap.put("excelContent", excelContent);
+
+	        try {
+
+	            for (Map<String, String> map : excelContent) {
+	            	map.put("INS_ID", ins_id);
+	            	manageDAO.insertConsultExcel(map);
+	            }
+
+		    } catch (Exception e) {
+		      // TODO Auto-generated catch block
+		      e.printStackTrace();
+		    }
+	  }
+	
+	/*선별진료소*/
+	@Override
+	public List<Map<String, Object>> selectClinicList(Map<String, Object> map) throws Exception {
+		return manageDAO.selectClinicList(map);
+	}
+	
+	
+	@Override
+	public void clinicExcelUp(File destFile,String ins_id){
+		System.out.println("clinicExcelUp service 탐");
+		System.out.println("ins_id 확인 : " + ins_id);
+		
+	    	ExcelReadOption excelReadOption = new ExcelReadOption();
+
+	        excelReadOption.setFilePath(destFile.getAbsolutePath());
+ 
+	        excelReadOption.setOutputColumns("A","B","C","D","E","F","G","H","I","J","K","L");
+
+
+	        excelReadOption.setStartRow(2);
+
+	        List<Map<String, String>>excelContent = ExcelRead.read(excelReadOption);
+
+	        Map<String, Object> paramMap = new HashMap<String, Object>();
+	        paramMap.put("excelContent", excelContent);
+
+	        try {
+
+	            for (Map<String, String> map : excelContent) {
+	            	map.put("INS_ID", ins_id);
+	            	System.out.println("map 확인 : " + map.toString());
+	            	
+	            	manageDAO.insertClinicManageExcel(map);
+	            }
+
+		    } catch (Exception e) {
+		      // TODO Auto-generated catch block
+		      e.printStackTrace();
+		    }
+	  }
+	
+}

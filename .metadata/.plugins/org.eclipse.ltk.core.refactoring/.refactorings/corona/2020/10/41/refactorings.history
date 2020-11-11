@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<session version="1.0">
+<refactoring comment="Rename resource &apos;corona/src/main/webapp/WEB-INF/jsp/status/statusMiddleView.jsp&apos; to &apos;statusMiddleConsultView.jsp&apos;" description="Rename resource &apos;statusMiddleView.jsp&apos;" flags="7" id="org.eclipse.ltk.core.refactoring.rename.resource" input="src/main/webapp/WEB-INF/jsp/status/statusMiddleView.jsp" name="statusMiddleConsultView.jsp" stamp="1602050456011" updateReferences="true"/>
+</session>

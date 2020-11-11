@@ -1,0 +1,44 @@
+
+/* Block : tab
+---------------------------------------------------------*/
+.LblockTab {
+	background:url(/ffems/images/common/tabbg.gif) repeat-x left bottom;
+	margin-bottom:2px; 
+}
+.LblockTab li {
+	float:left;
+	margin-right:3px;
+	background:url(/ffems/images/common/tab_l.gif) no-repeat;
+	height:26px;
+}
+.LblockTab li.Lcurrent {
+	background-position:left -26px;
+}
+.LblockTab li span {
+	display:block;
+	background:url(/ffems/images/common/tab_r.gif) no-repeat right top;
+}
+.LblockTab li.Lcurrent span {
+	background-position:right -26px;
+}
+.LblockTab li span a {
+	display:block;
+	line-height:20px;	
+	*line-height:21px;
+	color:#fff;
+	text-decoration:none;
+	padding:4px 18px 0;
+	*padding:3px 18px 0;	
+}
+.LblockTab li.Lcurrent span a {
+	font-weight:bold;
+	color:#4170A4;
+}
+.LblockTab li span a:hover,
+.LblockTab li.Lcurrent span a:hover {
+	text-decoration:none;	
+}
+
+/* Block : tab)
+---------------------------------------------------------*/
+

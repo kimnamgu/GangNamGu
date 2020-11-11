@@ -1,0 +1,9 @@
+eclipse.preferences.version=1
+encoding//src/main/java=UTF-8
+encoding//src/main/java/manpower/common/controller/CommonController.java=UTF-8
+encoding//src/main/java/manpower/common/dao/AbstractDAO.java=UTF-8
+encoding//src/main/java/manpower/common/service/CommonServiceImpl.java=UTF-8
+encoding//src/main/java/manpower/common/util/AES256Cipher.java=UTF-8
+encoding//src/main/java/manpower/common/util/ExcelRead.java=UTF-8
+encoding//src/main/java/manpower/manage/controller/DaejangController.java=UTF-8
+encoding//src/test/java=UTF-8

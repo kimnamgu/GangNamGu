@@ -1,0 +1,453 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<html>
+<head>
+<%@ include file="/WEB-INF/include/include-header.jspf" %>
+<script type="text/javascript">
+		var user_right = "${sessionScope.userinfo.userright}";
+	        		
+		$(document).ready(function(){
+						
+			fn_initial_setting();
+			//openSocket();
+			fn_selectDocIssueReserveList(1);
+			
+		
+			$("#APPLY_DATE").datepicker({
+				
+				dateFormat: 'yy-mm-dd',
+				monthNamesShort: ['1월','2월','3월','4월','5월','6월','7월','8월','9월','10월','11월','12월'],
+			    dayNamesMin: ['일','월','화','수','목','금','토'],
+				changeMonth: true, //월변경가능
+			    changeYear: true, //년변경가능
+				showMonthAfterYear: true //년 뒤에 월 표시				
+			});
+			
+			
+			$("#search").on("click", function(e){ //검색 버튼
+				e.preventDefault();
+				sort_gb = "";
+				$("#PAGE_INDEX").val("1");
+				fn_selectDocIssueReserveList();
+			});
+			
+						
+	
+			$("#APPLY_DATE").keydown(function (key) {
+
+				if(key.keyCode == 13){//키가 13이면 실행 (엔터는 13)
+					$("#PAGE_INDEX").val("1");
+					fn_selectDocIssueReserveList();
+				}
+
+			});
+			
+			$("#logout").on("click", function(e){ //로그아웃				
+				e.preventDefault();				
+				fn_logout();
+			});
+			
+			
+			$(window).bind("beforeunload", function ()
+			{
+				if (event.clientY < 0) {
+					
+					var comAjax = new ComAjax();
+					//alert( '로그아웃 됩니다.' );
+					comAjax.setUrl("<c:url value='/logout.do' />")
+					comAjax.ajax();			
+				}
+									
+			});
+			
+		});
+		
+		/* 초기화 */
+		function fn_initial_setting(){
+			$("#APPLY_DATE").val("");
+		}
+		
+		/* 로그아웃 */
+		function fn_logout(){
+			var comSubmit = new ComSubmit();			
+			comSubmit.setUrl("<c:url value='/logout.do' />");
+			comSubmit.submit();
+		}
+		
+		/* 조회 */
+		function fn_selectDocIssueReserveList(pageNo){	
+			var comAjax = new ComAjax();
+			var user_right =  $("#USER_RIGHT").val();
+			
+			comAjax.setUrl("<c:url value='/api/v1/selectDocIssueReserveViewList.do' />");
+			comAjax.addParam("apply_date", $("#APPLY_DATE").val().replace(/-/gi, ""));
+			comAjax.setCallback("fn_selectDocIssueReserveListCallback");
+			
+
+			comAjax.ajax();
+		}
+		
+		function fn_selectDocIssueReserveListCallback(data){			
+			//data = $.parseJSON(data);			
+			var total = data.total;			
+			var body = $("#mytable");
+			var recordcnt = $("#RECORD_COUNT").val();
+			
+			//구글차트 그리기
+			google.charts.load('current', {'packages':['line','controls']});
+			chartDrow(data.statisticsList); //chartDrow() 실행
+			
+			$("#tcnt").text(comma(total));
+			
+			body.empty();
+			if(total == 0){
+				var str = "<tr>" + 
+					  "<td colspan='21' style='text-align:center;'>조회된 결과가 없습니다.</td>" +
+					  "</tr>";
+				body.append(str);
+			}
+			else{
+				var params = {
+					divId : "PAGE_NAVI",
+					pageIndex : "PAGE_INDEX",
+					totalCount : total,
+					recordCount : recordcnt,
+					eventName : "fn_selectDocIssueReserveList"
+				};
+				gfn_renderPaging(params);
+				
+				var str = "";
+				var t_str = "";
+				var tr_class = "";
+				var tot_amt = 0;
+				var jsonData = null;
+				var jsonStr = null;
+				
+				$.each(data.list, function(key, value){
+					       t_str = "";
+						
+					       if ((value.rnum % 2) == 0 )
+								tr_class = "tr1";
+						   else
+								tr_class = "tr2";
+					      
+					       
+					       jsonData = $.parseJSON(value.apply_option);
+					       jsonstr = 	JSON.stringify(jsonData);
+					       //alert(jsonstr);
+						   
+					       str += "<tr class='" + tr_class + "'>" + 
+									   "<td align='center' style='color:#222222;'>" + value.rnum + "</td>" +
+									   "<td align='center' style='color:#444444;'>" + value.id + "</td>" +	
+						   			   "<td align='center' style='color:#444444;'>" + formatDate(NvlStr(value.apply_date), ".") + "</td>" +
+						   			   "<td align='center' style='color:#444444;'>" + formatDate(NvlStr(value.apply_address), ".") + "</td>" +
+						   			   "<td align='center' style='color:#444444;'>" + jumin_format(NvlStr(value.apply_regist_number)) + "</td>" +
+						   			   "<td align='center' style='color:#444444;'>" + 
+						   			   "<a href='#this' name='title1' >" + NvlStr(value.apply_uname) + "</a>" +
+									   "<input type='hidden' name='title1' id='UID1' value=" + jsonstr + ">" +						   			   
+						   			   "</td>" +
+						   			   "<td align='center' style='color:#444444;'>" + hp_format(NvlStr(value.apply_phone)) + "</td>" +						   			   
+						   			   "<td align='center' style='color:#444444;'>" + NvlStr(value.document_nm) + "</td>" +
+						   			   "<td align='center' style='color:#444444;'>" + NvlStr(value.language_nm) + "</td>" +
+						   			   "<td align='center' style='color:#444444;'>" + NvlStr(value.detail_nm) + "</td>" +
+						   			   "<td align='right' style='color:#4272d7'>" + comma(NvlStr(value.apply_unit_price)) + "</td>" +
+						   			   "<td align='right' style='color:red'>" + comma(NvlStr(value.apply_qty)) + "</td>" +
+						   			   "<td align='right' style='color:#4272d7'>" + comma(NvlStr(value.apply_price_sum)) + "</td>" +
+						   			   "<td width=90 align='center' style='color:#444444;word-break:break-all;'>" + NvlStr(value.visit_date) + "</td>" +
+						   			   "<td width=90 align='center' style='color:#444444;word-break:break-all;'>" + NvlStr(value.ins_date) + "</td>";
+						   			   
+						   			   if(NvlStr(value.issue_yn) == "Y"){
+						   					str += "<td align='center' class='process'>" + NvlStr(value.issue_yn) + "</td>";
+						   			   }else{
+						   					str += "<td align='center' class='denied'>" + NvlStr(value.issue_yn) + "</td>";
+						   			   }
+						   			   
+				   				str += "<td width=90 align='center' style='color:#444444;word-break:break-all;'>" + NvlStr(value.issue_date) + "</td>";
+						   			
+						   			   if(NvlStr(value.disposal_yn) == "Y"){
+						   					str += "<td align='center' class='process'>" + NvlStr(value.disposal_yn) + "</td>";
+						   			   }else{
+						   					str += "<td align='center' class='denied'>" + NvlStr(value.disposal_yn) + "</td>";
+						   			   }
+						   			
+			   					str += "<td width=90 align='center' style='color:#444444;word-break:break-all;'>" + NvlStr(value.disposal_date) + "</td>";
+			   					
+						   			   if(NvlStr(value.done_yn) == "Y"){
+						   					str += "<td align='center' class='process'>" + NvlStr(value.done_yn) + "</td>";
+						   			   }else{
+						   					str += "<td align='center' class='denied'>" + NvlStr(value.done_yn) + "</td>";
+						   			   }
+			   								   					
+					   			str += "<td width=90 align='center' style='color:#444444;word-break:break-all;'>" + NvlStr(value.done_date) + "</td>" +
+									   "<td style='padding:2px;'>"
+
+						   			   if(NvlStr(value.issue_yn) == "Y"){
+						   					str += "<a href='javascript:void(0)' name='' class='btn btn-secondary btn-sm' style='padding:.25rem .2rem;' >&nbsp;발급요청</a> ";
+						   			   }else{
+						   					str += "<a href='#this' name='title2' class='btn btn-success btn-sm' style='padding:.25rem .2rem;' >&nbsp;발급요청</a> ";
+						   			   }
+									   
+								   str += "<input type='hidden' name='title2' id='UID2' value=" + value.id + ">";
+									   /*"<a href='#this' name='title3' >서손</a> " +
+									   "<input type='hidden' name='title3' id='UID3' value=" + value.id + ">" +*/
+									   
+					   			   if(NvlStr(value.done_yn) == "Y"){
+					   					str += "<a href='javascript:void(0)' name='' class='btn btn-secondary btn-sm' style='padding:.25rem .2rem;'>교부완료</a> ";
+					   			   }else{
+					   					str += "<a href='#this' name='title4' class='btn btn-primary btn-sm' style='padding:.25rem .2rem;'>교부완료</a> ";
+					   			   }
+									   
+								   str += "<input type='hidden' name='title4' id='UID4' value=" + value.id + ">" +
+									   "</td>" +									   
+									   "</tr>";
+									   
+									   tot_amt = tot_amt + Number(NvlStr(value.apply_price_sum));
+
+				});
+				body.append(str);
+			}
+		}
+		
+</script>
+</head>
+<body bgcolor="#FFFFFF">
+<form id="form1" name="form1">
+<input type="hidden" id="USER_ID" name="USER_ID" value="${sessionScope.userinfo.userId}">
+<c:set var="u_rt" value="${sessionScope.userinfo.userright}"/>
+
+<!-- 타이틀 -->
+<div style="background-color:#170B3B;color:white; margin-bottom:10px; width: 100%;">
+	<a href="#this" class="btn" id="logout">
+		<img src="/service/images/popup_title.gif" align="absmiddle">
+	</a>민원서류발급 사전예약신청 조회
+</div>
+
+<div style="width:100%;padding-left:20px;padding-right:10px;">
+	<div class="card" style="width:680px;display: inline-block">
+		<div class="card-header" style="background-color:#0B2161;color:white;margin-bottom:10px;">검색</div>
+		
+	<form action="" method="post">
+		<div class="card-body card-block" style="padding:5px;">
+				<div style="float:left;">
+					<div class="form-group" style="margin-bottom:5px;">
+						<div class="input-group">
+							<div class="input-group-addon" style="width:80px;">ID</div>
+							<input type="text" id="ID" name="ID" value="" class="form-control">
+							<div class="input-group-addon">
+								<i class="fa fa-user"></i>
+							</div>
+						</div>
+					</div>
+					<div class="form-group" style="margin-bottom:5px;">
+						<div class="input-group">
+							<div class="input-group-addon" style="width:80px;">신청일</div>
+							<input type="text" id="APPLY_DATE" name="APPLY_DATE" value="" class="form-control">
+							<div class="input-group-addon">
+								<i class="fa fa-calendar-o"></i>
+							</div>
+						</div>
+					</div>
+					<div class="form-group" style="margin-bottom:5px;">
+						<div class="input-group">
+							<div class="input-group-addon" style="width:80px;">이름</div>
+							<input type="text" id="APPLY_UNAME" name="APPLY_UNAME" value="" class="form-control">
+							<div class="input-group-addon">
+								<i class="fa fa-user"></i>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div style="padding-left:15px;float:left;">
+					<div class="form-group" style="margin-bottom:5px;">
+						<div class="input-group">
+							<div class="input-group-addon" style="width:80px;padding:3px;">언어구분</div>&nbsp;&nbsp;&nbsp;
+							<div class="form-check-inline form-check">
+				                 <label for="LANGUAGE1_GB" class="form-check-label ">
+				                     <input type="radio" id="LANGUAGE1_GB" name="LANGUAGE_GB" value="" class="form-check-input">전체 &nbsp;&nbsp;
+				                 </label>
+				                 <label for="LANGUAGE2_GB" class="form-check-label ">
+				                     <input type="radio" id="LANGUAGE2_GB" name="LANGUAGE_GB" value="CAA" class="form-check-input">국문 &nbsp;&nbsp;
+				                 </label>
+				                 <label for="LANGUAGE3_GB" class="form-check-label ">
+				                     &nbsp;&nbsp;&nbsp;&nbsp;<input type="radio" id="LANGUAGE3_GB" name="LANGUAGE_GB" value="CAB" class="form-check-input">&nbsp;영문 &nbsp;&nbsp;
+				                 </label>
+				             </div>
+						</div>
+					</div>
+					<div class="form-group" style="margin-bottom:5px;">
+						<div class="input-group">
+							<div class="input-group-addon" style="width:80px;padding:3px;">발급구분</div>&nbsp;&nbsp;&nbsp;
+				        	<div class="form-check-inline form-check">
+								<label for="ISSUE1_YN" class="form-check-label ">
+					            	<input type="radio" id="ISSUE1_YN" name="ISSUE_YN" value="" class="form-check-input" onfocus="this.blur()"> 전체 &nbsp;
+					           	</label>
+					           	<label for="ISSUE2_YN" class="form-check-label "> 
+					            	<input type="radio" id="ISSUE2_YN" name="ISSUE_YN" value="N" class="form-check-input" onfocus="this.blur()"> 미발급 &nbsp;
+					            </label>
+					            <label for="ISSUE3_YN" class="form-check-label ">
+					            	<input type="radio" id="ISSUE3_YN" name="ISSUE_YN" value="Y" class="form-check-input" onfocus="this.blur()"> 발급 &nbsp;
+					           	</label>
+				           	</div>
+						</div>
+					</div>
+					<div class="form-group" style="margin-bottom:5px;">
+						<div class="input-group">
+							<div class="input-group-addon" style="width:80px;padding:3px;">서손여부</div>&nbsp;&nbsp;&nbsp;
+				           	<div class="form-check-inline form-check">
+								<label for="DISPOSAL1_YN" class="form-check-label ">
+					            	<input type="radio" id="DISPOSAL1_YN" name="DISPOSAL_YN" value="" class="form-check-input" onfocus="this.blur()"> 전체 &nbsp;
+					           	</label>
+					           	<label for="DISPOSAL2_YN" class="form-check-label "> 
+					            	<input type="radio" id="DISPOSAL2_YN" name="DISPOSAL_YN" value="N" class="form-check-input" onfocus="this.blur()"> 미서손 &nbsp;
+					            </label>
+					            <label for="DISPOSAL3_YN" class="form-check-label ">
+					            	<input type="radio" id="DISPOSAL3_YN" name="DISPOSAL_YN" value="Y" class="form-check-input" onfocus="this.blur()"> 서손 &nbsp;
+					           	</label>
+				           	</div>
+						</div>
+					</div>
+					<div class="form-group" style="margin-bottom:15px;">
+						<div class="input-group">
+							<div class="input-group-addon" style="width:80px;padding:3px;">완료여부</div>&nbsp;&nbsp;&nbsp;
+				          	<div class="form-check-inline form-check">
+								<label for="DONE1_YN" class="form-check-label ">
+					            	<input type="radio" id="DONE1_YN" name="DONE_YN" value="" class="form-check-input" onfocus="this.blur()"> 전체 &nbsp;
+					           	</label>
+					           	<label for="DONE2_YN" class="form-check-label "> 
+					            	<input type="radio" id="DONE2_YN" name="DONE_YN" value="N" class="form-check-input" onfocus="this.blur()"> 미완료 &nbsp;
+					            </label>
+					            <label for="DONE3_YN" class="form-check-label ">
+					            	<input type="radio" id="DONE3_YN" name="DONE_YN" value="Y" class="form-check-input" onfocus="this.blur()"> 완료 &nbsp;
+					           	</label>
+				           	</div>
+						</div>
+					</div>
+				</div>
+			</div>
+				<div class="form-actions form-group">
+					<div style="padding-left:5px;padding-bottom:10px;float:left;">
+						<a href="#this" class="btn btn-danger" id="initial"><i class="fa fa-ban"></i> 검색초기화</a>
+						<a href="#this" class="btn btn-primary" id="search"><i class="fa fa-search"></i> 검색</a>
+					</div>
+					<div style="padding-right:5px;padding-bottom:10px;float:right;">
+						<a href="#this" class="btn btn-success" id="statistics"><i class="fa fa-bar-chart-o"></i> 통계정보확인</a>
+					</div>
+					
+				</div>
+			</form>
+	</div>
+	
+	<!-- 조회시 최근 입력값 확인후 그것 보다 큰값이 db 에 있을경우 새로 고침 수행 -->	
+	<input type="hidden" value="${recentData.INS_DATE}" id="recentData_date">
+	
+	<div style="display: inline-block;width:900px;height:200px;padding-left:40px;">
+	    <h4>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;민원 접수 현황</h4>
+ 
+    	<div id="Line_Controls_Chart">
+      		<!-- 라인 차트 생성할 영역 -->
+          <div id="lineChartArea"></div>
+      		<!-- 컨트롤바를 생성할 영역 -->
+          <div id="controlsArea"></div>
+        </div>
+	</div>
+</div>
+
+
+
+<table>
+  <tr>
+    <td class="pupup_frame" style="padding-left:20px">	
+	
+      
+ <!-- -------------- 버튼 시작 --------------  -->
+   <table width="100%" height="40" border="0" cellspacing="0" cellpadding="0" id="divMemoMainBody2">     
+     <tr style="height:50px;">
+       <td align="left">
+	       <div style="float: left;">
+				<b>Total : <span id="tcnt"></span> 건</b> &nbsp;
+	       </div> 
+			<div style="float: left;">
+	            <select id="DISP_CNT" name="DISP_CNT" class="form-control" style="width:60px!important;height:30px;padding:3px;">
+	            	<option value="10">10</option>
+	            	<option value="20">20</option>
+					<option value="50">50</option>
+				</select>
+			</div>
+			<div style="float: left;">						
+		   	   &nbsp;&nbsp;&nbsp;&nbsp;
+		   	   <b><font color=#ff0000>총액 : <span id="t_amt"></span></font></b>
+	   	   </div>
+       </td>
+     </tr>
+     <tr>
+       <td class="margin_btn" colspan="2"></td>
+     </tr>
+   </table>
+    
+
+	
+	</td>
+	</tr>
+</table>
+<div class="col-md-12" align="center">
+	<div class="table-responsive m-b-40">
+		 <table class="table table-borderless table-data3">
+	     <thead style="background-color:#0B2161;">
+	        <tr align="center">
+							<th>NO</th>
+							<th>ID</th>
+							<th>신청일</th>
+							<th>신청주소</th>
+							<th>주민번호</th>
+							<th>이름</th>
+							<th>연락처</th>
+							<th>발급문서</th>
+							<th>언어</th>
+							<th>구분</th>
+							<th>단가</th>
+							<th>부수</th>
+							<th>금액</th>
+							<th>방문시간</th>
+							<th>신청시간</th>
+							<th>발급여부</th>
+							<th>발급시간</th>
+							<th>서손여부</th>
+							<th>서손시간</th>
+							<th>완료여부</th>
+							<th>완료시간</th>
+							<th>처리</th>
+						</tr>
+	      </thead>
+	      <tbody id='mytable'>     
+	      </tbody>
+	      </table>
+      </div>
+</div>
+
+</form>
+	<div id="PAGE_NAVI" align='center'></div>
+	<input type="hidden" id="PAGE_INDEX" name="PAGE_INDEX"/>
+	<input type="hidden" id="RECORD_COUNT" name="RECORD_COUNT" value="20"/>	
+	<%@ include file="/WEB-INF/include/include-body.jspf" %>
+	
+
+	
+<!-- POPUP --> 
+<div id="pop1" style="position:absolute;left:550px;top:200;z-index:200;display:none;background-color:#e5e5e5;">
+	<table width=500 height=250  border="1" cellpadding=2 cellspacing=0 class="table table-data2">
+		<thead>
+			<tr class="list_tit_tr">
+				<th style="padding:5px 10px;" class="list_tit"></th>
+				<th style="padding:5px 10px;" class="list_tit_bar">항목명</th>
+				<th style="padding:5px 10px;" class="list_tit_bar">값</th>
+			</tr>
+		</thead>
+		<tbody id='mytable2'>
+		</tbody>
+		<tr>
+			<td colspan="3" style="padding:5px" align=right bgcolor=white><a href="#" id="close2"><B>[닫기]</B></a>
+			</td>
+		</tr>
+	</table>
+</div>
+</body>
+</html>

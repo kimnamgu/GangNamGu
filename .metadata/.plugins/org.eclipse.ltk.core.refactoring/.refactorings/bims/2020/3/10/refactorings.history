@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<session version="1.0">
+<refactoring comment="Copy element &apos;DaejangServiceImpl.java&apos; to &apos;ffems/src/main/java/ffems.daejang.service&apos;&#x0D;&#x0A;- Original project: &apos;bims&apos;&#x0D;&#x0A;- Destination element: &apos;ffems/src/main/java/ffems.daejang.service&apos;&#x0D;&#x0A;- Original element: &apos;bims.daejang.service.DaejangServiceImpl.java&apos;" description="Copy compilation unit" destination="=ffems/src\/main\/java&lt;ffems.daejang.service" element1="/src\/main\/java&lt;bims.daejang.service{DaejangServiceImpl.java" files="0" flags="589830" folders="0" id="org.eclipse.jdt.ui.copy" policy="org.eclipse.jdt.ui.copyResources" stamp="1583301656999" units="1" version="1.0"/>
+</session>

@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="sso">
+	
+	
+ 	<select id="popJikWonList" parameterType="hashmap" resultType="hashmap">		
+		<![CDATA[
+			SELECT ROW_NUMBER() OVER (ORDER BY DEPT_ID ASC) RNUM, 
+			       ORG_NAME,
+			       USER_ID,
+			       USER_NAME,
+			       DEPT_ID,
+			       DEPT_NAME,
+			       CLASS_ID,
+			       CLASS_NAME,
+			       GRADE_ID,
+			       GRADE_NAME
+			FROM SSOX_USER 
+			WHERE SUBSTR(USER_STAT,0, 2) = 'AA'
+			AND USE_YN = '1'
+			AND USER_NAME LIKE #{USER_NAME} ||'%'
+		]]>		
+	</select>
+	
+	
+	<select id="ssoLogin" parameterType="hashmap" resultType="hashmap">
+		<![CDATA[
+			SELECT USER_ID, USER_NAME,
+				   DEPT_ID, DEPT_NAME, 
+				   CLASS_ID, CLASS_NAME,
+				   POSITION_ID, POSITION_NAME,
+				   TEL, MOBILE
+			FROM SSOX_USER
+			WHERE SUBSTR(USER_STAT,0, 2) = 'AA'
+			AND USER_ID = #{USER_ID}
+		]]>
+	</select>
+	
+	
+</mapper>

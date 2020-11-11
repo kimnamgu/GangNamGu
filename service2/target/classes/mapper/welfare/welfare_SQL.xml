@@ -1,0 +1,213 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="welfare">
+
+
+
+	<insert id="welfarInsert" parameterType="hashmap">
+		<![CDATA[
+			INSERT INTO WELFARE_SALARY
+			(
+				SEQ_NO
+				,NAME
+				,BIRTH
+				,PHONE
+				,DONG
+				,AGREE
+				,GUBUN_CODE
+				,GUBUN_NAME
+				,CI
+				,INS_DATE
+				,UPD_ID
+				,UPD_DATE
+				,DEL_ID
+				,DEL_DATE
+				,CONFIRM_YN
+				,SEX
+				,DEL_YN
+				,UUID
+				,ADDRESS
+			)
+			VALUES
+			(	
+				WELFARE_SALARY_SQ.NEXTVAL,
+				#{name},
+				#{birth},
+				#{phone},
+				#{dong},
+				#{agree},
+				#{gubunCode},
+				#{gubunName},
+				#{ci},
+				sysdate,
+				'',
+				'',
+				'',
+				'',
+				'',
+				'',
+				'',
+				#{uuid},
+				#{address}
+				
+			)
+		]]>
+	</insert>
+	
+	
+	
+	<select id="loginProcessId" parameterType="hashmap" resultType="hashmap">
+		<![CDATA[
+			SELECT
+				USER_ID,
+				USER_NAME,
+				USER_PASS,
+				USER_RIGHT,				
+				DEPT_ID,
+				DEPT_NAME,
+				CLASS_ID, 
+				CLASS_NAME, 
+				POSITION_ID,
+				POSITION_NAME,
+				APPLY_REASON,
+				USER_STATUS,
+				APPROVE_DATE,
+                DEPT_NAME								
+			FROM
+				SELF_DGNS_USER_MASTER
+			WHERE
+				DEL_YN = '0'
+				AND USER_ID = #{USER_ID}			
+		]]>
+	</select>
+	
+	
+	<select id="loginProcessPw" parameterType="hashmap" resultType="hashmap">
+		<![CDATA[
+			SELECT
+				USER_ID,
+				USER_NAME,
+				USER_PASS,
+				USER_RIGHT,				
+				DEPT_ID,
+				DEPT_NAME,
+				CLASS_ID, 
+				CLASS_NAME, 
+				POSITION_ID,
+				POSITION_NAME,				
+				APPLY_REASON, 
+				USER_STATUS,
+				APPROVE_DATE,
+                DEPT_NAME							
+			FROM
+				SELF_DGNS_USER_MASTER
+			WHERE
+				DEL_YN = '0'
+				AND USER_ID = #{USER_ID}
+				AND USER_PASS = #{PASS_WD}		
+		]]>
+	</select>
+	
+	<update id="updateDocIssueReserve" parameterType="hashmap">
+		<![CDATA[
+			UPDATE WELFARE_SALARY				
+				SET 
+		]]>		
+			<choose>
+			<when test='work_gb != null and work_gb.equals("C")'>     
+			    CONFIRM_YN       = 'Y',
+				UPD_ID			 = #{userId},
+			    UPD_DATE   		 = sysdate 
+			</when>
+			<when test='work_gb != null and work_gb.equals("I")'>     
+			    CANCEL_YN       = 'N',
+			    UPD_ID			 = #{userId},
+			    UPD_DATE   		 = sysdate 
+			</when>
+			</choose>
+			<choose>
+			<otherwise>
+			WHERE
+				CI = #{ci}
+				NAME = #{name}
+				SEX = #{sex}
+			</otherwise>
+			</choose>						
+	</update>
+	
+	
+	<select id="welfarSelect" parameterType="hashmap" resultType="hashmap">
+			SELECT 
+				UUID
+				,NAME
+				,BIRTH
+				,PHONE
+				,DONG
+				,AGREE
+				,GUBUN_CODE
+				,GUBUN_NAME
+				,CI
+				,TO_CHAR(INS_DATE,'YYYY-MM-DD HH24:MI:SS') INS_DATE
+				,UPD_ID
+				,UPD_DATE
+				,DEL_ID
+				,DEL_DATE
+				,CONFIRM_YN
+				,SEX
+				,DEL_YN
+				,ADDRESS
+				,DEL_ID
+				,CONFIRM_YN
+            FROM WELFARE_SALARY
+            WHERE
+            <choose>
+				<when test="ci != ''">     
+				   CI = #{ci}
+				</when>
+				<when test="uuid != ''">     
+				    UUID = #{uuid}
+				</when>
+				
+			</choose>
+            
+            AND NAME = #{name}
+            AND DONG = #{deptName}
+            ORDER BY INS_DATE DESC
+<!--             AND	  GUBUN_CODE = #{gubunCode} -->
+            
+	</select>
+	
+	
+	<select id="welfareSelectCt" parameterType="hashmap" resultType="hashmap">
+			SELECT 
+				COUNT(*) OVER() AS TOTAL_COUNT 
+				,UUID
+				,NAME
+				,BIRTH
+				,PHONE
+				,DONG
+				,AGREE
+				,GUBUN_CODE
+				,GUBUN_NAME
+				,CI
+				,TO_CHAR(INS_DATE,'YYYY-MM-DD HH24:MI:SS') INS_DATE
+				,UPD_ID
+				,UPD_DATE
+				,DEL_ID
+				,DEL_DATE
+				,CONFIRM_YN
+				,SEX
+				,DEL_YN
+				,ADDRESS
+				,DEL_ID
+				,CONFIRM_YN
+            FROM WELFARE_SALARY
+             <choose>
+				<when test="userId != '18025190' and userId != 'epvmzhs233' ">     
+				   WHERE DONG = #{deptName}
+				</when>
+			</choose>
+            ORDER BY INS_DATE DESC
+	</select>
+</mapper>

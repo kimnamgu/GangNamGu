@@ -1,0 +1,645 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="daejang">
+	
+
+	<select id="selectDocIssueReserveList" parameterType="hashmap" resultType="hashmap">
+		<include refid="common.pagingPre"/> 
+		<![CDATA[
+			 SELECT COUNT(*) OVER() AS TOTAL_COUNT,                                
+                    ID,
+                    PHONE_ID,
+                    APPLY_UNAME,
+                    APPLY_REGIST_NUMBER,
+                    APPLY_ADDRESS,
+                    APPLY_PHONE,
+                    APPLY_DATE,                    
+					DOCUMENT_GB,
+					( SELECT ITEM_NM FROM DOCUMENT_ISSUE_CODE_LIST WHERE DEL_YN = 'N' AND ITEM_GB||ITEM_DGB||ITEM_CD = A.DOCUMENT_GB ) DOCUMENT_NM,
+					LANGUAGE_GB,
+					( SELECT ITEM_NM FROM DOCUMENT_ISSUE_CODE_LIST WHERE DEL_YN = 'N' AND ITEM_GB||ITEM_DGB||ITEM_CD = A.LANGUAGE_GB ) LANGUAGE_NM,
+					DETAIL_GB,
+					( SELECT ITEM_NM FROM DOCUMENT_ISSUE_CODE_LIST WHERE DEL_YN = 'N' AND ITEM_GB||ITEM_DGB||ITEM_CD = A.DETAIL_GB ) DETAIL_NM,
+					APPLY_OPTION,													
+					APPLY_UNIT_PRICE,
+					APPLY_QTY,
+					APPLY_PRICE_SUM,
+					TO_CHAR(VISIT_DATE, 'YYYY.MM.DD HH24:MI:SS') VISIT_DATE,
+					PAYMENT_DATE,
+					PAYMENT_ID,
+					ISSUE_YN,
+					DISPOSAL_YN,
+					DONE_YN,
+					CANCEL_YN,					
+					INS_ID,
+					TO_CHAR(INS_DATE, 'YYYY.MM.DD HH24:MI:SS') INS_DATE,
+					TO_CHAR(ISSUE_DATE, 'YYYY.MM.DD HH24:MI:SS') ISSUE_DATE,
+					TO_CHAR(DISPOSAL_DATE, 'YYYY.MM.DD HH24:MI:SS') DISPOSAL_DATE,
+					TO_CHAR(DONE_DATE, 'YYYY.MM.DD HH24:MI:SS') DONE_DATE
+            FROM DOCUMENT_ISSUE_APPLY_LIST A           
+            WHERE A.CANCEL_YN = 'N'
+		]]>
+		<if test="id != null and id !=''">
+		AND id = #{id}
+		</if>
+		<if test="phone_id != null and phone_id !=''">
+		AND PHONE_ID = #{phone_id}
+		</if>
+		<if test="apply_uname != null and apply_uname !=''">
+		AND APPLY_UNAME like '%' || #{apply_uname} ||'%'
+		</if>
+		<if test="apply_date != null and apply_date !=''">
+		AND APPLY_DATE = #{apply_date}
+		</if>
+		<if test="language_gb != null and language_gb !=''">
+		AND LANGUAGE_GB = #{language_gb}
+		</if>		
+		<if test="issue_yn != null and issue_yn !=''">
+		AND ISSUE_YN = #{issue_yn}
+		</if>
+		<if test="disposal_yn != null and disposal_yn !=''">
+		AND DISPOSAL_YN = #{disposal_yn}
+		</if>
+		<if test="done_yn != null and done_yn !=''">
+		AND DONE_YN = #{done_yn}
+		</if>
+		ORDER BY ID ASC				
+		<include refid="common.pagingPost"/> 
+	</select>
+	
+	<select id="selectDocIssueReserveViewList" parameterType="hashmap" resultType="hashmap">
+		<include refid="common.pagingPre"/> 
+		<![CDATA[
+			 SELECT COUNT(*) OVER() AS TOTAL_COUNT,                                
+                    ID,
+                    PHONE_ID,
+                    APPLY_UNAME,
+                    APPLY_REGIST_NUMBER,
+                    APPLY_ADDRESS,
+                    APPLY_PHONE,
+                    APPLY_DATE,                    
+					DOCUMENT_GB,
+					( SELECT ITEM_NM FROM DOCUMENT_ISSUE_CODE_LIST WHERE DEL_YN = 'N' AND ITEM_GB||ITEM_DGB||ITEM_CD = A.DOCUMENT_GB ) DOCUMENT_NM,
+					LANGUAGE_GB,
+					( SELECT ITEM_NM FROM DOCUMENT_ISSUE_CODE_LIST WHERE DEL_YN = 'N' AND ITEM_GB||ITEM_DGB||ITEM_CD = A.LANGUAGE_GB ) LANGUAGE_NM,
+					DETAIL_GB,
+					( SELECT ITEM_NM FROM DOCUMENT_ISSUE_CODE_LIST WHERE DEL_YN = 'N' AND ITEM_GB||ITEM_DGB||ITEM_CD = A.DETAIL_GB ) DETAIL_NM,
+					APPLY_OPTION,													
+					APPLY_UNIT_PRICE,
+					APPLY_QTY,
+					APPLY_PRICE_SUM,
+					TO_CHAR(VISIT_DATE, 'YYYY.MM.DD HH24:MI:SS') VISIT_DATE,
+					PAYMENT_DATE,
+					PAYMENT_ID,
+					ISSUE_YN,
+					DISPOSAL_YN,
+					DONE_YN,
+					CANCEL_YN,					
+					INS_ID,
+					TO_CHAR(INS_DATE, 'YYYY.MM.DD HH24:MI:SS') INS_DATE,
+					TO_CHAR(ISSUE_DATE, 'YYYY.MM.DD HH24:MI:SS') ISSUE_DATE,
+					TO_CHAR(DISPOSAL_DATE, 'YYYY.MM.DD HH24:MI:SS') DISPOSAL_DATE,
+					TO_CHAR(DONE_DATE, 'YYYY.MM.DD HH24:MI:SS') DONE_DATE
+            FROM DOCUMENT_ISSUE_APPLY_LIST A           
+            WHERE A.CANCEL_YN = 'N'                        
+		]]>
+		<if test="id != null and id !=''">
+		AND id = #{id}
+		</if>
+		<if test="phone_id != null and phone_id !=''">
+		AND PHONE_ID = #{phone_id}
+		</if>
+		<if test="apply_uname != null and apply_uname !=''">
+		AND APPLY_UNAME = #{apply_uname}
+		</if>
+		<if test="apply_date != null and apply_date !=''">
+		AND APPLY_DATE = #{apply_date}
+		</if>
+		<if test="language_gb != null and language_gb !=''">
+		AND LANGUAGE_GB = #{language_gb}
+		</if>		
+		<if test="issue_yn != null and issue_yn !=''">
+		AND ISSUE_YN = #{issue_yn}
+		</if>
+		<if test="disposal_yn != null and disposal_yn !=''">
+		AND DISPOSAL_YN = #{disposal_yn}
+		</if>
+		<if test="done_yn != null and done_yn !=''">
+		AND DONE_YN = #{done_yn}
+		</if>
+		ORDER BY ID ASC				
+		<include refid="common.pagingPost"/> 
+	</select>
+	
+	
+	<select id="selectStatisticsList" parameterType="hashmap" resultType="hashmap">
+		<![CDATA[
+		SELECT             
+		        ST_DATE.ST_DAY AS PROCESS_DATE
+		        ,NVL(A.TOTAL_CNT,0) AS TOTAL_CNT
+		        ,NVL(A.ISSUE_YN_CNT,0) AS ISSUE_YN_CNT
+		        ,NVL(A.DISPOSAL_YN_CNT,0) AS DISPOSAL_YN_CNT
+		        ,NVL(A.DONE_YN_CNT,0) AS DONE_YN_CNT
+		        ,NVL(A.CANCEL_YN_CNT ,0) AS CANCEL_YN_CNT
+		FROM 
+		(
+		    SELECT TO_CHAR(TO_DATE(to_char(add_months(sysdate,-1),'YYYYMMDD'), 'YYYYMMDD')+LEVEL-1, 'YYYYMMDD') ST_DAY
+		      FROM DUAL
+		    CONNECT BY LEVEL <= (TO_DATE(to_char(sysdate+1,'YYYYMMDD'), 'YYYYMMDD')-TO_DATE(to_char(add_months(sysdate,-1),'YYYYMMDD'), 'YYYYMMDD')+1)
+		)ST_DATE,
+		(  SELECT (
+		            CASE WHEN TO_CHAR(INS_DATE,'HH24MI') >= '1800' THEN TO_CHAR(INS_DATE+1,'YYYYMMDD')
+		                 ELSE TO_CHAR(INS_DATE,'YYYYMMDD')
+		             END
+		         ) PROCESS_DATE,
+		         COUNT (1) TOTAL_CNT,
+		         SUM (CASE ISSUE_YN WHEN 'Y' THEN 1 ELSE 0 END) AS ISSUE_YN_CNT,
+		         SUM (CASE DISPOSAL_YN WHEN 'Y' THEN 1 ELSE 0 END)
+		            AS DISPOSAL_YN_CNT,
+		         SUM (CASE DONE_YN WHEN 'Y' THEN 1 ELSE 0 END) AS DONE_YN_CNT,
+		         SUM (CASE CANCEL_YN WHEN 'Y' THEN 1 ELSE 0 END)
+		            AS CANCEL_YN_CNT
+		    FROM DOCUMENT_ISSUE_APPLY_LIST
+		GROUP BY (
+		            CASE WHEN TO_CHAR(INS_DATE,'HH24MI') >= '1800' THEN TO_CHAR(INS_DATE+1,'YYYYMMDD')
+		                 ELSE TO_CHAR(INS_DATE,'YYYYMMDD')
+		             END
+		         )
+		)A
+		WHERE ST_DATE.ST_DAY = A.PROCESS_DATE(+)
+		ORDER BY ST_DAY ASC			
+		]]>
+	</select>
+	
+	
+	
+	<select id="getDocumentKindList" parameterType="hashmap" resultType="hashmap">		 
+		<![CDATA[
+			SELECT  COUNT(*) OVER() AS TOTAL_COUNT,
+					ITEM_GB,
+					ITEM_DGB,
+					ITEM_CD,
+                    ITEM_NM,                    
+                    ITEM_AMT,
+                    ITEM_BG                                                         
+            FROM DOCUMENT_ISSUE_CODE_LIST           
+            WHERE DEL_YN = 'N'                                    
+		]]>	
+		<if test="item_gb != null and item_gb !=''">
+		AND ITEM_GB = #{item_gb}
+		</if>							
+	</select>
+	
+		
+	<select id="docIssueReserveDetail" parameterType="hashmap" resultType="hashmap">
+		<![CDATA[
+				SELECT  ID          		,   						
+                    	PHONE_ID,
+                    	APPLY_UNAME,
+                    	APPLY_REGIST_NUMBER,
+                    	APPLY_ADDRESS,
+                    	APPLY_PHONE,
+                    	APPLY_DATE,                    
+						DOCUMENT_GB,
+						( SELECT ITEM_NM FROM DOCUMENT_ISSUE_CODE_LIST WHERE DEL_YN = 'N' AND ITEM_GB||ITEM_DGB||ITEM_CD = A.DOCUMENT_GB ) DOCUMENT_NM,
+						LANGUAGE_GB,
+						( SELECT ITEM_NM FROM DOCUMENT_ISSUE_CODE_LIST WHERE DEL_YN = 'N' AND ITEM_GB||ITEM_DGB||ITEM_CD = A.LANGUAGE_GB ) LANGUAGE_NM,
+						DETAIL_GB,
+						( SELECT ITEM_NM FROM DOCUMENT_ISSUE_CODE_LIST WHERE DEL_YN = 'N' AND ITEM_GB||ITEM_DGB||ITEM_CD = A.DETAIL_GB ) DETAIL_NM,
+						APPLY_OPTION,																		
+						APPLY_UNIT_PRICE    ,
+						APPLY_QTY           ,
+						APPLY_PRICE_SUM     ,
+						VISIT_DATE          ,
+						PAYMENT_DATE        ,
+						PAYMENT_ID          ,
+						ISSUE_YN            ,
+						DISPOSAL_YN         ,
+						DONE_YN             ,
+						CANCEL_YN           ,
+						BIGO                ,
+						INS_ID              ,
+						INS_DATE            ,
+						ISSUE_DATE          ,
+						DISPOSAL_DATE       ,
+						DONE_DATE           ,
+						UPD_ID              ,
+						UPD_DATE            ,
+						CNC_ID              ,
+						CNC_DATE
+            FROM DOCUMENT_ISSUE_APPLY_LIST A    
+            WHERE CANCEL_YN = 'N'            
+            AND ID = #{id}
+		]]>
+	</select>
+	
+	
+	<insert id="insertDocIssueReserve" parameterType="hashmap" useGeneratedKeys="true" keyProperty="ID">
+		<selectKey keyProperty="doc_id" resultType="string" order="BEFORE">
+			SELECT DOCUMENT_ISSUE_APPLY_LIST_SQ.NEXTVAL FROM DUAL
+		</selectKey>		
+		<![CDATA[
+			INSERT INTO DOCUMENT_ISSUE_APPLY_LIST
+			(
+				  ID                  ,
+				  PHONE_ID            ,
+				  APPLY_UNAME         ,
+				  APPLY_REGIST_NUMBER ,
+				  APPLY_ADDRESS       ,
+				  APPLY_PHONE         ,
+				  APPLY_DATE          ,				  
+				  DOCUMENT_GB         ,
+				  LANGUAGE_GB         ,
+				  DETAIL_GB           ,
+				  APPLY_OPTION        ,
+				  APPLY_UNIT_PRICE    ,
+				  APPLY_QTY           ,
+				  APPLY_PRICE_SUM     ,
+				  VISIT_DATE		  ,
+				  PAYMENT_DATE        ,
+				  PAYMENT_ID	      ,				  						  
+				  INS_ID     		  ,
+				  INS_DATE
+			)
+			VALUES
+			(			
+			    #{doc_id},
+			    #{phone_id},
+			    #{apply_uname},
+			    #{apply_regist_number},
+			    #{apply_address},
+			    #{apply_phone},			    
+			    #{apply_date},			    	
+				#{document_gb},
+				#{language_gb},
+				#{detail_gb},
+				#{apply_option},
+				#{apply_unit_price},
+				#{apply_qty},
+				#{apply_price_sum},
+				to_date(#{visit_date}, 'yyyy.mm.dd hh24:mi:ss'),	
+				to_date(#{payment_date}, 'yyyy.mm.dd hh24:mi:ss'),
+				#{payment_id},						
+				#{ins_id},
+				sysdate					
+			)
+		]]>
+	</insert>
+	
+	
+	
+	
+	<update id="updateDocIssueReserve" parameterType="hashmap">
+		<![CDATA[
+			UPDATE DOCUMENT_ISSUE_APPLY_LIST				
+				SET 
+		]]>		
+			<choose>
+			<when test='work_gb != null and work_gb.equals("A")'>	
+				ISSUE_YN  = 'Y',
+			    ISSUE_DATE    = SYSDATE,
+			    UPD_DATE   		 = sysdate 
+			</when>
+			<when test='work_gb != null and work_gb.equals("B")'>    
+			    DISPOSAL_YN   = 'Y',
+			    DISPOSAL_DATE = SYSDATE,
+			    UPD_DATE   		 = sysdate 
+			</when>
+			<when test='work_gb != null and work_gb.equals("C")'>     
+			    DONE_YN       = 'Y',
+			    DONE_DATE     = SYSDATE,
+			    UPD_DATE   		 = sysdate 
+			</when>
+			<when test='work_gb != null and work_gb.equals("D")'>     
+			    CANCEL_YN       = 'Y',
+			    CNC_DATE     = SYSDATE,
+			    UPD_DATE   		 = sysdate 
+			</when>
+			<when test='work_gb != null and work_gb.equals("E")'>     
+			    DOCUMENT_GB      = #{document_gb},
+			    LANGUAGE_GB      = #{language_gb},
+			    DETAIL_GB        = #{detail_gb},
+			    APPLY_UNIT_PRICE = #{apply_unit_price},
+			    APPLY_QTY 		 = #{apply_qty},
+			    APPLY_PRICE_SUM  = #{apply_price_sum},	
+			    VISIT_DATE       = to_date(#{visit_date}, 'yyyy.mm.dd hh24:mi:ss'),
+			    UPD_ID           = #{upd_id}, 
+			    UPD_DATE   		 = sysdate 	
+			</when>				
+			</choose>
+			<choose>
+			<when test='work_gb != null and work_gb.equals("D")'>
+			WHERE PHONE_ID = #{phone_id}
+				AND DOCUMENT_GB = #{document_gb}
+				<choose><!-- LANGUAGE_GB 가 인자값 인식을 못해서 이렇게 할수 밖에 없었음 -->
+				<when test='language_gb.equals("A")'>
+					AND LANGUAGE_GB = 'A'
+				</when>
+				<when test='language_gb.equals("B")'>
+					AND LANGUAGE_GB = 'B'
+				</when>
+				<when test='language_gb.equals("C")'>
+					AND LANGUAGE_GB = 'C'
+				</when>
+				<when test='language_gb.equals("D")'>
+					AND LANGUAGE_GB = 'D'
+				</when>
+				<when test='language_gb.equals("E")'>
+					AND LANGUAGE_GB = 'E'
+				</when>
+				<when test='language_gb.equals("F")'>
+					AND LANGUAGE_GB = 'F'
+				</when>
+				<when test='language_gb.equals("G")'>
+					AND LANGUAGE_GB = 'G'
+				</when>
+				<when test='language_gb.equals("H")'>
+					AND LANGUAGE_GB = 'H'
+				</when>
+				<when test='language_gb.equals("I")'>
+					AND LANGUAGE_GB = 'I'
+				</when>
+				<when test='language_gb.equals("J")'>
+					AND LANGUAGE_GB = 'J'
+				</when>
+				</choose>
+			</when>
+			<otherwise>
+			WHERE
+				ID = #{id}
+			</otherwise>
+			</choose>						
+	</update>
+	
+	
+	
+	
+	<select id="getDocIssueReserveCount" resultType="hashmap">		 
+		<![CDATA[
+			SELECT COUNT(*) AS TOTAL_COUNT                                                 
+            FROM DOCUMENT_ISSUE_APPLY_LIST           
+            WHERE ISSUE_YN = 'N'                        
+		]]>
+	</select>
+	
+	<select id="getDocIssueReserveRecent" resultType="hashmap">		 
+		<![CDATA[
+				SELECT 
+					TO_CHAR(MAX(INS_DATE), 'YYYY.MM.DD HH24:MI:SS') INS_DATE
+	            FROM DOCUMENT_ISSUE_APPLY_LIST A           
+            ]]>
+	</select>
+	
+	
+	<update id="updateSeoson" parameterType="String">
+		<![CDATA[
+			UPDATE
+			/*+ bypass_ujvc */ 
+			(
+			SELECT 
+			    DISPOSAL_YN
+			    ,DISPOSAL_DATE
+			    ,UPD_ID
+			    ,UPD_DATE
+			FROM DOCUMENT_ISSUE_APPLY_LIST
+			WHERE TO_CHAR (INS_DATE, 'YYYYMMDDHH24MISS') BETWEEN TO_CHAR (SYSDATE-1, 'YYYYMMDD') || '180001' AND TO_CHAR (SYSDATE, 'YYYYMMDD') || '180000' 
+			AND DONE_YN = 'N' 
+			AND CANCEL_YN = 'N'
+			) 
+			SET  DISPOSAL_YN = 'Y'
+			,DISPOSAL_DATE = SYSDATE
+			,UPD_ID = 'Scheduler20'
+			,UPD_DATE = SYSDATE
+		]]>		
+	</update>
+
+
+	<!-- 발급통계 현황 -->
+	<select id="selectDocIssueStaticsDayList" resultType="hashmap">		 
+		<![CDATA[
+			SELECT ST_DATE.ST_DAY AS PROCESS_DATE,
+			         NVL (A.DONE_YN_CNT, 0) AS DONE_YN_CNT,
+			         NVL (A.BAA_CNT, 0) AS BAA_CNT,
+					 NVL (A.BAB_CNT, 0) AS BAB_CNT,
+					 NVL (A.BBA_CNT, 0) AS BBA_CNT,
+					 NVL (A.BBB_CNT, 0) AS BBB_CNT,
+					 NVL (A.BBC_CNT, 0) AS BBC_CNT,
+					 NVL (A.BBD_CNT, 0) AS BBD_CNT,
+					 NVL (A.BCA_CNT, 0) AS BCA_CNT,
+					 NVL (A.BCB_CNT, 0) AS BCB_CNT
+			FROM ( 
+			    SELECT TO_CHAR(TO_DATE(#{from_date}, 'YYYYMMDD') + LEVEL - 1, 'YYYYMMDD') AS ST_DAY
+			        FROM   DUAL CONNECT BY LEVEL <= TO_DATE(#{to_date}, 'YYYYMMDD') - TO_DATE(#{from_date}, 'YYYYMMDD') + 1
+			)ST_DATE,
+			         (  SELECT (CASE
+			                       WHEN TO_CHAR (INS_DATE, 'HH24MI') >= '1800'
+			                       THEN TO_CHAR (INS_DATE + 1, 'YYYYMMDD')
+			                       ELSE TO_CHAR (INS_DATE, 'YYYYMMDD')
+			                    END) PROCESS_DATE,
+			                   SUM (CASE DONE_YN WHEN 'Y' THEN 1 ELSE 0 END) AS DONE_YN_CNT,
+								SUM (CASE  WHEN DONE_YN = 'Y' AND DOCUMENT_GB = 'BAA' THEN  1 ELSE 0 END) AS BAA_CNT,
+								SUM (CASE  WHEN DONE_YN = 'Y' AND DOCUMENT_GB = 'BAB' THEN  1 ELSE 0 END) AS BAB_CNT,
+								SUM (CASE  WHEN DONE_YN = 'Y' AND DOCUMENT_GB = 'BBA' THEN  1 ELSE 0 END) AS BBA_CNT,
+								SUM (CASE  WHEN DONE_YN = 'Y' AND DOCUMENT_GB = 'BBB' THEN  1 ELSE 0 END) AS BBB_CNT,
+								SUM (CASE  WHEN DONE_YN = 'Y' AND DOCUMENT_GB = 'BBC' THEN  1 ELSE 0 END) AS BBC_CNT,
+								SUM (CASE  WHEN DONE_YN = 'Y' AND DOCUMENT_GB = 'BBD' THEN  1 ELSE 0 END) AS BBD_CNT,
+								SUM (CASE  WHEN DONE_YN = 'Y' AND DOCUMENT_GB = 'BCA' THEN  1 ELSE 0 END) AS BCA_CNT,
+								SUM (CASE  WHEN DONE_YN = 'Y' AND DOCUMENT_GB = 'BCB' THEN  1 ELSE 0 END) AS BCB_CNT
+			              FROM DOCUMENT_ISSUE_APPLY_LIST
+			              WHERE (CASE
+			                       WHEN TO_CHAR (INS_DATE, 'HH24MI') >= '1800'
+			                       THEN TO_CHAR (INS_DATE + 1, 'YYYYMMDD')
+			                       ELSE TO_CHAR (INS_DATE, 'YYYYMMDD')
+			                    END) BETWEEN #{from_date} AND #{to_date}
+                    		AND CANCEL_YN ='N'
+			          GROUP BY (CASE
+			                       WHEN TO_CHAR (INS_DATE, 'HH24MI') >= '1800'
+			                       THEN TO_CHAR (INS_DATE + 1, 'YYYYMMDD')
+			                       ELSE TO_CHAR (INS_DATE, 'YYYYMMDD')
+			                    END)
+			        ) A
+			   WHERE ST_DATE.ST_DAY = A.PROCESS_DATE(+)
+			ORDER BY ST_DAY ASC
+            ]]>
+	</select>	
+	
+	<select id="selectDocIssueStaticsMonthList" resultType="hashmap">		 
+		<![CDATA[
+	  		SELECT (CASE
+	                       WHEN TO_CHAR (INS_DATE, 'HH24MI') >= '1800'
+	                       THEN TO_CHAR (INS_DATE + 1, 'YYYYMM')
+	                       ELSE TO_CHAR (INS_DATE, 'YYYYMM')
+	                    END) PROCESS_DATE,
+	                   SUM (CASE DONE_YN WHEN 'Y' THEN 1 ELSE 0 END) AS DONE_YN_CNT,
+						SUM (CASE  WHEN DONE_YN = 'Y' AND DOCUMENT_GB = 'BAA' THEN  1 ELSE 0 END) AS BAA_CNT,
+						SUM (CASE  WHEN DONE_YN = 'Y' AND DOCUMENT_GB = 'BAB' THEN  1 ELSE 0 END) AS BAB_CNT,
+						SUM (CASE  WHEN DONE_YN = 'Y' AND DOCUMENT_GB = 'BBA' THEN  1 ELSE 0 END) AS BBA_CNT,
+						SUM (CASE  WHEN DONE_YN = 'Y' AND DOCUMENT_GB = 'BBB' THEN  1 ELSE 0 END) AS BBB_CNT,
+						SUM (CASE  WHEN DONE_YN = 'Y' AND DOCUMENT_GB = 'BBC' THEN  1 ELSE 0 END) AS BBC_CNT,
+						SUM (CASE  WHEN DONE_YN = 'Y' AND DOCUMENT_GB = 'BBD' THEN  1 ELSE 0 END) AS BBD_CNT,
+						SUM (CASE  WHEN DONE_YN = 'Y' AND DOCUMENT_GB = 'BCA' THEN  1 ELSE 0 END) AS BCA_CNT,
+						SUM (CASE  WHEN DONE_YN = 'Y' AND DOCUMENT_GB = 'BCB' THEN  1 ELSE 0 END) AS BCB_CNT
+	              FROM DOCUMENT_ISSUE_APPLY_LIST
+	                WHERE (CASE
+	                       WHEN TO_CHAR (INS_DATE, 'HH24MI') >= '1800'
+	                       THEN TO_CHAR (INS_DATE + 1, 'YYYYMMDD')
+	                       ELSE TO_CHAR (INS_DATE, 'YYYYMMDD')
+	                    END) BETWEEN #{from_date} AND #{to_date}
+                    AND CANCEL_YN ='N'
+	          GROUP BY (CASE
+	                       WHEN TO_CHAR (INS_DATE, 'HH24MI') >= '1800'
+	                       THEN TO_CHAR (INS_DATE + 1, 'YYYYMM')
+	                       ELSE TO_CHAR (INS_DATE, 'YYYYMM')
+	                    END)           
+            ]]>
+	</select>	
+	
+	<select id="selectDocIssueStaticsYearList" resultType="hashmap">		 
+		<![CDATA[
+         SELECT (CASE
+                       WHEN TO_CHAR (INS_DATE, 'HH24MI') >= '1800'
+                       THEN TO_CHAR (INS_DATE + 1, 'YYYY')
+                       ELSE TO_CHAR (INS_DATE, 'YYYY')
+                    END) PROCESS_DATE,
+                   SUM (CASE DONE_YN WHEN 'Y' THEN 1 ELSE 0 END) AS DONE_YN_CNT,
+					SUM (CASE  WHEN DONE_YN = 'Y' AND DOCUMENT_GB = 'BAA' THEN  1 ELSE 0 END) AS BAA_CNT,
+					SUM (CASE  WHEN DONE_YN = 'Y' AND DOCUMENT_GB = 'BAB' THEN  1 ELSE 0 END) AS BAB_CNT,
+					SUM (CASE  WHEN DONE_YN = 'Y' AND DOCUMENT_GB = 'BBA' THEN  1 ELSE 0 END) AS BBA_CNT,
+					SUM (CASE  WHEN DONE_YN = 'Y' AND DOCUMENT_GB = 'BBB' THEN  1 ELSE 0 END) AS BBB_CNT,
+					SUM (CASE  WHEN DONE_YN = 'Y' AND DOCUMENT_GB = 'BBC' THEN  1 ELSE 0 END) AS BBC_CNT,
+					SUM (CASE  WHEN DONE_YN = 'Y' AND DOCUMENT_GB = 'BBD' THEN  1 ELSE 0 END) AS BBD_CNT,
+					SUM (CASE  WHEN DONE_YN = 'Y' AND DOCUMENT_GB = 'BCA' THEN  1 ELSE 0 END) AS BCA_CNT,
+					SUM (CASE  WHEN DONE_YN = 'Y' AND DOCUMENT_GB = 'BCB' THEN  1 ELSE 0 END) AS BCB_CNT
+                   
+              FROM DOCUMENT_ISSUE_APPLY_LIST
+              WHERE (CASE
+                       WHEN TO_CHAR (INS_DATE, 'HH24MI') >= '1800'
+                       THEN TO_CHAR (INS_DATE + 1, 'YYYYMMDD')
+                       ELSE TO_CHAR (INS_DATE, 'YYYYMMDD')
+                    END) BETWEEN #{from_date} AND #{to_date}
+          		AND CANCEL_YN ='N'
+          GROUP BY (CASE
+                       WHEN TO_CHAR (INS_DATE, 'HH24MI') >= '1800'
+                       THEN TO_CHAR (INS_DATE + 1, 'YYYY')
+                       ELSE TO_CHAR (INS_DATE, 'YYYY')
+                    END)      
+            ]]>
+	</select>
+	
+	<!-- 수수료통계 현황 -->
+	<select id="selectDocPeeStaticsDayList" resultType="hashmap">		 
+		<![CDATA[
+			SELECT ST_DATE.ST_DAY AS PROCESS_DATE,
+			     NVL (A.DONE_YN_PRICE, 0) AS DONE_YN_PRICE,
+		         NVL (A.BAA_PRICE, 0) AS BAA_PRICE,
+				 NVL (A.BAB_PRICE, 0) AS BAB_PRICE,
+				 NVL (A.BBA_PRICE, 0) AS BBA_PRICE,
+				 NVL (A.BBB_PRICE, 0) AS BBB_PRICE,
+				 NVL (A.BBC_PRICE, 0) AS BBC_PRICE,
+				 NVL (A.BBD_PRICE, 0) AS BBD_PRICE,
+				 NVL (A.BCA_PRICE, 0) AS BCA_PRICE,
+				 NVL (A.BCB_PRICE, 0) AS BCB_PRICE
+			FROM ( 
+			    SELECT TO_CHAR(TO_DATE(#{from_date}, 'YYYYMMDD') + LEVEL - 1, 'YYYYMMDD') AS ST_DAY
+			        FROM   DUAL CONNECT BY LEVEL <= TO_DATE(#{to_date}, 'YYYYMMDD') - TO_DATE(#{from_date}, 'YYYYMMDD') + 1
+			)ST_DATE,
+			(
+			         
+			 SELECT (CASE
+			                       WHEN TO_CHAR (INS_DATE, 'HH24MI') >= '1800'
+			                       THEN TO_CHAR (INS_DATE + 1, 'YYYYMMDD')
+			                       ELSE TO_CHAR (INS_DATE, 'YYYYMMDD')
+			                    END) PROCESS_DATE,
+			                   SUM (CASE DONE_YN WHEN 'Y' THEN APPLY_UNIT_PRICE ELSE 0 END) AS DONE_YN_PRICE,
+								SUM (CASE  WHEN DONE_YN = 'Y' AND DOCUMENT_GB = 'BAA' THEN  APPLY_UNIT_PRICE ELSE 0 END) AS BAA_PRICE,
+								SUM (CASE  WHEN DONE_YN = 'Y' AND DOCUMENT_GB = 'BAB' THEN  APPLY_UNIT_PRICE ELSE 0 END) AS BAB_PRICE,
+								SUM (CASE  WHEN DONE_YN = 'Y' AND DOCUMENT_GB = 'BBA' THEN  APPLY_UNIT_PRICE ELSE 0 END) AS BBA_PRICE,
+								SUM (CASE  WHEN DONE_YN = 'Y' AND DOCUMENT_GB = 'BBB' THEN  APPLY_UNIT_PRICE ELSE 0 END) AS BBB_PRICE,
+								SUM (CASE  WHEN DONE_YN = 'Y' AND DOCUMENT_GB = 'BBC' THEN  APPLY_UNIT_PRICE ELSE 0 END) AS BBC_PRICE,
+								SUM (CASE  WHEN DONE_YN = 'Y' AND DOCUMENT_GB = 'BBD' THEN  APPLY_UNIT_PRICE ELSE 0 END) AS BBD_PRICE,
+								SUM (CASE  WHEN DONE_YN = 'Y' AND DOCUMENT_GB = 'BCA' THEN  APPLY_UNIT_PRICE ELSE 0 END) AS BCA_PRICE,
+								SUM (CASE  WHEN DONE_YN = 'Y' AND DOCUMENT_GB = 'BCB' THEN  APPLY_UNIT_PRICE ELSE 0 END) AS BCB_PRICE
+			              FROM DOCUMENT_ISSUE_APPLY_LIST
+			              WHERE (CASE
+			                       WHEN TO_CHAR (INS_DATE, 'HH24MI') >= '1800'
+			                       THEN TO_CHAR (INS_DATE + 1, 'YYYYMMDD')
+			                       ELSE TO_CHAR (INS_DATE, 'YYYYMMDD')
+			                    END) BETWEEN #{from_date} AND #{to_date}
+                    		AND CANCEL_YN ='N'
+			          GROUP BY (CASE
+			                       WHEN TO_CHAR (INS_DATE, 'HH24MI') >= '1800'
+			                       THEN TO_CHAR (INS_DATE + 1, 'YYYYMMDD')
+			                       ELSE TO_CHAR (INS_DATE, 'YYYYMMDD')
+			                    END)
+			        ) A
+			   WHERE ST_DATE.ST_DAY = A.PROCESS_DATE(+)
+			   ORDER BY ST_DAY ASC          
+            ]]>
+	</select>	
+	
+	<select id="selectDocPeeStaticsMonthList" resultType="hashmap">		 
+		<![CDATA[
+			SELECT (CASE
+                       WHEN TO_CHAR (INS_DATE, 'HH24MI') >= '1800'
+                       THEN TO_CHAR (INS_DATE + 1, 'YYYYMM')
+                       ELSE TO_CHAR (INS_DATE, 'YYYYMM')
+                    END) PROCESS_DATE,
+                    SUM (CASE DONE_YN WHEN 'Y' THEN APPLY_UNIT_PRICE ELSE 0 END) AS DONE_YN_PRICE,
+					SUM (CASE  WHEN DONE_YN = 'Y' AND DOCUMENT_GB = 'BAA' THEN  APPLY_UNIT_PRICE ELSE 0 END) AS BAA_PRICE,
+					SUM (CASE  WHEN DONE_YN = 'Y' AND DOCUMENT_GB = 'BAB' THEN  APPLY_UNIT_PRICE ELSE 0 END) AS BAB_PRICE,
+					SUM (CASE  WHEN DONE_YN = 'Y' AND DOCUMENT_GB = 'BBA' THEN  APPLY_UNIT_PRICE ELSE 0 END) AS BBA_PRICE,
+					SUM (CASE  WHEN DONE_YN = 'Y' AND DOCUMENT_GB = 'BBB' THEN  APPLY_UNIT_PRICE ELSE 0 END) AS BBB_PRICE,
+					SUM (CASE  WHEN DONE_YN = 'Y' AND DOCUMENT_GB = 'BBC' THEN  APPLY_UNIT_PRICE ELSE 0 END) AS BBC_PRICE,
+					SUM (CASE  WHEN DONE_YN = 'Y' AND DOCUMENT_GB = 'BBD' THEN  APPLY_UNIT_PRICE ELSE 0 END) AS BBD_PRICE,
+					SUM (CASE  WHEN DONE_YN = 'Y' AND DOCUMENT_GB = 'BCA' THEN  APPLY_UNIT_PRICE ELSE 0 END) AS BCA_PRICE,
+					SUM (CASE  WHEN DONE_YN = 'Y' AND DOCUMENT_GB = 'BCB' THEN  APPLY_UNIT_PRICE ELSE 0 END) AS BCB_PRICE
+              FROM DOCUMENT_ISSUE_APPLY_LIST
+                WHERE (CASE
+                       WHEN TO_CHAR (INS_DATE, 'HH24MI') >= '1800'
+                       THEN TO_CHAR (INS_DATE + 1, 'YYYYMMDD')
+                       ELSE TO_CHAR (INS_DATE, 'YYYYMMDD')
+                    END) BETWEEN #{from_date} AND #{to_date}
+          		AND CANCEL_YN ='N'
+          GROUP BY (CASE
+                       WHEN TO_CHAR (INS_DATE, 'HH24MI') >= '1800'
+                       THEN TO_CHAR (INS_DATE + 1, 'YYYYMM')
+                       ELSE TO_CHAR (INS_DATE, 'YYYYMM')
+                    END)
+            ]]>
+	</select>	
+	
+	<select id="selectDocPeeStaticsYearList" resultType="hashmap">		 
+		<![CDATA[
+         SELECT (CASE
+                       WHEN TO_CHAR (INS_DATE, 'HH24MI') >= '1800'
+                       THEN TO_CHAR (INS_DATE + 1, 'YYYY')
+                       ELSE TO_CHAR (INS_DATE, 'YYYY')
+                    END) PROCESS_DATE,
+                   SUM (CASE DONE_YN WHEN 'Y' THEN APPLY_UNIT_PRICE ELSE 0 END) AS DONE_YN_PRICE,
+					SUM (CASE  WHEN DONE_YN = 'Y' AND DOCUMENT_GB = 'BAA' THEN  APPLY_UNIT_PRICE ELSE 0 END) AS BAA_PRICE,
+					SUM (CASE  WHEN DONE_YN = 'Y' AND DOCUMENT_GB = 'BAB' THEN  APPLY_UNIT_PRICE ELSE 0 END) AS BAB_PRICE,
+					SUM (CASE  WHEN DONE_YN = 'Y' AND DOCUMENT_GB = 'BBA' THEN  APPLY_UNIT_PRICE ELSE 0 END) AS BBA_PRICE,
+					SUM (CASE  WHEN DONE_YN = 'Y' AND DOCUMENT_GB = 'BBB' THEN  APPLY_UNIT_PRICE ELSE 0 END) AS BBB_PRICE,
+					SUM (CASE  WHEN DONE_YN = 'Y' AND DOCUMENT_GB = 'BBC' THEN  APPLY_UNIT_PRICE ELSE 0 END) AS BBC_PRICE,
+					SUM (CASE  WHEN DONE_YN = 'Y' AND DOCUMENT_GB = 'BBD' THEN  APPLY_UNIT_PRICE ELSE 0 END) AS BBD_PRICE,
+					SUM (CASE  WHEN DONE_YN = 'Y' AND DOCUMENT_GB = 'BCA' THEN  APPLY_UNIT_PRICE ELSE 0 END) AS BCA_PRICE,
+					SUM (CASE  WHEN DONE_YN = 'Y' AND DOCUMENT_GB = 'BCB' THEN  APPLY_UNIT_PRICE ELSE 0 END) AS BCB_PRICE
+              FROM DOCUMENT_ISSUE_APPLY_LIST
+              WHERE (CASE
+                       WHEN TO_CHAR (INS_DATE, 'HH24MI') >= '1800'
+                       THEN TO_CHAR (INS_DATE + 1, 'YYYYMMDD')
+                       ELSE TO_CHAR (INS_DATE, 'YYYYMMDD')
+                    END) BETWEEN #{from_date} AND #{to_date}
+          		AND CANCEL_YN ='N'
+          GROUP BY (CASE
+                       WHEN TO_CHAR (INS_DATE, 'HH24MI') >= '1800'
+                       THEN TO_CHAR (INS_DATE + 1, 'YYYY')
+                       ELSE TO_CHAR (INS_DATE, 'YYYY')
+                    END)        
+            ]]>
+	</select>
+	
+	
+	
+</mapper>

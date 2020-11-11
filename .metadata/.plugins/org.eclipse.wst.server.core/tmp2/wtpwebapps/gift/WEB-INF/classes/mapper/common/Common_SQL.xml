@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="common">
+	
+	<select id="selectFileInfo" parameterType="hashmap" resultType="hashmap">
+		<![CDATA[
+			SELECT
+			    STORED_FILE_NAME,
+			    ORIGINAL_FILE_NAME
+			FROM
+			    TB_FILE
+			WHERE
+			    IDX = #{IDX}
+		]]>
+	</select>
+	
+	<sql id="pagingPre">
+		<![CDATA[
+   			SELECT 
+			    AAA.*
+			FROM(
+			    SELECT 
+			        COUNT(*) OVER() AS TOTAL_COUNT,
+			        AA.*
+			    FROM(  
+ 		]]>
+ 	</sql>
+ 	
+ 	<sql id="pagingPost">
+ 		<![CDATA[
+ 			 	) AA
+			) AAA
+			WHERE 
+			    AAA.RNUM BETWEEN #{START} AND #{END}
+ 		]]>
+ 	</sql>
+ 	
+ 	
+ 	
+ 	<insert id="insertFile" parameterType="hashmap">
+		<![CDATA[
+			INSERT INTO GIFT_ATTACH_FILE
+			(
+				ID,
+				BOARD_ID,
+				BD_LST_ID,
+				ORIGINAL_FILE_NAME,
+				STORED_FILE_NAME,
+				FILE_SIZE,
+				INS_DATE,
+				DEL_YN
+			)
+			VALUES
+			(
+				GIFT_ATTACH_FILE_SQ.NEXTVAL,
+				#{BOARD_ID},
+				#{BD_LST_ID},
+				#{ORIGINAL_FILE_NAME},
+				#{STORED_FILE_NAME},
+				#{FILE_SIZE},
+				SYSDATE,
+				'0'
+			)
+		]]>
+	</insert>
+	
+	
+	<select id="selectFileList" parameterType="hashmap" resultType="hashmap">
+		<![CDATA[
+			SELECT
+			    ID,
+			    BOARD_ID,
+			    ORIGINAL_FILE_NAME,
+			    STORED_FILE_NAME,
+			    ROUND(FILE_SIZE/1024,1) AS FILE_SIZE
+			FROM
+			    GIFT_ATTACH_FILE
+			WHERE
+			    BOARD_ID = #{BDID}
+			AND BD_LST_ID = #{ID}
+			AND DEL_YN = '0'
+		]]>
+	</select>
+	
+	
+	<update id="deleteFileList" parameterType="hashmap">
+		<![CDATA[
+			UPDATE GIFT_ATTACH_FILE
+			SET 
+				DEL_YN = '1',
+				DEL_DATE = SYSDATE 
+			WHERE 
+				BOARD_ID = #{BDID}
+			AND	BD_LST_ID = #{ID}	
+		]]>
+	</update>
+	
+	<update id="updateFile" parameterType="hashmap">
+		<![CDATA[
+			UPDATE GIFT_ATTACH_FILE 
+			SET
+				DEL_YN = '0',
+				MOD_DATE = SYSDATE
+			WHERE				
+				ID = #{FILE_ID}	
+		]]>
+	</update>	
+</mapper>

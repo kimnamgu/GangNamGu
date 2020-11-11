@@ -1,0 +1,181 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<html>
+<head>
+<%@ include file="/WEB-INF/include/include-header.jspf" %>
+
+<script type="text/javascript">		
+</script>
+</head>
+<body bgcolor="#FFFFFF">
+
+<table  border="0" cellspacing="0" cellpadding="0" class="bodyframe_full">
+  <tr>
+    <td class="bodyframe_mn">
+    <!--페이지 타이틀 시작 -->
+    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+      <tr>
+        <td><img src="/oms/images/main/img_main.jpg" align="absmiddle"></td>
+      </tr>      
+    </table>
+    <!--페이지 타이틀 끝 -->
+    </td>
+  </tr>
+   <tr>
+    <td class="pupup_frame_mn" style="padding-right:12px">
+
+    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+      <tr>
+        <td height="15">
+        
+			<table width="100%" border="0" cellspacing="0" cellpadding="5">
+			<tr>
+				<td width="20%"></td>
+				<td width="40%"></td>
+				<td width="40%"></td>
+			</tr>			
+			<tr>
+				<td valign="top">
+				<table width="100%" border="0" cellspacing="1" cellpadding="8">
+				  <tr>
+					<td width="60%"></td>
+					<td width="40%"></td>				
+				  </tr>
+				  <!-- <tr>
+					<td colspan="2" class="list_tit03_line_s"></td>
+				  </tr>-->	
+				  <tr>
+					<td colspan="2" class="title2"><img src="/oms/images/title_ico.gif" align="absmiddle"><u>위탁사무현황</u></td>					
+				  </tr>
+				  <!-- <tr>
+					<td colspan="2" class="list_tit03_line_e"></td>
+				  </tr>-->
+                  <tr>
+                    <td class="tbl_field">계</td>
+                    <td align="right"><fmt:formatNumber value="${map.TOTAL}" pattern="###,###,###" /></td>                    
+                  </tr>
+                  <tr>
+                    <td class="tbl_field">민간위탁</td>
+                    <td align="right"><fmt:formatNumber value="${map.TYPE1}" pattern="###,###,###" /></td>                    
+                  </tr>
+                  <tr>
+                    <td class="tbl_field">용역</td>
+                    <td align="right"><fmt:formatNumber value="${map.TYPE2}" pattern="###,###,###" /></td>                   
+                  </tr>
+                  <tr>
+                    <td class="tbl_field">대행</td>
+                    <td align="right"><fmt:formatNumber value="${map.TYPE3}" pattern="###,###,###" /></td>                   
+                  </tr>
+                  <tr>
+                    <td class="tbl_field">연구용역</td>
+                    <td align="right"><fmt:formatNumber value="${map.TYPE4}" pattern="###,###,###" /></td>                   
+                  </tr>
+                </table> 
+				</td>
+				<td valign="top">
+				<table width="100%" border="0" cellspacing="1" cellpadding="8">
+				  <tr>
+					<td width="70%"></td>
+					<td width="20%"></td>
+					<td width="10%"></td>
+				  </tr>
+				  <!-- <tr>
+					<td colspan="3" class="list_tit03_line_s"></td>
+				  </tr> -->	
+				  <tr>
+					<td colspan=2 class="title2"><img src="/oms/images/title_ico.gif" align="absmiddle"><u>공지사항</u></td>
+					<td align="right"><a href="/oms/board/openBoardList.do?bdId=2">more</a></td>
+				  </tr>
+				  <!--<tr>
+					<td colspan="3" class="list_tit03_line_e"></td>
+				  </tr>-->
+				  <c:forEach var="row" items="${list2}" varStatus="status">
+					<tr>
+					  <td>							
+						<a href="/oms/board/openBoardDetail.do?ID=${row.ID}&BDID=2" name="file">${row.TITLE}</a> 							
+					  </td>
+					  <td><fmt:parseDate value="${row.INS_DATE}" var="dateFmt1" pattern="yyyyMMdd"/>
+					  <fmt:formatDate value="${dateFmt1}" pattern="yyyy.MM.dd"/></td>
+					  <td align="right">${row.HIT_CNT}</td>
+					</tr>
+				  </c:forEach>								                
+                </table>                
+				</td>
+				<td valign="top">
+				<table width="100%" border="0" cellspacing="1" cellpadding="8">
+				  <tr>
+					<td width="70%"></td>
+					<td width="20%"></td>
+					<td width="10%"></td>
+				  </tr>	
+				  <!-- <tr>
+					<td colspan="3" class="list_tit03_line_s"></td>
+				  </tr>-->	
+				  <tr>
+					<td colspan=2 class="title2"><img src="/oms/images/title_ico.gif" align="absmiddle"><u>자료실</u></td>
+					<td><a href="/oms/board/openBoardList.do?bdId=1">more</a></td>
+				  </tr>
+				  <!-- <tr>
+					<td colspan="3" class="list_tit03_line_e"></td>
+				  </tr>-->	
+                  <c:forEach var="row" items="${list1}" varStatus="status" end="4">
+					<tr>
+					  <td>							
+						<a href="/oms/board/openBoardDetail.do?ID=${row.ID}&BDID=1" name="file">${row.TITLE}</a>
+					  </td>
+					  <td>
+					  <fmt:parseDate value="${row.INS_DATE}" var="dateFmt1" pattern="yyyyMMdd"/>
+					  <fmt:formatDate value="${dateFmt1}" pattern="yyyy.MM.dd"/></td>
+					  <td align="right">${row.HIT_CNT}</td>
+					</tr>
+				  </c:forEach>								
+                </table>
+				</td>												
+			</tr>
+				
+			<tr>			
+			<td colspan=3>
+			<table width="100%" border="0" cellspacing="5" cellpadding="7">
+			  <tr>
+				<td width="40%"></td>
+				<td width="20%"></td>
+				<td width="15%"></td>
+				<td width="15%"></td>
+			  </tr>
+			  <!-- 
+			  <tr>
+				<td colspan="4" class="list_tit03_line_s"></td>
+			  </tr>-->	
+			  <tr>
+				<td colspan=3 class="title2"><img src="/oms/images/title_ico.gif" align="absmiddle"><u>위탁만료대상</u></td>
+				<td align="right"><a href="/oms/officework/officeworkRegList.do">more</a></td>
+			  </tr>
+			  <!-- <tr>
+				<td colspan="4" class="list_tit03_line_e"></td>
+			  </tr>-->
+               <c:forEach var="row" items="${list3}" varStatus="status" end="4">
+				<tr>
+				  <td>							
+					<a href="/oms/officework/officeworkBasicDetail.do?ID=${row.ID}" name="file">${row.OW_NAME}</a>
+				  </td>
+				  <td>${row.OW_DEPT_NM}</td>
+				  <td>${row.CS_INST_NAME}</td>
+				  <td align="right">만료일 : 
+				  <fmt:parseDate value="${row.CUR_TRUST_EDDATE}" var="dateFmt1" pattern="yyyyMMdd"/>
+	              <fmt:formatDate value="${dateFmt1}"  pattern="yyyy.MM.dd"/>
+				  </td>
+				</tr>
+		 	   </c:forEach>	
+               </table>                
+			</td>
+			</tr>			
+			</table>			
+		</td>
+		</tr>		
+	</table>
+	
+	</td>
+	</tr>
+	</table>	
+	<%@ include file="/WEB-INF/include/include-body.jspf" %>				
+</body>
+</html>

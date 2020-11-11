@@ -1,0 +1,10 @@
+eclipse.preferences.version=1
+encoding//src/main/java=UTF-8
+encoding//src/main/java/bims/common/controller/CommonController.java=EUC-KR
+encoding//src/main/java/bims/common/dao/AbstractDAO.java=EUC-KR
+encoding//src/main/java/bims/common/dao/CommonDAO.java=EUC-KR
+encoding//src/main/java/bims/common/util/CommonLib.java=EUC-KR
+encoding//src/main/java/bims/common/util/FileUtils.java=UTF-8
+encoding//src/main/java/bims/common/util/Nvl.java=EUC-KR
+encoding//src/main/java/bims/daejang/controller/DaejangApiController.java=EUC-KR
+encoding//src/main/java/bims/daejang/controller/DaejangController.java=EUC-KR

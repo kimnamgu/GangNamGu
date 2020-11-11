@@ -1,0 +1,436 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="daejang">
+	
+	<select id="selectGiftAcceptList" parameterType="hashmap" resultType="hashmap">
+		<include refid="common.pagingPre"/> 
+		<![CDATA[
+			SELECT
+                ROW_NUMBER() OVER (ORDER BY ID DESC) RNUM,
+                ID,
+                GIFT_ITEM_NM,
+                GIFT_STND,
+                GIFT_NUMBER,
+                GIFT_TAKE_DATE,
+                GIFT_TAKE_PLACE,
+                GIFT_TAKE_DETAILS,
+                TAKE_DEPT_CD,
+                TAKE_DEPT_NM,
+                TAKE_PSN_CLASS_CD,
+                TAKE_PSN_CLASS_NM,
+                TAKE_PSN_NM,
+                GIVE_PSN_NATION_CD,
+                GIVE_PSN_NATION_NM,
+                GIVE_PSN_CLASS_NM,
+                GIVE_PSN_NM,
+                INS_DEPT            
+            FROM
+              GIFT_ACCEPT_MASTER
+            WHERE DEL_YN = '0'			
+		]]>
+		<if test="TRNSF_DEPT_GB != null and TRNSF_DEPT_GB !=''">
+		AND TRNSF_DEPT_GB = #{TRNSF_DEPT_GB}
+		</if>
+		<include refid="common.pagingPost"/> 
+	</select>
+	
+	
+	<select id="selectGiftPrintList" parameterType="hashmap" resultType="hashmap">
+		<include refid="common.pagingPre"/> 
+		<![CDATA[
+			SELECT  
+					ROW_NUMBER() OVER (ORDER BY A.ID DESC) RNUM,		
+					A.ID,
+					A.GIFT_ITEM_NM,
+					A.GIFT_STND,
+					A.GIFT_NUMBER,
+					A.GIFT_TAKE_DATE,
+					A.GIFT_REPORT_DATE,
+					A.GIVE_PSN_NATION_NM,
+					A.GIVE_PSN_NM,
+					B.KEEP_PLACE,
+					C.SELL_DATE,
+					C.SELL_AMT,
+					D.STORED_FILE_NAME                       
+			FROM GIFT_ACCEPT_MASTER A LEFT OUTER JOIN
+					(
+					  SELECT                
+					    ID, 
+					    MAST_ID,
+					    KEEP_PLACE                                           
+					  FROM
+					  GIFT_MNG_DAEJANG
+					  WHERE DEL_YN = '0'   
+					) B ON A.ID = B.MAST_ID
+					LEFT OUTER JOIN 
+					(
+						SELECT
+						  ID,
+						  MAST_ID,
+						  SELL_DATE,
+						  SELL_AMT                                                            
+						FROM
+						GIFT_SELL_DAEJANG
+						WHERE DEL_YN = '0'
+					) C ON A.ID = C.MAST_ID
+					 LEFT OUTER JOIN 
+                    (
+                        SELECT
+                          ID,
+                          BD_LST_ID,
+                          ORIGINAL_FILE_NAME,
+                          STORED_FILE_NAME                                                                          
+                        FROM
+                        GIFT_ATTACH_FILE
+                        WHERE DEL_YN = '0'
+                    ) D ON A.ID = D.BD_LST_ID
+			WHERE A.DEL_YN = '0'		
+		]]>
+		<if test="TRNSF_DEPT_GB != null and TRNSF_DEPT_GB !=''">
+		AND TRNSF_DEPT_GB = #{TRNSF_DEPT_GB}
+		</if>
+		<include refid="common.pagingPost"/> 
+	</select>
+	
+	<insert id="insertGiftAccept" parameterType="hashmap" useGeneratedKeys="true" keyProperty="ID">
+		<selectKey keyProperty="ID" resultType="string" order="BEFORE">
+			SELECT GIFT_ACCEPT_MASTER_SQ.NEXTVAL FROM DUAL
+		</selectKey>
+		<![CDATA[
+			INSERT INTO GIFT_ACCEPT_MASTER
+			(
+				ID,
+			    GIFT_ITEM_NM,
+			    GIFT_STND,
+			    GIFT_NUMBER,
+			    GIFT_TAKE_DATE,
+			    GIFT_TAKE_PLACE,
+			    GIFT_TAKE_DETAILS,
+			    TAKE_DEPT_CD,
+			    TAKE_DEPT_NM,
+			    TAKE_PSN_CLASS_CD,		    			   			  
+			    TAKE_PSN_CLASS_NM,
+			    TAKE_PSN_ID,
+			    TAKE_PSN_NM,
+			    GIFT_REPORT_DATE,
+			    GIVE_PSN_NATION_CD,
+			    GIVE_PSN_NATION_NM,
+			    GIVE_PSN_CLASS_NM,
+			    GIVE_PSN_NM,
+			    EVAL_DATE,
+			    EVAL_AMT,
+			    EVAL_RESULT_GB,
+			    EVAL_BIGO,
+			    TRNSF_DATE,
+			    TRNSF_DEPT_GB,
+			    TRNSF_BIGO,
+			    INS_ID,	   
+			    INS_DEPT,			    
+			    INS_DATE			    
+			)
+			VALUES
+			(
+				#{ID},				
+				#{GIFT_ITEM_NM},
+			    #{GIFT_STND},
+			    REPLACE(#{GIFT_NUMBER}, ',', ''),
+			    REPLACE(#{GIFT_TAKE_DATE}, '-', ''),
+			    #{GIFT_TAKE_PLACE},
+			    #{GIFT_TAKE_DETAILS},
+			    #{TAKE_DEPT_CD},
+			    #{TAKE_DEPT_NM},
+			    #{TAKE_PSN_CLASS_CD},		    			   			  
+			    #{TAKE_PSN_CLASS_NM},
+			    #{TAKE_PSN_ID},
+			    #{TAKE_PSN_NM},
+			    REPLACE(#{GIFT_REPORT_DATE}, '-', ''),
+			    #{GIVE_PSN_NATION_CD},
+			    #{GIVE_PSN_NATION_NM},
+			    #{GIVE_PSN_CLASS_NM},
+			    #{GIVE_PSN_NM},
+			    REPLACE(#{EVAL_DATE}, '-', ''),
+			    REPLACE(#{EVAL_AMT}, ',', ''),
+			    #{EVAL_RESULT_GB,jdbcType=CHAR},
+			    #{EVAL_BIGO},			   
+			    REPLACE(#{TRNSF_DATE}, '-', ''),
+			    #{TRNSF_DEPT_GB,jdbcType=CHAR},
+			    #{TRNSF_BIGO},			    			    
+			    #{INS_ID},			   
+			    #{INS_DEPT},
+			    SYSDATE			   
+			)
+		]]>
+	</insert>
+	
+	
+	<select id="giftAcceptDetail" parameterType="hashmap" resultType="hashmap">
+		<![CDATA[
+			SELECT
+				ID,
+			    GIFT_ITEM_NM,
+			    GIFT_STND,
+			    GIFT_NUMBER,
+			    GIFT_TAKE_DATE,
+			    GIFT_TAKE_PLACE,
+			    GIFT_TAKE_DETAILS,
+			    TAKE_DEPT_CD,
+			    TAKE_DEPT_NM,
+			    TAKE_PSN_CLASS_CD,		    			   			  
+			    TAKE_PSN_CLASS_NM,
+			    TAKE_PSN_ID,
+			    TAKE_PSN_NM,
+			    GIFT_REPORT_DATE,
+			    GIVE_PSN_NATION_CD,
+			    GIVE_PSN_NATION_NM,
+			    GIVE_PSN_CLASS_NM,
+			    GIVE_PSN_NM,			    
+			    EVAL_DATE,
+			    EVAL_AMT,
+			    EVAL_RESULT_GB,
+			    EVAL_BIGO,
+			    TRNSF_DATE,
+			    TRNSF_DEPT_GB,
+			    TRNSF_BIGO,			   
+			    INS_DEPT,			    
+			    INS_DATE			    
+			FROM
+				GIFT_ACCEPT_MASTER
+			WHERE
+				ID = #{ID}		
+		]]>
+	</select>
+	
+	
+	<update id="updateGiftAccept" parameterType="hashmap">
+		<![CDATA[
+			UPDATE GIFT_ACCEPT_MASTER
+			SET	GIFT_ITEM_NM = #{GIFT_ITEM_NM},
+			    GIFT_STND = #{GIFT_STND},
+			    GIFT_NUMBER = REPLACE(#{GIFT_NUMBER}, ',', ''),
+			    GIFT_TAKE_DATE = REPLACE(#{GIFT_TAKE_DATE}, '-', ''),
+			    GIFT_TAKE_PLACE = #{GIFT_TAKE_PLACE},
+			    GIFT_TAKE_DETAILS = #{GIFT_TAKE_DETAILS},
+			    TAKE_DEPT_CD = #{TAKE_DEPT_CD},
+			    TAKE_DEPT_NM = #{TAKE_DEPT_NM},
+			    TAKE_PSN_CLASS_CD = #{TAKE_PSN_CLASS_CD},		    			   			  
+			    TAKE_PSN_CLASS_NM = #{TAKE_PSN_CLASS_NM},
+			    TAKE_PSN_ID = #{TAKE_PSN_ID},
+			    TAKE_PSN_NM = #{TAKE_PSN_NM},
+			    GIFT_REPORT_DATE = REPLACE(#{GIFT_REPORT_DATE}, '-', ''),
+			    GIVE_PSN_NATION_CD = #{GIVE_PSN_NATION_CD},
+			    GIVE_PSN_NATION_NM = #{GIVE_PSN_NATION_NM} ,
+			    GIVE_PSN_CLASS_NM = #{GIVE_PSN_CLASS_NM},
+			    GIVE_PSN_NM = #{GIVE_PSN_NM},
+			    EVAL_DATE = REPLACE(#{EVAL_DATE}, '-', ''),
+			    EVAL_AMT = REPLACE(#{EVAL_AMT}, ',', ''),
+			    EVAL_RESULT_GB = #{EVAL_RESULT_GB,jdbcType=CHAR},
+			    EVAL_BIGO = #{EVAL_BIGO},
+			    TRNSF_DATE = REPLACE(#{TRNSF_DATE}, '-', ''),
+			    TRNSF_DEPT_GB = #{TRNSF_DEPT_GB,jdbcType=CHAR},
+			    TRNSF_BIGO = #{TRNSF_BIGO},
+			    MOD_ID = #{MOD_ID},			   
+			    MOD_DEPT = #{MOD_DEPT},			    
+			    MOD_DATE = SYSDATE			
+			WHERE
+				ID = #{ID}
+		]]>
+	</update>
+	
+	
+	<update id="deleteGiftAccept" parameterType="hashmap">
+		<![CDATA[
+			UPDATE GIFT_ACCEPT_MASTER
+			SET
+				DEL_YN = '1',
+				DEL_ID = #{DEL_ID},
+				DEL_DEPT = #{DEL_DEPT},
+				DEL_DATE = SYSDATE
+			WHERE
+				ID = #{ID}
+		]]>
+	</update>
+	
+		
+	<select id="giftMngStatus" parameterType="hashmap" resultType="hashmap">
+		<![CDATA[
+			SELECT
+				ID,
+				MAST_ID,
+				TAKE_DATE,
+				TAKE_PSN_CLASS_CD,
+				TAKE_PSN_CLASS_NM,
+				TAKE_PSN_ID,		   
+			    TAKE_PSN_NM,
+			    KEEP_PLACE,
+			    BIGO   
+			FROM
+				GIFT_MNG_DAEJANG
+			WHERE
+				MAST_ID = #{MID}
+				AND DEL_YN = '0'		
+		]]>
+	</select>
+	
+	
+	
+	<insert id="insertGiftMng" parameterType="hashmap" useGeneratedKeys="true" keyProperty="ID">
+		<selectKey keyProperty="ID" resultType="string" order="BEFORE">
+			SELECT GIFT_MNG_DAEJANG_SQ.NEXTVAL FROM DUAL
+		</selectKey>
+		<![CDATA[
+			INSERT INTO GIFT_MNG_DAEJANG
+			(
+				ID,
+			    MAST_ID,
+  				TAKE_DATE,
+  				TAKE_PSN_CLASS_CD,
+  				TAKE_PSN_CLASS_NM,
+  				TAKE_PSN_ID,
+  				TAKE_PSN_NM,
+  				KEEP_PLACE,
+  				BIGO,
+			    INS_ID,	   
+			    INS_DEPT,			    
+			    INS_DATE			    
+			)
+			VALUES
+			(
+				#{ID},				
+				#{MID},			  
+			    REPLACE(#{TAKE_DATE}, '-', ''),
+			    #{TAKE_PSN_CLASS_CD},
+			    #{TAKE_PSN_CLASS_NM},
+			    #{TAKE_PSN_ID},
+			    #{TAKE_PSN_NM},		
+			    #{KEEP_PLACE},
+			    #{BIGO},			    		    			   
+			    #{INS_ID},			   
+			    #{INS_DEPT},
+			    SYSDATE			   
+			)
+		]]>
+	</insert>
+
+	
+	<update id="updateGiftMng" parameterType="hashmap">
+		<![CDATA[
+			UPDATE GIFT_MNG_DAEJANG
+			SET
+				TAKE_DATE = REPLACE(#{TAKE_DATE}, '-', ''),
+				TAKE_PSN_CLASS_CD = #{TAKE_PSN_CLASS_CD},
+			    TAKE_PSN_CLASS_NM = #{TAKE_PSN_CLASS_NM},
+			    TAKE_PSN_ID = #{TAKE_PSN_ID},
+			    TAKE_PSN_NM = #{TAKE_PSN_NM},
+			    KEEP_PLACE = #{KEEP_PLACE},
+			    BIGO = #{BIGO}			
+			WHERE
+				MAST_ID = #{MID}
+		]]>
+	</update>
+	
+	
+	<update id="deleteGiftMng" parameterType="hashmap">
+		<![CDATA[
+			UPDATE GIFT_MNG_DAEJANG
+			SET 
+				 DEL_YN = '1',
+				 DEL_ID = #{DEL_ID},
+				 DEL_DEPT = #{DEL_DEPT},
+				 DEL_DATE = SYSDATE				 
+			WHERE
+				MAST_ID = #{MID}
+		]]>
+	</update>
+	
+	
+		
+	
+	<select id="giftSellStatus" parameterType="hashmap" resultType="hashmap">
+		<![CDATA[
+			SELECT
+				ID,
+				MAST_ID,
+				APPRAISED_VALUE,
+				APPRAISED_INSTITUTE,
+				SELL_DATE,
+				SELL_METHOD_GB,
+				SELL_AMT,
+				BIGO	   
+			FROM
+				GIFT_SELL_DAEJANG
+			WHERE
+				MAST_ID = #{MID}
+				AND DEL_YN = '0'		
+		]]>
+	</select>
+	
+	
+	
+	<insert id="insertGiftSell" parameterType="hashmap" useGeneratedKeys="true" keyProperty="ID">
+		<selectKey keyProperty="ID" resultType="string" order="BEFORE">
+			SELECT GIFT_SELL_DAEJANG_SQ.NEXTVAL FROM DUAL
+		</selectKey>
+		<![CDATA[
+			INSERT INTO GIFT_SELL_DAEJANG
+			(
+				ID,                 
+				MAST_ID,
+				APPRAISED_VALUE,
+				APPRAISED_INSTITUTE,
+				SELL_DATE,
+				SELL_METHOD_GB,
+				SELL_AMT,
+				BIGO,
+			    INS_ID,
+			    INS_DEPT,
+			    INS_DATE			    
+			)
+			VALUES
+			(
+				#{ID},                 
+				#{MID},
+				REPLACE(#{APPRAISED_VALUE}, ',', ''),
+				#{APPRAISED_INSTITUTE},				
+				REPLACE(#{SELL_DATE}, '-', ''),
+				#{SELL_METHOD_GB},
+				REPLACE(#{SELL_AMT}, ',', ''),
+				#{BIGO},
+			    #{INS_ID},			   
+			    #{INS_DEPT},
+			    SYSDATE			   
+			)
+		]]>
+	</insert>
+	
+	<update id="updateGiftSell" parameterType="hashmap">
+		<![CDATA[
+			UPDATE GIFT_SELL_DAEJANG
+			SET
+				APPRAISED_VALUE = REPLACE(#{APPRAISED_VALUE}, ',', ''),
+				APPRAISED_INSTITUTE = #{APPRAISED_INSTITUTE},
+			    SELL_DATE = REPLACE(#{SELL_DATE}, '-', ''),			    
+			    SELL_METHOD_GB = #{SELL_METHOD_GB},
+			    SELL_AMT = REPLACE(#{SELL_AMT}, ',', ''),
+			    BIGO = #{BIGO}			
+			WHERE
+				MAST_ID = #{MID}
+		]]>
+	</update>
+	
+	
+	<update id="deleteGiftSell" parameterType="hashmap">
+		<![CDATA[
+			UPDATE GIFT_SELL_DAEJANG
+			SET
+				DEL_YN = '1',
+				DEL_ID = #{DEL_ID},
+				DEL_DEPT = #{DEL_DEPT},
+				DEL_DATE = SYSDATE
+			WHERE
+				MAST_ID = #{MID}
+		]]>
+	</update>
+	
+	
+</mapper>

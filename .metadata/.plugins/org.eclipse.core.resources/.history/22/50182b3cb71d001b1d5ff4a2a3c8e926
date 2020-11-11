@@ -1,0 +1,67 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<html>
+<head>
+<%@ include file="/WEB-INF/include/include-header.jspf" %>
+<title>수의계약 관리시스템</title>
+<style type="text/css">
+     *html ul li a{height:1%;}
+    #dropdownNav{margin:0;padding:0;cursor:pointer;}
+    #dropdownNav #nav{}
+    #dropdownNav ul{width:190px;background:#2196F3;list-style-type: none;margin:0; padding:0;}
+    #dropdownNav ul li a{margin:1px 0;padding:5px 0px 5px 40px; display:block; color:#fff; text-decoration:none; font-size: 13px}
+    #dropdownNav ul li a:hover{background-color:#1d82d2;border-color:#666666;}
+    #dropdownNav ul li>ul {padding: 5px 0; border-top: 1px solid #777;}
+    /*#dropdownNav ul li>ul>li a::before {content: "-"; display: inline-block; color: #fff; position: relative; right: 5px;}*/
+    #dropdownNav .caption{margin:0;color: #333333;font-weight:600; background-image:url('/data/201011/IJ12886133923544/arrow.gif');background-color:#fff; background-position:3px center;background-repeat: no-repeat;padding:15px 4px 15px 25px; font-size: 15px; border-top: 1px solid #777;}
+    #dropdownNav .show ul{display:block;}
+    #dropdownNav .hide ul{display:none;}
+    #dropdownNav .show div.caption{background-image:url('/manpower/images/left_icon.png'); background-position: 10px; padding-left: 30px;}
+</style>
+
+<script type="text/javascript" language="javascript">
+
+	var user_right = "${sessionScope.userinfo.userright}";
+	$(document).ready(function(){
+	
+		$("#logout").on("click", function(e){ //글쓰기 버튼
+			e.preventDefault();
+			fn_logout();
+		});	
+	});
+	
+</script>
+</head>
+<body>
+<c:set var="chkAdmin" value="${sessionScope.userinfo.userright}"/>
+
+<table>
+<tr height = "12">
+<td></td>
+</tr>
+</table>
+<div id="dropdownNav">
+	<ul id="nav">
+		<li class="show">
+			<div id="mn1" class="caption">인력관리-공공근로</div>
+			<ul>
+				<li><a href="/manpower/daejang/notice.do" target="main"><span>- </span> 공지사항</a></li>
+				<li><a href="/manpower/daejang/paymentMng.do" target="main"><span>- </span> 임금관리</a></li>
+				<c:if test="${chkAdmin eq 'A'}">
+					<li><a href="/manpower/daejang/workerMng.do" target="main"><span>- </span> 인력관리</a></li>
+					<li><a href="/manpower/daejang/businessMng.do" target="main"><span>- </span> 사업관리</a></li>
+					<li><a href="/manpower/daejang/bankMng.do" target="main"><span>- </span> 은행코드관리</a></li>
+					<li><a href="/manpower/daejang/manpowerStatus.do" target="main"><span>- </span> 통계</a></li>
+					<li><a href="/manpower/daejang/authority.do" target="main"><span>- </span> 권한관리</a></li>
+				</c:if>						
+			</ul>
+		</li>
+	</ul>
+</div>
+<div align="center">
+			${sessionScope.userinfo.deptName} <b>${sessionScope.userinfo.userName}</b>
+			</br>
+			<a href="/manpower/logout.do" class="btn btn-secondary btn-sm">로그아웃</a>
+</div>
+
+</body>
+</html>

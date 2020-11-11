@@ -1,0 +1,31 @@
+package manpower.write.service;
+
+import java.util.Map;
+
+import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
+
+import org.apache.log4j.Logger;
+import org.springframework.stereotype.Service;
+
+import manpower.common.util.FileUtils;
+import manpower.write.dao.WriteDAO;
+
+
+@Service("writeService")
+public class WriteServiceImpl implements WriteService{
+	Logger log = Logger.getLogger(this.getClass());
+	
+	@Resource(name="fileUtils")
+	private FileUtils fileUtils;
+	
+	@Resource(name="writeDAO")
+	private WriteDAO writeDAO;
+
+	/*상담민원*/
+	@Override
+	public void insertNoticeWrite(Map<String, Object> map,  HttpServletRequest request) throws Exception {
+		writeDAO.insertNoticeWrite(map);
+	}
+	
+}

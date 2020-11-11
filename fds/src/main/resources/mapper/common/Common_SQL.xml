@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="common">
+	
+	<sql id="pagingPre">
+		<![CDATA[
+   			SELECT 
+			    AAA.*
+			FROM(
+			    SELECT 
+			        ROWNUM AS RNUM,
+			        AA.*
+			    FROM(  
+ 		]]>
+ 	</sql>
+ 	
+ 	<sql id="pagingPost">
+ 		<![CDATA[
+ 			 	) AA
+ 			 	WHERE 
+                	ROWNUM <= #{END}
+			) AAA
+			WHERE 
+			    AAA.RNUM >= #{START}
+ 		]]>
+ 	</sql>
+
+	
+	<select id="yearList" parameterType="hashmap" resultType="hashmap">
+		<![CDATA[
+			SELECT YEAR FROM 
+			(
+			SELECT SUBSTR(FIXDATE_GRANT_DATE,0 ,4) YEAR FROM FIXED_DATE_DAEJANG
+			WHERE DEL_YN = '0'
+			AND TRIM(FIXDATE_GRANT_DATE) IS NOT NULL
+			GROUP BY SUBSTR(FIXDATE_GRANT_DATE,0 ,4)
+			)
+			ORDER BY YEAR ASC
+		]]>
+	</select>
+	
+	
+	<select id="dongList" parameterType="hashmap" resultType="hashmap">
+		<![CDATA[
+			SELECT DONG_CD_OLD, DONG_NAME_OLD, DEPT_ID 
+			FROM FIXED_DONG_LIST
+			WHERE DONG_CD_OLD IS NOT NULL
+			ORDER BY DEPT_RANK, ID
+		]]>
+	</select>
+	
+	
+	
+	<select id="selectIdApproveList" parameterType="hashmap" resultType="hashmap">
+		<include refid="common.pagingPre"/>	
+		<![CDATA[			
+			SELECT COUNT(*) OVER() AS TOTAL_COUNT,
+				   USER_ID, 
+				   USER_NAME, DEPT_NAME, CLASS_NAME, 
+				   POSITION_NAME, USER_TEL, APPLY_REASON 
+			FROM FIXED_USER_MASTER
+			WHERE DEL_YN = '0'			
+			AND USER_STATUS = #{USER_STATUS}
+		]]>
+		<include refid="common.pagingPost"/>
+	</select>
+	
+	
+	<update id="updateIdApprove" parameterType="hashmap">
+		<![CDATA[
+			UPDATE FIXED_USER_MASTER
+			SET
+				USER_STATUS = '0',				
+				APPROVE_DATE = SYSDATE
+			WHERE
+				USER_ID IN ( ${ID_LIST} )
+		]]>
+	</update>
+	
+	
+	<select id="idApproveListDetail" parameterType="hashmap" resultType="hashmap">
+		<![CDATA[
+			SELECT                
+                USER_ID, 
+				USER_NAME,
+				USER_RIGHT, 
+				DEPT_NAME, 
+				CLASS_NAME, 
+				POSITION_NAME, 
+				USER_TEL, 
+				APPLY_REASON				         
+            FROM
+              FIXED_USER_MASTER
+            WHERE DEL_YN = '0'
+            AND USER_ID = #{USER_ID}				
+		]]>
+	</select>
+	
+	
+	<update id="updateIdApproveList" parameterType="hashmap">
+		<![CDATA[
+			UPDATE FIXED_USER_MASTER
+			SET
+				USER_RIGHT = #{USER_RIGHT},							  
+			    MOD_DATE = SYSDATE
+			WHERE  
+				USER_ID = #{USER_ID}
+		]]>
+	</update>
+	
+	
+	<update id="deleteIdApproveList" parameterType="hashmap">
+		<![CDATA[
+			UPDATE FIXED_USER_MASTER
+			SET
+				DEL_YN = '1',				
+				DEL_DATE = SYSDATE
+			WHERE
+				USER_ID = #{USER_ID}
+		]]>
+	</update>
+	
+	
+	<insert id="insertFile" parameterType="hashmap">
+		<![CDATA[
+			INSERT INTO GIFT_ATTACH_FILE
+			(
+				ID,
+				BOARD_ID,
+				BD_LST_ID,
+				ORIGINAL_FILE_NAME,
+				STORED_FILE_NAME,
+				FILE_SIZE,
+				INS_DATE,
+				DEL_YN
+			)
+			VALUES
+			(
+				GIFT_ATTACH_FILE_SQ.NEXTVAL,
+				#{BOARD_ID},
+				#{BD_LST_ID},
+				#{ORIGINAL_FILE_NAME},
+				#{STORED_FILE_NAME},
+				#{FILE_SIZE},
+				SYSDATE,
+				'0'
+			)
+		]]>
+	</insert>
+		
+</mapper>

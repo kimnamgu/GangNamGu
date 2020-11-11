@@ -1,0 +1,125 @@
+package manpower.manage.controller;
+
+import java.util.List;
+import java.util.Map;
+
+import javax.annotation.Resource;
+
+import org.apache.log4j.Logger;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.servlet.ModelAndView;
+
+import manpower.common.common.CommandMap;
+import manpower.manage.dao.ManageDAO;
+import manpower.manage.service.ManageService;
+
+@Controller
+public class ManageController {
+	Logger log = Logger.getLogger(this.getClass());
+	
+	
+	@Resource(name="manageService")
+	private ManageService manageService;
+	
+	@Resource(name="manageDAO")
+	private ManageDAO manageDAO;
+	
+	/*공지사항*/
+	@RequestMapping(value="/manage/noticeManage.do")
+    public ModelAndView noticeManage(CommandMap commandMap) throws Exception{
+    	System.out.println("noticeManage탐");
+		ModelAndView mv = new ModelAndView("/manage/noticeManage");
+    	
+    	return mv;
+    }
+	
+	@RequestMapping(value="/manage/selectNoticeList.do")
+    public ModelAndView selectNoticeList(CommandMap commandMap) throws Exception{
+		log.debug("selectConfirmList param2= [" + commandMap.getMap().toString() + "]");
+		
+		ModelAndView mv = new ModelAndView("jsonView");
+		
+
+		
+		
+    	List<Map<String,Object>> list = manageService.selectNoticeList(commandMap.getMap());
+    	
+    	mv.addObject("list", list);
+    	
+    	if(list.size() > 0){
+    		System.out.println("확인 : " + list.toString());
+    		mv.addObject("total", list.get(0).get("TOTAL_COUNT"));
+    	}
+    	else{
+    		mv.addObject("total", 0);
+    	}
+    	
+    	return mv;
+    }
+	
+	/*임금관리*/
+	@RequestMapping(value="/manage/paymentManage.do")
+    public ModelAndView paymentManage(CommandMap commandMap) throws Exception{
+    	System.out.println("paymentManage탐");
+		ModelAndView mv = new ModelAndView("/manage/paymentManage");
+    	
+    	return mv;
+    }
+	
+	/*인력관리*/
+	@RequestMapping(value="/manage/workerMng.do")
+    public ModelAndView workerMng(CommandMap commandMap) throws Exception{
+    	System.out.println("workerMng탐");
+		ModelAndView mv = new ModelAndView("/manage/workerMng");
+    	
+    	return mv;
+    }
+	
+	/*사업관리*/
+	@RequestMapping(value="/manage/businessManage.do")
+    public ModelAndView businessManage(CommandMap commandMap) throws Exception{
+    	System.out.println("businessManage탐");
+		ModelAndView mv = new ModelAndView("/manage/businessManage");
+    	
+    	return mv;
+    }
+	
+	/*은행코드관리*/
+	@RequestMapping(value="/manage/bankManage.do")
+    public ModelAndView bankManage(CommandMap commandMap) throws Exception{
+    	System.out.println("bankManage탐");
+		ModelAndView mv = new ModelAndView("/manage/bankManage");
+    	
+    	return mv;
+    }
+	
+	/*통계관리*/
+	@RequestMapping(value="/manage/manpowerStatus.do")
+    public ModelAndView manpowerStatus(CommandMap commandMap) throws Exception{
+    	System.out.println("manpowerStatus탐");
+		ModelAndView mv = new ModelAndView("/manage/manpowerStatus");
+    	
+    	return mv;
+    }
+	
+	/*권한관리*/
+	@RequestMapping(value="/manage/authorityMng.do")
+    public ModelAndView authorityMng(CommandMap commandMap) throws Exception{
+    	System.out.println("authorityMng탐");
+		ModelAndView mv = new ModelAndView("/manage/authorityMng");
+    	
+    	return mv;
+    }
+	
+	
+	/*소득세관리*/
+	@RequestMapping(value="/manage/incomeMng.do")
+    public ModelAndView incomeMng(CommandMap commandMap) throws Exception{
+    	System.out.println("incomeMng탐");
+		ModelAndView mv = new ModelAndView("/manage/incomeMng");
+    	
+    	return mv;
+    }
+	
+}

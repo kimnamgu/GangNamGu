@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="daejang">
+	
+	<select id="selectFixedDateList" parameterType="hashmap" resultType="hashmap">
+		<include refid="common.pagingPre"/> 
+		<![CDATA[
+			SELECT COUNT(*) OVER() AS TOTAL_COUNT,                                
+                   A.ID,
+                   A.DONG_CD_OLD,
+                   B.DONG_CD_NEW,
+                   B.DEPT_ID,
+                   B.DONG_NAME_OLD,
+                   B.DONG_NAME_NEW,
+                   SUBSTR(A.FIXDATE_GRANT_DATE,0,4) YEAR,
+                   SUBSTR(A.FIXDATE_GRANT_DATE,5,2) MONTH,
+                   TENANT_NAME,                  
+                   FIXDATE_GRANT_DATE,                  
+                   LINK_IMG_NM           
+            FROM FIXED_DATE_DAEJANG A LEFT OUTER JOIN FIXED_DONG_LIST B 
+            ON A.DONG_CD_OLD = B.DONG_CD_OLD
+            WHERE A.DEL_YN = '0'            
+		]]>
+		<if test="DONG != null and DONG !=''">
+		AND A.DONG_CD_OLD = #{DONG}
+		</if>
+		<if test="YEAR != null and YEAR !=''">
+		AND SUBSTR(A.FIXDATE_GRANT_DATE, 0, 4) = #{YEAR}
+		</if>
+		<if test="MONTH != null and MONTH !=''">
+		AND SUBSTR(A.FIXDATE_GRANT_DATE, 5, 2) = #{MONTH}
+		</if>
+		<if test="TENANT_NAME != null and TENANT_NAME !=''">
+		AND A.TENANT_NAME = #{TENANT_NAME}
+		</if>
+		<if test='SORT_GB != null and SORT_GB.equals("A")'>
+		ORDER BY FIXDATE_GRANT_DATE DESC NULLS LAST
+		</if>
+		<if test='SORT_GB != null and SORT_GB.equals("B")'>
+		ORDER BY ID DESC
+		</if>
+		<if test='SORT_GB != null and SORT_GB.equals("C")'>
+		ORDER BY ID ASC
+		</if>		
+		<include refid="common.pagingPost"/> 
+	</select>
+	
+	
+	<insert id="insertFixedDateData" parameterType="hashmap" useGeneratedKeys="true" keyProperty="ID">
+		<selectKey keyProperty="ID" resultType="string" order="BEFORE">
+			SELECT FIXED_DATE_DAEJANG_SQ.NEXTVAL FROM DUAL
+		</selectKey>
+		<![CDATA[
+			INSERT INTO FIXED_DATE_DAEJANG
+			(
+				ID,
+				DONG_CD_OLD,				
+				TENANT_NAME,
+				FIXDATE_GRANT_DATE,
+				LINK_IMG_NM,
+				BIGO,
+				INS_ID,
+				INS_DEPT,
+				INS_DATE										    
+			)
+			VALUES
+			(
+				#{ID},				
+				#{DONG_CD_OLD},			   
+			    #{TENANT_NAME},			    
+			    REPLACE(#{FIXDATE_GRANT_DATE}, '-', ''),
+			    #{LINK_IMG_NM},
+			    #{BIGO},			   		    			    
+			    #{INS_ID},	   
+			    #{INS_DEPT},
+			    SYSDATE
+			)
+		]]>
+	</insert>
+	
+	
+	
+	<select id="fixedDateDataDetail" parameterType="hashmap" resultType="hashmap">
+		<![CDATA[
+			SELECT                 
+                  A.ID,
+                  A.DONG_CD_OLD,
+                  B.DONG_CD_NEW,
+                  B.DEPT_ID,
+                  B.DONG_NAME_OLD,
+                  B.DONG_NAME_NEW,
+                  SUBSTR(A.FIXDATE_GRANT_DATE,0,4) YEAR,
+                  SUBSTR(A.FIXDATE_GRANT_DATE,5,2) MONTH,
+                  TENANT_NAME,                  
+                  FIXDATE_GRANT_DATE,                  
+                  LINK_IMG_NM,
+                  BIGO           
+            FROM FIXED_DATE_DAEJANG A LEFT OUTER JOIN FIXED_DONG_LIST B 
+            ON A.DONG_CD_OLD = B.DONG_CD_OLD
+            WHERE A.DEL_YN = '0'
+            AND A.ID = #{ID} 	
+		]]>
+	</select>
+	
+	
+	
+	<update id="updateFixedDateData" parameterType="hashmap">
+		<![CDATA[
+			UPDATE FIXED_DATE_DAEJANG
+			SET	FIXDATE_GRANT_DATE = REPLACE(#{FIXDATE_GRANT_DATE}, '-', ''),
+			    TENANT_NAME = #{TENANT_NAME},
+			    BIGO = #{BIGO},			    
+		]]>
+			<if test="LINK_IMG_NM != null and LINK_IMG_NM !=''">
+				DONG_CD_OLD = #{DONG_CD_OLD},
+				LINK_IMG_NM = #{LINK_IMG_NM},
+			</if> 
+			    MOD_ID = #{MOD_ID},
+			    MOD_DEPT = #{MOD_DEPT},			    
+			    MOD_DATE = SYSDATE			
+			WHERE
+				ID = #{ID}
+	</update>
+	
+	
+	<update id="deleteFixedDateData" parameterType="hashmap">
+		<![CDATA[
+			UPDATE FIXED_DATE_DAEJANG
+			SET
+				DEL_YN = '1',
+				DEL_ID = #{MOD_ID},
+				DEL_DEPT = #{MOD_DEPT},
+				DEL_DATE = SYSDATE
+			WHERE
+				ID = #{ID}
+		]]>
+	</update>
+	
+		
+	
+	
+</mapper>

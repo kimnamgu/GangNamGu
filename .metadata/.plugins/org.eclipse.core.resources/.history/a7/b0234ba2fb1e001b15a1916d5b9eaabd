@@ -1,0 +1,6 @@
+package manpower.write.service;
+
+public interface WriteService {
+
+
+}

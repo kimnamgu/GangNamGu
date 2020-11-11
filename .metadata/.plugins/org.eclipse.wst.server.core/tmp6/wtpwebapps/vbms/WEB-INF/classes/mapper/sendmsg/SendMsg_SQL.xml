@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="sendmsg">
+	<sql id="pagingPre3">
+		<![CDATA[
+   			SELECT 
+			    AAA.*
+			FROM(
+			    SELECT 
+			        COUNT(*) OVER() AS TOTAL_COUNT,
+			        AA.*
+			    FROM(  
+ 		]]>
+ 	</sql>
+ 	
+ 	<sql id="pagingPost3">
+ 		<![CDATA[
+ 			 	) AA
+			) AAA
+			WHERE 
+			    AAA.RNUM BETWEEN #{START} AND #{END}
+ 		]]>
+ 	</sql>
+	
+ 	<insert id="insertSendMsg" parameterType="hashmap" useGeneratedKeys="true" keyProperty="ID">	
+		<![CDATA[
+			INSERT INTO MSG_QUEUE 
+			( 
+			    MSEQ,
+			    MSG_TYPE,
+			    DSTADDR,
+			    CALLBACK,
+			    STAT,
+			    TEXT,
+			    REQUEST_TIME
+			)
+			VALUES
+			(				
+				MSG_QUEUE_SEQ.NEXTVAL,       
+				#{MSG_TYPE},
+				#{DSTADDR},
+				#{CALLBACK},				
+				#{STAT},  
+				#{TEXT},			
+				SYSDATE						
+			)
+		]]>
+	</insert>
+	
+	
+	<select id="popJikWonList" parameterType="hashmap" resultType="hashmap">
+		<include refid="sendmsg.pagingPre3"/>		
+		<![CDATA[
+			SELECT ROW_NUMBER() OVER (ORDER BY NDU_USER_NAME ASC) RNUM, 
+			       NDU_ORG_CODENM,
+			       NDU_DEPT_ID,
+			       NDU_DEPT_NAME,
+			       NDU_USER_ID,
+			       NDU_USER_NAME,			       
+			       NDU_CLSS_NO,
+			       NDU_CLSS_NM,
+			       NDU_POSIT_CODE,
+			       NDU_POSIT_NM,
+			       NDU_HP_NO
+			FROM NTIS_DEPT_USER
+			WHERE SUBSTR(NDU_WORKSTATE_CODE,0, 2) = 'AA'			
+		]]>
+		<if test="USER_NAME != null and USER_NAME !=''">
+		AND NDU_USER_NAME LIKE #{USER_NAME} ||'%'
+		</if>
+		<if test="NDU_USER_ID != null and NDU_USER_ID !=''">
+		AND NDU_USER_ID = #{NDU_USER_ID}
+		</if>
+		<include refid="sendmsg.pagingPost3"/>		
+	</select>
+
+	<select id="popSendSmsList" parameterType="hashmap" resultType="hashmap">
+	
+		<include refid="sendmsg.pagingPre3"/>	
+		<![CDATA[
+			SELECT ROW_NUMBER() OVER (ORDER BY MSEQ DESC) RNUM, 
+			       DSTADDR, 
+			       CALLBACK, 
+			       SUBJECT,  
+			       TEXT, 
+			       INSERT_TIME,			       
+			       TO_CHAR(SEND_TIME,'YYYY/MM/DD HH24:MI:SS') SEND_TIME, 			       
+			       TO_CHAR(REPORT_TIME,'YYYY/MM/DD HH24:MI:SS') REPORT_TIME,
+			       RESULT			       
+			FROM MSG_RESULT
+			WHERE TEXT LIKE '#소송안내문자#%'						
+		]]>		
+		<if test="INSERT_TIME != null and INSERT_TIME !=''">
+			AND TO_CHAR(INSERT_TIME, 'YYYYMMDD') <![CDATA[>=]]> REPLACE(#{INSERT_TIME}, '-', '')
+		</if>	
+		<if test="STDATE != null and STDATE !=''">
+			AND TO_CHAR(SEND_TIME, 'YYYYMMDD') <![CDATA[>=]]> REPLACE(#{STDATE}, '-', '')
+		</if>
+		<if test="EDDATE != null and EDDATE !=''">
+			AND TO_CHAR(SEND_TIME, 'YYYYMMDD') <![CDATA[<=]]> REPLACE(#{EDDATE}, '-', '')
+		</if>
+		<if test="DSTADDR != null and DSTADDR !=''">
+			AND DSTADDR = #{DSTADDR}
+		</if>
+		<include refid="sendmsg.pagingPost3"/>
+	</select>
+	
+</mapper>

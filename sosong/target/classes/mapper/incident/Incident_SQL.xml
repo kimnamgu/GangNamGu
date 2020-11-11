@@ -1,0 +1,883 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="incident">
+	
+	<select id="selectAllIncidentList" parameterType="hashmap" resultType="hashmap">
+		<include refid="common.pagingPre"/> 
+		<![CDATA[
+			SELECT
+                ROW_NUMBER() OVER (ORDER BY ID DESC) RNUM,
+                ID,
+				INCDNT_NAME,
+				CMPLN_NAME,
+				NOTE,
+				DFNDNT_NAME,
+				DEPT_CD,
+				DEPT_NAME,
+				PERFORM_PERSON,
+				CHRG_LAWYER,
+				LAWSUIT_VALUE,
+				WIN_LOSE_GB,
+				LAST_RSLT_CONT				
+            FROM
+              SOSONG_MASTER
+            WHERE DEL_YN = '0'
+            AND INCDNT_GB IN ('1', '2', '3')			
+		]]>
+		<if test="INCDNT_GB != null and INCDNT_GB !=''">
+		AND INCDNT_GB = #{INCDNT_GB}
+		</if>
+		<if test="DEPT_NAME != null and DEPT_NAME !=''">
+		AND DEPT_NAME LIKE '%'|| #{DEPT_NAME} ||'%'
+		</if>
+		<if test="CMPLN_NAME != null and CMPLN_NAME !=''">
+		AND CMPLN_NAME LIKE '%'|| #{CMPLN_NAME} ||'%'
+		</if>
+		<if test="ID != null and ID !=''">
+		AND ID = #{ID}
+		</if>
+		<if test="ICDNT_NO != null and ICDNT_NO !=''">
+		AND ID IN ( SELECT MAST_ID FROM SOSONG_SUB_LIST WHERE DEL_YN = '0' AND ICDNT_NO = #{ICDNT_NO} )
+		</if> 
+		<include refid="common.pagingPost"/> 
+	</select>
+	
+	
+	
+	<select id="selectAllSimList" parameterType="hashmap" resultType="hashmap">
+		<include refid="common.pagingPre"/> 
+		<![CDATA[
+			SELECT ROW_NUMBER() OVER (ORDER BY INCDNT_GB ASC , ICDNT_TRIAL_NO ASC, ACCEPT_DATE ASC NULLS LAST) RNUM, 
+				   ID, 
+				   MAST_ID,
+				   INCDNT_GB, 
+				   ICDNT_TRIAL_NO, 
+				   ICDNT_NO, 
+				   INCDNT_NAME,
+				   GN_GB,
+				   CMPLN_NAME, 
+				   DEPT_NAME, 
+				   ACCEPT_DATE, 
+				   CHRG_LAWYER,
+				   DONE_YN, 
+				   JUDGE_CONT_GB,
+				   ( SELECT NAME FROM SOSONG_CODE_LIST WHERE GR_CD = '15' AND CODE = JUDGE_CONT_GB ) JUDGE_CONT_GB1, 
+				   JUDGE_CONTENT,  
+				   JUDGE_DATE  
+			FROM
+			(
+				SELECT MAST_ID, INCDNT_GB, ICDNT_NO, ACCEPT_DATE, CHRG_LAWYER, DONE_YN, JUDGE_CONT_GB, JUDGE_CONTENT, JUDGE_DATE, ICDNT_TRIAL_NO
+				FROM SOSONG_SUB_LIST
+				WHERE INCDNT_GB IN ('1', '2', '3') 
+				AND ICDNT_TRIAL_NO IN ( 11, 21, 31, 32)
+				AND DEL_YN = '0'				
+			) A LEFT OUTER JOIN
+			(
+				SELECT ID, INCDNT_NAME, GN_GB, CMPLN_NAME, DEPT_NAME
+				FROM SOSONG_MASTER
+				WHERE DEL_YN = '0'
+				AND INCDNT_GB IN ('1', '2', '3')				
+			) B ON A.MAST_ID = B.ID
+			]]>	
+			<where>		
+		    <if test="INCDNT_GB != null and INCDNT_GB !=''">
+			AND INCDNT_GB = #{INCDNT_GB}
+			</if>
+			<if test="STDATE != null and STDATE !=''">
+			AND ACCEPT_DATE BETWEEN REPLACE(#{STDATE}, '-', '') AND REPLACE(#{EDDATE}, '-', '')
+			</if>
+			<if test="DEPT_NAME != null and DEPT_NAME !=''">
+			AND DEPT_NAME LIKE '%'|| #{DEPT_NAME} ||'%'
+			</if>
+			<if test="CMPLN_NAME != null and CMPLN_NAME !=''">
+			AND CMPLN_NAME LIKE '%'|| #{CMPLN_NAME} ||'%'
+			</if>
+			<if test="GN_GB != null and GN_GB !=''">
+			AND GN_GB = #{GN_GB}
+			</if>
+			<if test="ICDNT_NO != null and ICDNT_NO !=''">
+			AND ICDNT_NO = #{ICDNT_NO}
+			</if>
+			</where>
+		<include refid="common.pagingPost"/> 
+	</select>
+	
+	
+	
+	<select id="selectCrimIncidentList" parameterType="hashmap" resultType="hashmap">
+		<include refid="common.pagingPre"/> 
+		<![CDATA[
+			SELECT
+                ROW_NUMBER() OVER (ORDER BY A.ID DESC) RNUM,
+                A.ID,
+                A.INCDNT_NAME,               
+                A.DEPT_CD,
+                A.DEPT_NAME,
+                A.PERFORM_PERSON,
+                A.CHRG_LAWYER,
+                A.LAST_RSLT_GB,            
+                A.LAST_RSLT_CONT,
+                B.SUE_DATE,
+                B.DEPOSIT_AMT,
+                B.DEPOSIT_PAY_DATE,
+                B.REWARD_AMT,
+                B.REWARD_PAY_DATE               
+            FROM
+              SOSONG_MASTER A, SOSONG_SUB_LIST B
+            WHERE A.ID = B.MAST_ID 
+            AND A.DEL_YN = '0'
+            AND A.INCDNT_GB = '4'
+            AND B.ICDNT_TRIAL_NO = '41'	
+		]]>		
+		<if test="DEPT_NAME != null and DEPT_NAME !=''">
+		AND DEPT_NAME LIKE '%'|| #{DEPT_NAME} ||'%'
+		</if>
+		<if test="ID != null and ID !=''">
+		AND ID = #{ID}
+		</if>
+		<include refid="common.pagingPost"/> 
+	</select>
+	
+	
+	
+	<select id="selectIndIncidentList" parameterType="hashmap" resultType="hashmap">
+		<include refid="common.pagingPre"/> 
+		<![CDATA[
+			SELECT  ROW_NUMBER() OVER (ORDER BY MAST_ID DESC) RNUM,               
+	                MAST_ID,
+	                ICDNT_NO,
+	                SUE_DATE,
+	                ACCEPT_DATE,
+	                IMPORTANT_GB,      
+	                ( SELECT NAME FROM SOSONG_CODE_LIST WHERE GR_CD = '11' AND CODE = IMPORTANT_GB ) IMPORTANT_GB1,
+	                DIRECT_GB,
+	                ( SELECT NAME FROM SOSONG_CODE_LIST WHERE GR_CD = '12' AND CODE = DIRECT_GB ) DIRECT_GB1,
+	                PERFORM_PERSON,
+	                CHRG_LAWYER,
+	                DONE_YN,
+	                ( SELECT NAME FROM SOSONG_CODE_LIST WHERE GR_CD = '13' AND CODE = DONE_YN ) DONE_YN1,
+	                WIN_LOSE_GB,
+	                ( SELECT NAME FROM SOSONG_CODE_LIST WHERE GR_CD = '14' AND CODE = WIN_LOSE_GB ) WIN_LOSE_GB1,
+	                JUDGE_CONT_GB,
+	                ( SELECT NAME FROM SOSONG_CODE_LIST WHERE GR_CD = #{TRNO_GR_CD} AND CODE = JUDGE_CONT_GB ) JUDGE_CONT_GB1,
+	                JUDGE_CONTENT,
+	                JUDGE_DATE,
+	                JG_ACCPT_DATE,
+	                DEPOSIT_AMT,
+	                DEPOSIT_PAY_DATE,	       
+	                ETC1,
+	                ETC2           						
+            FROM
+              SOSONG_SUB_LIST
+			WHERE ICDNT_TRIAL_NO = #{ICDNT_TRIAL_NO}
+			AND	MAST_ID = #{MID}
+			AND DEL_YN = '0'	
+			]]>			
+		<include refid="common.pagingPost"/> 
+	</select>
+	
+	
+	
+	
+	
+	
+	<select id="incidentBasicDetail" parameterType="hashmap" resultType="hashmap">
+		<![CDATA[
+			SELECT MAX(A.ID) ID, 
+		           MAX(A.INCDNT_GB) INCDNT_GB,
+		           MAX(A.INCDNT_NAME) INCDNT_NAME,
+		           MAX(A.GN_GB) GN_GB,
+		           MAX(A.CMPLN_NAME) CMPLN_NAME,
+		           MAX(A.NOTE) NOTE,
+		           MAX(A.DFNDNT_NAME) DFNDNT_NAME,   
+		           MAX(A.DEPT_CD) DEPT_CD,
+		           MAX(A.DEPT_NAME) DEPT_NAME,
+		           MAX(A.PERFORM_PERSON) PERFORM_PERSON,
+		           MAX(A.CHRG_LAWYER) CHRG_LAWYER,
+		           MAX(A.WIN_LOSE_GB) WIN_LOSE_GB,
+		           MAX(A.LAWSUIT_VALUE) LAWSUIT_VALUE,
+		           MAX(A.LAST_RSLT_GB) LAST_RSLT_GB,
+		           MAX(A.LAST_SIM_GB) LAST_SIM_GB,
+		           MAX(A.LAST_RSLT_CONT) LAST_RSLT_CONT,
+		           MAX(A.BIGO) BIGO,           
+		           MAX(DECODE( ICDNT_TRIAL_NO, 11, 'O')) SIM11,
+		           MAX(DECODE( ICDNT_TRIAL_NO, 12, 'O')) SIM12,
+		           MAX(DECODE( ICDNT_TRIAL_NO, 13, 'O')) SIM13,
+		           MAX(DECODE( ICDNT_TRIAL_NO, 21, 'O')) SIM21,
+		           MAX(DECODE( ICDNT_TRIAL_NO, 31, 'O')) SIM31,
+		           MAX(DECODE( ICDNT_TRIAL_NO, 32, 'O')) SIM32,
+		           MAX(DECODE( ICDNT_TRIAL_NO, 33, 'O')) SIM33
+		    FROM     
+		    ( 
+		        SELECT ID,                
+		               INCDNT_GB,
+		               INCDNT_NAME,
+		               GN_GB,
+		               CMPLN_NAME,
+		               NOTE,
+		               DFNDNT_NAME,   
+		               DEPT_CD,
+		               DEPT_NAME,
+		               PERFORM_PERSON,
+		               CHRG_LAWYER,
+		               WIN_LOSE_GB,
+		               LAWSUIT_VALUE,
+		               LAST_RSLT_GB,
+		               LAST_SIM_GB,
+		               LAST_RSLT_CONT,
+		               BIGO               
+		        FROM SOSONG_MASTER
+		        WHERE ID = #{ID} 
+		        AND DEL_YN = '0'
+		    ) A  LEFT OUTER JOIN  
+		    ( 
+		      SELECT ICDNT_TRIAL_NO, MAST_ID 
+		      FROM SOSONG_SUB_LIST 
+		      WHERE DEL_YN = '0' 
+		    ) B ON A.ID = B.MAST_ID			
+		]]>
+	</select>
+	
+	
+	
+	<select id="indTrialDetail" parameterType="hashmap" resultType="hashmap">
+		<![CDATA[
+			SELECT                
+                MAST_ID,
+                ICDNT_NO,
+                SUE_DATE,
+                ACCEPT_DATE,
+                IMPORTANT_GB,      
+                ( SELECT NAME FROM SOSONG_CODE_LIST WHERE GR_CD = '11' AND CODE = IMPORTANT_GB ) IMPORTANT_GB1,
+                DIRECT_GB,
+                ( SELECT NAME FROM SOSONG_CODE_LIST WHERE GR_CD = '12' AND CODE = DIRECT_GB ) DIRECT_GB1,
+                PERFORM_USERID,
+                PERFORM_PERSON,
+                CHRG_LAWYER,
+                DONE_YN,
+                ( SELECT NAME FROM SOSONG_CODE_LIST WHERE GR_CD = '13' AND CODE = DONE_YN ) DONE_YN1,
+                WIN_LOSE_GB,
+                ( SELECT NAME FROM SOSONG_CODE_LIST WHERE GR_CD = '14' AND CODE = WIN_LOSE_GB ) WIN_LOSE_GB1,
+                APPEAL_RESPONSE_DATE,
+                APPEAL_REASON_DATE,                
+                APPEAL_SUBMIT_DATE,
+                ARGUE_SET_DATE,
+                PERFORM_USERHNO,
+                JUDGE_CONT_GB,
+                ( SELECT NAME FROM SOSONG_CODE_LIST WHERE GR_CD = #{TRNO_GR_CD} AND CODE = JUDGE_CONT_GB ) JUDGE_CONT_GB1,
+                JUDGE_CONTENT,
+                JUDGE_CONT_NOTES,
+                JUDGE_DATE,
+                JG_ACCPT_DATE,
+                DEPOSIT_AMT,
+                DEPOSIT_PAY_DATE,
+                REWARD_AMT,
+                REWARD_PAY_DATE,  
+                STAMP_AMT,        
+                STAMP_PAY_DATE,
+                TRANSMIT_FEE,
+                TRANSMIT_PAY_DATE,
+                ETC1,
+                ETC2								
+            FROM
+              SOSONG_SUB_LIST
+			WHERE ICDNT_TRIAL_NO = #{ICDNT_TRIAL_NO}
+			AND	MAST_ID = #{MID}
+			AND	ICDNT_NO = #{ICDNT_NO}					
+		]]>
+	</select>
+	
+	
+	
+	<select id="crimListDetail" parameterType="hashmap" resultType="hashmap">
+		<![CDATA[
+			SELECT                
+                A.ID,
+                A.INCDNT_NAME,               
+                A.DEPT_CD,
+                A.DEPT_NAME,
+                B.PERFORM_USERID,
+                B.PERFORM_PERSON,
+                B.CHRG_LAWYER,
+                A.LAST_RSLT_GB,            
+                A.LAST_RSLT_CONT,
+                B.ICDNT_NO,
+                B.ICDNT_TRIAL_NO,
+                B.SUE_DATE,
+                B.DEPOSIT_AMT,
+                B.DEPOSIT_PAY_DATE,
+                B.REWARD_AMT,
+                B.REWARD_PAY_DATE               
+            FROM
+              SOSONG_MASTER A, SOSONG_SUB_LIST B
+            WHERE A.ID = B.MAST_ID 
+            AND A.DEL_YN = '0'
+            AND A.INCDNT_GB = '4'
+            AND B.ICDNT_TRIAL_NO = '41'
+            AND A.ID = #{ID}				
+		]]>
+	</select>
+	
+	
+	
+	
+	
+	<select id="selectIncidentStatisticsList1" parameterType="hashmap" resultType="hashmap">		
+		<include refid="common.pagingPre"/> 
+		
+		    SELECT ROW_NUMBER() OVER (ORDER BY ORD ASC) RNUM,
+		           ORD, 
+			       TT1, 
+			       MAXST, 
+			       MAXSD, 
+			       MAXSW, 
+			       WIN1, 
+			       WIN2, 
+			       WIN3, 
+			       WIN4, 
+			       LOSE,
+			       ING, 
+			       WINP
+			FROM
+			(
+			SELECT 
+				   DECODE(TT1, '행정소송', 2, '민사소송', 3, '국가소송', 4, 1) ORD, 
+			       DECODE(TT1, NULL, '계', TT1) TT1, 
+			       SUM(MAXST) MAXST, 
+			       SUM(MINSD) MAXSD, 
+			       SUM(MINSW) MAXSW, 
+			       SUM(WIN1) WIN1, 
+			       SUM(WIN2) WIN2, 
+			       SUM(WIN3) WIN3, 
+			       SUM(WIN4) WIN4, 
+			       SUM(LOSE) LOSE,
+			       SUM(ING) ING, 
+			       DECODE(SUM(MINSD), 0, '',  TO_CHAR((SUM(MINSW)/SUM(MINSD))* 100, '999.99')) WINP
+			FROM
+			(
+			    SELECT TT1, (WIN1+WIN2+WIN3+WIN4+LOSE+ING) MAXST, (WIN1+WIN2+WIN3+WIN4+LOSE) MINSD, (WIN1+WIN2+WIN3+WIN4) MINSW, WIN1, WIN2,WIN3, WIN4, LOSE, ING,
+			           DECODE( WIN1+WIN2+WIN3+WIN4+LOSE, 0, '', ((WIN1+WIN2+WIN3+WIN4)/(WIN1+WIN2+WIN3+WIN4+LOSE))*100) WINP
+			    FROM
+			    (
+			        SELECT TT1, 
+			               MAX(DECODE(JUDGE_CONT_GB, 1, CNT, 0)) WIN1,
+			               MAX(DECODE(JUDGE_CONT_GB, 2, CNT, 0)) WIN2,
+			               MAX(DECODE(JUDGE_CONT_GB, 3, CNT, 0)) WIN3,
+			               SUM(DECODE(JUDGE_CONT_GB, 4, CNT, 5, CNT, 6, CNT, 8, CNT, 0)) WIN4,
+			               MAX(DECODE(JUDGE_CONT_GB, 7, CNT, 0)) LOSE,
+			               MAX(DECODE(DONE_YN, 1, CNT, 0)) ING          
+			        FROM
+			        (        
+			            SELECT  DECODE(INCDNT_GB, '1', '행정소송', '2', '민사소송', '3', '국가소송') TT1,  DONE_YN, JUDGE_CONT_GB, COUNT(*) CNT
+			            FROM 
+			            (       			                			              	              
+			                SELECT INCDNT_GB, DONE_YN, JUDGE_CONT_GB
+			                FROM SOSONG_SUB_LIST
+			                WHERE INCDNT_GB IN ('1', '2', '3') 
+			                AND ICDNT_TRIAL_NO IN (11, 21, 31, 32)
+			                AND DEL_YN = '0'       
+			                AND DONE_YN IS NOT NULL			                               
+			                <if test="STDATE != null and STDATE !=''">
+			                AND ACCEPT_DATE BETWEEN REPLACE(#{STDATE}, '-', '')  AND  REPLACE(#{EDDATE}, '-', '')
+			                </if>
+			                <if test="DEPT_NAME != null and DEPT_NAME !=''"> 
+			                AND MAST_ID IN 
+			                (   SELECT ID 
+			                    FROM 
+			                    SOSONG_MASTER
+                                WHERE DEL_YN = '0'	                            
+								AND DEPT_NAME LIKE '%'|| #{DEPT_NAME} ||'%'								
+							)
+							</if>
+			            ) 
+			            GROUP BY INCDNT_GB, DONE_YN, JUDGE_CONT_GB            
+			            ORDER BY INCDNT_GB ASC, DONE_YN DESC, JUDGE_CONT_GB ASC
+			        )
+			        GROUP BY TT1
+			        ORDER BY TT1 DESC
+			    )
+			)
+			GROUP BY ROLLUP(TT1)
+			)		
+	
+		<include refid="common.pagingPost"/>
+	</select>
+	
+	
+	
+	<select id="selectIncidentStatisticsList2" parameterType="hashmap" resultType="hashmap">		
+	   SELECT ROW_NUMBER() OVER (ORDER BY ORD ASC, CHRG_LAWYER ASC) RNUM,
+          CHRG_LAWYER,
+          SUMN, 
+          NUM1, 
+          NUM2 
+	   FROM
+	   (
+	        SELECT DECODE(CHRG_LAWYER, NULL, '계', CHRG_LAWYER) CHRG_LAWYER,
+	               DECODE(CHRG_LAWYER, NULL, 0, '이중광', 1, '이성섭', 2, '하태웅', 3, '법무법인 웅빈', 4, '법무법인 대륙아주', 5, '직접수행', 6, 7) ORD,     
+	               SUM(SA)  SUMN, 
+	               SUM(A1) NUM1, 
+	               SUM(A2) NUM2
+	        FROM 
+	        ( 
+	            SELECT  CHRG_LAWYER, (SUM(DEPOSIT_AMT) + SUM(REWARD_AMT)) SA,  SUM(DEPOSIT_AMT) A1, SUM(REWARD_AMT) A2
+	            FROM 
+	            (
+	                SELECT  CHRG_LAWYER, NVL(DEPOSIT_AMT, 0) DEPOSIT_AMT, NVL(REWARD_AMT, 0) REWARD_AMT                 
+	                FROM SOSONG_SUB_LIST
+	                WHERE INCDNT_GB IN ('1', '2', '3') 
+	                AND ICDNT_TRIAL_NO IN (11, 21, 31, 32)
+	                AND DEL_YN = '0'                        
+	                AND DONE_YN IS NOT NULL
+	                AND ACCEPT_DATE IS NOT NULL
+	                AND CHRG_LAWYER IS NOT NULL
+	                <if test="INCDNT_GB != null and INCDNT_GB !=''">
+					AND INCDNT_GB = #{INCDNT_GB}
+					</if>
+			        <if test="STDATE != null and STDATE !=''">
+			        AND ACCEPT_DATE BETWEEN REPLACE(#{STDATE}, '-', '')  AND  REPLACE(#{EDDATE}, '-', '')
+			        </if>			         
+			        <if test="DEPT_NAME != null and DEPT_NAME !=''">			        
+			        AND MAST_ID IN 
+                    (   SELECT ID
+                        FROM
+                        SOSONG_MASTER
+                        WHERE DEL_YN = '0'       
+                        AND DEPT_NAME LIKE '%'|| #{DEPT_NAME} ||'%'                         
+                    )
+                    </if>	                
+	            )
+	            <if test="CHK_LAWYER == '11'">
+					WHERE CHRG_LAWYER IS NOT NULL
+					AND CHRG_LAWYER IN (${LAWYER_LIST})								
+				</if>
+	            GROUP BY CHRG_LAWYER
+	        )
+	        GROUP BY ROLLUP(CHRG_LAWYER)
+	   )
+	</select>	
+	
+	
+	
+	
+	
+	
+	<select id="selectIncidentStatisticsList3" parameterType="hashmap" resultType="hashmap">		
+		SELECT ROW_NUMBER() OVER (ORDER BY ORD ASC) RNUM,
+           CHRG_LAWYER,
+           ORD,  
+           MAXST, 
+           MAXSD, 
+           MAXSW, 
+           WIN1, 
+           WIN2, 
+           WIN3, 
+           WIN4, 
+           LOSE,
+           ING, 
+           WINP
+	    FROM
+	    (
+	        SELECT DECODE(CHRG_LAWYER, NULL, '계', CHRG_LAWYER) CHRG_LAWYER,
+	               DECODE(CHRG_LAWYER, NULL, 0, '이중광', 1, '이성섭', 2, '하태웅', 3, '법무법인 웅빈', 4, '법무법인 대륙아주', 5, '기타변호사', 6, '직접수행', 7) ORD,  
+	               SUM(MAXST) MAXST, 
+	               SUM(MINSD) MAXSD, 
+	               SUM(MINSW) MAXSW, 
+	               SUM(WIN1) WIN1, 
+	               SUM(WIN2) WIN2, 
+	               SUM(WIN3) WIN3, 
+	               SUM(WIN4) WIN4, 
+	               SUM(LOSE) LOSE,
+	               SUM(ING) ING, 
+	               DECODE(SUM(MINSD), 0, '',  TO_CHAR((SUM(MINSW)/SUM(MINSD))* 100, '999.99')) WINP
+	        FROM
+	        (
+	     
+	            SELECT CHRG_LAWYER, 
+	                   (WIN1+WIN2+WIN3+WIN4+LOSE+ING) MAXST, (WIN1+WIN2+WIN3+WIN4+LOSE) MINSD, (WIN1+WIN2+WIN3+WIN4) MINSW, WIN1, WIN2,WIN3, WIN4, LOSE, ING,
+	                   DECODE( WIN1+WIN2+WIN3+WIN4+LOSE, 0, '', TO_CHAR( ((WIN1+WIN2+WIN3+WIN4)/(WIN1+WIN2+WIN3+WIN4+LOSE))*100, '999.99')) WINP
+	            FROM
+	            (
+	         
+	                SELECT CHRG_LAWYER, 
+	                       MAX(DECODE(JUDGE_CONT_GB, 1, CNT, 0)) WIN1,
+	                       MAX(DECODE(JUDGE_CONT_GB, 2, CNT, 0)) WIN2,
+	                       MAX(DECODE(JUDGE_CONT_GB, 3, CNT, 0)) WIN3,
+	                       SUM(DECODE(JUDGE_CONT_GB, 4, CNT, 5, CNT, 6, CNT, 8, CNT, 0)) WIN4,
+	                       MAX(DECODE(JUDGE_CONT_GB, 7, CNT, 0)) LOSE,
+	                       MAX(DECODE(DONE_YN, 1, CNT, 0)) ING          
+	                FROM
+	                (       
+	                    SELECT CHRG_LAWYER, DONE_YN, JUDGE_CONT_GB, COUNT(*) CNT
+	                    FROM 
+	                    (   
+	                    	<choose>
+	                    	<when test="CHK_LAWYER == '11'">                 
+	                        SELECT DECODE(CHRG_LAWYER, ${LAWYER_LIST}) CHRG_LAWYER,  
+	                        </when>
+	                        <otherwise>
+	                        SELECT DECODE(CHRG_LAWYER, '이중광', '이중광', '이성섭', '이성섭', '하태웅', '하태웅', '직접수행', '직접수행', '법무법인 웅빈', '법무법인 웅빈', '법무법인 대륙아주', '법무법인 대륙아주', '기타변호사') CHRG_LAWYER,
+	                        </otherwise>       
+	                        </choose>	                      
+	                        DONE_YN, JUDGE_CONT_GB           
+	                        FROM SOSONG_SUB_LIST
+	                        WHERE INCDNT_GB IN ('1', '2', '3')
+	                        AND ICDNT_TRIAL_NO IN (11, 21, 31, 32)
+	                        AND DEL_YN = '0'                                            
+	                        AND DONE_YN IS NOT NULL
+	                        AND ACCEPT_DATE IS NOT NULL
+	                        AND CHRG_LAWYER IS NOT NULL
+	                        <if test="INCDNT_GB != null and INCDNT_GB !=''">
+							AND INCDNT_GB = #{INCDNT_GB}
+							</if>
+					        <if test="STDATE != null and STDATE !=''">
+					        AND ACCEPT_DATE BETWEEN REPLACE(#{STDATE}, '-', '')  AND  REPLACE(#{EDDATE}, '-', '')
+					        </if>			         
+					        <if test="DEPT_NAME != null and DEPT_NAME !=''">			        
+					        AND MAST_ID IN 
+		                    (   SELECT ID
+		                        FROM
+		                        SOSONG_MASTER
+		                        WHERE DEL_YN = '0'       
+		                        AND DEPT_NAME LIKE '%'|| #{DEPT_NAME} ||'%'                         
+		                    )
+		                    </if>         
+	                    )
+	                    <if test="CHK_LAWYER == '11'">
+					    WHERE CHRG_LAWYER IS NOT NULL
+					    </if>
+	                    GROUP BY CHRG_LAWYER, DONE_YN, JUDGE_CONT_GB            
+	                    ORDER BY CHRG_LAWYER, DONE_YN DESC, JUDGE_CONT_GB ASC  
+	                 )           
+	                 GROUP BY CHRG_LAWYER                            
+	            )    
+	        )        
+	        GROUP BY ROLLUP(CHRG_LAWYER)
+    	)
+	</select>	
+	
+	
+	
+	<select id="selectIncidentStatisticsList4" parameterType="hashmap" resultType="hashmap">		
+		SELECT     ROW_NUMBER() OVER (ORDER BY FY DESC) RNUM,
+                   DECODE(FY, NULL, '계', FY) FY, 
+                   SUM(MAXST) MAXST, 
+                   SUM(MINSD) MAXSD, 
+                   SUM(MINSW) MAXSW, 
+                   SUM(WIN1) WIN1, 
+                   SUM(WIN2) WIN2, 
+                   SUM(WIN3) WIN3, 
+                   SUM(WIN4) WIN4, 
+                   SUM(LOSE) LOSE,
+                   SUM(ING) ING, 
+                   DECODE(SUM(MINSD), 0, '',  TO_CHAR((SUM(MINSW)/SUM(MINSD))* 100, '999.99')) WINP
+        FROM
+        (   
+   			SELECT FY, (WIN1+WIN2+WIN3+WIN4+LOSE+ING) MAXST, (WIN1+WIN2+WIN3+WIN4+LOSE) MINSD, (WIN1+WIN2+WIN3+WIN4) MINSW, WIN1, WIN2,WIN3, WIN4, LOSE, ING,
+                   DECODE( WIN1+WIN2+WIN3+WIN4+LOSE, 0, '', ((WIN1+WIN2+WIN3+WIN4)/(WIN1+WIN2+WIN3+WIN4+LOSE))*100) WINP
+            FROM
+            (   
+			   SELECT FY, 
+			       MAX(DECODE(JUDGE_CONT_GB, 1, CNT, 0)) WIN1,
+			       MAX(DECODE(JUDGE_CONT_GB, 2, CNT, 0)) WIN2,
+			       MAX(DECODE(JUDGE_CONT_GB, 3, CNT, 0)) WIN3,
+			       SUM(DECODE(JUDGE_CONT_GB, 4, CNT, 5, CNT, 6, CNT, 8, CNT, 0)) WIN4,
+			       MAX(DECODE(JUDGE_CONT_GB, 7, CNT, 0)) LOSE,
+			       MAX(DECODE(DONE_YN, 1, CNT, 0)) ING          
+			   FROM
+			   (       
+			    SELECT  FY, DONE_YN, JUDGE_CONT_GB,   COUNT(*) CNT
+			    FROM 
+			    (			        
+			        SELECT SUBSTR(ACCEPT_DATE, 1, 4) FY, DONE_YN, JUDGE_CONT_GB
+			        FROM SOSONG_SUB_LIST
+			        WHERE INCDNT_GB IN ('1', '2', '3')
+			        AND ICDNT_TRIAL_NO IN (11, 21, 31, 32)
+			        AND DEL_YN = '0'
+			        AND DIRECT_GB = '1'			             
+			        AND DONE_YN IS NOT NULL
+			        AND ACCEPT_DATE IS NOT NULL
+			        <if test="INCDNT_GB != null and INCDNT_GB !=''">
+					AND INCDNT_GB = #{INCDNT_GB}
+					</if>
+			        <if test="STDATE != null and STDATE !=''">
+			        AND ACCEPT_DATE BETWEEN REPLACE(#{STDATE}, '-', '')  AND  REPLACE(#{EDDATE}, '-', '')
+			        </if>			         
+			        <if test="DEPT_NAME != null and DEPT_NAME !=''">			        
+			        AND MAST_ID IN 
+                    (   SELECT ID 
+                        FROM 
+                        SOSONG_MASTER
+                        WHERE DEL_YN = '0'                                
+                        AND DEPT_NAME LIKE '%'|| #{DEPT_NAME} ||'%'                         
+                    )
+                    </if>
+		        )
+			    GROUP BY FY, DONE_YN, JUDGE_CONT_GB            
+			    ORDER BY FY, DONE_YN DESC, JUDGE_CONT_GB ASC       
+               )
+			   GROUP BY FY                 
+			   ORDER BY FY DESC                 
+			)
+		)
+		GROUP BY ROLLUP(FY)
+	</select>	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	<insert id="insertIncidentBasic" parameterType="hashmap" useGeneratedKeys="true" keyProperty="ID">
+		<selectKey keyProperty="ID" resultType="string" order="BEFORE">
+			SELECT SOSONG_MASTER_SQ.NEXTVAL FROM DUAL
+		</selectKey>
+		<![CDATA[
+			INSERT INTO SOSONG_MASTER
+			(
+				ID,          
+				INCDNT_GB,
+				INCDNT_NAME,
+				GN_GB,
+				CMPLN_NAME,
+				NOTE,
+				DFNDNT_NAME,
+				DEPT_CD,
+				DEPT_NAME,				
+				LAWSUIT_VALUE, 
+				WIN_LOSE_GB,
+				LAST_RSLT_CONT,
+				LAST_RSLT_GB,				
+				LAST_SIM_GB,
+				BIGO,
+				INS_ID,  
+				INS_DEPT,
+				INS_DATE						
+			)
+			VALUES
+			(
+				#{ID},			         
+				#{INCDNT_GB},
+				#{INCDNT_NAME},
+				#{GN_GB},
+				#{CMPLN_NAME},
+				#{NOTE},
+				#{DFNDNT_NAME},
+				#{DEPT_CD},		
+				#{DEPT_NAME},
+				REPLACE(#{LAWSUIT_VALUE}, ',', ''), 
+				#{WIN_LOSE_GB},
+				#{LAST_RSLT_CONT},
+				#{LAST_RSLT_GB},				
+				#{LAST_SIM_GB},
+				#{BIGO},
+				#{INS_ID},  
+				#{INS_DEPT},
+				SYSDATE			
+			)
+		]]>
+	</insert>
+	
+	
+	
+	<insert id="insertIndTrial" parameterType="hashmap" useGeneratedKeys="true" keyProperty="ID">	
+		<![CDATA[
+			INSERT INTO SOSONG_SUB_LIST
+			(
+				ICDNT_NO,        
+				MAST_ID,
+				INCDNT_GB,
+				ICDNT_TRIAL_NO,
+				SUE_DATE,
+				ACCEPT_DATE,
+				IMPORTANT_GB,
+				DIRECT_GB,
+				PERFORM_USERID,
+				PERFORM_PERSON,
+				CHRG_LAWYER,
+				DONE_YN,
+				WIN_LOSE_GB,
+				JUDGE_CONT_GB,
+				JUDGE_CONTENT,
+				JUDGE_CONT_NOTES,
+				JUDGE_DATE,
+				JG_ACCPT_DATE,
+				DEPOSIT_AMT,
+				DEPOSIT_PAY_DATE,
+				REWARD_AMT,
+				REWARD_PAY_DATE,
+				STAMP_AMT, 
+				STAMP_PAY_DATE,
+				TRANSMIT_FEE,
+				TRANSMIT_PAY_DATE,
+				ETC1,
+				ETC2,
+				INS_ID,  
+				INS_DEPT,
+				INS_DATE,
+				APPEAL_RESPONSE_DATE,
+				APPEAL_REASON_DATE,
+				APPEAL_SUBMIT_DATE,
+				ARGUE_SET_DATE,
+				PERFORM_USERHNO
+			)
+			VALUES
+			(				
+				TRIM(#{ICDNT_NO}),       
+				#{MAST_ID},
+				#{INCDNT_GB},
+				#{ICDNT_TRIAL_NO},
+				REPLACE(#{SUE_DATE}, '-', ''),
+				REPLACE(#{ACCEPT_DATE}, '-', ''),
+				#{IMPORTANT_GB},
+				#{DIRECT_GB},
+				#{PERFORM_USERID},
+				#{PERFORM_PERSON},
+				#{CHRG_LAWYER},
+				#{DONE_YN},
+				#{WIN_LOSE_GB},
+				#{JUDGE_CONT_GB},
+				#{JUDGE_CONTENT},
+				#{JUDGE_CONT_NOTES},
+				REPLACE(#{JUDGE_DATE}, '-', ''),
+				REPLACE(#{JG_ACCPT_DATE}, '-', ''),
+				REPLACE(#{DEPOSIT_AMT}, ',', ''),
+				REPLACE(#{DEPOSIT_PAY_DATE}, '-', ''),
+				REPLACE(#{REWARD_AMT}, ',', ''),
+				REPLACE(#{REWARD_PAY_DATE}, '-', ''),
+				REPLACE(#{STAMP_AMT}, ',', ''), 
+				REPLACE(#{STAMP_PAY_DATE}, '-', ''),
+				REPLACE(#{TRANSMIT_FEE}, ',', ''),
+				REPLACE(#{TRANSMIT_PAY_DATE}, '-', ''),	
+				#{ETC1},
+				#{ETC2},
+				#{INS_ID},  
+				#{INS_DEPT},			
+				SYSDATE,
+				REPLACE(#{APPEAL_RESPONSE_DATE}, '-', ''),
+				REPLACE(#{APPEAL_REASON_DATE}, '-', ''),
+				REPLACE(#{APPEAL_SUBMIT_DATE}, '-', ''),
+				REPLACE(#{ARGUE_SET_DATE}, '-', ''),
+				#{PERFORM_USERHNO}
+			)
+		]]>
+	</insert>
+	
+	
+	<update id="updateIncidentBasic" parameterType="hashmap">
+		<![CDATA[
+			UPDATE SOSONG_MASTER 
+			SET
+				INCDNT_GB = #{INCDNT_GB},
+			    INCDNT_NAME = #{INCDNT_NAME},
+			    GN_GB = #{GN_GB},
+			    CMPLN_NAME = #{CMPLN_NAME},
+			    NOTE = #{NOTE},
+			    DFNDNT_NAME = #{DFNDNT_NAME},
+			    DEPT_CD = #{DEPT_CD},
+			    DEPT_NAME = #{DEPT_NAME},			    
+			    LAWSUIT_VALUE = REPLACE(#{LAWSUIT_VALUE}, ',', ''),
+			    WIN_LOSE_GB = #{WIN_LOSE_GB},
+			    LAST_RSLT_GB = #{LAST_RSLT_GB},
+			    LAST_RSLT_CONT = #{LAST_RSLT_CONT},
+			    LAST_SIM_GB = #{LAST_SIM_GB},
+			    MOD_ID = #{MOD_ID},
+			    MOD_DEPT = #{MOD_DEPT},			  
+			    MOD_DATE = SYSDATE
+			WHERE
+				ID = #{ID}	
+		]]>
+	</update>
+	
+	
+	<update id="deleteIncidentBasic" parameterType="hashmap">
+		<![CDATA[
+			UPDATE SOSONG_MASTER
+			SET
+				DEL_YN = '1',
+				DEL_ID = #{DEL_ID},
+				DEL_DEPT = #{DEL_DEPT},
+				DEL_DATE = SYSDATE
+			WHERE DEL_YN = '0'
+			AND ID = #{ID}
+		]]>
+	</update>
+	
+	
+	<update id="updateIndTrial" parameterType="hashmap">
+		<![CDATA[
+			UPDATE SOSONG_SUB_LIST 
+			SET				
+				INCDNT_GB = #{INCDNT_GB},
+			    SUE_DATE = REPLACE(#{SUE_DATE}, '-', ''),
+			    ACCEPT_DATE = REPLACE(#{ACCEPT_DATE}, '-', ''),
+			    IMPORTANT_GB = #{IMPORTANT_GB},
+			    DIRECT_GB = #{DIRECT_GB},
+			    PERFORM_USERID = #{PERFORM_USERID},
+			    PERFORM_PERSON = #{PERFORM_PERSON},			    
+			    CHRG_LAWYER = #{CHRG_LAWYER},
+			    DONE_YN = #{DONE_YN},
+			    WIN_LOSE_GB = #{WIN_LOSE_GB},
+			    APPEAL_RESPONSE_DATE = REPLACE(#{APPEAL_RESPONSE_DATE}, '-', ''),
+			    APPEAL_REASON_DATE = REPLACE(#{APPEAL_REASON_DATE}, '-', ''),			
+				APPEAL_SUBMIT_DATE = REPLACE(#{APPEAL_SUBMIT_DATE}, '-', ''),
+				ARGUE_SET_DATE = REPLACE(#{ARGUE_SET_DATE}, '-', ''),							    			   
+			    JUDGE_CONT_GB = #{JUDGE_CONT_GB},
+			    JUDGE_CONTENT = #{JUDGE_CONTENT},
+			    JUDGE_CONT_NOTES = #{JUDGE_CONT_NOTES},			  
+			    JUDGE_DATE = REPLACE(#{JUDGE_DATE}, '-', ''),
+			    JG_ACCPT_DATE = REPLACE(#{JG_ACCPT_DATE}, '-', ''),
+			    DEPOSIT_AMT = REPLACE(#{DEPOSIT_AMT}, ',', ''),
+			    DEPOSIT_PAY_DATE = REPLACE(#{DEPOSIT_PAY_DATE}, '-', ''),
+			    REWARD_AMT = REPLACE(#{REWARD_AMT}, ',', ''),
+			    REWARD_PAY_DATE = REPLACE(#{REWARD_PAY_DATE}, '-', ''),
+			    STAMP_AMT = REPLACE(#{STAMP_AMT}, ',', ''),
+			    STAMP_PAY_DATE = REPLACE(#{STAMP_PAY_DATE}, '-', ''),
+			    TRANSMIT_FEE = REPLACE(#{TRANSMIT_FEE}, ',', ''),
+			    TRANSMIT_PAY_DATE = REPLACE(#{TRANSMIT_PAY_DATE}, '-', ''),
+			    ETC1 = #{ETC1},
+			    ETC2 = #{ETC2},
+			    MOD_ID = #{MOD_ID},
+			    MOD_DEPT = #{MOD_DEPT},			  
+			    MOD_DATE = SYSDATE,
+			    PERFORM_USERHNO = #{PERFORM_USERHNO}	 
+			WHERE
+				ICDNT_TRIAL_NO = #{ICDNT_TRIAL_NO}
+				AND	MAST_ID = #{MID}
+				AND	ICDNT_NO = #{ICDNT_NO}	
+		]]>
+	</update>
+	
+	
+	<update id="deleteIndTrial" parameterType="hashmap">
+		<![CDATA[
+			UPDATE SOSONG_SUB_LIST
+			SET
+				ICDNT_NO = '!'|| ICDNT_NO,
+				DEL_YN = '1',
+				DEL_ID = #{DEL_ID},
+				DEL_DEPT = #{DEL_DEPT},
+				DEL_DATE = SYSDATE
+			WHERE DEL_YN = '0'			
+		]]>
+		<if test="MID != null and MID !=''">
+		AND MAST_ID = #{MID}
+		</if>
+		<if test="ICDNT_TRIAL_NO != null and ICDNT_TRIAL_NO !=''">
+		AND ICDNT_TRIAL_NO = #{ICDNT_TRIAL_NO}
+		</if>
+		<if test="ICDNT_NO != null and ICDNT_NO !=''">
+		AND ICDNT_NO = #{ICDNT_NO}
+		</if>		
+	</update>
+		
+</mapper>

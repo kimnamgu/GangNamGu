@@ -1,0 +1,103 @@
+package fds.daejang.controller;
+
+import java.util.List;
+import java.util.Map;
+
+import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
+
+import org.apache.log4j.Logger;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.servlet.ModelAndView;
+
+import fds.common.common.CommandMap;
+import fds.daejang.service.DaejangService;
+
+@Controller
+public class DaejangController {
+	Logger log = Logger.getLogger(this.getClass());
+	
+	@Resource(name="daejangService")
+	private DaejangService daejangService;
+	
+	@RequestMapping(value="/daejang/fixedDateList.do")
+    public ModelAndView fixedDateList(CommandMap commandMap) throws Exception{
+    	
+		ModelAndView mv = new ModelAndView("/daejang/fixedDateList");
+    	
+    	return mv;
+    }
+	
+	@RequestMapping(value="/daejang/selectFixedDateList.do")
+    public ModelAndView selectFixedDateList(CommandMap commandMap) throws Exception{
+    	ModelAndView mv = new ModelAndView("jsonView");
+    	
+    	List<Map<String,Object>> list = daejangService.selectFixedDateList(commandMap.getMap());
+    	mv.addObject("list", list);
+    	if(list.size() > 0){
+    		mv.addObject("TOTAL", list.get(0).get("TOTAL_COUNT"));
+    	}
+    	else{
+    		mv.addObject("TOTAL", 0);
+    	}
+    	
+    	return mv;
+    }
+	
+	
+	
+	@RequestMapping(value="/daejang/fixedDateDataWrite.do")
+	public ModelAndView fixedDateDataWrite(CommandMap commandMap) throws Exception{
+		ModelAndView mv = new ModelAndView("/daejang/fixedDateDataWrite");
+		
+		return mv;
+	}
+	
+	
+	@RequestMapping(value="/daejang/insertFixedDateData.do")
+	public ModelAndView insertFixedDateData(CommandMap commandMap, HttpServletRequest request) throws Exception{
+		ModelAndView mv = new ModelAndView("redirect:/daejang/fixedDateList.do");
+		
+		daejangService.insertFixedDateData(commandMap.getMap(), request);
+		
+		return mv;
+	}
+	
+	@RequestMapping(value="/daejang/fixedDateDataUpdate.do")
+	public ModelAndView giftAcceptDetail(CommandMap commandMap) throws Exception{
+		ModelAndView mv = new ModelAndView("/daejang/fixedDateDataUpdate");
+		
+		Map<String,Object> map = daejangService.fixedDateDataDetail(commandMap.getMap());
+		mv.addObject("map", map.get("map"));
+		mv.addObject("list", map.get("list"));
+		
+		return mv;
+	}
+	
+	
+	
+
+	@RequestMapping(value="/daejang/updateFixedDateData.do")
+	public ModelAndView updateFixedDateData(CommandMap commandMap, HttpServletRequest request) throws Exception{
+		ModelAndView mv = new ModelAndView("redirect:/daejang/fixedDateList.do");
+		
+		daejangService.updateFixedDateData(commandMap.getMap(), request);		
+		mv.addObject("ID", commandMap.get("ID"));
+		
+		return mv;
+	}
+	
+	@RequestMapping(value="/daejang/deleteGiftAccept.do")
+	public ModelAndView deleteGiftAccept(CommandMap commandMap) throws Exception{
+		ModelAndView mv = new ModelAndView("redirect:/daejang/giftAcceptList.do");
+		
+		daejangService.deleteGiftAccept(commandMap.getMap());
+		
+		return mv;
+	}
+	
+	
+	
+	
+}

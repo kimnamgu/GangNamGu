@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="common">
+	
+	<select id="selectFileInfo" parameterType="hashmap" resultType="hashmap">
+		<![CDATA[
+			SELECT
+			    STORED_FILE_NAME,
+			    ORIGINAL_FILE_NAME
+			FROM
+			    OMS_ATTACH_FILE
+			WHERE
+			    ID = #{ID}
+		]]>
+	</select>
+	
+	<sql id="pagingPre">
+		<![CDATA[
+   			SELECT 
+			    AAA.*
+			FROM(
+			    SELECT 
+			        COUNT(*) OVER() AS TOTAL_COUNT,
+			        AA.*
+			    FROM(  
+ 		]]>
+ 	</sql>
+ 	
+ 	<sql id="pagingPost">
+ 		<![CDATA[
+ 			 	) AA
+			) AAA
+			WHERE 
+			    AAA.RNUM BETWEEN #{START} AND #{END}
+ 		]]>
+ 	</sql>
+ 	
+ 	
+	<select id="getOfficeworkStatics" parameterType="hashmap" resultType="hashmap">
+	<![CDATA[
+	        SELECT 
+            NVL(SUM(CNT), 0) TOTAL,
+       	    NVL(MAX(DECODE(OW_TYPE1, '01', CNT)), 0) TYPE1,
+       		NVL(MAX(DECODE(OW_TYPE1, '02', CNT)), 0) TYPE2,
+       		NVL(MAX(DECODE(OW_TYPE1, '03', CNT)), 0) TYPE3,
+       		NVL(MAX(DECODE(OW_TYPE1, '04', CNT)), 0) TYPE4
+			FROM (
+				SELECT A.OW_TYPE1 OW_TYPE1, COUNT(*) CNT
+                FROM OMS_TRUST_MASTER A, OMS_BUDGET_STATUS B
+                WHERE A.ID = B.OW_ID 
+                AND A.DEL_YN = '0'
+                AND B.DEL_YN = '0'
+                AND B.BG_YEAR = TO_CHAR(SYSDATE, 'YYYY')
+				GROUP BY A.OW_TYPE1
+			)
+	]]>
+	</select>
+ 	
+	
+	
+	<select id="selectIdApproveList" parameterType="hashmap" resultType="hashmap">
+		<include refid="common.pagingPre"/>	
+		<![CDATA[			
+			SELECT ROW_NUMBER() OVER (ORDER BY USER_ID DESC) RNUM,
+				   USER_ID, 
+				   USER_NAME, DEPT_NAME, CLASS_NAME, 
+				   POSITION_NAME, USER_TEL, APPLY_REASON 
+			FROM OMS_USER_MASTER
+			WHERE DEL_YN = '0'
+			AND USER_STATUS = 'Z'
+		]]>
+		<include refid="common.pagingPost"/>
+	</select>
+	
+	
+	<update id="updateIdApproveList" parameterType="hashmap">
+		<![CDATA[
+			UPDATE OMS_USER_MASTER
+			SET
+				USER_STATUS = '0',				
+				APPROVE_DATE = SYSDATE
+			WHERE
+				USER_ID IN ( ${ID_LIST} )
+		]]>
+	</update>
+</mapper>

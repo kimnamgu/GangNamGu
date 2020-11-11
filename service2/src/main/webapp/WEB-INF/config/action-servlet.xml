@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:beans="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns="http://www.springframework.org/schema/beans"
+	xmlns:websocket="http://www.springframework.org/schema/websocket"
+	xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xsi:schemaLocation="http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.2.xsd
+		http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-4.2.xsd
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.2.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.2.xsd
+		http://www.springframework.org/schema/websocket
+        http://www.springframework.org/schema/websocket/spring-websocket.xsd">
+
+	<context:component-scan base-package="service" use-default-filters="false">
+		<context:include-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
+	</context:component-scan>
+	
+	<mvc:annotation-driven>
+		<mvc:argument-resolvers>
+			<bean class="service.common.resolver.CustomMapArgumentResolver"></bean>		
+		</mvc:argument-resolvers>
+	</mvc:annotation-driven>
+	
+	<mvc:interceptors>
+		<mvc:interceptor>
+			<mvc:mapping path="/**/*.do"/>				
+			<mvc:exclude-mapping path="/**/login.do"/>
+			<mvc:exclude-mapping path="/**/ssoLogin.do"/>
+			<mvc:exclude-mapping path="/**/insertUserinfo.do"/>
+			<mvc:exclude-mapping path="/**/LoginMsgOut.do"/>
+			<mvc:exclude-mapping path="/**/updateState.do"/>
+			<mvc:exclude-mapping path="/**/insertMainSaup.do"/>
+			<mvc:exclude-mapping path="/**/getDocumentKindList.do"/>
+			<mvc:exclude-mapping path="/**/getDocIssueReserveDetail.do"/>			
+			<mvc:exclude-mapping path="/**/selectDocIssueReserveList.do"/>
+			<mvc:exclude-mapping path="/**/getDocIssueReserveList.do"/>
+			<mvc:exclude-mapping path="/**/insertDocIssueReserve.do"/>
+			<mvc:exclude-mapping path="/**/updateDocIssueReserve.do"/>
+			<mvc:exclude-mapping path="/**/processDocIssueReserve.do"/>
+			<mvc:exclude-mapping path="/**/test.do"/>
+			
+			<!-- 스마트 방문처리 api -->
+			<mvc:exclude-mapping path="/**/getVisitorInfo.do"/>
+			<mvc:exclude-mapping path="/**/insertVisitorInfo.do"/>
+			<mvc:exclude-mapping path="/**/updateVisitorInfo.do"/>
+			<mvc:exclude-mapping path="/**/insertFootprint.do"/>
+			
+			<!-- 스마트 방문처리 방문기록조회 -->			
+			<mvc:exclude-mapping path="/**/visitorLogin.do"/>
+			<mvc:exclude-mapping path="/**/selectVisitorFootprintList.do"/>
+			<mvc:exclude-mapping path="/**/downloadExcelFile.do"/>
+			
+			<!-- 일자리콘텐츠 api 임기제 공무원-->
+			<mvc:exclude-mapping path="/**/insertTermOfficialInfo.do"/>
+			<mvc:exclude-mapping path="/**/updateVolunteerTermOfficialInfo.do"/>
+			<mvc:exclude-mapping path="/**/updateTermOfficialPaymentYN.do"/>
+			<mvc:exclude-mapping path="/**/updateTermOfficialMaster.do"/>
+			<mvc:exclude-mapping path="/**/deleteTermOfficialInfo.do"/>
+			<mvc:exclude-mapping path="/**/getTermOfficialInfo.do"/>
+			<mvc:exclude-mapping path="/**/selectTermOfficialList.do"/>
+			
+			<!-- 일자리콘텐츠 api 기간제 근로자-->
+			<mvc:exclude-mapping path="/**/insertTermWorkerInfo.do"/>
+			<mvc:exclude-mapping path="/**/updateVolunteerTermWorkerInfo.do"/>
+			<mvc:exclude-mapping path="/**/updateTermWorkerMaster.do"/>
+			<mvc:exclude-mapping path="/**/deleteTermWorkerInfo.do"/>
+			<mvc:exclude-mapping path="/**/getTermWorkerInfo.do"/>
+			<mvc:exclude-mapping path="/**/selectTermWorkerList.do"/>
+			
+			<!-- 일자리콘텐츠 api 공공근로사업참여자-->
+			<mvc:exclude-mapping path="/**/insertPublicBusinessInfo.do"/>
+			<mvc:exclude-mapping path="/**/updateVolunteerPublicBusinessInfo.do"/>
+			<mvc:exclude-mapping path="/**/updatePublicBusinessMaster.do"/>
+			<mvc:exclude-mapping path="/**/deletePublicBusinessInfo.do"/>
+			<mvc:exclude-mapping path="/**/getPublicBusinessInfo.do"/>
+			<mvc:exclude-mapping path="/**/selectPublicBusinessList.do"/>
+			
+			<!-- 일자리콘텐츠 api 고시공고 좋아요-->
+			<mvc:exclude-mapping path="/**/insertGood.do"/>
+			<mvc:exclude-mapping path="/**/deleteGood.do"/>
+			<mvc:exclude-mapping path="/**/getGood.do"/>
+			
+			<!-- 일자리콘텐츠 api 고시공고 스크랩-->
+			<mvc:exclude-mapping path="/**/insertScrap.do"/>
+			<mvc:exclude-mapping path="/**/deleteScrap.do"/>
+			<mvc:exclude-mapping path="/**/getScrap.do"/>
+			<mvc:exclude-mapping path="/**/selectMyScrapList.do"/>
+			
+			<!-- 일자리콘텐츠 api 파일전송-->
+			<mvc:exclude-mapping path="/**/sendIljaliFile.do"/>
+			<mvc:exclude-mapping path="/**/getIljaliFile.do"/>
+			
+			<!-- 일자리콘텐츠 api 파일관리-->
+			<mvc:exclude-mapping path="/**/insertMangeIljaliFile.do"/>
+			<mvc:exclude-mapping path="/**/deleteMangeIljaliFile.do"/>
+			<mvc:exclude-mapping path="/**/selectMangeIljaliFileList.do"/>
+			
+			<!-- 일자리콘텐츠 화면 (지워도됨)-->
+			<mvc:exclude-mapping path="/**/iljaliLogin.do"/>
+			<mvc:exclude-mapping path="/**/selectTermOfficialViewList.do"/>
+			<mvc:exclude-mapping path="/**/selectTermWorkerViewList.do"/>
+			<mvc:exclude-mapping path="/**/selectPublicBusinessViewList.do"/>
+			
+			<mvc:exclude-mapping path="/**/iljaliTermOfficialDtl.do"/>
+			<mvc:exclude-mapping path="/**/iljaliTermWorkerDtl.do"/>
+			<mvc:exclude-mapping path="/**/iljaliPublicBusinessDtl.do"/>
+			
+			<!-- 일자리콘텐츠 화면-->
+			<mvc:exclude-mapping path="/**/selectAdminList.do"/>
+			<mvc:exclude-mapping path="/**/getFileExistYN.do"/>
+			
+			<!-- 복지 -->
+			<mvc:exclude-mapping path="/**/welfareBenefitAppInsert.do"/>
+			<mvc:exclude-mapping path="/**/welfareBenefitAppSelect.do"/>
+			<mvc:exclude-mapping path="/**/welfareBenefitAppSelectTe.do"/>
+			<mvc:exclude-mapping path="/**/welfareLogin.do"/>
+			<mvc:exclude-mapping path="/**/welfareLoginList.do"/>
+			
+			<bean id="loginInterceptor" class="service.common.logger.LoginInterceptor"></bean>
+		</mvc:interceptor>
+	</mvc:interceptors>
+	
+	<aop:aspectj-autoproxy/>
+	<bean id="loggerAspect" class="service.common.logger.LoggerAspect" />
+    <bean class="org.springframework.web.servlet.mvc.annotation.DefaultAnnotationHandlerMapping"/>
+    
+    <bean class="org.springframework.web.servlet.view.BeanNameViewResolver" p:order="0" />
+    <bean id="jsonView" class="org.springframework.web.servlet.view.json.MappingJackson2JsonView" />    
+    
+    <bean
+    	class="org.springframework.web.servlet.view.UrlBasedViewResolver" p:order="1" 
+    	p:viewClass="org.springframework.web.servlet.view.JstlView" 
+    	p:prefix="/WEB-INF/jsp/" p:suffix=".jsp">
+   	</bean>
+</beans>

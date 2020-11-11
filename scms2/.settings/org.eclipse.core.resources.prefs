@@ -1,0 +1,9 @@
+eclipse.preferences.version=1
+encoding//src/main/java=UTF-8
+encoding//src/main/java/scms/common/controller/CommonController.java=UTF-8
+encoding//src/main/java/scms/common/dao/AbstractDAO.java=UTF-8
+encoding//src/main/java/scms/common/service/CommonServiceImpl.java=UTF-8
+encoding//src/main/java/scms/daejang/controller/DaejangController.java=UTF-8
+encoding//src/main/java/scms/daejang/controller/DaejangControllerBack.java=UTF-8
+encoding//src/main/java/scms/daejang/service/DaejangServiceImpl.java=UTF-8
+encoding//src/test/java=UTF-8

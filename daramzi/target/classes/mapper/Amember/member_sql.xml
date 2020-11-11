@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="member">
+	<sql id="COMMON_PAGING_HEADER">
+		select R.* FROM(	
+	</sql>
+	
+	<sql id="COMMON_PAGING_TAIL">
+		) R
+		LIMIT #{listNum, jdbcType=INTEGER} OFFSET #{start, jdbcType=INTEGER}	
+	</sql>
+
+    
+    <select id="memberList" parameterType="AmemberVO" resultType="AmemberVO">
+      <include refid="COMMON_PAGING_HEADER"/>
+      <![CDATA[
+		    select userIdx, 
+		    		id,
+		            email, 
+		            name,
+		            grade, 
+		            ins_dt 
+		    from user
+		]]> 
+		<where>
+		<if test="keyWord != null and keyWord != ''">   
+				<if test="keyField == 'name'">
+					and NAME = #{keyWord, jdbcType=VARCHAR}
+				</if>
+		</if>
+		</where>
+		<![CDATA[
+    		order by userIdx desc
+		]]> 
+      <include refid="COMMON_PAGING_TAIL"/>
+    </select> 
+    
+	<select id="memberListCnt" parameterType="AmemberVO" resultType="integer">
+      <![CDATA[
+		    select count(1) as cnt
+		    from user
+		]]> 
+		<where>
+		<if test="keyWord != null and keyWord != ''">   
+				<if test="keyField == 'name'">
+					and NAME = #{keyWord, jdbcType=VARCHAR}
+				</if>
+		</if>
+		</where>
+    </select> 
+
+	<select id="findBySeq" parameterType="int" resultType="AmemberVO">
+      <![CDATA[
+		select * from user 
+		]]>
+		where seq = #{seq} 
+    </select>
+</mapper>

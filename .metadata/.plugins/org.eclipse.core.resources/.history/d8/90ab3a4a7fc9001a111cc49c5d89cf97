@@ -1,0 +1,304 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+	pageEncoding="UTF-8"%>
+<html>
+<head>
+<%@ include file="/WEB-INF/include/include-header.jspf"%>
+
+
+<script type="text/javascript">
+	var user_right = "${sessionScope.userinfo.userright}";
+
+	$(document).ready(
+		function() {
+		
+			
+		});
+</script>
+
+</head>
+<body bgcolor="#FFFFFF">
+	<form id="form1" name="form1">
+		<input type="hidden" id="USER_ID" name="USER_ID"
+			value="${sessionScope.userinfo.userId}"> <input type="hidden"
+			id="DEPT_ID" name="DEPT_ID" value="${sessionScope.userinfo.deptId}">
+		<input type="hidden" id="USER_RIGHT" name="USER_RIGHT"
+			value="${sessionScope.userinfo.userright}"> <input
+			type="hidden" id="BOARD_ID" name="BOARD_ID" value="1">
+		<c:set var="u_rt" value="${sessionScope.userinfo.userright}" />
+		<c:set var="year" value="${param.year}" />
+		<c:set var="sgb" value="${param.sgb}" />
+
+
+		<table border="0" cellspacing="0" cellpadding="0"
+			class="bodyframe_full">
+			<tr>
+				<td class="bodyframe">
+					<!--페이지 타이틀 시작 -->
+					<table width="100%" border="0" cellspacing="0" cellpadding="0">
+						<tr>
+							<td class="pupup_title"><a href="#this" class="btn"
+								id="logout"><img src="/corona/images/popup_title.gif"
+									align="absmiddle"></a> <c:choose>
+									<c:when test="${sgb eq 'M'}">공약·역점 사업</c:when>
+								</c:choose>
+								<c:choose>
+									<c:when test="${sgb eq 'S'}">스마트도시 사업</c:when>
+								</c:choose></td>
+						</tr>
+						<tr>
+							<td class="margin_title"></td>
+						</tr>
+
+					</table> <!--페이지 타이틀 끝 -->
+				</td>
+			</tr>
+			<tr>
+				<td class="pupup_frame" style="padding-right: 12px">
+
+
+					<table width="100%" border="0" cellspacing="0" cellpadding="0">
+						<tr>
+							<td height="15">
+
+								<div class="LblockTab" style="position: relative;">
+									<ul class="Lclear">
+										<c:choose>
+											<c:when test="${sgb eq 'M'}">
+												<li class="Lcurrent" id="lcommit"><span><a
+														href="#this" class="btn" id="commit">공약·역점 사업</a></span></li>
+												<li id="lsmart"><span><a href="#this"
+														class="btn" id="smart">스마트도시 사업</a></span></li>
+											</c:when>
+										</c:choose>
+										<c:choose>
+											<c:when test="${sgb eq 'S'}">
+												<li id="lcommit"><span><a href="#this"
+														class="btn" id="commit">공약·역점 사업</a></span></li>
+												<li class="Lcurrent" id="lsmart"><span><a
+														href="#this" class="btn" id="smart">스마트도시 사업</a></span></li>
+											</c:when>
+										</c:choose>
+									</ul>
+								</div>
+
+								<table width="100%" border="0" cellspacing="0" cellpadding="0">
+									<tr>
+										<td class="margin_btn" colspan="2"></td>
+									</tr>
+								</table>
+							</td>
+						</tr>
+					</table>
+
+
+					<table width="520" border="0" cellspacing="1" cellpadding="0"
+						class="tbl" id="divMemoMainBody1">
+						<tr>
+							<td width="120" class="tbl_field">년도</td>
+							<td colspan="3" width="400" class="tbl_list_left">
+								<h2>
+									<font color="red"><c:out value="${year}" /></font>
+								</h2>
+							</td>
+						</tr>
+						<tr>
+							<td width="120" class="tbl_field">부서명</td>
+							<td colspan="3" width="400" class="tbl_list_left"><select
+								id="SAUP_DEPT_CD" name="SAUP_DEPT_CD" class="input">
+									<option value="">전체</option>
+							</select> &nbsp;</td>
+						</tr>
+						<tr>
+							<td width="120" class="tbl_field">사업명(내용)</td>
+							<td colspan="3" width="400" class="tbl_list_left"><input
+								type="text" id="SAUP_NM" name="SAUP_NM" class="input"
+								style="width: 300;"></td>
+						</tr>
+						<tr>
+							<td width="120" class="tbl_field">예산금액</td>
+							<td colspan="3" width="400" class="tbl_list_left"><input
+								type="text" id="SAUP_AMT1" name="SAUP_AMT1" class="input"
+								style="width: 100;"> ~ <input type="text" id="SAUP_AMT2"
+								name="SAUP_AMT2" class="input" style="width: 100;"></td>
+						</tr>
+					</table> <!-- -------------- 버튼 시작 --------------  -->
+					<table width="100%" height="40" border="0" cellspacing="0"
+						cellpadding="0" id="divMemoMainBody2">
+						<tr>
+							<td align="left"><b>Total : <span id="tcnt"></span></b>
+								&nbsp; <select id="DISP_CNT" name="DISP_CNT" class="input">
+									<option value="95">95</option>
+									<option value="50">50</option>
+									<option value="25">25</option>
+									<option value="40">40</option>
+									<option value="10">10</option>
+							</select></td>
+							<td align="right">
+								<table border="0" cellspacing="0" cellpadding="0">
+									<tr>
+										<c:choose>
+											<c:when test="${u_rt eq 'A'}">
+												<td>
+													<table border="0" cellspacing="0" cellpadding="0"
+														class="btn" id="changebtn2" style="display: block;">
+														<tr>
+															<td><img src="/corona/images/btn_type0_head.gif"></td>
+															<td background="/corona/images/btn_type0_bg.gif"
+																class="btn_type1" nowrap><a href="#this"
+																class="btn" id="admin"><font color="white">관리자</font></a></td>
+															<td><img src="/corona/images/btn_type0_end.gif"></td>
+														</tr>
+													</table>
+												</td>
+											</c:when>
+										</c:choose>
+										<c:choose>
+											<c:when test="${year eq '2019'}">
+												<td>
+													<table border="0" cellspacing="0" cellpadding="0"
+														class="btn" id="tblAddMemo21" style="filter: none;">
+														<tr>
+															<td><img src="/corona/images/btn_type1_head.gif"></td>
+															<td background="/corona/images/btn_type1_bg.gif"
+																class="btn_type1" nowrap><a href="#this"
+																class="btn" id="2020">2020</a></td>
+															<td><img src="/corona/images/btn_type1_end.gif"></td>
+														</tr>
+													</table>
+												</td>
+											</c:when>
+											<c:when test="${year eq '2020'}">
+												<td>
+													<table border="0" cellspacing="0" cellpadding="0"
+														class="btn" id="tblAddMemo21" style="filter: none;">
+														<tr>
+															<td><img src="/corona/images/btn_type1_head.gif"></td>
+															<td background="/corona/images/btn_type1_bg.gif"
+																class="btn_type1" nowrap><a href="#this"
+																class="btn" id="2019">2019</a></td>
+															<td><img src="/corona/images/btn_type1_end.gif"></td>
+														</tr>
+													</table>
+												</td>
+											</c:when>
+										</c:choose>
+										<td>
+											<table border="0" cellspacing="0" cellpadding="0" class="btn"
+												id="tblAddMemo21" style="filter: none;">
+												<tr>
+													<td><img src="/corona/images/btn_type1_head.gif"></td>
+													<td background="/corona/images/btn_type1_bg.gif"
+														class="btn_type1" nowrap><a href="#this" class="btn"
+														id="initial">검색초기화</a></td>
+													<td><img src="/corona/images/btn_type1_end.gif"></td>
+												</tr>
+											</table>
+										</td>
+										<td>
+											<table border="0" cellspacing="0" cellpadding="0" class="btn"
+												id="changebtn2" style="display: block;">
+												<tr>
+													<td><img src="/corona/images/btn_type0_head.gif"></td>
+													<td background="/corona/images/btn_type0_bg.gif"
+														class="btn_type1" nowrap><a href="#this" class="btn"
+														id="write"><font color="white">사업등록</font></a></td>
+													<td><img src="/corona/images/btn_type0_end.gif"></td>
+												</tr>
+											</table>
+										</td>
+										<td>
+											<table border="0" cellspacing="0" cellpadding="0" class="btn"
+												id="tblAddMemo21" style="filter: none;">
+												<tr>
+													<td><img src="/corona/images/btn_type0_head.gif"></td>
+													<td background="/corona/images/btn_type0_bg.gif"
+														class="btn_type1" nowrap><a href="#this" class="btn"
+														id="search"><font color="white">검색</font></a></td>
+													<td><img src="/corona/images/btn_type0_end.gif"></td>
+												</tr>
+											</table>
+										</td>
+									</tr>
+								</table>
+							</td>
+						</tr>
+						<tr>
+							<td class="margin_btn" colspan="2"></td>
+						</tr>
+					</table>
+
+				</td>
+			</tr>
+		</table>
+
+
+		<!-- 리스트 -->
+		<div class="tb_wrap">
+			<div class="tb_box">
+				<table class="tbl1">
+					<thead>
+						<tr class="fixed_top">
+							<th class='cell1'>&nbsp;</th>
+							<th class='cell2'>이력보기</th>
+							<th class='cell3'>사업명 <a href="#this" class="btn" id="sam_nm1"> <fontcolor="white">▼</font></a><a'
+								href="#this" class="btn" id="sam_nm2"> <font color="white">▲</font>
+							</a>
+							</th>
+							<th class='cell4'>담당부서 <a href="#this" class="btn" id="sam_sy2"> <font
+									color="white">▲</font>
+							</a>
+							</th>
+							<th class='cell5'>예산금액(천원) <a href="#this" class="btn" id="sam_amt1">
+									<font color="white">▼</font>
+							</a> <a href="#this" class="btn" id="sam_amt2"> <font
+									color="white">▲</font>
+							</a>
+							</th>
+							<th class='cell6'>목표시기</th>
+							<th class='cell7'>2020년 진척률(%) <a href="#this" class="btn" id="sam_pct1">
+									<font color="white">▼</font>
+							</a> <a href="#this" class="btn" id="sam_pct2"> <font
+									color="white">▲</font>
+							</a>
+							</th>
+							<th class='cell8'>최종목표 대비 진척률(%)</th>
+							<th class='cell9'>담당자</th>
+							<th></th>
+						</tr>
+					</thead>
+
+					<tbody id='mytable'>
+					</tbody>
+				</table>
+			</div>
+		</div>
+
+	</form>
+	<div id="PAGE_NAVI" align='center'></div>
+	<input type="hidden" id="PAGE_INDEX" name="PAGE_INDEX" />
+	<input type="hidden" id="RECORD_COUNT" name="RECORD_COUNT" value="95" />
+	<%@ include file="/WEB-INF/include/include-body.jspf"%>
+
+
+	<!-- POPUP -->
+	<div id="pop1"
+		style="position: absolute; left: 300px; top: 50; z-index: 200; display: none; border: 2px solid #c84637;">
+		<table width=572 height=839 cellpadding=2 cellspacing=0>
+			<tr>
+				<td align=right bgcolor=white><a href="#" id="close1"><B>[닫기]</B></a>
+				</td>
+			</tr>
+			<tr>
+				<td style="border: 2px #ddd solid" height=809 align=center
+					bgcolor=white>
+					<table width="100%" border="0" cellspacing="0" cellpadding="0">
+						<tbody id='poptable1'>
+						</tbody>
+					</table>
+				</td>
+			</tr>
+		</table>
+	</div>
+
+</body>
+</html>

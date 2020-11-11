@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="manage">
+
+<select id="selectConfirmList" parameterType="hashmap" resultType="hashmap">
+		<include refid="common.pagingPre"/> 
+		<![CDATA[
+             SELECT COUNT(*) OVER() AS TOTAL_COUNT                                
+                    ,ID
+					,WRITE_DATE
+					,CELL_NUM
+					,PATIENT_NUM
+					,PATIENT_NAME
+					,CONTACT_NUM
+					,CONTACT_NAME
+					,CONFIRM_GRADE
+					,SEX
+					,BIRTH
+					,JOB
+					,ORG_ADDRESS
+					,ORG_ADDRESS_DTL
+					,INFECT_GUBUN
+					,INFECT_DONG
+					,INFECT_DAE
+					,INFECT_SO
+					,INFECT_ASFECT_AREA
+					,INFECT_ASFECT_AREA_DTL
+					,COFIRM_DATE
+					,HOSPITAL
+					,DISCHARGE_YN
+					,DISCHARGE_DATE
+					,REMARK
+					,INS_ID
+                    ,TO_CHAR(INS_DATE, 'YYYY.MM.DD HH24:MI:SS') INS_DATE
+            FROM CORONA_CONFIRM_STATUS 
+            WHERE DEL_YN = 0              
+		]]>
+		<if test="name != null and name !=''">
+		AND PATIENT_NAME LIKE '%' || #{name} ||'%'
+		</if>
+		<if test="from_date != null and from_date !=''">
+		AND WRITE_DATE <![CDATA[>=]]> #{from_date}
+		</if>
+		<if test="to_date != null and to_date !=''">
+		AND WRITE_DATE <![CDATA[<=]]> #{to_date}
+		</if>
+		ORDER BY INS_DATE DESC				
+		<include refid="common.pagingPost"/> 
+</select>
+
+
+<insert id="insertConfirmManageExcel" parameterType="hashmap">
+		<selectKey keyProperty="SID" resultType="string" order="BEFORE">
+			SELECT CORONA_CONFIRM_SQ.NEXTVAL FROM DUAL
+		</selectKey>
+		<![CDATA[		
+			INSERT INTO CORONA_CONFIRM_STATUS
+			(
+				ID
+				,WRITE_DATE
+				,CELL_NUM
+				,PATIENT_NUM
+				,PATIENT_NAME
+				,CONTACT_NUM
+				,CONTACT_NAME
+				,CONFIRM_GRADE
+				,SEX
+				,BIRTH
+				,JOB
+				,ORG_ADDRESS
+				,ORG_ADDRESS_DTL
+				,INFECT_GUBUN
+				,INFECT_DONG
+				,INFECT_DAE
+				,INFECT_SO
+				,INFECT_ASFECT_AREA
+				,INFECT_ASFECT_AREA_DTL
+				,COFIRM_DATE
+				,HOSPITAL
+				,DISCHARGE_YN
+				,DISCHARGE_DATE
+				,REMARK
+				,INS_ID
+				,INS_DATE
+				,DEL_YN														  
+			)
+			VALUES
+			(
+				TRIM(#{SID})
+				
+				,TRIM(#{A})
+				,TRIM(#{B})
+				,TRIM(#{C})
+				,TRIM(#{D})
+				,TRIM(#{E})
+				,TRIM(#{F})
+				,TRIM(#{G})
+				,TRIM(#{H})
+				,TRIM(#{I})
+				,TRIM(#{J})
+				,TRIM(#{K})
+				,TRIM(#{L})
+				,TRIM(#{M})
+				,TRIM(#{N})
+				,TRIM(#{O})
+				,TRIM(#{P})
+				,TRIM(#{Q})
+				,TRIM(#{R})
+				,TRIM(#{S})
+				,TRIM(#{T})
+				,TRIM(#{U})
+				,TRIM(#{V})
+				,TRIM(#{W})
+				
+				,#{INS_ID}
+				,SYSDATE
+				,0		
+			)
+			]]>
+	</insert>
+	
+	<update id="updateDelConfirmAllList" parameterType="hashmap">
+	<![CDATA[		
+		UPDATE CORONA_CONFIRM_STATUS
+		SET del_yn = 1,
+			del_date = sysdate
+		WHERE del_yn = 0
+		AND ID = #{selId}
+	]]>
+	</update>
+	
+</mapper>

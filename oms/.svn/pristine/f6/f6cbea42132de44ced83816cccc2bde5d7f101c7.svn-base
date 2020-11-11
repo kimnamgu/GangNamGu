@@ -1,0 +1,260 @@
+@charset "utf-8";
+/* 20050824 추가 */
+td.PL_box_txt		{font-size:11px; letter-spacing:-1; color: #125470; text-decoration: none; font-family:"돋움"}
+
+/* **************************************** 061218 추가 *********************************************** */
+
+
+
+/* 링크 */
+A:link		{ FONT-SIZE: 9pt; COLOR: #444444; FONT-FAMILY: 굴림; TEXT-DECORATION: none }
+A:active	{ FONT-SIZE: 9pt; COLOR: #058BB9; FONT-FAMILY: 굴림; TEXT-DECORATION: none }
+A:hover		{ FONT-SIZE: 9pt; COLOR: #058BB9;FONT-FAMILY: 굴림; TEXT-DECORATION: none }
+A:visited	{ FONT-SIZE: 9pt; COLOR: #444444; FONT-FAMILY: 굴림; TEXT-DECORATION: none }
+
+.b_text A:link		{ FONT-SIZE: 9pt; COLOR: #444444; FONT-FAMILY: 굴림; TEXT-DECORATION: none ;font-weight:bold}
+.b_text A:active	{ FONT-SIZE: 9pt; COLOR: #058BB9; FONT-FAMILY: 굴림; TEXT-DECORATION: none ;font-weight:bold}
+.b_text A:hover		{ FONT-SIZE: 9pt; COLOR: #058BB9;FONT-FAMILY: 굴림; TEXT-DECORATION: none ;font-weight:bold}
+.b_text A:visited	{ FONT-SIZE: 9pt; COLOR: #444444; FONT-FAMILY: 굴림; TEXT-DECORATION: none ;font-weight:bold}
+
+
+/*  페이지 타이틀 */
+.title_left				{color:#000000; font-size:13px; font-weight:bold; letter-spacing:-1; padding:2px 0px 0px 0px; }
+.title_right			{text-align:right}
+
+
+.title		{background-color:#ffffff; color:#00007d; font:14px 'Malgun Gothic'; font-weight:bold; letter-spacing:-1; padding-right:15px; padding-top:7px; height:20px;}
+.title2		{background-color:#e8f3ff; color:#00007d; font:14px 'Malgun Gothic'; font-weight:bold; letter-spacing:-1; padding-right:15px; padding-top:7px; height:20px;}
+
+.title_print		{color:#000000; font-size:15px; font-weight:bold; letter-spacing:-1; padding-right:15px; padding-top:1px; height:20px;}
+#printImg {padding-bottom:15px;}
+
+/*  ******************************  리스트테이블(게시판형태) ******************************  */
+
+tr.list_tit_tr		{text-align:center}
+.list_tit			{background-color:#daf5fc; font-weight:bold; color:#626262 ; height:25px;     padding:4px 3px 0px 4px;}
+.list_tit02			{background-color:#f7f7f7; font-weight:bold; color:#138c76 ; height:25px;     padding:4px 3px 0px 4px;}
+.list_tit03			{background-color:#f7f7f7; font-weight:bold; color:#9e9e9e ; height:25px;     padding:4px 3px 0px 4px;}
+.list_tit_bar		{background:#daf5fc url(/oms/images/common/list_bar.gif); background-position:top left; background-repeat:no-repeat; padding-left:1px;
+						  font-weight:bold; color:#626262 ; height:25px;    padding:4px 3px 0px 6px; }
+
+.list_tit_1			{background-color:#f7f7f7; color:#4A718C ; height:25px;     padding:4px 3px 0px 4px;}
+
+
+
+/* --------------end ----------------------*/
+/*
+.list_tit_line_s		{height:10px; background:url(/oms/images/skin01/tit_line_bg.gif) left bottom repeat-x;}
+.list_tit_line_e		{height:1px; background-color:#7c9fc6;}
+*/
+
+.list_tit_line_s		{height:1px; background-color:#3c3cff;}
+.list_tit_line_e		{height:1px; background-color:#c1c1ff;}
+
+.list_tit02_line_s		{height:2px; background-color:#30aa94;}
+.list_tit02_line_e		{height:1px; background-color:#30aa94;}
+
+.list_tit03_line_s		{height:2px; background-color:#9e9e9e;}
+.list_tit03_line_e		{height:1px; background-color:#9e9e9e;}
+
+
+
+.list			{text-align:left; padding:0 ; height:20px;  font-size: 9pt; color: #444444; text-decoration: none; font-family:"굴림"}
+.list A:link    	{font-size: 9pt; color: #444444; text-decoration: none; font-family:"굴림"}
+.list A:visited		{font-size: 9pt; color: #444444; text-decoration: none; font-family:"굴림"}
+.list A:active  	{font-size: 9pt; color: #058BB9; text-decoration: none; font-family:"굴림"}
+.list A:hover		{font-size: 9pt; color: #058BB9; text-decoration: none; font-family:"굴림"}
+
+.list_padding5	{padding:3px 0px 0px 0px ;}
+
+
+.listbk			{word-break:break-all;text-align:left; padding:2px 0px 0px 7px ; height:24px;  font-size: 9pt; color: #444444; text-decoration: none; font-family:"굴림"}
+.listbk A:link    	{font-size: 9pt; color: #444444; text-decoration: none; font-family:"굴림"}
+.listbk A:visited		{font-size: 9pt; color: #444444; text-decoration: none; font-family:"굴림"}
+.listbk A:active  	{font-size: 9pt; color: #058BB9; text-decoration: none; font-family:"굴림"}
+.listbk A:hover		{font-size: 9pt; color: #058BB9; text-decoration: none; font-family:"굴림"}
+
+.list_center		{text-align:center; padding:2px 0px 0px0px ; height:24px;  font-size: 9pt; color: #444444; text-decoration: none; font-family:"굴림"}
+
+.list_center_		{text-align:center; padding:2px 0px 0px0px ; height:24px;  font-size: 9pt; color: #444444; text-decoration: none; font-family:"굴림"}
+.list_center_ A:link    	{text-align:center; font-size: 9pt; color: #444444; text-decoration: none; font-family:"굴림"}
+.list_center_ A:visited		{text-align:center; font-size: 9pt; color: #444444; text-decoration: none; font-family:"굴림"}
+.list_center_ A:active  	{text-align:center; font-size: 9pt; color: #058BB9; text-decoration: none; font-family:"굴림"}
+.list_center_ A:hover		{text-align:center; font-size: 9pt; color: #058BB9; text-decoration: none; font-family:"굴림"}
+
+.list_right		{text-align:right; padding:2px 0px 0px0px ; height:24px;  font-size: 9pt; color: #444444; text-decoration: none; font-family:"굴림"}
+
+.list_line				{height:1px; background-color:#BDBEBD;}
+.list_line_e7e7e7		{height:1px; background-color:#e7e7e7;}
+
+
+		tr.list1 		{background-color:#ffffff;}
+		tr.list2 		{background-color:#ffffff;}
+		tr.list_over 		{background-color:#D1EBF4;}
+		tr.list_over22 		{background-color:#F8F7DD;}
+		tr.list_over33 		{background-color:#D1EBF4;cursor:hand;}
+
+
+.list_02			{text-align:left; padding:2px 0px 0px 7px ; height:24px;  font-size: 9pt; color: #107aae; font-weight:bold; text-decoration: none; font-family:"굴림"}
+.list_02_bg			{background-color:#fbfcf8;}
+.list_03			{text-align:left; padding:2px 0px 0px 7px ; height:24px;  font-size: 9pt; color: #7a7a7a; text-decoration: none; font-family:"굴림"}
+
+.list_txt_648cbc {font-size: 9pt; color: #648cbc; text-decoration: none; font-family:"굴림"}
+	.list_txt_648cbc A:link    	{font-size: 9pt; color: #648cbc; text-decoration: none; font-family:"굴림"}
+	.list_txt_648cbc A:visited		{font-size: 9pt; color: #648cbc; text-decoration: none; font-family:"굴림"}
+	.list_txt_648cbc A:active  	{font-size: 9pt; color: #648cbc; text-decoration: none; font-family:"굴림"}
+	.list_txt_648cbc A:hover		{font-size: 9pt; color: #648cbc; text-decoration: none; font-family:"굴림"}
+
+.list_txt_336699 {font-size: 9pt; color: #336699; text-decoration: none; font-weight:bold; font-family:"굴림" }
+.list_txt_center	{ padding:0px 0px 0px 10px ;}
+
+
+
+
+/* ****************************** 리스트, 뷰 테이블 관련 ****************************** */
+
+.tbl_line_s     {background-color:#5892b8; height:2px;}
+.tbl_line_s_enf {background-color:#C28B26; height:1px;}
+.tbl			{background-color:#c3c3c3;}
+.tbl_02			{background-color:#ADAEAD; border-style:solid; border-color:#ADAEAD; border-top-width:0px; border-right-width:1px; border-bottom-width:1px; border-left-width:1px;}
+
+
+
+
+
+.tbl_field      {background-color:#f1f1f1; color:#01345f; text-align:left; padding:4px 0px 2px 12px; height:26px;}
+.tbl_field_120  {font-size: 11pt; color: #336699; text-decoration: none; font-weight:bold; font-family:"굴림"; background-color:#f1f1f1; color:#01345f; text-align:left; padding:4px 0px 2px 12px; height:120px;}
+.tbl_field_150      {background-color:#f1f1f1; color:#004f8b; padding:5px; height:150px;}
+.tbl_field_enf      {background-color:#f1f1f1; color:#5E2901; text-align:left; padding:3px 0px 1px 12px; height:24px;}
+.001_tbl_field		{background-color:#f1f1f1; color:#2b3c0d; text-align:left; padding:3px 0px 1px 12px; height:24px;}
+.tbl_field_print		{background-color:#ffffff; color:#000000; text-align:left; padding:3px 0px 1px 12px; height:24px;font-weight:bold}
+
+.tbl_field_center {background-color:#f1f1f1; color:#01345f; text-align:center; padding:4px 0px 2px 12px; height:26px;}
+	.tbl_field_center A:link   {font-size: 9pt; color: #444444; text-decoration: underline; font-family:"굴림"}
+	.tbl_field_center A:visited{font-size: 9pt; color: #444444; text-decoration: underline; font-family:"굴림"}
+	.tbl_field_center A:active {font-size: 9pt; color: #058BB9; text-decoration: underline; font-family:"굴림"}
+	.tbl_field_center A:hover  {font-size: 9pt; color: #444444; text-decoration: underline; font-family:"굴림"}
+
+.tbl_field_s		{background-color:#fafafa; color:#000000; text-align:left; padding:3px 0px 1px 12px; height:24px;}
+
+.tbl_tit        {background-color:#F7F7F7; color:#004F8B; text-align:center; padding-top:3px; height:24px;}
+.tbl_tit_enf        {background-color:#F7F7F7; color:#5E2901; text-align:center; padding-top:3px; height:24px;}
+.tbl_tit_print		{background-color:#ffffff; color:#000000; text-align:center; padding-top:3px; height:24px;font-weight:bold}
+
+.tbl_tit_print_agd		{background-color:#ffffff; color:#000000; text-align:center; padding-top:3px; height:35px;font-weight:bold}
+
+
+.tbl_listas		{background-color:#FBFFED; font-weight:bold; text-align:center; padding-top:3px; padding-bottom:1px;  height:24px; font-size: 9pt; color: #000000; text-decoration: none; font-family:"굴림"}
+	.tbl_listas A:link    {font-size: 9pt; color: #444444; text-decoration: none; font-family:"굴림"}
+	.tbl_listas A:visited {font-size: 9pt; color: #444444; text-decoration: none; font-family:"굴림"}
+	.tbl_listas A:active  {font-size: 9pt; color: #058BB9; text-decoration: none; font-family:"굴림"}
+	.tbl_listas A:hover   {font-size: 9pt; color: #058BB9; text-decoration: none; font-family:"굴림"}
+.tbl_list_leftas			{background-color:#FBFFED; font-weight:bold; text-align:left; padding:3px 3px 1px 7px; color: #444444; height:24px; text-decoration: none; font-family:"굴림"}
+	.tbl_list_leftas A:link   {font-size: 9pt; color: #000000; text-decoration: none; font-family:"굴림"}
+	.tbl_list_leftas A:visited{font-size: 9pt; color: #000000; text-decoration: none; font-family:"굴림"}
+	.tbl_list_leftas A:active {font-size: 9pt; color: #816D00; text-decoration: none; font-family:"굴림"}
+	.tbl_list_leftas A:hover  {font-size: 9pt; color: #816D00; text-decoration: none; font-family:"굴림"}
+
+
+.tbl_list		{background-color:#ffffff; text-align:center; padding-top:3px; padding-bottom:1px;  height:24px; font-size: 9pt; color: #444444; text-decoration: none; font-family:"굴림"}
+	.tbl_list A:link    {font-size: 9pt; color: #444444; text-decoration: underline; font-family:"굴림"}
+	.tbl_list A:visited {font-size: 9pt; color: #444444; text-decoration: underline; font-family:"굴림"}
+	.tbl_list A:active  {font-size: 9pt; color: #058BB9; text-decoration: underline; font-family:"굴림"}
+	.tbl_list A:hover   {font-size: 9pt; color: #058BB9; text-decoration: underline; font-family:"굴림"}
+
+.tbl_list_event	{text-align:center; padding-top:3px; padding-bottom:1px;  height:24px; font-size: 9pt; color: #444444; text-decoration: none; font-family:"굴림"}
+	.tbl_list_event A:link    {font-size: 9pt; color: #444444; text-decoration: underline; font-family:"굴림"}
+	.tbl_list_event A:visited {font-size: 9pt; color: #444444; text-decoration: underline; font-family:"굴림"}
+	.tbl_list_event A:active  {font-size: 9pt; color: #058BB9; text-decoration: underline; font-family:"굴림"}
+	.tbl_list_event A:hover   {font-size: 9pt; color: #058BB9; text-decoration: underline; font-family:"굴림"}
+
+.tbl_list_print		{background-color:#ffffff; text-align:center; padding-top:3px; padding-bottom:1px;  height:24px; font-size: 9pt; color: #000000; text-decoration: none; font-family:"굴림"}
+	.tbl_list A:link    {font-size: 9pt; color: #000000; text-decoration: underline; font-family:"굴림"}
+	.tbl_list A:visited {font-size: 9pt; color: #000000; text-decoration: underline; font-family:"굴림"}
+	.tbl_list A:active  {font-size: 9pt; color: #058BB9; text-decoration: underline; font-family:"굴림"}
+	.tbl_list A:hover   {font-size: 9pt; color: #058BB9; text-decoration: underline; font-family:"굴림"}
+
+.tbl_listgray		{background-color:#ffffff; text-align:center; padding-top:3px; padding-bottom:1px;  height:24px; font-size: 9pt; color: #999999; text-decoration: none; font-family:"굴림"}
+	.tbl_list A:link    {font-size: 9pt; color: #444444; text-decoration: underline; font-family:"굴림"}
+	.tbl_list A:visited {font-size: 9pt; color: #444444; text-decoration: underline; font-family:"굴림"}
+	.tbl_list A:active  {font-size: 9pt; color: #058BB9; text-decoration: underline; font-family:"굴림"}
+	.tbl_list A:hover   {font-size: 9pt; color: #058BB9; text-decoration: underline; font-family:"굴림"}
+
+.tbl_list_left			{background-color:#ffffff; text-align:left; line-height:17px; padding:3px 3px 1px 7px; color: #444444; height:24px; text-decoration: none; font-family:"굴림"}
+	.tbl_list_left A:link   {font-size: 9pt; color: #444444; text-decoration: underline; font-family:"굴림"}
+	.tbl_list_left A:visited{font-size: 9pt; color: #444444; text-decoration: underline; font-family:"굴림"}
+	.tbl_list_left A:active {font-size: 9pt; color: #058BB9; text-decoration: underline; font-family:"굴림"}
+	.tbl_list_left A:hover  {font-size: 9pt; color: #058BB9; text-decoration: underline; font-family:"굴림"}
+
+.tbl_list_left_event	{text-align:left; padding:3px 3px 1px 7px; color: #444444; height:24px; text-decoration: none; font-family:"굴림"}
+	.tbl_list_left_event A:link   {font-size: 9pt; color: #444444; text-decoration: underline; font-family:"굴림"}
+	.tbl_list_left_event A:visited{font-size: 9pt; color: #444444; text-decoration: underline; font-family:"굴림"}
+	.tbl_list_left_event A:active {font-size: 9pt; color: #058BB9; text-decoration: underline; font-family:"굴림"}
+	.tbl_list_left_event A:hover  {font-size: 9pt; color: #058BB9; text-decoration: underline; font-family:"굴림"}
+
+
+.tbl_list_left_print			{background-color:#ffffff; text-align:left; padding:3px 3px 1px 7px; color: #000000; height:24px; text-decoration: none; font-family:"굴림"}
+	.tbl_list_left A:link   {font-size: 9pt; color: #000000; text-decoration: underline; font-family:"굴림"}
+	.tbl_list_left A:visited{font-size: 9pt; color: #000000; text-decoration: underline; font-family:"굴림"}
+	.tbl_list_left A:active {font-size: 9pt; color: #058BB9; text-decoration: underline; font-family:"굴림"}
+	.tbl_list_left A:hover  {font-size: 9pt; color: #058BB9; text-decoration: underline; font-family:"굴림"}
+
+.tbl_list_leftnone		{background-color:#ffffff; text-align:left; padding:3px 3px 1px 7px; color: #444444; height:24px; text-decoration: none; font-family:"굴림"}
+	.tbl_list_leftnone A:link   {font-size: 9pt; color: #444444; text-decoration: none; font-family:"굴림"}
+	.tbl_list_leftnone A:visited{font-size: 9pt; color: #444444; text-decoration: none; font-family:"굴림"}
+	.tbl_list_leftnone A:active {font-size: 9pt; color: #058BB9; text-decoration: none; font-family:"굴림"}
+	.tbl_list_leftnone A:hover  {font-size: 9pt; color: #058BB9; text-decoration: none; font-family:"굴림"}
+
+/* 2006년 10월 30일 월요일 red 회의쪽 css 때문에 높이 수정 */
+.tbl_list_leftnone_agd		{background-color:#ffffff; text-align:left; padding:3px 3px 1px 7px; color: #444444; height:30px; text-decoration: none; font-family:"굴림"}
+	.tbl_list_leftnone A:link   {font-size: 9pt; color: #444444; text-decoration: none; font-family:"굴림"}
+	.tbl_list_leftnone A:visited{font-size: 9pt; color: #444444; text-decoration: none; font-family:"굴림"}
+	.tbl_list_leftnone A:active {font-size: 9pt; color: #058BB9; text-decoration: none; font-family:"굴림"}
+	.tbl_list_leftnone A:hover  {font-size: 9pt; color: #058BB9; text-decoration: none; font-family:"굴림"}
+
+/* 2006년 10월 30일 월요일 끝 */
+
+.tbl_list_none		{background-color:#ffffff; text-align:center; padding-top:3px; padding-bottom:1px;  height:24px; font-size: 9pt; color: #444444; text-decoration: none; font-family:"굴림"}
+	.tbl_list_none A:link    {font-size: 9pt; color: #444444; text-decoration:none; font-family:"굴림"}
+	.tbl_list_none A:visited {font-size: 9pt; color: #444444; text-decoration:none; font-family:"굴림"}
+	.tbl_list_none A:active  {font-size: 9pt; color: #058BB9; text-decoration:none; font-family:"굴림"}
+	.tbl_list_none A:hover   {font-size: 9pt; color: #058BB9; text-decoration:none; font-family:"굴림"}
+
+.tbl_list_left_bold			{background-color:#ffffff; text-align:left; padding:3px 3px 1px 7px; color: #444444; height:24px; text-decoration: none; font-family:"굴림"}
+	.tbl_list_left_bold A:link   {font-size: 9pt; color: #444444; text-decoration: none; font-family:"굴림"; font-weight:bold}
+	.tbl_list_left_bold A:visited{font-size: 9pt; color: #444444; text-decoration: none; font-family:"굴림";font-weight:bold}
+	.tbl_list_left_bold A:active {font-size: 9pt; color: #058BB9; text-decoration: none; font-family:"굴림";font-weight:bold}
+	.tbl_list_left_bold A:hover  {font-size: 9pt; color: #058BB9; text-decoration: none; font-family:"굴림";font-weight:bold}
+
+.tbl_list_leftgray			{background-color:#ffffff; text-align:left; padding:3px 3px 1px 7px; color: #999999; height:24px; text-decoration: none; font-family:"굴림"}
+	.tbl_list_left A:link   {font-size: 9pt; color: #444444; text-decoration: underline; font-family:"굴림"}
+	.tbl_list_left A:visited{font-size: 9pt; color: #444444; text-decoration: underline; font-family:"굴림"}
+	.tbl_list_left A:active {font-size: 9pt; color: #058BB9; text-decoration: underline; font-family:"굴림"}
+	.tbl_list_left A:hover  {font-size: 9pt; color: #058BB9; text-decoration: underline; font-family:"굴림"}
+
+
+	.tbl_list_b		{border-bottom:1px solid #ADAEAD; background-color:#ffffff; text-align:center; padding-top:3px; padding-bottom:1px;  height:24px; font-size: 9pt; color: #444444; text-decoration: none; font-family:"굴림"}
+		.tbl_list_b A:link    {font-size: 9pt; color: #444444; text-decoration: underline; font-family:"굴림"}
+		.tbl_list_b A:visited {font-size: 9pt; color: #444444; text-decoration: underline; font-family:"굴림"}
+		.tbl_list_b A:active  {font-size: 9pt; color: #058BB9; text-decoration: underline; font-family:"굴림"}
+		.tbl_list_b A:hover   {font-size: 9pt; color: #058BB9; text-decoration: underline; font-family:"굴림"}
+
+	.tbl_list_left_b		{border-bottom:1px solid #ADAEAD;  background-color:#ffffff; text-align:left; padding:3px 3px 1px 7px; color: #444444; height:24px; text-decoration: none; font-family:"굴림"}
+		.tbl_list_left_b A:link   {font-size: 9pt; color: #444444; text-decoration: underline; font-family:"굴림"}
+		.tbl_list_left_b A:visited{font-size: 9pt; color: #444444; text-decoration: underline; font-family:"굴림"}
+		.tbl_list_left_b A:active {font-size: 9pt; color: #058BB9; text-decoration: underline; font-family:"굴림"}
+		.tbl_list_left_b A:hover  {font-size: 9pt; color: #058BB9; text-decoration: underline; font-family:"굴림"}
+
+
+
+
+/* 줄간격 넓은것 */
+.tbl_list_left2		{background-color:#ffffff; text-align:left; padding:3px 3px 1px 7px; color: #444444; height:24px; text-decoration: none; font-family:"굴림"; line-height:150%;}
+
+.tbl_list_left2_b	{border-bottom:1px solid #ADAEAD; background-color:#ffffff; text-align:left; padding:3px 3px 1px 7px; color: #444444; height:24px; text-decoration: none; font-family:"굴림"; line-height:150%;}
+
+
+
+
+.tbl_list_chk		{background-color:#ffffff; text-align:left; height:24px; padding-left:3px}
+

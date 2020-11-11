@@ -1,0 +1,47 @@
+1604315284992	Delete elements
+1604315648480	Rename resource 'domesticContactManage.jsp'
+1604317003668	Copy file
+1604317055620	Copy file
+1604317066285	Copy file
+1604317075840	Copy file
+1604317085570	Copy file
+1604317096405	Copy file
+1604462816940	Copy file
+1604468507382	Rename resource 'notice.jsp'
+1604468514480	Rename resource 'income.jsp'
+1604468522594	Rename resource 'authority.jsp'
+1604471571655	Copy file
+1604472523971	Rename package 'manpower.daejang'
+1604472546135	Rename type 'DaejangController'
+1604472559432	Rename type 'DaejangDAO'
+1604472570029	Rename type 'DaejangService'
+1604472580355	Rename type 'DaejangServiceImpl'
+1604472593247	Rename resource 'daejang'
+1604472601813	Rename resource 'daejang_SQL.xml'
+1604472730057	Rename resource 'daejang'
+1604472859513	Copy package
+1604472904914	Delete element
+1604472919929	Copy compilation unit
+1604472923584	Copy compilation unit
+1604472926368	Copy compilation units
+1604472937943	Rename type 'ManageController'
+1604472946788	Rename type 'ManageDAO'
+1604472954438	Rename type 'ManageService'
+1604472961922	Rename type 'ManageServiceImpl'
+1604477387553	Move file
+1604480669326	Copy file
+1604480678768	Rename resource 'businessMng.jsp'
+1604487427826	Copy file
+1604489714695	Copy file
+1604627667859	Delete element
+1604635975021	Copy file
+1604638240237	Rename resource 'noticeMng.jsp'
+1604638381643	Rename resource 'workerMng.jsp'
+1604638389412	Rename resource 'paymentMng.jsp'
+1604638397067	Rename resource 'incomeMng.jsp'
+1604638403769	Rename resource 'businessMng.jsp'
+1604638411358	Rename resource 'bankMng.jsp'
+1604638417829	Rename resource 'authorityMng.jsp'
+1604650320733	Copy file
+1604650350895	Delete element
+1604650360010	Copy file

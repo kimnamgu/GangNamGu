@@ -1,0 +1,252 @@
+--파일 추천 테이블
+CREATE TABLE file_recommend (
+	recommendIdx int not null auto_increment  comment '추천IDX',
+    fileIdx int comment '파일IDX',
+    id varchar(45) NOT NULL  comment '사용자 ID',
+    recommendYN varchar(1) comment '추천상태', 
+	ins_dt timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP comment '가입일',
+	upt_dt timestamp ON UPDATE CURRENT_TIMESTAMP  comment '수정일',
+	PRIMARY KEY (recommendIdx)
+);
+
+
+select * from user;
+select * from user_log;
+
+DROP TABLE user;
+DROP TABLE user_log;
+
+-- 사용자 테이블
+--grade  1: OWNER , 2: 사이트관리자 , 3 : 카테고리 관리자 , 4: 일반 사용자 , 5: 비승인자 , 6 : 경고누적자, 7: 영구제한자 ,10: 탈퇴자
+CREATE TABLE user (
+	userIdx int NOT NULL AUTO_INCREMENT comment '사용자 IDX',                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             
+	id varchar(45) NOT NULL  comment '사용자 ID',
+	email varchar(100) NOT NULL comment '이메일',
+	name varchar(45) NOT NULL comment '사용자명',
+  	password varchar(45) NOT NULL comment '비밀번호',                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               
+	grade int DEFAULT '5' comment '사용자등급', 
+	ins_dt timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP comment '가입일',
+	upt_dt timestamp ON UPDATE CURRENT_TIMESTAMP  comment '수정일',
+	PRIMARY KEY (userIdx)
+);
+
+
+ --사용자 로그 테이블 생성
+create table user_log (
+	actionType varchar(10) comment '입력상태',
+	userIdx int comment '사용자 IDX',
+	id varchar(45) comment '사용자 ID',
+	email varchar(100) comment '이메일',
+	name varchar(45)comment '사용자명',
+	password varchar(45) comment '비밀번호',                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               
+	grade int comment '사용자등급',
+	ins_dt timestamp DEFAULT CURRENT_TIMESTAMP comment '입력일'
+);
+ 
+ 
+CREATE TRIGGER after_user_insert
+AFTER INSERT ON user
+FOR EACH ROW
+BEGIN
+
+INSERT INTO user_log
+SET
+actionType = 'INSERT',
+userIdx = NEW.userIdx ,
+id = NEW.id ,
+email = NEW.email ,
+name = NEW.name ,
+password = NEW.password ,
+grade = NEW.grade ,
+ins_dt = sysdate()
+;
+END;
+
+
+CREATE TRIGGER after_user_delete
+AFTER DELETE ON user
+FOR EACH ROW
+BEGIN
+
+INSERT INTO user_log
+SET
+actionType = 'DELETE',
+userIdx = OLD.userIdx ,
+id = OLD.id ,
+email = OLD.email ,
+name = OLD.name ,
+password = OLD.password ,
+grade = OLD.grade ,
+ins_dt = sysdate()
+;
+END;
+
+CREATE TRIGGER after_user_update
+AFTER UPDATE ON user
+FOR EACH ROW
+BEGIN
+
+INSERT INTO user_log
+SET
+actionType = 'UPDATE',
+userIdx = NEW.userIdx ,
+id = NEW.id ,
+email = NEW.email ,
+name = NEW.name ,
+password = NEW.password ,
+grade = NEW.grade ,
+ins_dt = sysdate()
+;
+END;
+
+
+--파일 폴더 테이블
+create table file_folder(
+    folderIdx int not null auto_increment comment '폴더IDX',
+    folderSeq int not null comment '폴더순번',
+    folderName varchar(100) not null comment '폴더명',
+    id varchar(45) NOT NULL  comment '사용자 ID',
+    upperFolder varchar(100) comment '상위폴더명',
+	del_flag varchar(1) comment '삭제여부',
+	
+    ins_dt date comment '입력일',    
+    upt_dt date comment '수정일',
+    PRIMARY KEY(folderIdx)
+);
+
+--파일 태그 테이블
+create table file_tag (
+    tagIdx int not null auto_increment comment '태그IDX',
+    tagSeq int not null comment '파일순번',
+    tagName varchar(100) not null comment '태그명',
+    fileIdx int not null comment '파일IDX',
+    ins_dt date comment '입력일',
+    upt_dt date comment '수정일',
+    PRIMARY KEY(tagIdx)
+)
+
+
+--파일 테이블 작업
+drop table file_house;
+drop table file_house_log;
+
+SHOW TRIGGERS;
+SET Global log_bin_trust_function_creators='ON';
+DROP TRIGGERS after_file_house_insert;
+DROP TRIGGERS after_file_house_delete;
+DROP TRIGGERS after_file_house_update;
+
+create table file_house (
+    fileIdx int not null auto_increment  comment '파일IDX',
+    fileSeq int not null comment '파일순번',
+    fileName varchar(100) not null comment '파일명',
+	fileExtension varchar(10) not null comment '파일확장자명',
+    fileRealName varchar(512) not null comment '파일원본명',
+    fileSize int comment '파일크기',
+    board_idx int comment '게시판IDX',
+    id varchar(45) NOT NULL  comment '사용자 ID',
+    folderPath varchar(200) comment '폴더경로',    
+    del_yn varchar(1) DEFAULT 'Y' comment '삭제YN',
+	open_yn varchar(1) DEFAULT 'Y' comment '공개YN',
+	down_yn varchar(1) DEFAULT 'Y'comment '다운YN',
+    fileDescription varchar(300) comment '파일설명',
+    ins_dt date comment '입력일',
+    upt_dt date comment '수정일',
+    PRIMARY KEY(fileIdx)
+);
+
+
+--파일 로그 테이블 생성
+create table file_house_log (
+	actionType varchar(10) comment '입력상태',
+    fileIdx int comment '파일IDX',
+    fileSeq int comment '파일순번',
+    fileName varchar(100) comment '파일명',
+	fileExtension varchar(10) comment '파일확장자명',
+    fileRealName varchar(512) comment '파일원본명',
+    fileSize int comment '파일크기',
+    board_idx int comment '게시판IDX',
+    id varchar(45) comment '사용자 ID',
+    folderPath varchar(200) comment '폴더경로',  
+    del_yn varchar(1) DEFAULT 'Y' comment '삭제YN',
+	open_yn varchar(1) DEFAULT 'Y' comment '공개YN',
+	down_yn varchar(1) DEFAULT 'Y'comment '다운YN',
+    fileDescription varchar(300) comment '파일설명',
+    ins_dt date comment '입력일'
+);
+
+
+CREATE TRIGGER after_file_house_insert
+AFTER INSERT ON file_house
+FOR EACH ROW
+BEGIN
+
+INSERT INTO file_house_log
+SET
+actionType = 'INSERT',
+fileIdx = NEW.fileIdx ,
+fileSeq = NEW.fileSeq ,
+fileName = NEW.fileName ,
+fileExtension = NEW.fileExtension ,
+fileRealName = NEW.fileRealName ,
+fileSize = NEW.fileSize ,
+board_idx = NEW.board_idx ,
+id = NEW.id ,
+folderPath = NEW.folderPath ,
+del_yn = NEW.del_yn,
+open_yn = NEW.open_yn,
+down_yn = NEW.down_yn,
+fileDescription = NEW.fileDescription,
+ins_dt = sysdate()
+;
+END;
+
+CREATE TRIGGER after_file_house_delete
+AFTER DELETE ON file_house
+FOR EACH ROW
+BEGIN
+
+INSERT INTO file_house_log
+SET
+actionType = 'DELETE',
+fileIdx = OLD.fileIdx ,
+fileSeq = OLD.fileSeq ,
+fileName = OLD.fileName ,
+fileExtension = OLD.fileExtension ,
+fileRealName = OLD.fileRealName ,
+fileSize = OLD.fileSize ,
+board_idx = OLD.board_idx ,
+id = OLD.id ,
+folderPath = OLD.folderPath ,
+del_yn = OLD.del_yn,
+open_yn = OLD.open_yn,
+down_yn = OLD.down_yn,
+fileDescription = OLD.fileDescription,
+ins_dt = sysdate()
+;
+END ;
+
+CREATE TRIGGER after_file_house_update
+AFTER UPDATE ON file_house
+FOR EACH ROW
+BEGIN
+
+INSERT INTO file_house_log
+SET
+actionType = 'UPDATE',
+fileIdx = NEW.fileIdx ,
+fileSeq = NEW.fileSeq ,
+fileName = NEW.fileName ,
+fileExtension = NEW.fileExtension ,
+fileRealName = NEW.fileRealName ,
+fileSize = NEW.fileSize ,
+board_idx = NEW.board_idx ,
+id = NEW.id ,
+folderPath = NEW.folderPath ,
+del_yn = NEW.del_yn,
+open_yn = NEW.open_yn,
+down_yn = NEW.down_yn,
+fileDescription = NEW.fileDescription,
+ins_dt = sysdate()
+;
+END  ;

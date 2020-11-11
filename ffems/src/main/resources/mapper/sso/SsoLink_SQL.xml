@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="sso">
+	
+	
+ 	<select id="popJikWonList" parameterType="hashmap" resultType="hashmap">		
+		<![CDATA[
+			SELECT ROW_NUMBER() OVER (ORDER BY DEPT_ID ASC) RNUM, 
+			       ORG_NAME,
+			       USER_ID,
+			       USER_NAME,
+			       DEPT_ID,
+			       DEPT_NAME,
+			       CLASS_ID,
+			       CLASS_NAME,
+			       GRADE_ID,
+			       GRADE_NAME
+			FROM SSOX_USER 
+			WHERE SUBSTR(USER_STAT,0, 2) = 'AA'
+			AND USE_YN = '1'
+			AND USER_NAME LIKE #{USER_NAME} ||'%'
+		]]>		
+	</select>
+	
+	
+	<!--  행정국 [3220119],  도시계획상임기획단[3220192]-->
+ 	<select id="deptList" parameterType="hashmap" resultType="hashmap">		
+		<![CDATA[
+			SELECT ROW_NUMBER() OVER (ORDER BY DEPT_RANK ASC) RNUM,  
+			DEPT_ID, DEPT_NAME, DEPT_RANK
+			FROM (
+			SELECT 
+			       DEPT_ID,
+			       DEPT_NAME,
+			       DEPT_RANK
+			FROM SSOV_DEPT 
+			WHERE DEPT_ORDER = 4
+			AND DEPT_ID NOT IN ('3220192')
+			AND DEPT_RANK IS NOT NULL
+			UNION ALL
+			SELECT DEPT_ID,
+			       DEPT_NAME,
+			       DEPT_RANK
+			FROM SSOV_DEPT
+			WHERE DEPT_ORDER = 3
+			AND DEPT_ID > '3220101'
+			AND DEPT_SE = '0'
+			AND DEPT_RANK IS NOT NULL
+			AND DEPT_ID NOT IN ('3220119')			
+			)			
+		]]>	
+	</select>
+</mapper>

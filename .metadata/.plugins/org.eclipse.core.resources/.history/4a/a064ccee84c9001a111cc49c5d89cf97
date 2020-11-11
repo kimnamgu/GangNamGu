@@ -1,0 +1,28 @@
+package corona.status.controller;
+
+import javax.annotation.Resource;
+
+import org.apache.log4j.Logger;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.servlet.ModelAndView;
+
+import corona.common.common.CommandMap;
+import corona.status.service.StatusService;
+
+@Controller
+public class StatusController {
+	Logger log = Logger.getLogger(this.getClass());
+	
+	@Resource(name="statusService")
+	private StatusService statusService;
+	
+	@RequestMapping(value="/status/mainStatusList.do")
+    public ModelAndView mainStatusList(CommandMap commandMap) throws Exception{
+    	
+		ModelAndView mv = new ModelAndView("/status/mainStatusList");
+    	
+    	return mv;
+    }
+	
+}

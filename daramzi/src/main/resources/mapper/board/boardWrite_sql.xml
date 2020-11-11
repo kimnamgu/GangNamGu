@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="boardWrite">
+    
+    <insert id="insertBoard" useGeneratedKeys="true" keyProperty="boardIdx" parameterType="ImageBoardVO" >
+        <![CDATA[
+		INSERT INTO board 
+		            (
+			            id
+						,title
+						,content
+						,hitCnt
+						,ip
+						,ins_dt
+		             ) 
+		VALUES     (
+			            #{id} 
+			            ,#{title} 
+			            ,#{content} 
+			            ,0 
+			            ,#{ip} 
+			            ,sysdate()
+		            ) 
+        ]]>
+    </insert>
+    
+	<update id="updateBoard">
+	<![CDATA[
+		UPDATE board 
+		SET    title = #{title}, 
+		       content = #{content} 
+		WHERE  boardIdx = #{boardIdx} 
+	]]>
+    </update>  
+ 
+	<delete id="deleteBoard">
+	<![CDATA[
+		delete from board where boardIdx=#{boardIdx}
+	]]>
+    </delete>
+ 
+</mapper>

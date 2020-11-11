@@ -1,0 +1,184 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="visitor">
+	
+	<!--방문자정보조회   -->
+	<select id="getVisitorInfo" parameterType="hashmap" resultType="hashmap">
+		<![CDATA[
+			SELECT UUID
+            FROM VISITOR_MEMBER
+            WHERE UUID= #{uuid, jdbcType=VARCHAR}
+		]]>
+	</select>
+	
+	<!--방문자정보조회   -->
+	<select id="getVisitorLocationInfo" parameterType="hashmap" resultType="hashmap">
+		<![CDATA[
+			SELECT SITECODE,X_LOCATION,Y_LOCATION
+            FROM VISITOR_LOCATION
+            WHERE SITECODE = #{sitecode, jdbcType=VARCHAR}
+		]]>
+	</select>
+	
+	<!--방문자정보 사전 등록  -->
+	<insert id="insertVisitorInfo" parameterType="hashmap">
+		<![CDATA[
+			INSERT INTO VISITOR_MEMBER
+			(
+			  	UUID
+			  	,CI
+			  	,RESPONSE_NUM
+				,NATIONAL_INFO
+				,NAME
+			  	,SEX
+			  	,BIRTH
+			  	,AGENCY
+				,PHONE
+				,INS_DATE
+			)
+			VALUES
+			(			
+			    #{uuid}
+			    ,#{ci}
+			    ,#{response_num}
+			    ,#{national_info}
+				,#{name}
+				,#{sex}
+				,#{birth}
+				,#{agency}
+				,#{phone}
+				,sysdate
+			)
+		]]>
+	</insert>
+	
+	<!-- 방문자정보 수정 -->
+	<update id="updateVisitorInfo" parameterType="hashmap">
+		<![CDATA[
+			UPDATE VISITOR_MEMBER				
+			SET NAME = #{NAME}
+				,PHONE = #{PHONE}
+				,ADDRESS = #{ADDRESS}
+			WHERE ID = #{ID}
+		]]>		
+	</update>
+	
+	<!--QR 스캔 방문정보기록  -->
+	<insert id="insertFootprint" parameterType="hashmap">
+		<![CDATA[
+			INSERT INTO VISITOR_FOOOTPRINT
+			(
+			  	UUID
+				,SITECODE 
+				,INS_DATE
+			)
+			VALUES
+			(			
+			    #{uuid}
+				,#{sitecode}
+				,sysdate
+			)
+		]]>
+	</insert>
+	
+	
+	<select id="selectVisitorFootprintList" parameterType="hashmap" resultType="hashmap">
+		<include refid="common.pagingPre"/> 
+		<![CDATA[
+             SELECT COUNT(*) OVER() AS TOTAL_COUNT,                                
+                    VF.UUID
+                    ,substr(VM.NAME,1,1) || lpad('*',length(VM.NAME)-1,'*') AS NAME
+                    ,VM.RESPONSE_NUM
+                    ,VM.NATIONAL_INFO
+                    ,DECODE(VM.SEX, '1', '남자', '0', '여자', '기타') SEX
+                    ,VM.BIRTH
+                    ,VM.AGENCY
+                    ,substr(VM.PHONE,1,7) || '****' AS PHONE
+                    ,VL.SITECODE
+                    ,substr(VL.GIGWAN_NAME,1,1) || lpad('*',length(VL.GIGWAN_NAME)-1,'*') AS GIGWAN_NAME
+                    ,VL.ADDRESS_NAME
+                    ,VL.PHONE_NO
+                    ,TO_CHAR(VF.INS_DATE, 'YYYY.MM.DD HH24:MI:SS') INS_DATE
+            FROM VISITOR_FOOOTPRINT VF,VISITOR_MEMBER VM,VISITOR_LOCATION VL 
+            WHERE VF.UUID = VM.UUID
+            AND VF.SITECODE = VL.SITECODE                      
+		]]>
+		<if test="name != null and name !=''">
+		AND VM.NAME LIKE '%' || #{name} ||'%'
+		</if>
+		<if test="gigwan_name != null and gigwan_name !=''">
+		AND VL.GIGWAN_NAME LIKE '%' || #{gigwan_name} ||'%'
+		</if>
+		<if test="from_date != null and from_date !=''">
+		AND TO_CHAR(VF.ins_date,'YYYYMMDD') <![CDATA[>=]]> #{from_date}
+		</if>
+		<if test="to_date != null and to_date !=''">
+		AND TO_CHAR(VF.ins_date,'YYYYMMDD') <![CDATA[<=]]> #{to_date}
+		</if>
+		ORDER BY VF.ins_date DESC				
+		<include refid="common.pagingPost"/> 
+	</select>
+	
+	<select id="selectStatisticsList" parameterType="hashmap" resultType="hashmap">
+		<![CDATA[
+		SELECT             
+		        ST_DATE.ST_DAY AS PROCESS_DATE
+		        ,NVL(A.TOTAL_CNT,0) AS TOTAL_CNT
+		FROM 
+		(
+		    SELECT TO_CHAR(TO_DATE(to_char(add_months(sysdate,-1),'YYYYMMDD'), 'YYYYMMDD')+LEVEL-1, 'YYYYMMDD') ST_DAY
+		      FROM DUAL
+		    CONNECT BY LEVEL <= (TO_DATE(to_char(sysdate,'YYYYMMDD'), 'YYYYMMDD')-TO_DATE(to_char(add_months(sysdate,-1),'YYYYMMDD'), 'YYYYMMDD')+1)
+		)ST_DATE,
+		(  SELECT TO_CHAR(INS_DATE,'YYYYMMDD') PROCESS_DATE,
+		         COUNT (1) TOTAL_CNT
+		    FROM VISITOR_FOOOTPRINT
+		GROUP BY TO_CHAR(INS_DATE,'YYYYMMDD')
+		)A
+		WHERE ST_DATE.ST_DAY = A.PROCESS_DATE(+)
+		ORDER BY ST_DAY ASC			
+		]]>
+	</select>
+	
+	<select id="selectVisitorFootprintListExcel" parameterType="hashmap" resultType="hashmap">
+		<![CDATA[
+		SELECT 
+	        ROWNUM AS RNUM,
+	        AA.*
+	    FROM( 
+
+             SELECT COUNT(*) OVER() AS TOTAL_COUNT,                                
+                    VF.UUID
+                    ,substr(VM.NAME,1,1) || lpad('*',length(VM.NAME)-1,'*') AS NAME
+                    ,VM.RESPONSE_NUM
+                    ,VM.NATIONAL_INFO
+                    ,DECODE(VM.SEX, '1', '남자', '0', '여자', '기타') SEX
+                    ,VM.BIRTH
+                    ,VM.AGENCY
+                    ,substr(VM.PHONE,1,7) || '****' AS PHONE
+                    ,VL.SITECODE
+                    ,substr(VL.GIGWAN_NAME,1,1) || lpad('*',length(VL.GIGWAN_NAME)-1,'*') AS GIGWAN_NAME
+                    ,VL.ADDRESS_NAME
+                    ,VL.PHONE_NO
+                    ,TO_CHAR(VF.INS_DATE, 'YYYY.MM.DD HH24:MI:SS') INS_DATE
+            FROM VISITOR_FOOOTPRINT VF,VISITOR_MEMBER VM,VISITOR_LOCATION VL 
+            WHERE VF.UUID = VM.UUID
+            AND VF.SITECODE = VL.SITECODE                      
+			]]>
+			<if test="name != null and name !=''">
+			AND VM.NAME LIKE '%' || #{name} ||'%'
+			</if>
+			<if test="sex_gb != null and sex_gb !=''">
+			AND SEX = #{sex_gb}
+			</if>
+			<if test="from_date != null and from_date !=''">
+			AND TO_CHAR(VF.ins_date,'YYYYMMDD') <![CDATA[>=]]> #{from_date}
+			</if>
+			<if test="to_date != null and to_date !=''">
+			AND TO_CHAR(VF.ins_date,'YYYYMMDD') <![CDATA[<=]]> #{to_date}
+			</if>
+			ORDER BY VF.ins_date DESC	
+		)AA			
+	</select>
+</mapper>

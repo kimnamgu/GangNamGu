@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="common">
+	
+	<sql id="pagingPre">
+		<![CDATA[
+   			SELECT 
+			    AAA.*
+			FROM(
+			    SELECT 
+			        ROWNUM AS RNUM,
+			        AA.*
+			    FROM(  
+ 		]]>
+ 	</sql>
+ 	
+ 	<sql id="pagingPost">
+ 		<![CDATA[
+ 			 	) AA
+ 			 	WHERE 
+                	ROWNUM <= #{END}
+			) AAA
+			WHERE 
+			    AAA.RNUM >= #{START}
+ 		]]>
+ 	</sql>
+
+	
+	
+	<select id="selectFileInfo" parameterType="hashmap" resultType="hashmap">
+		<![CDATA[
+			SELECT
+			    STORED_FILE_NAME,
+			    ORIGINAL_FILE_NAME,
+			    TO_CHAR(INS_DATE, 'YYYYMM') DIR_PATH
+			FROM
+			    PRIVATE_CONTRACT_ATTACH_FILE
+			WHERE
+			    ID = #{ID}
+		]]>
+	</select>
+	
+	<select id="selectIdApproveList" parameterType="hashmap" resultType="hashmap">
+		<include refid="common.pagingPre"/>	
+		<![CDATA[			
+			SELECT ROW_NUMBER() OVER (ORDER BY USER_ID DESC) RNUM,
+				   USER_ID, 
+				   USER_NAME, DEPT_NAME, CLASS_NAME, 
+				   POSITION_NAME, USER_TEL, APPLY_REASON 
+			FROM EMPTRAN_USER_MASTER
+			WHERE DEL_YN = '0'			
+			AND USER_STATUS = #{USER_STATUS}
+		]]>
+		<include refid="common.pagingPost"/>
+	</select>
+	
+	
+	<update id="updateIdApprove" parameterType="hashmap">
+		<![CDATA[
+			UPDATE EMPTRAN_USER_MASTER
+			SET
+				USER_STATUS = '0',				
+				APPROVE_DATE = SYSDATE
+			WHERE
+				USER_ID IN ( ${ID_LIST} )
+		]]>
+	</update>
+	
+	
+	<select id="idApproveListDetail" parameterType="hashmap" resultType="hashmap">
+		<![CDATA[
+			SELECT                
+                USER_ID, 
+				USER_NAME,
+				USER_RIGHT, 
+				DEPT_NAME, 
+				CLASS_NAME, 
+				POSITION_NAME, 
+				USER_TEL, 
+				APPLY_REASON				         
+            FROM
+              EMPTRAN_USER_MASTER
+            WHERE DEL_YN = '0'
+            AND USER_ID = #{USER_ID}				
+		]]>
+	</select>
+	
+	
+	<update id="updateIdApproveList" parameterType="hashmap">
+		<![CDATA[
+			UPDATE EMPTRAN_USER_MASTER
+			SET
+				USER_RIGHT = #{USER_RIGHT},							  
+			    MOD_DATE = SYSDATE
+			WHERE  
+				USER_ID = #{USER_ID}
+		]]>
+	</update>
+	
+	
+	<update id="deleteIdApproveList" parameterType="hashmap">
+		<![CDATA[
+			UPDATE EMPTRAN_USER_MASTER
+			SET
+				DEL_YN = '1',				
+				DEL_DATE = SYSDATE
+			WHERE
+				USER_ID = #{USER_ID}
+		]]>
+	</update>
+	
+	
+	
+	
+	<select id="test" resultType="String">		
+		<![CDATA[			
+			SELECT DEPT_NAME FROM  EMPTRAN_USER_MASTER
+        	WHERE USER_ID = 'bluegreen' 
+		]]>
+	</select>
+	
+	
+	
+	
+	<delete id="deleteScmsUserData" parameterType="hashmap">
+		<![CDATA[
+			TRUNCATE TABLE  PRIVATE_CONTRACT_USER_MASTER			
+		]]>
+	</delete>
+	
+	
+	
+	
+	<select id="saupMonthList" parameterType="hashmap" resultType="hashmap">		
+		<![CDATA[			
+			SELECT 
+	  			  TO_CHAR(ADD_MONTHS(TO_DATE(TO_CHAR(ADD_MONTHS(SYSDATE,-12),'YYYYMM'), 'YYYYMM'), LEVEL - 1 ),'YYYYMM') AS MONTHS 
+			FROM DUAL
+			CONNECT BY LEVEL <= MONTHS_BETWEEN( TO_DATE(TO_CHAR(ADD_MONTHS(SYSDATE,12),'YYYYMM'), 'YYYYMM'), TO_DATE(TO_CHAR(ADD_MONTHS(SYSDATE,-12),'YYYYMM'), 'YYYYMM' ) ) + 1
+			ORDER BY MONTHS DESC
+		]]>
+	</select>
+	
+	
+	<select id="yearList" parameterType="hashmap" resultType="hashmap">		
+		<![CDATA[			
+			SELECT TO_CHAR(ADD_MONTHS(SYSDATE,12),'YYYY')-LEVEL+1 AS YEAR 
+			FROM DUAL 
+			CONNECT BY LEVEL <= ((TO_CHAR(SYSDATE,'YYYY')+1)-2000)
+		]]>
+	</select>	
+</mapper>

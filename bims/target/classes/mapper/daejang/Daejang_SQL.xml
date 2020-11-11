@@ -1,0 +1,630 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="daejang">
+	
+	<resultMap id="clobHashMap" type="HashMap">   
+        <result property="SAUP_PUSH_CONTENT" column="SAUP_PUSH_CONTENT" jdbcType="CLOB" javaType="java.lang.String"/>
+        <result property="SAUP_NEXT_CONTENT" column="SAUP_NEXT_CONTENT" jdbcType="CLOB" javaType="java.lang.String"/>
+    </resultMap>
+    
+    
+	<select id="selectMainSaupList" parameterType="hashmap" resultType="hashmap">
+		<include refid="common.pagingPre"/> 
+		  SELECT COUNT(*) OVER() AS TOTAL_COUNT,                                
+                    ID                  ,                    
+                    SAUP_NM             ,
+                    SAUP_DETAIL         ,
+                    SAUP_BUDGET_AMT     ,
+                    SAUP_START_DATE     ,
+                    SAUP_END_DATE       ,
+                    SAUP_OPEN_DATE      ,                    
+                    SAUP_DEPT_CD        ,
+                    SAUP_DEPT_NM        ,
+                    SAUP_DAMDANG_ID     ,
+                    SAUP_DAMDANG_NM     ,
+                    SAUP_DAMDANG_TEL    ,                    
+                    SAUP_DEPT_TEAMJANG  ,
+                    SAUP_TEAMJANG_TEL   ,
+                    SAUP_DEPT_GWAJANG   ,
+                    SAUP_GWAJANG_TEL    ,                                     
+                    SAUP_PROCESS_PERCENT,
+                    SAUP_PROCESS_TOT_PERCENT,
+                    SAUP_ORDER,
+                    SAUP_FIELD_GB,
+                    SAUP_FIELD_GONGYAK,
+                    SAUP_FIELD_JEONRAK
+                                                            
+            FROM  (                                       
+					SELECT 
+					    B.ID                  ,                    
+					    A.SAUP_NM             ,
+					    B.SAUP_DETAIL         ,
+					    B.SAUP_BUDGET_AMT     ,
+					    B.SAUP_START_DATE     ,
+					    B.SAUP_END_DATE       ,
+					    B.SAUP_OPEN_DATE      ,                    
+					    B.SAUP_DEPT_CD        ,
+					    A.DEPT_NM SAUP_DEPT_NM  ,
+					    B.SAUP_DAMDANG_ID     ,
+					    B.SAUP_DAMDANG_NM     ,
+					    B.SAUP_DAMDANG_TEL    ,                    
+					    B.SAUP_DEPT_TEAMJANG  ,
+					    B.SAUP_TEAMJANG_TEL   ,
+					    B.SAUP_DEPT_GWAJANG   ,
+					    B.SAUP_GWAJANG_TEL    ,  
+					    A.SAUP_ORDER,
+					    A.SAUP_FIELD_GB,
+					    A.SAUP_FIELD_GONGYAK,
+					    A.SAUP_FIELD_JEONRAK
+					FROM 
+					(
+						 SELECT ID,
+						        SAUP_NM,
+						        DEPT_NM,
+						        SAUP_ORDER,
+						        SAUP_FIELD_GB,
+						        SAUP_FIELD_GONGYAK,
+						        SAUP_FIELD_JEONRAK
+						 FROM BIMS_MAIN_SAUP_LIST
+						 WHERE DEL_YN = 0						 
+						 <choose>
+						 <when test='SAUP_YEAR != null and SAUP_YEAR != ""'>
+						 AND SAUP_YEAR = #{SAUP_YEAR}
+						 </when>						 					
+						 </choose>
+						 <choose>
+						 <when test='SGB != null and SGB != ""'>
+						  AND SAUP_GB = #{SGB}
+						 </when> 
+						 </choose>
+						<if test="FGB != null and FGB !=''">
+							AND SAUP_FIELD_GB = #{FGB}
+						</if>
+						<if test="SAUP_FIELD_GONGYAK != null and SAUP_FIELD_GONGYAK !=''">
+							AND SAUP_FIELD_GONGYAK = #{SAUP_FIELD_GONGYAK}
+						</if>
+						<if test="SAUP_FIELD_JEONRAK != null and SAUP_FIELD_JEONRAK !=''">
+							AND SAUP_FIELD_JEONRAK = #{SAUP_FIELD_JEONRAK}
+						</if>
+					) A LEFT OUTER JOIN 
+					(
+						  SELECT 
+						    ID                  ,                       
+						    SAUP_DETAIL         ,
+						    SAUP_BUDGET_AMT     ,
+						    SAUP_START_DATE     ,
+						    SAUP_END_DATE       ,
+						    SAUP_OPEN_DATE      ,                    
+						    SAUP_DEPT_CD        ,
+						    SAUP_DAMDANG_ID     ,
+						    SAUP_DAMDANG_NM     ,
+						    SAUP_DAMDANG_TEL    ,                    
+						    SAUP_DEPT_TEAMJANG  ,
+						    SAUP_TEAMJANG_TEL   ,
+						    SAUP_DEPT_GWAJANG   ,
+						    SAUP_GWAJANG_TEL
+						  FROM
+						  BIMS_MAIN_SAUP_MASTER 
+						  WHERE DEL_YN = '0'
+						  <choose>
+						  <when test='SAUP_YEAR != null and SAUP_YEAR != ""'>
+						  AND SAUP_YEAR = #{SAUP_YEAR}
+						  </when>						 				
+						  </choose>
+						  <choose>
+						  <when test='SGB != null and SGB != ""'>
+						  AND SAUP_GB = #{SGB}
+						  </when>
+						  </choose>	 
+					 )B ON A.ID = B.ID	                         
+       		) A LEFT OUTER JOIN (
+                SELECT MAST_ID, SAUP_PROCESS_PERCENT, SAUP_PROCESS_TOT_PERCENT, SAUP_PUSH_CONTENT,  SAUP_NEXT_CONTENT 
+                FROM BIMS_MAIN_SAUP_SUB
+                WHERE ID IN ( SELECT  MAX(ID) ID FROM BIMS_MAIN_SAUP_SUB WHERE DEL_YN = '0' GROUP BY MAST_ID )
+      		) B ON A.ID = B.MAST_ID             
+            WHERE 1 = 1        
+		<if test="SAUP_DEPT_CD != null and SAUP_DEPT_CD !=''">
+		AND SAUP_DEPT_CD = #{SAUP_DEPT_CD}
+		</if>
+		<if test="SAUP_NM != null and SAUP_NM !=''">
+		AND ( SAUP_NM LIKE '%'|| #{SAUP_NM} ||'%' OR SAUP_DETAIL LIKE '%'|| #{SAUP_NM} ||'%' )
+		</if>
+		<if test="SAUP_AMT1 != null and SAUP_AMT1 !=''">
+		AND SAUP_BUDGET_AMT  &gt;= REPLACE(#{SAUP_AMT1}, ',', '')
+		</if>
+		<if test="SAUP_AMT2 != null and SAUP_AMT2 !=''">
+		AND SAUP_BUDGET_AMT &lt;= REPLACE(#{SAUP_AMT2}, ',', '')
+		</if>
+		<choose>
+		<when test='SORT_GB != null and SORT_GB.equals("A1")'>
+		ORDER BY SAUP_NM DESC
+		</when>
+		<when test='SORT_GB != null and SORT_GB.equals("A2")'>
+		ORDER BY SAUP_NM ASC
+		</when>
+		<when test='SORT_GB != null and SORT_GB.equals("B1")'>
+		ORDER BY SAUP_BUDGET_AMT DESC
+		</when>
+		<when test='SORT_GB != null and SORT_GB.equals("B2")'>
+		ORDER BY SAUP_BUDGET_AMT ASC
+		</when>
+		<when test='SORT_GB != null and SORT_GB.equals("C1")'>
+		ORDER BY SAUP_PROCESS_PERCENT DESC NULLS LAST
+		</when>
+		<when test='SORT_GB != null and SORT_GB.equals("C2")'>
+		ORDER BY SAUP_PROCESS_PERCENT ASC NULLS LAST
+		</when>
+		<when test='SORT_GB != null and SORT_GB.equals("D1")'>
+		ORDER BY SAUP_ORDER DESC
+		</when>
+		<when test='SORT_GB != null and SORT_GB.equals("D2")'>
+		ORDER BY SAUP_ORDER ASC
+		</when>
+		<otherwise>
+		ORDER BY SAUP_ORDER ASC
+		</otherwise>
+		</choose>
+		<include refid="common.pagingPost"/> 
+	</select>
+	
+	
+	<select id="selectApiMainSaupList" parameterType="hashmap" resultType="hashmap">
+	    SELECT 
+	        ROWNUM AS RNUM,
+	        AA.*
+	    FROM(  
+				  SELECT COUNT(*) OVER() AS TOTAL_COUNT,                                
+		                    ID                  ,                    
+		                    SAUP_NM             ,
+		                    SAUP_DETAIL         ,
+		                    SAUP_BUDGET_AMT     ,
+		                    SAUP_START_DATE     ,
+		                    SAUP_END_DATE       ,
+		                    SAUP_OPEN_DATE      ,                    
+		                    SAUP_DEPT_CD        ,
+		                    SAUP_DEPT_NM        ,
+		                    SAUP_DAMDANG_ID     ,
+		                    SAUP_DAMDANG_NM     ,
+		                    SAUP_DAMDANG_TEL    ,                    
+		                    SAUP_DEPT_TEAMJANG  ,
+		                    SAUP_TEAMJANG_TEL   ,
+		                    SAUP_DEPT_GWAJANG   ,
+		                    SAUP_GWAJANG_TEL    ,                                     
+		                    SAUP_PROCESS_PERCENT,
+		                    SAUP_PROCESS_TOT_PERCENT,
+		                    SAUP_ORDER,
+		                    SAUP_FIELD_GB,
+		                    SAUP_FIELD_GONGYAK,
+		                    SAUP_FIELD_JEONRAK
+		                                                            
+		            FROM  (                                       
+							SELECT 
+							    B.ID                  ,                    
+							    A.SAUP_NM             ,
+							    B.SAUP_DETAIL         ,
+							    B.SAUP_BUDGET_AMT     ,
+							    B.SAUP_START_DATE     ,
+							    B.SAUP_END_DATE       ,
+							    B.SAUP_OPEN_DATE      ,                    
+							    B.SAUP_DEPT_CD        ,
+							    A.DEPT_NM SAUP_DEPT_NM  ,
+							    B.SAUP_DAMDANG_ID     ,
+							    B.SAUP_DAMDANG_NM     ,
+							    B.SAUP_DAMDANG_TEL    ,                    
+							    B.SAUP_DEPT_TEAMJANG  ,
+							    B.SAUP_TEAMJANG_TEL   ,
+							    B.SAUP_DEPT_GWAJANG   ,
+							    B.SAUP_GWAJANG_TEL    ,  
+							    A.SAUP_ORDER,
+							    A.SAUP_FIELD_GB,
+							    A.SAUP_FIELD_GONGYAK,
+							    A.SAUP_FIELD_JEONRAK
+							FROM 
+							(
+								 SELECT ID,
+								        SAUP_NM,
+								        DEPT_NM,
+								        SAUP_ORDER,
+								        SAUP_FIELD_GB,
+								        SAUP_FIELD_GONGYAK,
+								        SAUP_FIELD_JEONRAK
+								 FROM BIMS_MAIN_SAUP_LIST
+								 WHERE DEL_YN = 0						 
+								 <choose>
+								 <when test='SAUP_YEAR != null and SAUP_YEAR != ""'>
+								 AND SAUP_YEAR = #{SAUP_YEAR}
+								 </when>						 					
+								 </choose>
+								 <choose>
+								 <when test='SGB != null and SGB != ""'>
+								  AND SAUP_GB = #{SGB}
+								 </when> 
+								 </choose>
+								<if test="FGB != null and FGB !=''">
+									AND SAUP_FIELD_GB = #{FGB}
+								</if>
+								<if test="SAUP_FIELD_GONGYAK != null and SAUP_FIELD_GONGYAK !=''">
+									AND SAUP_FIELD_GONGYAK = #{SAUP_FIELD_GONGYAK}
+								</if>
+								<if test="SAUP_FIELD_JEONRAK != null and SAUP_FIELD_JEONRAK !=''">
+									AND SAUP_FIELD_JEONRAK = #{SAUP_FIELD_JEONRAK}
+								</if>
+							) A LEFT OUTER JOIN 
+							(
+								  SELECT 
+								    ID                  ,                       
+								    SAUP_DETAIL         ,
+								    SAUP_BUDGET_AMT     ,
+								    SAUP_START_DATE     ,
+								    SAUP_END_DATE       ,
+								    SAUP_OPEN_DATE      ,                    
+								    SAUP_DEPT_CD        ,
+								    SAUP_DAMDANG_ID     ,
+								    SAUP_DAMDANG_NM     ,
+								    SAUP_DAMDANG_TEL    ,                    
+								    SAUP_DEPT_TEAMJANG  ,
+								    SAUP_TEAMJANG_TEL   ,
+								    SAUP_DEPT_GWAJANG   ,
+								    SAUP_GWAJANG_TEL
+								  FROM
+								  BIMS_MAIN_SAUP_MASTER 
+								  WHERE DEL_YN = '0'
+								  <choose>
+								  <when test='SAUP_YEAR != null and SAUP_YEAR != ""'>
+								  AND SAUP_YEAR = #{SAUP_YEAR}
+								  </when>						 				
+								  </choose>
+								  <choose>
+								  <when test='SGB != null and SGB != ""'>
+								  AND SAUP_GB = #{SGB}
+								  </when>
+								  </choose>	 
+							 )B ON A.ID = B.ID	                         
+		       		) A LEFT OUTER JOIN (
+		                SELECT MAST_ID, SAUP_PROCESS_PERCENT, SAUP_PROCESS_TOT_PERCENT, SAUP_PUSH_CONTENT,  SAUP_NEXT_CONTENT 
+		                FROM BIMS_MAIN_SAUP_SUB
+		                WHERE ID IN ( SELECT  MAX(ID) ID FROM BIMS_MAIN_SAUP_SUB WHERE DEL_YN = '0' GROUP BY MAST_ID )
+		      		) B ON A.ID = B.MAST_ID             
+		            WHERE 1 = 1        
+				<if test="SAUP_DEPT_CD != null and SAUP_DEPT_CD !=''">
+				AND SAUP_DEPT_CD = #{SAUP_DEPT_CD}
+				</if>
+				<if test="SAUP_NM != null and SAUP_NM !=''">
+				AND ( SAUP_NM LIKE '%'|| #{SAUP_NM} ||'%' OR SAUP_DETAIL LIKE '%'|| #{SAUP_NM} ||'%' )
+				</if>
+				<if test="SAUP_AMT1 != null and SAUP_AMT1 !=''">
+				AND SAUP_BUDGET_AMT  &gt;= REPLACE(#{SAUP_AMT1}, ',', '')
+				</if>
+				<if test="SAUP_AMT2 != null and SAUP_AMT2 !=''">
+				AND SAUP_BUDGET_AMT &lt;= REPLACE(#{SAUP_AMT2}, ',', '')
+				</if>
+				ORDER BY SAUP_ORDER ASC
+		 	) AA
+	</select>
+	
+	
+	<select id="selectMainSaupSubList" parameterType="hashmap" resultMap="clobHashMap">
+		<include refid="common.pagingPre"/> 
+		<![CDATA[
+			SELECT COUNT(*) OVER() AS TOTAL_COUNT,                                
+                    ID                  ,
+					MAST_ID             ,
+					SAUP_PROCESS_PERCENT,
+					SAUP_PROCESS_TOT_PERCENT,
+					SAUP_PUSH_CONTENT   ,
+					SAUP_NEXT_CONTENT   ,
+					INS_ID              ,
+					INS_DEPT            ,
+					TO_CHAR(INS_DATE, 'YYYY.MM.DD') INS_DATE,
+					TO_CHAR(MOD_DATE, 'YYYY.MM.DD HH24:MI:SS') MOD_DATE,
+					DECODE(MOD_DATE, NULL, TO_CHAR(INS_DATE, 'YYYY.MM.DD'), TO_CHAR(MOD_DATE, 'YYYY.MM.DD')) UPD_DATE
+            FROM BIMS_MAIN_SAUP_SUB
+            WHERE DEL_YN = '0'
+            AND MAST_ID = #{MAST_ID}            
+		]]>
+		ORDER BY ID DESC		
+		<if test="SAUP_NM != null and SAUP_NM !=''">
+		AND SAUP_NM LIKE '%'|| #{SAUP_NM} ||'%'
+		</if>		
+		<include refid="common.pagingPost"/> 
+	</select>
+	
+	
+	<insert id="insertMainSaup" parameterType="hashmap" useGeneratedKeys="true" keyProperty="ID">		
+		<![CDATA[
+			INSERT INTO BIMS_MAIN_SAUP_MASTER
+			(
+				  ID                  ,
+				  SAUP_YEAR           ,
+				  SAUP_FIELD1_GB      ,				
+				  SAUP_NM             ,
+				  SAUP_DETAIL         ,
+				  SAUP_BUDGET_AMT     ,
+				  SAUP_START_DATE     ,
+				  SAUP_END_DATE       ,
+				  SAUP_OPEN_DATE      ,				 
+				  SAUP_DEPT_CD        ,
+				  SAUP_DEPT_NM        ,
+				  SAUP_DAMDANG_ID     ,
+				  SAUP_DAMDANG_NM     ,
+				  SAUP_DAMDANG_TEL    ,
+				  SAUP_DEPT_TEAMJANG  ,
+				  SAUP_TEAMJANG_TEL   ,
+				  SAUP_DEPT_GWAJANG   ,
+				  SAUP_GWAJANG_TEL    ,
+				  SAUP_GB             ,
+				  INS_ID              ,
+				  INS_DEPT            ,
+				  INS_DATE
+			)
+			VALUES
+			(			
+			    #{SID},
+			    #{SAUP_YEAR},
+				#{SAUP_FIELD1_GB},				
+				#{SAUP_NM},
+				#{SAUP_DETAIL},
+				REPLACE(#{SAUP_BUDGET_AMT}, ',', ''),
+				REPLACE(#{SAUP_START_DATE}, '-', ''),
+				REPLACE(#{SAUP_END_DATE}, '-', ''),
+				REPLACE(#{SAUP_OPEN_DATE}, '-', ''),	
+				#{SAUP_DEPT_CD},
+				#{SAUP_DEPT_NM},
+				#{SAUP_DAMDANG_ID},
+				#{SAUP_DAMDANG_NM},
+				#{SAUP_DAMDANG_TEL},
+				#{SAUP_DEPT_TEAMJANG},
+				#{SAUP_TEAMJANG_TEL},
+				#{SAUP_DEPT_GWAJANG},
+			    #{SAUP_GWAJANG_TEL},
+			    #{SGB},									
+				#{INS_ID},
+				#{INS_DEPT},
+				SYSDATE				
+			)
+		]]>
+	</insert>
+	
+	
+	
+	<insert id="insertMainSaupSub" parameterType="hashmap" useGeneratedKeys="true" keyProperty="ID">
+		<selectKey keyProperty="SSID" resultType="string" order="BEFORE">
+			SELECT BIMS_MAIN_SAUP_SUB_SQ.NEXTVAL FROM DUAL
+		</selectKey>
+		<![CDATA[
+			INSERT INTO BIMS_MAIN_SAUP_SUB
+			(
+				  ID                  ,
+				  MAST_ID			  ,
+				  SAUP_PROCESS_PERCENT,
+				  SAUP_PROCESS_TOT_PERCENT,
+				  SAUP_PUSH_CONTENT   ,
+				  SAUP_NEXT_CONTENT   ,
+				  THWK_ST_DATE        ,
+				  THWK_ED_DATE        ,
+				  NTWK_ST_DATE        ,
+				  NTWK_ED_DATE        ,				  				 		
+				  INS_ID              ,
+				  INS_DEPT            ,
+				  INS_DATE
+			)
+			VALUES
+			(			
+			    #{SSID},
+				#{MAST_ID},
+				#{SAUP_PROCESS_PERCENT},
+				#{SAUP_PROCESS_TOT_PERCENT},
+				#{SAUP_PUSH_CONTENT},
+				#{SAUP_NEXT_CONTENT},
+				REPLACE(#{THWK_ST_DATE}, '-', ''),
+				REPLACE(#{THWK_ED_DATE}, '-', ''),
+				REPLACE(#{NTWK_ST_DATE}, '-', ''),
+				REPLACE(#{NTWK_ED_DATE}, '-', ''),				
+				#{INS_ID},
+				#{INS_DEPT},
+				SYSDATE		    
+			)
+		]]>
+	</insert>
+	
+	
+	
+	<select id="mainSaupDetail" parameterType="hashmap" resultMap="clobHashMap">
+		<![CDATA[
+			SELECT  A.ID                ,					
+					SAUP_FIELD1_GB      ,				
+					SAUP_NM             ,
+					SAUP_DETAIL         ,
+					SAUP_BUDGET_AMT     ,
+					SAUP_START_DATE     ,
+					SAUP_END_DATE       ,
+					SAUP_OPEN_DATE      ,					
+					SAUP_DEPT_CD        ,
+					SAUP_DEPT_NM        ,
+					SAUP_DAMDANG_ID     ,
+					SAUP_DAMDANG_NM     ,
+					SAUP_DAMDANG_TEL    ,
+					SAUP_DEPT_TEAMJANG  ,
+					SAUP_TEAMJANG_TEL   ,
+					SAUP_DEPT_GWAJANG   ,
+					SAUP_GWAJANG_TEL    ,
+					B.ID  AS SID        ,
+					B.SAUP_PROCESS_PERCENT,
+					B.SAUP_PROCESS_TOT_PERCENT,
+					B.SAUP_PUSH_CONTENT ,
+					B.SAUP_NEXT_CONTENT ,
+					B.THWK_ST_DATE ,
+					B.THWK_ED_DATE ,
+					B.NTWK_ST_DATE ,
+					B.NTWK_ED_DATE  
+            FROM BIMS_MAIN_SAUP_MASTER A LEFT OUTER JOIN (
+	            SELECT ID, MAST_ID, SAUP_PROCESS_PERCENT, SAUP_PROCESS_TOT_PERCENT, SAUP_PUSH_CONTENT, SAUP_NEXT_CONTENT, 
+	                   THWK_ST_DATE, THWK_ED_DATE, NTWK_ST_DATE, NTWK_ED_DATE 
+				FROM BIMS_MAIN_SAUP_SUB
+				WHERE ID IN ( SELECT  MAX(ID) ID FROM BIMS_MAIN_SAUP_SUB WHERE DEL_YN = '0' GROUP BY MAST_ID )
+			) B ON A.ID = B.MAST_ID        
+            WHERE A.DEL_YN = '0'            
+            AND A.ID = #{ID} 	
+		]]>
+	</select>
+	
+	
+	<select id="mainSaupBasicDetail" parameterType="hashmap" resultType="hashmap">
+		<![CDATA[
+			SELECT  ID                  ,
+					SAUP_FIELD1_GB      ,				
+					SAUP_NM             ,
+					SAUP_DETAIL         ,
+					SAUP_BUDGET_AMT     ,
+					SAUP_START_DATE     ,
+					SAUP_END_DATE       ,
+					SAUP_OPEN_DATE      ,					
+					SAUP_DEPT_CD        ,
+					SAUP_DEPT_NM        ,
+					SAUP_DAMDANG_ID     ,
+					SAUP_DAMDANG_NM     ,
+					SAUP_DAMDANG_TEL    ,
+					SAUP_DEPT_TEAMJANG  ,
+					SAUP_TEAMJANG_TEL   ,
+					SAUP_DEPT_GWAJANG   ,
+					SAUP_GWAJANG_TEL	,
+					INS_ID              ,
+					INS_DEPT            ,
+					INS_DATE			   
+            FROM BIMS_MAIN_SAUP_MASTER     
+            WHERE DEL_YN = '0'            
+            AND ID = #{ID}
+		]]>
+	</select>
+	
+	
+	<select id="mainSaupSubDetail" parameterType="hashmap" resultMap="clobHashMap">
+		<![CDATA[
+			SELECT
+				ID                    ,
+				MAST_ID               ,
+				SAUP_PROCESS_PERCENT  ,
+				SAUP_PROCESS_TOT_PERCENT  ,
+				SAUP_PUSH_CONTENT     ,
+				SAUP_NEXT_CONTENT     ,
+				THWK_ST_DATE          ,
+				THWK_ED_DATE          ,
+				NTWK_ST_DATE          ,
+				NTWK_ED_DATE          , 
+				INS_ID			      ,
+				INS_DEPT			  ,
+				INS_DATE				
+            FROM BIMS_MAIN_SAUP_SUB     
+            WHERE DEL_YN = '0'            
+            AND ID = #{ID} 	
+		]]>
+	</select>
+	
+	
+	<update id="updateMainSaupBasic" parameterType="hashmap">
+		<![CDATA[
+			UPDATE BIMS_MAIN_SAUP_MASTER
+				SET SAUP_BUDGET_AMT    = REPLACE(#{SAUP_BUDGET_AMT}, ',', ''),
+				SAUP_DETAIL            = #{SAUP_DETAIL},
+				SAUP_OPEN_DATE         = REPLACE(#{SAUP_OPEN_DATE}, '-', ''),
+				SAUP_DEPT_CD           = #{SAUP_DEPT_CD},
+				SAUP_DEPT_NM           = #{SAUP_DEPT_NM},
+				SAUP_DAMDANG_ID        = #{SAUP_DAMDANG_ID},
+				SAUP_DAMDANG_NM        = #{SAUP_DAMDANG_NM},
+				SAUP_DAMDANG_TEL       = #{SAUP_DAMDANG_TEL},
+				SAUP_DEPT_TEAMJANG     = #{SAUP_DEPT_TEAMJANG},
+				SAUP_TEAMJANG_TEL      = #{SAUP_TEAMJANG_TEL},
+				SAUP_DEPT_GWAJANG      = #{SAUP_DEPT_GWAJANG},
+				SAUP_GWAJANG_TEL       = #{SAUP_GWAJANG_TEL},
+			    MOD_ID = #{MOD_ID},
+			    MOD_DEPT = #{MOD_DEPT},			    
+			    MOD_DATE = SYSDATE			
+			WHERE
+				ID = #{SID}
+		]]>		
+	</update>
+	
+	
+	<update id="updateMainSaupSub" parameterType="hashmap">
+		<![CDATA[
+			UPDATE BIMS_MAIN_SAUP_SUB
+			SET	SAUP_PROCESS_PERCENT = #{SAUP_PROCESS_PERCENT},
+				SAUP_PROCESS_TOT_PERCENT = #{SAUP_PROCESS_TOT_PERCENT},
+				SAUP_PUSH_CONTENT    = #{SAUP_PUSH_CONTENT},
+				SAUP_NEXT_CONTENT    = #{SAUP_NEXT_CONTENT},
+				THWK_ST_DATE         = REPLACE(#{THWK_ST_DATE}, '-', ''),
+				THWK_ED_DATE         = REPLACE(#{THWK_ED_DATE}, '-', ''),
+				NTWK_ST_DATE         = REPLACE(#{NTWK_ST_DATE}, '-', ''),
+				NTWK_ED_DATE         = REPLACE(#{NTWK_ED_DATE}, '-', ''),  	
+			    MOD_ID = #{MOD_ID},
+			    MOD_DEPT = #{MOD_DEPT},			    
+			    MOD_DATE = SYSDATE			
+			WHERE
+				ID = #{ID}
+		]]>		
+	</update>
+	
+	
+	
+	<update id="deleteMainSaup" parameterType="hashmap">
+		<![CDATA[
+			UPDATE BIMS_MAIN_SAUP_MASTER
+			SET
+				DEL_YN = '1',
+				DEL_ID = #{MOD_ID},
+				DEL_DEPT = #{MOD_DEPT},
+				DEL_DATE = SYSDATE
+			WHERE
+				ID = #{SID}
+		]]>
+	</update>
+	
+	
+	<update id="deleteMainSaupSub" parameterType="hashmap">
+		<![CDATA[
+			UPDATE BIMS_MAIN_SAUP_SUB
+			SET
+				DEL_YN = '1',
+				DEL_ID = #{MOD_ID},
+				DEL_DEPT = #{MOD_DEPT},
+				DEL_DATE = SYSDATE
+			WHERE
+				ID = #{ID}
+		]]>
+	</update>
+	
+		
+	
+	<select id="mSaupList" parameterType="hashmap" resultType="hashmap">		
+		<include refid="common.pagingPre"/> 
+		
+			SELECT COUNT(*) OVER() AS TOTAL_COUNT,
+		           ROWNUM RID,
+		           ID,
+		           DEPT_CD,
+		           DEPT_NM,
+		           SAUP_YEAR,
+		           SAUP_NM
+	            FROM
+	            (				  
+				   SELECT
+					   ID,
+				       DEPT_CD,
+				       DEPT_NM,
+				       SAUP_YEAR,
+					   SAUP_NM				
+				   FROM BIMS_MAIN_SAUP_LIST				   
+				   WHERE DISPLAY_YN = '0' 
+				   AND DEL_YN = '0'
+			       <choose>
+				   <when test='SGB != null and SGB != ""'>
+				   AND SAUP_GB = #{SGB}
+				   </when>						 					
+				   </choose>
+				   ORDER BY SAUP_ORDER ASC			
+				)								    
+		<include refid="common.pagingPost"/>		
+	</select>
+	
+</mapper>

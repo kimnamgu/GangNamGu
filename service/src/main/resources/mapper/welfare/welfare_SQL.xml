@@ -1,0 +1,258 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="welfare">
+
+
+
+	<insert id="welfarInsert" parameterType="hashmap">
+		<![CDATA[
+			INSERT INTO WELFARE_SALARY
+			(
+				SEQ_NO
+				,NAME
+				,BIRTH
+				,PHONE
+				,DONG
+				,AGREE
+				,GUBUN_CODE
+				,GUBUN_NAME
+				,CI
+				,INS_DATE
+				,UPD_ID
+				,UPD_DATE
+				,DEL_ID
+				,DEL_DATE
+				,CONFIRM_YN
+				,SEX
+				,DEL_YN
+				,UUID
+				,ADDRESS
+			)
+			VALUES
+			(	
+				WELFARE_SALARY_SQ.NEXTVAL,
+				#{name},
+				#{birth},
+				#{phone},
+				#{dong},
+				#{agree},
+				#{gubunCode},
+				#{gubunName},
+				#{ci},
+				sysdate,
+				'',
+				'',
+				'',
+				'',
+				'',
+				'',
+				'0',
+				#{uuid},
+				#{address}
+				
+			)
+		]]>
+	</insert>
+	
+	
+	
+	<select id="loginProcessId" parameterType="hashmap" resultType="hashmap">
+		<![CDATA[
+			SELECT
+				USER_ID,
+				USER_NAME,
+				USER_PASS,
+				USER_RIGHT,				
+				DEPT_ID,
+				DEPT_NAME,
+				CLASS_ID, 
+				CLASS_NAME, 
+				POSITION_ID,
+				POSITION_NAME,
+				APPLY_REASON,
+				USER_STATUS,
+				APPROVE_DATE,
+                DEPT_NAME								
+			FROM
+				SELF_DGNS_USER_MASTER
+			WHERE
+				DEL_YN = '0'
+				AND USER_ID = #{USER_ID}			
+		]]>
+	</select>
+	
+	
+	<select id="loginProcessPw" parameterType="hashmap" resultType="hashmap">
+		<![CDATA[
+			SELECT
+				USER_ID,
+				USER_NAME,
+				USER_PASS,
+				USER_RIGHT,				
+				DEPT_ID,
+				DEPT_NAME,
+				CLASS_ID, 
+				CLASS_NAME, 
+				POSITION_ID,
+				POSITION_NAME,				
+				APPLY_REASON, 
+				USER_STATUS,
+				APPROVE_DATE,
+                DEPT_NAME							
+			FROM
+				SELF_DGNS_USER_MASTER
+			WHERE
+				DEL_YN = '0'
+				AND USER_ID = #{USER_ID}
+				AND USER_PASS = #{PASS_WD}		
+		]]>
+	</select>
+	
+	<update id="updateDocIssueReserve" parameterType="hashmap">
+			UPDATE WELFARE_SALARY				
+				SET 
+			    CONFIRM_YN       = #{confirm_yn},
+			    SAYU       		= #{sayu},
+				UPD_ID			 = #{userId},
+			    UPD_DATE   		 = sysdate 
+			WHERE
+				SEQ_NO = #{seq_no}
+	</update>
+	
+	<update id="updateWelfareInfo" parameterType="hashmap">
+			UPDATE WELFARE_SALARY				
+				SET 
+			   	DONG       = #{dong},
+			   	SAYU       = #{sayu},
+				UPD_ID			 = #{userId},
+			    UPD_DATE   		 = sysdate 
+			WHERE
+				SEQ_NO = #{seq_no}
+	</update>
+	
+	
+	<select id="welfarSelect" parameterType="hashmap" resultType="hashmap">
+			SELECT
+				SEQ_NO 
+				,UUID
+				,NAME
+				,BIRTH
+				,PHONE
+				,DONG
+				,AGREE
+				,GUBUN_CODE
+				,GUBUN_NAME
+				,CI
+				,TO_CHAR(INS_DATE,'YYYY-MM-DD HH24:MI:SS') INS_DATE
+				,UPD_ID
+				,UPD_DATE
+				,DEL_ID
+				,DEL_DATE
+				,CONFIRM_YN
+				,SEX
+				,DEL_YN
+				,ADDRESS
+				,NVL(SAYU,'') AS SAYU
+            FROM WELFARE_SALARY
+            WHERE DEL_YN = '0'
+            <choose>
+				<when test="ci != ''">     
+				  AND CI = #{ci}
+				</when>
+				<when test="uuid != ''">     
+				  AND  UUID = #{uuid}
+				</when>
+			</choose>
+            AND NAME = #{name}
+            AND DONG = #{deptName}
+            ORDER BY INS_DATE DESC
+	</select>
+	
+	
+	<select id="welfareSelectCt" parameterType="hashmap" resultType="hashmap">
+			<include refid="common.pagingPre"/> 
+		<![CDATA[
+			SELECT 
+				COUNT(*) OVER() AS TOTAL_COUNT 
+				,SEQ_NO 
+				,UUID
+				,NAME
+				,BIRTH
+				,PHONE
+				,DONG
+				,AGREE
+				,GUBUN_CODE
+				,GUBUN_NAME
+				,CI
+				,TO_CHAR(INS_DATE,'YYYY-MM-DD HH24:MI:SS') INS_DATE
+				,UPD_ID
+				,UPD_DATE
+				,DEL_ID
+				,DEL_DATE
+				,CONFIRM_YN
+				,SEX
+				,DEL_YN
+				,ADDRESS
+				,NVL(SAYU,'') AS SAYU
+            FROM WELFARE_SALARY
+            WHERE DEL_YN = '0'
+            ]]>
+             <choose>
+				<when test="userId != '18025190' and userId != 'epvmzhs233' ">     
+				   AND DONG = #{deptName}
+				</when>
+			</choose>
+			
+			<if test='done_yn == "ING"'>
+				AND CONFIRM_YN IS NULL
+			</if>
+			<if test='done_yn == "Y"'>
+				AND CONFIRM_YN = 'Y'
+			</if>
+			<if test='done_yn == "N"'>
+				AND CONFIRM_YN = 'N'
+			</if>
+			
+			
+			<if test="from_date != null and from_date !=''">
+				AND TO_CHAR(ins_date,'YYYYMMDD') <![CDATA[>=]]> #{from_date}
+			</if>
+			<if test="to_date != null and to_date !=''">
+				AND TO_CHAR(ins_date,'YYYYMMDD') <![CDATA[<=]]> #{to_date}
+			</if>
+			
+            ORDER BY INS_DATE DESC
+      		<include refid="common.pagingPost"/> 
+	</select>
+	
+	<select id="welfarUserSelectList" parameterType="hashmap" resultType="hashmap">
+		<![CDATA[
+			SELECT
+				USER_ID
+				,USER_NAME
+				,USER_PASS
+				,USER_RIGHT
+				,DEPT_ID
+				,DEPT_NAME
+				,CLASS_ID
+				,CLASS_NAME
+				,POSITION_ID
+				,POSITION_NAME
+				,USER_TEL
+				,APPLY_REASON
+				,USER_STATUS
+				,APPROVE_DATE
+				,INS_DATE
+				,MOD_DATE
+				,DEL_DATE
+				,DEL_YN
+				,PHONE
+			FROM
+				WELFARE_USER_MASTER
+			WHERE DEL_YN = '0'
+				AND DEPT_NAME = #{dong}			
+		]]>
+	</select>
+	
+</mapper>

@@ -1,0 +1,107 @@
+@charset "utf-8";
+
+/* common */
+body{font-family:"Malgun Gothic","맑은 고딕","돋움","Dotum","san-serif";font-size:13px;letter-spacing:-0.5px}
+body, div, dl, dt, dd, ul, ol, li, h1, h2, h3, h4, h5, h6, pre, code, form, fieldset, legend, textarea, p, blockquote, th, td, input, select, textarea, button {margin:0;padding:0}
+h1, h2, h3, h4, h5, h6 {line-height:1.0}
+caption {overflow:hidden;position:absolute;top:0;left:0;width:1px;height:1px;font-size:0;line-height:0}
+fieldset,img {border:0 none}
+button{border:0 none;background-color:transparent;cursor:pointer}
+select {padding:4px;border:1px solid #dcdcdc;border-radius:0!important}
+textarea{width:100%;padding:5px;border:1px solid #dcdcdc;border-radius:0px;resize:none}
+input[type="text"], input[type="tel"], input[type="email"],input[type="password"]{-webkit-appearance:none;-moz-appearance:none;height:auto;line-height:normal;padding:5px;border-radius:0!important;border:1px solid #dcdcdc;box-shadow:none!important}
+em{font-style:normal}
+a, a:hover, a:focus, a:visited, a:active {text-decoration:none;color:#333}
+
+.bar {font-size:12px;color:#ccc;margin:0 8px}
+.required {font-weight:600;color:#d20917}
+
+.text-gray{color:#959595!important}
+.text-green{color:#8AC149!important}
+.text-darkgray{color:#535353!important}
+.text-blue{color:#3498db!important}
+.text-darkblue{color:#337ab7!important}
+.text-red{color:#d20917!important}
+.text-pink{color:#f0788c!important}
+.text-mint{color:#2faa98!important}
+.text-darkblue{color:#34495e!important}
+
+.container {padding-left:0;padding-right:0}
+
+.wrap{position:relative;overflow:hidden;height:100%;}
+.survey-wrap {border:10px solid #3f51b5}
+.survey-wrap h2 {font-size:23px;background-color:#3f51b5;color:#fff;padding:5px 5px 15px 5px;font-weight:600;letter-spacing:-1px}
+.survey-wrap h2:before {font-family:"fontAwesome";content:"\f0f6";margin-right:5px;font-weight:400}
+
+.survey-wrap .survey-info table {margin-bottom:0;border-bottom:1px solid #ddd}
+.survey-wrap .survey-info table tbody th, .survey-wrap .survey-info table tbody td {line-height:20px}
+.survey-wrap .survey-info table tbody th {background-color:#f5f5f5}
+.survey-wrap .survey-info table tbody .survey-title {font-size:17px;font-weight:700;background-color:#fff;color:#3f51b5}
+.survey-wrap .survey-info table tbody td .dept-info {background-color:#999;color:#fff;padding:1px 6px 2px 6px;border-radius:3px;font-size:12px;margin-right:5px}
+
+.survey-wrap .survey-write-top-area {padding:15px}
+.survey-wrap .survey-write-top-area .write-info {background-color:#f5f5f5;padding:10px 15px;font-size:12px;color:#555}
+.survey-wrap .survey-write-top-area .write-info ol {padding-left:15px;margin-top:5px}
+.survey-wrap .survey-write-top-area .result-doc-down {font-weight:600;background-color:#d9edf7;padding:10px 15px;font-size:12px}
+.survey-wrap .survey-write-top-area .result-doc-down ul {list-style:none}
+.survey-wrap .survey-write-top-area .result-doc-down ul li:before {font-family:"fontAwesome";content:"\f019";margin-right:5px;color:#28759c}
+.survey-wrap .survey-write-top-area .result-doc-down ul li a {color:#28759c}
+
+.survey-wrap .write-area {padding:0 15px 15px 15px;overflow:hidden}
+.survey-wrap .write-area .inner-form {margin-bottom:5px}
+.survey-wrap .write-area .inner-form input[type="text"] {width:50%}
+.survey-wrap .write-area .inner-form .address-area>input[type="text"] {width:100%;margin-bottom:5px}
+.survey-wrap .write-area .inner-form .address-area>a.btn-zipcode {font-size:12px;background-color:#607d8b;color:#fff;padding:2px 5px;margin-bottom:3px;display:inline-block}
+
+.survey-wrap .txt-area {padding:0 15px 15px 15px}
+
+.survey-wrap .survey-list {padding:15px;border-top:1px solid #ddd;font-size:12px}
+.survey-wrap .survey-list ol {padding-left:15px}
+.survey-wrap .survey-list ol li {margin-bottom:10px}
+.survey-wrap .survey-list ol li .survey-list-title {font-weight:600;margin-top:25px;border-top:2px dotted #ddd;padding-top:25px;color:#337ab7}
+.survey-wrap .survey-list ol li:first-child .survey-list-title {margin-top:0;border-top:0;padding-top:0}
+.survey-wrap .survey-list ol li .survey-list-title .detail-txt {padding:10px;background-color:#eef0fb;font-weight:400;margin-top:5px}
+
+.survey-wrap .survey-list ol li .survey-list-form {margin-top:5px}
+.survey-wrap .survey-list ol li .survey-list-form input[type="text"] {width:100%}
+.survey-wrap .survey-list ol li .survey-list-form ul {list-style:none;margin-top:3px}
+.survey-wrap .survey-list ol li .survey-list-form ul li {margin-bottom:0;position:relative}
+.survey-wrap .survey-list ol li .survey-list-form ul li label {font-weight:400;padding-left:18px}
+.survey-wrap .survey-list ol li .survey-list-form ul li input[type="radio"] {margin:0;position:absolute;top:2px}
+
+.survey-wrap .survey-list ol li .survey-list-result {margin-top:10px}
+.survey-wrap .survey-list ol li .survey-list-result select {width:100%}
+.survey-wrap .survey-list ol li .survey-list-result ul {list-style:none;margin-top:15px}
+.survey-wrap .survey-list ol li .survey-list-result ul li .progress {margin-top:2px;margin-bottom:0}
+.survey-wrap .survey-list ol li .survey-list-result .txt-result>ul>li {border-bottom:1px solid #eaeaea;padding-bottom:10px}
+.survey-wrap .survey-list ol li .survey-list-result .txt-result>ul>li>ul>li {margin-bottom:3px}
+
+.survey-wrap .survey-sp-txt {padding:15px;background-color:#f5f5f5;font-size:12px}
+
+.survey-end {font-size:17px;text-align:center;padding:20px 0}
+.mb20 {margin-bottom:20px}
+
+.btn-close {display:inline-block;background-color:#555;color:#fff!important;font-size:15px;font-weight:600;padding:5px 20px}
+.btn-close:hover, .btn-close:focus {color:#fff}
+
+.btn-join {display:inline-block;background-color:#3f51b5;color:#fff!important;font-size:15px;font-weight:600;padding:5px 20px}
+.btn-join:hover, .btn-join:focus {color:#fff}
+
+@media (max-width: 480px) {
+	.survey-wrap .write-area .inner-form>.col-xs-2 {width:100%}
+	.survey-wrap .write-area .inner-form>.col-xs-10 {width:100%}
+}
+
+.vc { 		
+		top: 0; 		
+		bottom:0; 
+		margin-top:auto; 
+		margin-left:auto; 
+		margin-right:auto; 
+		padding-top: 30px;
+		height:125px;
+		width:505px;
+		background-image:url(http://survey.gangnam.go.kr/images/research_comp_bg.gif);
+		background-repeat: no-repeat;
+		color: #0040FF;
+	} /* 세로 중앙 정렬 */ 

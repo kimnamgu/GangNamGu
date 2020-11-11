@@ -1,0 +1,196 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="board">
+	<sql id="COMMON_PAGING_HEADER">
+		select R.* FROM(	
+	</sql>
+	
+	<sql id="COMMON_PAGING_TAIL">
+		) R
+		<if test='pageYN == "Y"'>
+		LIMIT #{listNum, jdbcType=INTEGER} OFFSET #{start, jdbcType=INTEGER}	
+		</if>
+	</sql>
+
+    
+    <select id="boardList" parameterType="BoardVO" resultType="BoardVO">
+      <include refid="COMMON_PAGING_HEADER"/>
+      <![CDATA[
+		    select 
+			    boardIdx
+				,id
+				,title
+				,content
+				,hitCnt
+				,ip
+				,ins_dt
+				,upt_dt
+		    from board
+		]]> 
+		<where>
+		<if test="keyWord != null and keyWord != ''">   
+				<if test="keyField == 'id'">
+					and id = #{keyWord, jdbcType=VARCHAR}
+				</if>
+				<if test="keyField == 'title'">
+					and title = #{keyWord, jdbcType=VARCHAR}
+				</if>
+				<if test="keyField == 'content'">
+					and content = #{keyWord, jdbcType=VARCHAR}
+				</if>	
+		</if>
+		</where>
+		<![CDATA[
+    		order by boardIdx desc
+		]]> 
+      <include refid="COMMON_PAGING_TAIL"/>
+    </select> 
+    
+	<select id="boardListCnt" parameterType="BoardVO" resultType="integer">
+      <![CDATA[
+		    select count(1) as cnt
+		    from board
+		]]> 
+		<where>
+		<if test="keyWord != null and keyWord != ''">   
+				<if test="keyField == 'name'">
+					and id = #{keyWord, jdbcType=VARCHAR}
+				</if>
+				<if test="keyField == 'title'">
+					and title = #{keyWord, jdbcType=VARCHAR}
+				</if>
+				<if test="keyField == 'content'">
+					and content = #{keyWord, jdbcType=VARCHAR}
+				</if>	
+		</if>
+		</where>
+    </select> 
+
+	<select id="findByIdx" parameterType="BoardVO" resultType="BoardVO">
+      <![CDATA[
+		select 
+			a.boardIdx
+			,a.id
+			,a.title
+			,a.content
+			,a.hitCnt
+			,a.ip
+			,a.ins_dt
+			,a.upt_dt
+			,(select count(1) from board_recommend where boardIdx = a.boardIdx and recommendYN = 'Y') as recommendYcnt
+			,(select count(1) from board_recommend where boardIdx = a.boardIdx and recommendYN = 'N') as recommendNcnt
+			,(select recommendYN from board_recommend where boardIdx = a.boardIdx and id = #{id}) as recommendYN
+		from board a
+		]]>
+		where boardIdx = #{boardIdx} 
+    </select>
+    
+    
+    
+   	<update id="readCount">
+		<![CDATA[
+		update board set hitCnt = hitCnt + 1 where boardIdx = #{boardIdx}
+		]]>
+    </update>  
+    
+ 
+ 
+ 	<select id="fileList" parameterType="int" resultType="FileVO">
+      <![CDATA[
+		    select 
+			    fileIdx
+				,fileSeq
+				,fileName
+				,fileExtension
+				,fileRealName
+				,fileSize
+				,categoryCode
+				,boardIdx
+				,id
+				,folderPath
+				,del_yn
+				,open_yn
+				,down_yn
+				,fileDescription
+				,ins_dt
+				,upt_dt
+		    from file_house
+		    where boardIdx = #{boardIdx}
+    		order by fileSeq
+		]]> 
+    </select>
+    
+    
+    <insert id="insertBoardRecommend">
+        <![CDATA[
+		    INSERT INTO board_recommend (
+		        boardIdx,
+		        id,
+		        recommendYN,
+		        ins_dt
+		    ) VALUES (
+		        #{boardIdx}, 
+		        #{id},
+		        #{recommendYN},
+		        sysdate()
+	        )
+        ]]>
+    </insert>
+    
+    <delete id="deleteBoardRecommend">
+	<![CDATA[
+		delete from board_recommend 
+		where id = #{id}
+		and boardIdx = #{boardIdx}
+	]]>
+    </delete>
+    
+    <select id="selectBoardRecommendCnt" parameterType="BoardVO" resultType="BoardVO">
+      <![CDATA[
+		    select 
+				(select count(1) from board_recommend where boardIdx = #{boardIdx} and recommendYN = 'Y') as recommendYcnt
+				,(select count(1) from board_recommend where boardIdx = #{boardIdx} and recommendYN = 'N') as recommendNcnt
+		]]> 
+    </select>
+
+    <insert id="insertReply" parameterType="ReplyVO" >
+        <![CDATA[
+		INSERT INTO reply 
+		            (
+			            replySeq
+						,replyCont
+						,boardIdx
+						,id
+						,upperReplyIdx
+						,ins_dt
+		             ) 
+		VALUES     (
+			            IFNULL((SELECT IFNULL(MAX(replySeq) + 1, 1) FROM reply b where b.boardIdx = #{boardIdx}), 1)
+						,#{replyCont}
+						,#{boardIdx}
+						,#{id}
+						,#{upperReplyIdx}
+			            ,sysdate()
+		            ) 
+        ]]>
+    </insert>
+    
+  	<select id="replyList" parameterType="int" resultType="ReplyVO">
+      <![CDATA[
+		SELECT CASE WHEN LEVEL-1 > 0 then CONCAT(CONCAT(REPEAT('    ', level  - 1),'┗'), a.replyCont)
+		                 ELSE a.replyCont
+		           END AS replyCont
+		     , a.replyIdx
+		     , a.upperReplyIdx
+		     , fnc.level
+		  FROM
+		     (SELECT fnc_hierarchi() AS replyIdx, @level AS level
+		        FROM (SELECT @start_with:=0, @replyIdx:=@start_with, @level:=0) vars
+		          JOIN reply
+		         WHERE @replyIdx IS NOT NULL) fnc
+		  left JOIN reply a ON fnc.replyIdx = a.replyIdx
+		  WHERE a.boardIdx = #{boardIdx}
+		]]> 
+    </select>
+    
+</mapper>

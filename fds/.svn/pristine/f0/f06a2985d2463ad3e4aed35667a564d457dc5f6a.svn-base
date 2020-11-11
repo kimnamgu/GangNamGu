@@ -1,0 +1,263 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<html>
+<head>
+<%@ include file="/WEB-INF/include/include-header.jspf" %>
+
+<style>  
+.mytable { border-collapse:collapse; }  
+.mytable th, .mytable td { border:1px solid black; }
+</style>
+
+<script type="text/javascript">
+		$(document).ready(function(){
+			fn_selectGiftPrintList(1);
+			
+			$("#write").on("click", function(e){ //글쓰기 버튼
+				e.preventDefault();
+				fn_giftAcceptWrite();
+			});
+			
+			$("#print").on("click", function(e){ //프린트 버튼
+				e.preventDefault();				
+				fn_print();
+				//fac_Print();
+			});
+		
+		});
+		
+		
+		function fac_Print(cont) { 
+			 alert('bb');
+			 factory.printing.header = "머릿글" //머릿말 설정 
+			 factory.printing.footer = "바닥글"  //꼬릿말 설정 
+			 factory.printing.portrait = true                    //출력방향 설정: true-가로, false-세로 
+			 factory.printing.leftMargin = 1.0                //왼쪽 여백 설정 
+			 factory.printing.topMargin = 1.0                //왼쪽 여백 설정 
+			 factory.printing.rightMargin = 1.0              //왼쪽 여백 설정 
+			 factory.printing.bottomMargin = 1.0            //왼쪽 여백 설정 
+			 factory.printing.Print(false, cont); 
+			 
+		} 
+		 
+		
+		
+		function fn_print(){     
+			var initBody = document.body.innerHTML;
+			
+			window.onbeforeprint = function(){
+				document.body.innerHTML = document.getElementById('printarea').innerHTML;    
+			}
+			window.onafterprint = function(){     
+				document.body.innerHTML = initBody;    
+			}    
+			//window.print();
+			//fac_Print(body);
+			
+			//factory.printing.header = "머릿글" //머릿말 설정 
+			//factory.printing.footer = "바닥글"  //꼬릿말 설정 
+			factory.printing.portrait = false;                    //출력방향 설정: true-세로, false-가로
+			factory.printing.leftMargin = 0.0                //왼쪽 여백 설정 
+			factory.printing.topMargin = 0.0                //왼쪽 여백 설정 
+			factory.printing.rightMargin = 0.0              //왼쪽 여백 설정 
+			factory.printing.bottomMargin = 0.0            //왼쪽 여백 설정
+			alert('11');
+			factory.printing.Print(false, window);
+			alert('22');
+		}
+		
+		function fn_giftAcceptWrite(){
+			var comSubmit = new ComSubmit();
+			comSubmit.setUrl("<c:url value='/daejang/giftAcceptWrite.do' />");
+			comSubmit.submit();
+		}
+		
+		function fn_printList(){
+			var comSubmit = new ComSubmit();
+			comSubmit.setUrl("<c:url value='/daejang/giftPrintList.do' />");
+			comSubmit.submit();
+		}
+		
+		function fn_giftAcceptDetail(obj){
+			var comSubmit = new ComSubmit();
+			comSubmit.setUrl("<c:url value='/daejang/giftAcceptDetail.do' />");
+			comSubmit.addParam("ID", obj.parent().find("#ID").val());
+			comSubmit.addParam("BDID", $("#BOARD_ID").val());
+			comSubmit.submit();
+		}
+		
+		function fn_selectGiftPrintList(pageNo){			
+			var comAjax = new ComAjax();
+			var user_right =  $("#USER_RIGHT").val();
+			
+			comAjax.setUrl("<c:url value='/daejang/selectGiftPrintList.do' />");
+			comAjax.setCallback("fn_selectGiftPrintListCallback");
+			comAjax.addParam("PAGE_INDEX",$("#PAGE_INDEX").val());
+			comAjax.addParam("PAGE_ROW", $("#RECORD_COUNT").val());
+		
+			if(user_right == 'A') //관리자면 전체리스트 보여주고 일반사용자는 해당부서만			
+				comAjax.addParam("TRNSF_DEPT_GB", '');
+			else
+				comAjax.addParam("TRNSF_DEPT_GB", user_right);
+		
+			comAjax.ajax();
+		}
+		
+		
+		function fn_selectGiftPrintListCallback(data){			
+			var total = data.TOTAL;			
+			var body = $("#mytable");
+			var recordcnt = $("#RECORD_COUNT").val();
+			
+			body.empty();
+			if(total == 0){
+				var str = "<tr class=\"list1\" onmouseover=\"this.className='list_over'\" onmouseout=\"this.className='list1'\">" + 
+								"<td colspan=\"11\" class=\"list_center_50\" nowrap>조회된 결과가 없습니다.</td>" +
+						  "</tr>" +
+						  "<tr>" + 
+							    "<td colspan=\"11\" class=\"list_line\"></td>" + 
+						  "</tr>";
+						  
+				body.append(str);
+			}
+			else{
+				var params = {
+					divId : "PAGE_NAVI",
+					pageIndex : "PAGE_INDEX",
+					totalCount : total,
+					recordCount : recordcnt,
+					eventName : "fn_selectGiftPrintList"
+				};
+				gfn_renderPaging(params);
+				
+				var str = "";				
+				var img_str = "";
+				
+				$.each(data.list, function(key, value){
+							
+							img_str = "";
+							
+							if(NvlStr(value.STORED_FILE_NAME) != "")								
+								img_str = "<img src=\"/simg/" + NvlStr(value.STORED_FILE_NAME) + "\" width=\"150\" height=\"120\">";
+												
+							str += "<tr class=\"list1\" onmouseover=\"this.className='list_over'\" onmouseout=\"this.className='list1'\">" +
+									   "<td class=\"list_center_50\" nowrap>" + value.RNUM + "</td>" +
+					                   "<td class=\"list_center_50\" nowrap>" + formatDate(NvlStr(value.GIFT_REPORT_DATE), ".") + "</td>" +
+					                   "<td class=\"list_center_50\" nowrap>" + CutString(NvlStr(value.GIFT_ITEM_NM), 6) + "</td>" +            
+					                   "<td class=\"list_center_50\" nowrap>" + CutString(NvlStr(value.GIFT_STND), 8) + "</td>" + 									 
+									   "<td class=\"list_center_50\" nowrap>" + NvlStr(value.GIFT_NUMBER) +  "</td>" +									   
+									   "<td class=\"list_center_50\" nowrap>" + CutString(NvlStr(value.KEEP_PLACE), 4) + "</td>" +									   
+									   "<td class=\"list_center_50\" nowrap>" + CutString(NvlStr(value.GIVE_PSN_NATION_NM), 5) + "</td>" +
+									   "<td class=\"list_center_50\" nowrap>" + CutString(NvlStr(value.GIVE_PSN_NM), 6) + "</td>" +									 		
+									   "<td class=\"list_center_50\" nowrap>" + img_str + "</td>" +
+									   "<td class=\"list_center_50\" nowrap>" + formatDate(NvlStr(value.SELL_DATE), ".") + "</td>" +
+									   "<td class=\"list_center_50\" nowrap>" + comma(NvlStr(value.SELL_AMT)) + "</td>" +													
+									   "</tr>";
+									   
+							
+							
+				});
+				body.append(str);
+				
+				$("a[name='title']").on("click", function(e){ //제목 
+					e.preventDefault();
+					fn_giftAcceptDetail($(this));
+				});
+			}
+		}
+	</script>
+</head>
+<body bgcolor="#FFFFFF">
+<object id="factory" style="display:none"  classid="clsid:1663ed61-23eb-11d2-b92f-008048fdd814"  codebase="http://98.23.7.109:8099/gift/common/smsx.cab#Version=7,7,0,20"></object>
+<input type="hidden" id="USER_ID" name="USER_ID" value="${sessionScope.userinfo.userId}">
+<input type="hidden" id="DEPT_ID" name="DEPT_ID" value="${sessionScope.userinfo.deptId}">
+<input type="hidden" id="USER_RIGHT" name="USER_RIGHT" value="${sessionScope.userinfo.userright}">
+<input type="hidden" id="BOARD_ID" name="BOARD_ID" value="1">
+
+
+<table  border="0" cellspacing="0" cellpadding="0" class="bodyframe_full">
+  <tr>
+    <td class="bodyframe">
+    <!--페이지 타이틀 시작 -->
+    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+      <tr>
+        <td class="pupup_title"><img src="/gift/images/popup_title.gif" align="absmiddle">선물접수대장</td>
+      </tr>
+      <tr>
+        <td class="margin_title"></td>
+      </tr>
+    </table>
+    <!--페이지 타이틀 끝 -->
+    </td>
+  </tr>
+  <tr>
+    <td class="pupup_frame" style="padding-right:12px">	
+    
+    <c:set var="us_rt" value="${sessionScope.userinfo.userright}" />
+	<c:choose>
+	 <c:when test="${us_rt eq 'A'}">
+                       
+ <!-- -------------- 버튼 시작 --------------  -->
+   <table width="100%" height="40" border="0" cellspacing="0" cellpadding="0">
+     <tr>
+       <td></td>
+       <td align="right">
+       <table border="0" cellspacing="0" cellpadding="0">
+         <tr>
+           <td>          
+           <table border="0" cellspacing="0" cellpadding="0" class="btn" id="tblAddMemo21" style="filter:none;">
+             <tr>
+               <td><img src="/gift/images/btn_type0_head.gif"></td>
+               <td background="/gift/images/btn_type0_bg.gif" class="btn_type1" nowrap><a href="#this" class="btn" id="print"><font color="white">출력</font></a></td>
+               <td><img src="/gift/images/btn_type0_end.gif"></td>
+             </tr>
+           </table>                
+           </td>		
+         </tr>
+       </table>
+       </td>
+     </tr>
+   </table>
+   <!-- -------------- 버튼 끝 ---------------->	
+   
+     </c:when>	      	
+    </c:choose> 	
+    
+    <div id='printarea'>
+		<br></br>
+		<p><center><h2>선 물 관 리 대 장</h2></center></p>
+		
+		<!-- <table width="100%" border="0" cellspacing="0" cellpadding="0" style="TABLE-layout: fixed" class="mytable">-->
+		<table width="100%" border="1" cellspacing="0" cellpadding="0" bordercolor="#666666" style="border-collapse:collapse">
+			<tr class="list_tit_tr">
+				<td rowspan=2 width="40" class="list_tit">연번</td>				
+				<td rowspan=2 width="70" class="list_tit">접수일시</td>
+				<td rowspan=2 width="100" class="list_tit">선물명</td>				
+				<td rowspan=2 width="75" class="list_tit">규격</td>	
+				<td rowspan=2 width="40" class="list_tit">수량</td>
+				<td rowspan=2 width="75" class="list_tit">보관장소</td>
+				<td colspan=2 width="140" class="list_tit">증정인</td>				
+				<td rowspan=2 width="150" class="list_tit">선물사진</td>
+				<td rowspan=2 width="70" class="list_tit">매각일시</td>
+				<td rowspan=2 width="80" class="list_tit">매각금액</td>			
+			</tr>			
+			<tr class="list_tit_tr">				
+				<td width="70" class="list_tit">국적</td>
+				<td width="70" class="list_tit">성명</td>					
+			</tr>		
+		<tbody id='mytable'>			
+		</tbody>
+	</table>
+	</div>
+	
+	</td>
+	</tr>
+</table>
+
+
+	<div id="PAGE_NAVI" align='center'></div>
+	<input type="hidden" id="PAGE_INDEX" name="PAGE_INDEX"/>
+	<input type="hidden" id="RECORD_COUNT" name="RECORD_COUNT" value="10"/>	
+	<%@ include file="/WEB-INF/include/include-body.jspf" %>
+		
+</body>
+</html>

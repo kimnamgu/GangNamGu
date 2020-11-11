@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd" >
+
+<properties>
+	
+	<entry key="db.url">jdbc:oracle:thin:@98.23.7.4:1521:ora7</entry>
+	<entry key="db.username">portal</entry>
+	<entry key="db.password">ptl!#2016R</entry>
+	
+	<entry key="log.sosong">INFO</entry>
+	<entry key="log.sql">ERROR</entry>
+</properties>

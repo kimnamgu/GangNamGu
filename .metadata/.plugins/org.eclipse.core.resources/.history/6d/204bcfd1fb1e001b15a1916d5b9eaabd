@@ -1,0 +1,11 @@
+package manpower.write.dao;
+
+import org.springframework.stereotype.Repository;
+
+import manpower.common.dao.AbstractDAO;
+
+@Repository("writeDAO")
+public class WriteDAO extends AbstractDAO{
+
+	
+}

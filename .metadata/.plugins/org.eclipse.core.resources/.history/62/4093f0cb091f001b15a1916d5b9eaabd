@@ -1,0 +1,6 @@
+package manpower.manage.service;
+
+public interface ManageService {
+
+
+}

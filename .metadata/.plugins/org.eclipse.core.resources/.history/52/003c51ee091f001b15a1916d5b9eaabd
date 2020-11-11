@@ -1,0 +1,24 @@
+package manpower.manage.service;
+
+import javax.annotation.Resource;
+
+import org.apache.log4j.Logger;
+import org.springframework.stereotype.Service;
+
+import manpower.common.util.FileUtils;
+import manpower.manage.dao.ManageDAO;
+
+
+@Service("manageService")
+public class ManageServiceImpl implements ManageService{
+	Logger log = Logger.getLogger(this.getClass());
+	
+	@Resource(name="fileUtils")
+	private FileUtils fileUtils;
+	
+	@Resource(name="manageDAO")
+	private ManageDAO manageDAO;
+
+	
+	
+}

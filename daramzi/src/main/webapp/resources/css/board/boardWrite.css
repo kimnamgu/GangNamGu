@@ -1,0 +1,27 @@
+@CHARSET "UTF-8";
+
+body{
+  background-color : #CAE2F7;
+}
+
+table,tr,td, th{
+  border : 1px solid black;
+  border-collapse : collapse;
+}
+
+
+#preview img {
+    width: 100px;
+}
+
+#preview p {
+    text-overflow: ellipsis;
+    overflow: hidden;
+}
+
+.preview-box {
+    border: 1px solid;
+    padding: 5px;
+    border-radius: 2px;
+    margin-bottom: 10px;
+}

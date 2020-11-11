@@ -1,0 +1,23 @@
+package manpower.manage.dao;
+
+import java.util.List;
+import java.util.Map;
+
+import org.springframework.stereotype.Repository;
+
+import manpower.common.dao.AbstractDAO;
+
+@Repository("manageDAO")
+public class ManageDAO extends AbstractDAO{
+
+	@SuppressWarnings("unchecked")
+	public List<Map<String, Object>> selectNoticeList(Map<String, Object> map) throws Exception{
+		System.out.println("map 확인 : " + map.toString());
+		return (List<Map<String, Object>>)selectPagingList("manage.selectNoticeList", map);
+	}
+	
+	public void updateDelNoticeAllList(Map<String, Object> map) throws Exception{
+		update("manage.updateDelNoticeAllList", map);
+	}
+	
+}

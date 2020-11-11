@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="fileupload">
+    <insert id="mkDir">
+        <![CDATA[
+		    INSERT INTO file_folder (
+		        folderSeq,
+		        folderName,
+		        id,
+		        upperFolder,
+		        folderDepth,
+		        ins_dt
+		    ) VALUES (
+		        (SELECT ifnull(MAX(folderSeq) + 1, 1) FROM file_folder A),
+		        #{folderName},
+		        #{id}, 
+		        #{upperFolder},
+		        #{folderDepth},
+		        sysdate()
+	        )
+        ]]>
+    </insert>
+    
+   	<delete id="delDir">
+	<![CDATA[
+		delete from file_folder 
+		where folderName = #{folderName}
+		and folderDepth = 3
+	]]>
+    </delete>
+</mapper>

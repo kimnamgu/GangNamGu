@@ -1,0 +1,26 @@
+body {font: 9pt/1.5 sans-serif;background: white; color: black;}</p>
+<p>.left {float:left;}
+.picL{float:left;}
+.right {float:right;}
+.border1 {border: 1px solid #000;}</p>
+<p>a {color: black; text-decoration:none;}</p>
+<p>h1 {font-size: 18pt;}
+h2 {font-size: 15pt;}
+h3 {font-size: 11pt;}
+p {text-indent: 15pt; orphans: 3;}</p>
+<p>#sidebar, #menu, #header_special, .permlink, .ttag, .ad,
+#commentinputs, #commentwrap h2, .comment {display:none;}</p>
+<p>#content {width: auto;}
+.posttitle {float:left;}
+.postdate {float:right;}
+.writing {clear:both;}
+.writing a {text-decoration: underline;}
+h1 a:link:after, h1 a:visited:after,
+.writing a:link:after, .writing a:visited:after {
+   content: " (" attr(href) ") ";
+   font-size: 90%;
+   }
+#commentwrap p {text-indent:0;}
+
+#print_view table[border] th, #print_view table[border] td {outline:#000 solid thin\9;}
+#print_view table[border="0"] th, #print_view table[border="0"] td {outline-width:0px\9;}

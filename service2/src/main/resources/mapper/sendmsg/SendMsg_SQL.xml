@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="sendmsg">
+	<sql id="pagingPre3">
+		<![CDATA[
+   			SELECT 
+			    AAA.*
+			FROM(
+			    SELECT 
+			        ROWNUM AS RNUM,
+			        AA.*
+			    FROM(
+ 		]]>
+ 	</sql>
+ 	
+ 	<sql id="pagingPost3">
+ 		<![CDATA[
+ 			 	) AA
+			) AAA
+			WHERE 
+			    AAA.RNUM BETWEEN #{START} AND #{END}
+ 		]]>
+ 	</sql>
+	
+ 	
+	
+	<select id="ssoLogin" parameterType="hashmap" resultType="hashmap">
+		<![CDATA[
+		  SELECT NDU_USER_ID USER_ID, NDU_USER_NAME USER_NAME,
+		       NDU_DEPT_ID DEPT_ID, NDU_DEPT_NAME DEPT_NAME,
+		       NDU_CLSS_NO CLASS_ID, NDU_CLSS_NM CLASS_NAME,
+		       NDU_POSIT_CODE POSITION_ID, NDU_POSIT_NM POSITION_NAME ,
+		       NDU_GRADE_NO GRADE_ID, NDU_GRADE_NM GRADE_NAME,		    
+		       REPLACE(REPLACE(REPLACE(NDU_TEL_NO, '02-3423-', ''),'023423', ''), '02)3423-', '') TEL,
+		       NDU_HP_NO MOBILE
+		  FROM NTIS_DEPT_USER
+		  WHERE SUBSTR(NDU_WORKSTATE_CODE,0, 2) = 'AA'
+		  AND NDU_USER_ID = #{USER_ID}
+		]]>
+	</select>
+	
+	
+	
+	
+	<select id="selectSsoUserList" parameterType="hashmap" resultType="hashmap">		
+		<![CDATA[			
+			SELECT NDU_USER_ID USER_ID, NDU_USER_NAME USER_NAME,
+		       NDU_DEPT_ID DEPT_ID, NDU_DEPT_NAME DEPT_NAME,
+		       NDU_CLSS_NO CLASS_ID, NDU_CLSS_NM CLASS_NAME,
+		       NDU_POSIT_CODE POSITION_ID, NDU_POSIT_NM POSITION_NAME ,
+		       NDU_GRADE_NO GRADE_ID, NDU_GRADE_NM GRADE_NAME,
+		       NDU_TEL_NO TEL, NDU_HP_NO MOBILE
+		  FROM NTIS_DEPT_USER
+		  WHERE SUBSTR(NDU_WORKSTATE_CODE,0, 2) = 'AA'
+		]]>		
+	</select>
+	
+	
+	
+	<select id="popJikWonList" parameterType="hashmap" resultType="hashmap">
+		<include refid="sendmsg.pagingPre3"/>		
+		<![CDATA[
+			SELECT COUNT(*) OVER() AS TOTAL_COUNT, 	
+			       NDU_ORG_CODENM,
+			       NDU_DEPT_ID,
+			       NDU_DEPT_NAME,
+			       NDU_USER_ID,
+			       NDU_USER_NAME,			       
+			       NDU_CLSS_NO,
+			       NDU_CLSS_NM,
+			       NDU_POSIT_CODE,
+			       NDU_POSIT_NM,
+			       NDU_HP_NO,
+			       NDU_TEL_NO,
+			       REPLACE(REPLACE(REPLACE(NDU_TEL_NO, '02-3423-', ''),'023423', ''), '02)3423-', '') NAESUN
+			FROM NTIS_DEPT_USER
+			WHERE SUBSTR(NDU_WORKSTATE_CODE,0, 2) = 'AA'
+			AND NDU_USER_RANK != '0'					
+		]]>
+		<choose>
+		<when test='GUBUN != null and GUBUN.equals("2")'>		
+		AND NDU_DEPT_NAME LIKE #{USER_NAME} ||'%'
+		</when>
+		<otherwise>
+		AND NDU_USER_NAME LIKE #{USER_NAME} ||'%'
+		</otherwise>
+		</choose>
+		ORDER BY TO_NUMBER(NDU_USER_RANK) ASC NULLS LAST
+		<include refid="sendmsg.pagingPost3"/>			
+	</select>	
+	
+</mapper>

@@ -1,0 +1,316 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="diagnose">
+	
+	<select id="selectSelfDgnsMastList" parameterType="hashmap" resultType="hashmap">
+		<include refid="common.pagingPre"/> 
+		<![CDATA[
+			SELECT COUNT(*) OVER() AS TOTAL_COUNT,
+				   ROWNUM NO,                                
+                   DGNS_NO,                   
+                   TITLE,
+                   HEADCONT,            
+                   TAILCONT,
+                   NVL(ANSCOUNT, 0) ANSCOUNT,
+                   NVL(DOWNCOUNT, 0) DOWNCOUNT,
+                   ORIGINAL_FILE_NAME,
+                   IMG_FILE_NAME       
+            FROM SELF_DGNS_MASTER           
+            WHERE DEL_YN = '0'
+            ORDER BY DGNS_NO DESC
+		]]>		
+		<if test="USER_NAME != null and USER_NAME !=''">
+		AND USER_NAME = #{USER_NAME}
+		</if>		
+		<if test="DGNS_NO != null and DGNS_NO !=''">
+		AND DGNS_NO = #{DGNS_NO}
+		</if>
+		<if test="SHORTEN_YN != null and SHORTEN_YN !=''">
+		AND SHORTEN_YN = #{SHORTEN_YN}
+		</if>			
+		<include refid="common.pagingPost"/> 
+	</select>
+	
+	
+	<select id="selfDgnsContentView" parameterType="hashmap" resultType="hashmap">
+		<![CDATA[			
+	        SELECT DGNS_NO,                
+	               TITLE,
+	               HEADCONT,
+	               TAILCONT,
+	               BIGO,
+	               ORIGINAL_FILE_NAME,
+	               STORED_FILE_NAME,
+	               ORIGINAL_IMG_NAME,
+	               IMG_FILE_NAME               
+	        FROM SELF_DGNS_MASTER
+			WHERE DGNS_NO = #{DGNS_NO}		    		
+		]]>
+	</select>
+	
+	
+	
+	
+	<select id="selfDgnsSubjList" parameterType="hashmap" resultType="hashmap">
+		<![CDATA[			
+	        SELECT DGNS_NO,                
+	               SBJ_SEQ,	               
+	               SUBJECT,
+	               BIGO               
+	        FROM SELF_DGNS_SUBJECT
+			WHERE DGNS_NO = #{DGNS_NO}
+			AND DEL_YN = '0'				    	
+		]]>
+	</select>
+	
+	
+	<select id="selfDgnsQstList" parameterType="hashmap" resultType="hashmap">
+		<![CDATA[			
+	        SELECT DGNS_NO,                
+	               SBJ_SEQ,
+	               QST_SEQ,
+	               CONT_HEAD,
+	               CONT,
+	               BIGO               
+	        FROM SELF_DGNS_QUESTION
+			WHERE DGNS_NO = #{DGNS_NO}
+			AND DEL_YN = '0'
+			ORDER BY SBJ_SEQ ASC, QST_SEQ ASC			 			    		
+		]]>
+	</select>
+	
+	
+	<select id="selfDgnsExamList" parameterType="hashmap" resultType="hashmap">
+		<![CDATA[			
+	        SELECT DGNS_NO,                
+	               SBJ_SEQ,
+	               QST_SEQ,
+	               EXP_SEQ,	               
+	               POINT,
+	               CONT,
+	               BIGO               
+	        FROM SELF_DGNS_EXAMPLE
+			WHERE DGNS_NO = #{DGNS_NO}
+			AND DEL_YN = '0'
+			ORDER BY SBJ_SEQ ASC, QST_SEQ ASC, EXP_SEQ ASC       			    		
+		]]>
+	</select>
+	
+	
+	<select id="selfDgnsQstListCnt" parameterType="hashmap" resultType="hashmap">
+		<![CDATA[			
+	        SELECT SBJ_SEQ, COUNT(*) CNT	                              
+	        FROM SELF_DGNS_QUESTION
+			WHERE DGNS_NO = #{DGNS_NO}
+			AND DEL_YN = '0'
+			GROUP BY SBJ_SEQ
+			ORDER BY SBJ_SEQ ASC       			    		
+		]]>
+	</select>
+	
+	
+	
+	
+	
+	
+	
+	<insert id="insertDgnsMast" parameterType="hashmap">
+		<![CDATA[		
+			INSERT INTO SELF_DGNS_MASTER
+			(
+				DGNS_NO,
+				TITLE,
+				HEADCONT,
+				TAILCONT,
+				BIGO,
+				ORIGINAL_FILE_NAME,
+				STORED_FILE_NAME,
+				ORIGINAL_IMG_NAME,
+				IMG_FILE_NAME,				
+				INS_ID,
+				INS_DATE																	  
+			)
+			VALUES
+			(
+				SELF_DGNS_MASTER_SQ.NEXTVAL,				
+				#{TITLE},
+				#{HEADCONT},
+				#{TAILCONT},
+				#{BIGO},
+				#{ORIGINAL_FILE_NAME},
+				#{STORED_FILE_NAME},
+				#{ORIGINAL_IMG_NAME},
+				#{IMG_FILE_NAME},
+				#{INS_ID},
+				SYSDATE			    
+			)
+		]]>
+		<selectKey resultType="int" keyProperty="DGNS_ID" order="AFTER">
+        	SELECT SELF_DGNS_MASTER_SQ.CURRVAL FROM DUAL
+    	</selectKey>		
+	</insert>
+	
+	
+	
+	<update id="updateDgnsMast" parameterType="hashmap">
+		<![CDATA[
+			UPDATE SELF_DGNS_MASTER
+			SET	TITLE = #{TITLE},			    
+				HEADCONT = #{HEADCONT},
+				TAILCONT = #{TAILCONT},
+				BIGO = #{BIGO},
+				MOD_ID = #{DEL_ID},
+				MOD_DATE = SYSDATE
+		]]>		
+		<if test="ORIGINAL_FILE_NAME != null and ORIGINAL_FILE_NAME !=''">
+		, ORIGINAL_FILE_NAME = #{ORIGINAL_FILE_NAME}
+		, STORED_FILE_NAME = #{STORED_FILE_NAME}
+		</if>
+		<if test="ORIGINAL_IMG_NAME != null and ORIGINAL_IMG_NAME !=''">
+		, ORIGINAL_IMG_NAME = #{ORIGINAL_IMG_NAME}
+		, IMG_FILE_NAME = #{IMG_FILE_NAME}
+		</if>			    
+			WHERE  
+				DGNS_NO = #{DGNS_NO}
+				
+	</update>
+	
+	
+	<update id="deleteDgnsMast" parameterType="hashmap">
+		<![CDATA[
+			UPDATE SELF_DGNS_MASTER
+			SET	DEL_YN = '1',
+				DEL_ID = #{DEL_ID},
+				DEL_DATE = SYSDATE		
+			WHERE  
+				DGNS_NO = #{DGNS_NO}
+		]]>	
+	</update>
+	
+	
+	
+	
+	
+	
+	
+	<insert id="insertDgnsSubj" parameterType="hashmap">
+		<![CDATA[		
+			INSERT INTO SELF_DGNS_SUBJECT
+			(
+				DGNS_NO,
+				SBJ_SEQ,
+				SUBJECT,				
+				BIGO,				
+				INS_ID,
+				INS_DATE																	  
+			)
+			VALUES
+			(
+				#{DGNS_ID},				
+				#{SBJ_SEQ},
+				#{SUBJECT},
+				#{BIGOS},							
+				#{INS_ID},
+				SYSDATE			    
+			)
+		]]>		
+	</insert>
+	
+	
+	
+	<insert id="insertDgnsQuest" parameterType="hashmap">
+		<![CDATA[		
+			INSERT INTO SELF_DGNS_QUESTION
+			(
+				DGNS_NO,
+				SBJ_SEQ,
+				QST_SEQ,
+				CONT_HEAD,
+				CONT,
+				BIGO,				
+				INS_ID,
+				INS_DATE																	  
+			)
+			VALUES
+			(
+				#{DGNS_ID},				
+				#{SBJ_SEQ},
+				#{QST_SEQ},
+				#{CONT_HEAD},
+				#{CONT},
+				#{BIGOQ},							
+				#{INS_ID},
+				SYSDATE			    
+			)
+		]]>		
+	</insert>
+	
+	
+	
+	
+	<insert id="insertDgnsExamp" parameterType="hashmap">
+		<![CDATA[		
+			INSERT INTO SELF_DGNS_EXAMPLE
+			(
+				DGNS_NO,
+				SBJ_SEQ,
+				QST_SEQ,
+				EXP_SEQ,
+				POINT,
+				CONT,
+				BIGO,				
+				INS_ID,
+				INS_DATE																	  
+			)
+			VALUES
+			(
+				#{DGNS_ID},				
+				#{SBJ_SEQ},
+				#{QST_SEQ},
+				#{EXP_SEQ},
+				#{POINT},
+				#{CONT},
+				#{BIGOE},							
+				#{INS_ID},
+				SYSDATE			    
+			)
+		]]>		
+	</insert>
+	
+	
+	
+	
+	
+	<update id="updateDgnsSubj" parameterType="hashmap">
+		<![CDATA[		
+			UPDATE SELF_DGNS_SUBJECT
+			SET DEL_YN = '1',
+				DEL_ID = #{DEL_ID},
+				DEL_DATE = SYSDATE
+			WHERE DGNS_NO = #{DGNS_NO}
+		]]>
+	</update>
+	
+	<update id="updateDgnsQuest" parameterType="hashmap">
+		<![CDATA[		
+			UPDATE SELF_DGNS_QUESTION
+			SET DEL_YN = '1',
+			    DEL_ID = #{DEL_ID},
+				DEL_DATE = SYSDATE
+			WHERE DGNS_NO = #{DGNS_NO}
+		]]>
+	</update>
+	
+	<update id="updateDgnsExamp" parameterType="hashmap">
+		<![CDATA[		
+			UPDATE SELF_DGNS_EXAMPLE
+			SET DEL_YN = '1',
+				DEL_ID = #{DEL_ID},
+				DEL_DATE = SYSDATE
+			WHERE DGNS_NO = #{DGNS_NO}
+		]]>
+	</update>
+	
+
+</mapper>

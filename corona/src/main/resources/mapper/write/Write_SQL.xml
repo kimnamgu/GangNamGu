@@ -1,0 +1,631 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="write">
+
+<!-- 확진자 -->
+
+<insert id="insertConfirmWrite" parameterType="hashmap">
+		<selectKey keyProperty="SID" resultType="string" order="BEFORE">
+			SELECT CORONA_CONFIRM_SQ.NEXTVAL FROM DUAL
+		</selectKey>
+		<![CDATA[		
+			INSERT INTO CORONA_CONFIRM_STATUS
+			(
+				ID
+				,WRITE_DATE
+				,CELL_NUM
+				,PATIENT_NUM
+				,PATIENT_NAME
+				,CONTACT_NUM
+				,CONTACT_NAME
+				,CONFIRM_GRADE
+				,SEX
+				,BIRTH
+				,JOB
+				,ORG_GUBUN
+				,ORG_DONG
+				,ORG_ADDRESS
+				,ORG_ADDRESS_DTL
+				,INFECT_GUBUN
+				,INFECT_DONG
+				,INFECT_DAE
+				,INFECT_SO
+				,INFECT_ASFECT_AREA
+				,INFECT_ASFECT_AREA_DTL
+				,INFECT_JIPDAN_GUBUN
+				,INFECT_JIPDAN_GUBUN_FACILITY
+				,CONFIRM_DATE
+				,HOSPITAL
+				,DISCHARGE_DATE
+				,REMARK
+				,DEATH
+				,TA_CONFIRM_YN
+				,ICHUP_YN
+				,INS_ID
+				,INS_DATE
+				,DEL_YN														  
+			)
+			VALUES
+			(
+				TRIM(#{SID})
+				
+				,TRIM(NVL(#{WRITE_DATE},''))
+				,TRIM(NVL(#{CELL_NUM},''))
+				,TRIM(NVL(#{PATIENT_NUM},''))
+				,TRIM(NVL(#{PATIENT_NAME},''))
+				,TRIM(NVL(#{CONTACT_NUM},''))
+				,TRIM(NVL(#{CONTACT_NAME},''))
+				,TRIM(NVL(#{CONFIRM_GRADE},''))
+				,TRIM(NVL(#{SEX},''))
+				,TRIM(NVL(#{BIRTH},''))
+				,TRIM(NVL(#{JOB},''))
+				,TRIM(NVL(#{ORG_GUBUN},''))
+				,TRIM(NVL(#{ORG_DONG},''))
+				,TRIM(NVL(#{ORG_ADDRESS},''))
+				,TRIM(NVL(#{ORG_ADDRESS_DTL},''))
+				,TRIM(NVL(#{INFECT_GUBUN},''))
+				,TRIM(NVL(#{INFECT_DONG},''))
+				,TRIM(NVL(#{INFECT_DAE},''))
+				,TRIM(NVL(#{INFECT_SO},''))
+				,TRIM(NVL(#{INFECT_ASFECT_AREA},''))
+				,TRIM(NVL(#{INFECT_ASFECT_AREA_DTL},''))
+				,TRIM(NVL(#{INFECT_JIPDAN_GUBUN},''))
+				,TRIM(NVL(#{INFECT_JIPDAN_GUBUN_FACILITY},''))
+				,TRIM(NVL(#{CONFIRM_DATE},''))
+				,TRIM(NVL(#{HOSPITAL},''))
+				,TRIM(NVL(#{DISCHARGE_DATE},''))
+				,TRIM(NVL(#{REMARK},''))
+				,#{DEATH}
+				,#{TA_CONFIRM_YN}
+				,#{ICHUP_YN}
+				,#{INS_ID}
+				,SYSDATE
+				,0		
+			)
+			]]>
+	</insert>
+	
+	<select id="selectConfirmDetail" parameterType="hashmap" resultType="hashmap">
+		<![CDATA[
+			SELECT
+				ID
+				,WRITE_DATE
+				,CELL_NUM
+				,PATIENT_NUM
+				,PATIENT_NAME
+				,CONTACT_NUM
+				,CONTACT_NAME
+				,CONFIRM_GRADE
+				,SEX
+				,BIRTH
+				,JOB
+				,ORG_GUBUN
+				,ORG_DONG
+				,ORG_ADDRESS
+				,ORG_ADDRESS_DTL
+				,INFECT_GUBUN
+				,INFECT_DONG
+				,INFECT_DAE
+				,INFECT_SO
+				,INFECT_ASFECT_AREA
+				,INFECT_ASFECT_AREA_DTL
+				,INFECT_JIPDAN_GUBUN
+				,INFECT_JIPDAN_GUBUN_FACILITY
+				,CONFIRM_DATE
+				,HOSPITAL
+				,DISCHARGE_DATE
+				,REMARK
+				,DEATH
+				,TA_CONFIRM_YN
+				,ICHUP_YN
+            FROM CORONA_CONFIRM_STATUS     
+            WHERE DEL_YN = '0'            
+            AND ID = #{ID} 	
+		]]>
+	</select>
+	
+	
+	<update id="updateConfirm" parameterType="hashmap">
+		<![CDATA[		
+			UPDATE CORONA_CONFIRM_STATUS
+			SET   WRITE_DATE	= #{WRITE_DATE},
+					CELL_NUM	= #{CELL_NUM},
+					PATIENT_NUM	= #{PATIENT_NUM},
+					PATIENT_NAME	= #{PATIENT_NAME},
+					CONTACT_NUM	= #{CONTACT_NUM},
+					CONTACT_NAME	= #{CONTACT_NAME},
+					CONFIRM_GRADE	= #{CONFIRM_GRADE},
+					SEX	= #{SEX},
+					BIRTH	= #{BIRTH},
+					JOB	= #{JOB},
+					ORG_GUBUN	= #{ORG_GUBUN},
+					ORG_DONG	= #{ORG_DONG},
+					ORG_ADDRESS	= #{ORG_ADDRESS},
+					ORG_ADDRESS_DTL	= #{ORG_ADDRESS_DTL},
+					INFECT_GUBUN	= #{INFECT_GUBUN},
+					INFECT_DONG	= #{INFECT_DONG},
+					INFECT_DAE	= #{INFECT_DAE},
+					INFECT_SO	= #{INFECT_SO},
+					INFECT_ASFECT_AREA	= #{INFECT_ASFECT_AREA},
+					INFECT_ASFECT_AREA_DTL	= #{INFECT_ASFECT_AREA_DTL},
+					INFECT_JIPDAN_GUBUN	= #{INFECT_JIPDAN_GUBUN},
+					INFECT_JIPDAN_GUBUN_FACILITY	= #{INFECT_JIPDAN_GUBUN_FACILITY},
+					CONFIRM_DATE	= #{CONFIRM_DATE},
+					HOSPITAL	= #{HOSPITAL},
+					DISCHARGE_DATE	= #{DISCHARGE_DATE},
+					REMARK	= #{REMARK},
+					DEATH	= #{DEATH},
+					TA_CONFIRM_YN	= #{TA_CONFIRM_YN},
+					ICHUP_YN	= #{ICHUP_YN},
+					MOD_DATE	= SYSDATE
+			WHERE ID = #{ID}
+		]]>
+	</update>	
+
+
+
+<!-- 국내접촉자-->
+
+<insert id="insertDomesticWrite" parameterType="hashmap">
+		<selectKey keyProperty="SID" resultType="string" order="BEFORE">
+			SELECT CORONA_DOMESTIC_CONTACT_SQ.NEXTVAL FROM DUAL
+		</selectKey>
+		<![CDATA[		
+			INSERT INTO CORONA_DOMESTIC_CONTACT_STATUS
+			(
+				ID
+				
+				,WRITE_DATE
+				,CELL_NUM
+				,NAME
+				,SEX
+				,BIRTH
+				,JOB
+				,SELF_ISO_AREA_DONG
+				,SELF_ISO_AREA_ADDRESS
+				,SELF_ISO_AREA_ADDRESS_DTL
+				,PATIENT_NUM
+				,PATIENT_NAME
+				,CONTACT_NUM
+				,CONTACT_NAME
+				,FINAL_CONTACT
+				,MONITOR_START
+				,MONITOR_END
+				,CONTACT_ADDRESS
+				,CONTACT_TYPE
+				,CONTACT_GUBUN
+				,PATIENT_YN
+				,BALGUB_YN
+				,DAMDANG_DEPART
+				,DAMDANG_CLASS
+				,DAMDANG_POSITION
+				,DAMDANG_NAME
+				,DAMDANG_CALL
+				
+				,INS_ID
+				,INS_DATE
+				,DEL_YN													  
+			)
+			VALUES
+			(
+				TRIM(#{SID})
+				
+				,TRIM(NVL(#{WRITE_DATE},''))
+				,TRIM(NVL(#{CELL_NUM},''))
+				,TRIM(NVL(#{NAME},''))
+				,TRIM(NVL(#{SEX},''))
+				,TRIM(NVL(#{BIRTH},''))
+				,TRIM(NVL(#{JOB},''))
+				,TRIM(NVL(#{SELF_ISO_AREA_DONG},''))
+				,TRIM(NVL(#{SELF_ISO_AREA_ADDRESS},''))
+				,TRIM(NVL(#{SELF_ISO_AREA_ADDRESS_DTL},''))
+				,TRIM(NVL(#{PATIENT_NUM},''))
+				,TRIM(NVL(#{PATIENT_NAME},''))
+				,TRIM(NVL(#{CONTACT_NUM},''))
+				,TRIM(NVL(#{CONTACT_NAME},''))
+				,TRIM(NVL(#{FINAL_CONTACT},''))
+				,TRIM(NVL(#{MONITOR_START},''))
+				,TRIM(NVL(#{MONITOR_END},''))
+				,TRIM(NVL(#{CONTACT_ADDRESS},''))
+				,TRIM(NVL(#{CONTACT_TYPE},''))
+				,TRIM(NVL(#{CONTACT_GUBUN},''))
+				,TRIM(NVL(#{PATIENT_YN},''))
+				,TRIM(NVL(#{BALGUB_YN},''))
+				,TRIM(NVL(#{DAMDANG_DEPART},''))
+				,TRIM(NVL(#{DAMDANG_CLASS},''))
+				,TRIM(NVL(#{DAMDANG_POSITION},''))
+				,TRIM(NVL(#{DAMDANG_NAME},''))
+				,TRIM(NVL(#{DAMDANG_CALL},''))
+				
+				,#{INS_ID}
+				,SYSDATE
+				,0		
+			)
+			]]>
+	</insert>
+	
+	<select id="selectDomesticDetail" parameterType="hashmap" resultType="hashmap">
+		<![CDATA[
+			SELECT COUNT(*) OVER() AS TOTAL_COUNT                                
+	                    ,ID
+						,WRITE_DATE
+						,CELL_NUM
+						,NAME
+						,SEX
+						,BIRTH
+						,JOB
+						,SELF_ISO_AREA_DONG
+						,SELF_ISO_AREA_ADDRESS
+						,SELF_ISO_AREA_ADDRESS_DTL
+						,PATIENT_NUM
+						,PATIENT_NAME
+						,CONTACT_NUM
+						,CONTACT_NAME
+						,FINAL_CONTACT
+						,MONITOR_START
+						,MONITOR_END
+						,CONTACT_ADDRESS
+						,CONTACT_TYPE
+						,CONTACT_GUBUN
+						,PATIENT_YN
+						,BALGUB_YN
+						,DAMDANG_DEPART
+						,DAMDANG_CLASS
+						,DAMDANG_POSITION
+						,DAMDANG_NAME
+						,DAMDANG_CALL
+	            FROM CORONA_DOMESTIC_CONTACT_STATUS 
+	            WHERE DEL_YN = 0           
+           		AND ID = #{ID} 	
+		]]>
+	</select>
+	
+	
+	<update id="updateDomestic" parameterType="hashmap">
+		<![CDATA[		
+			UPDATE CORONA_DOMESTIC_CONTACT_STATUS
+			SET   WRITE_DATE= TRIM(NVL(#{WRITE_DATE},''))
+					,CELL_NUM= TRIM(NVL(#{CELL_NUM},''))
+					,NAME= TRIM(NVL(#{NAME},''))
+					,SEX= TRIM(NVL(#{SEX},''))
+					,BIRTH= TRIM(NVL(#{BIRTH},''))
+					,JOB= TRIM(NVL(#{JOB},''))
+					,SELF_ISO_AREA_DONG= TRIM(NVL(#{SELF_ISO_AREA_DONG},''))
+					,SELF_ISO_AREA_ADDRESS= TRIM(NVL(#{SELF_ISO_AREA_ADDRESS},''))
+					,SELF_ISO_AREA_ADDRESS_DTL= TRIM(NVL(#{SELF_ISO_AREA_ADDRESS_DTL},''))
+					,PATIENT_NUM= TRIM(NVL(#{PATIENT_NUM},''))
+					,PATIENT_NAME= TRIM(NVL(#{PATIENT_NAME},''))
+					,CONTACT_NUM= TRIM(NVL(#{CONTACT_NUM},''))
+					,CONTACT_NAME= TRIM(NVL(#{CONTACT_NAME},''))
+					,FINAL_CONTACT= TRIM(NVL(#{FINAL_CONTACT},''))
+					,MONITOR_START= TRIM(NVL(#{MONITOR_START},''))
+					,MONITOR_END= TRIM(NVL(#{MONITOR_END},''))
+					,CONTACT_ADDRESS= TRIM(NVL(#{CONTACT_ADDRESS},''))
+					,CONTACT_TYPE= TRIM(NVL(#{CONTACT_TYPE},''))
+					,CONTACT_GUBUN= TRIM(NVL(#{CONTACT_GUBUN},''))
+					,PATIENT_YN= TRIM(NVL(#{PATIENT_YN},''))
+					,BALGUB_YN= TRIM(NVL(#{BALGUB_YN},''))
+					,DAMDANG_DEPART= TRIM(NVL(#{DAMDANG_DEPART},''))
+					,DAMDANG_CLASS= TRIM(NVL(#{DAMDANG_CLASS},''))
+					,DAMDANG_POSITION= TRIM(NVL(#{DAMDANG_POSITION},''))
+					,DAMDANG_NAME= TRIM(NVL(#{DAMDANG_NAME},''))
+					,DAMDANG_CALL= TRIM(NVL(#{DAMDANG_CALL},''))
+					,MOD_DATE	= SYSDATE
+			WHERE ID = #{ID}
+		]]>
+	</update>	
+
+<!-- 해외입국자-->
+
+<insert id="insertOverseaWrite" parameterType="hashmap">
+		<selectKey keyProperty="SID" resultType="string" order="BEFORE">
+			SELECT CORONA_OVERSEA_SQ.NEXTVAL FROM DUAL
+		</selectKey>
+		<![CDATA[		
+			INSERT INTO CORONA_OVERSEA_STATUS
+			(
+				ID
+				,WRITE_DATE
+				,CELL_NUM
+				,NAME
+				,SEX
+				,BIRTH
+				,JOB
+				,ORG_ADDRESS
+				,ORG_ADDRESS_DTL
+				,SELF_ISO_AREA_DONG
+				,SELF_ISO_AREA_ADDRESS
+				,SELF_ISO_AREA_ADDRESS_DTL
+				,COME_DATE
+				,FREE_DATE
+				,VISIT_NATION
+				,DAMDANG_DEPART
+				,DAMDANG_CLASS
+				,DAMDANG_POSITION
+				,DAMDANG_NAME
+				,DAMDANG_CALL
+				,INS_ID
+				,INS_DATE
+				,DEL_YN	
+			)
+			VALUES
+			(
+				TRIM(#{SID})
+				
+				,TRIM(NVL(#{WRITE_DATE},''))
+				,TRIM(NVL(#{CELL_NUM},''))
+				,TRIM(NVL(#{NAME},''))
+				,TRIM(NVL(#{SEX},''))
+				,TRIM(NVL(#{BIRTH},''))
+				,TRIM(NVL(#{JOB},''))
+				,TRIM(NVL(#{ORG_ADDRESS},''))
+				,TRIM(NVL(#{ORG_ADDRESS_DTL},''))
+				,TRIM(NVL(#{SELF_ISO_AREA_DONG},''))
+				,TRIM(NVL(#{SELF_ISO_AREA_ADDRESS},''))
+				,TRIM(NVL(#{SELF_ISO_AREA_ADDRESS_DTL},''))
+				,TRIM(NVL(#{COME_DATE},''))
+				,TRIM(NVL(#{FREE_DATE},''))
+				,TRIM(NVL(#{VISIT_NATION},''))
+				,TRIM(NVL(#{DAMDANG_DEPART},''))
+				,TRIM(NVL(#{DAMDANG_CLASS},''))
+				,TRIM(NVL(#{DAMDANG_POSITION},''))
+				,TRIM(NVL(#{DAMDANG_NAME},''))
+				,TRIM(NVL(#{DAMDANG_CALL},''))
+				
+				,#{INS_ID}
+				,SYSDATE
+				,0		
+			)
+			]]>
+	</insert>
+	
+	<select id="selectOverseaDetail" parameterType="hashmap" resultType="hashmap">
+		<![CDATA[
+			SELECT COUNT(*) OVER() AS TOTAL_COUNT                                
+	                ,ID
+					,WRITE_DATE
+					,CELL_NUM
+					,NAME
+					,SEX
+					,BIRTH
+					,JOB
+					,ORG_ADDRESS
+					,ORG_ADDRESS_DTL
+					,SELF_ISO_AREA_DONG
+					,SELF_ISO_AREA_ADDRESS
+					,SELF_ISO_AREA_ADDRESS_DTL
+					,COME_DATE
+					,FREE_DATE
+					,VISIT_NATION
+					,DAMDANG_DEPART
+					,DAMDANG_CLASS
+					,DAMDANG_POSITION
+					,DAMDANG_NAME
+					,DAMDANG_CALL
+	            FROM CORONA_OVERSEA_STATUS 
+	            WHERE DEL_YN = 0           
+           		AND ID = #{ID} 	
+		]]>
+	</select>
+	
+	
+	<update id="updateOversea" parameterType="hashmap">
+		<![CDATA[		
+			UPDATE CORONA_OVERSEA_STATUS
+			SET   WRITE_DATE= #{WRITE_DATE}
+					,CELL_NUM= #{CELL_NUM}
+					,NAME= #{NAME}
+					,SEX= #{SEX}
+					,BIRTH= #{BIRTH}
+					,JOB= #{JOB}
+					,ORG_ADDRESS= #{ORG_ADDRESS}
+					,ORG_ADDRESS_DTL= #{ORG_ADDRESS_DTL}
+					,SELF_ISO_AREA_DONG= #{SELF_ISO_AREA_DONG}
+					,SELF_ISO_AREA_ADDRESS= #{SELF_ISO_AREA_ADDRESS}
+					,SELF_ISO_AREA_ADDRESS_DTL= #{SELF_ISO_AREA_ADDRESS_DTL}
+					,COME_DATE= #{COME_DATE}
+					,FREE_DATE= #{FREE_DATE}
+					,VISIT_NATION= #{VISIT_NATION}
+					,DAMDANG_DEPART= #{DAMDANG_DEPART}
+					,DAMDANG_CLASS= #{DAMDANG_CLASS}
+					,DAMDANG_POSITION= #{DAMDANG_POSITION}
+					,DAMDANG_NAME= #{DAMDANG_NAME}
+					,DAMDANG_CALL= #{DAMDANG_CALL}
+					,MOD_DATE	= SYSDATE
+			WHERE ID = #{ID}
+		]]>
+	</update>	
+
+<!-- 상담민원-->
+
+<insert id="insertConsultWrite" parameterType="hashmap">
+		<selectKey keyProperty="SID" resultType="string" order="BEFORE">
+			SELECT CORONA_CONSULT_SQ.NEXTVAL FROM DUAL
+		</selectKey>
+		<![CDATA[		
+			INSERT INTO CORONA_CONSULT_STATUS
+			(
+				ID
+				,WRITE_DATE
+				,CONSULT_GUBUN
+				,JUYA_GUBUN
+				,CONSULT_TIME
+				,CONSULT_NAME
+				,MINWON_NAME
+				,SEX
+				,MINWON_PHONE
+				,MINWON_CONTENT
+				,PROCESS_RESULT
+				
+				,INS_ID
+				,INS_DATE
+				,DEL_YN													  
+			)
+			VALUES
+			(
+				TRIM(#{SID})
+				
+				,TRIM(NVL(#{WRITE_DATE},''))
+				,TRIM(NVL(#{CONSULT_GUBUN},''))
+				,TRIM(NVL(#{JUYA_GUBUN},''))
+				,TRIM(NVL(#{CONSULT_TIME},''))
+				,TRIM(NVL(#{CONSULT_NAME},''))
+				,TRIM(NVL(#{MINWON_NAME},''))
+				,TRIM(NVL(#{SEX},''))
+				,TRIM(NVL(#{MINWON_PHONE},''))
+				,TRIM(NVL(#{MINWON_CONTENT},''))
+				,TRIM(NVL(#{PROCESS_RESULT},''))
+				
+				,#{INS_ID}
+				,SYSDATE
+				,0			
+			)
+			]]>
+	</insert>
+	
+	<select id="selectConsultDetail" parameterType="hashmap" resultType="hashmap">
+		<![CDATA[
+			SELECT COUNT(*) OVER() AS TOTAL_COUNT                                
+	                ,ID
+					,WRITE_DATE
+					,CONSULT_GUBUN
+					,JUYA_GUBUN
+					,CONSULT_TIME
+					,CONSULT_NAME
+					,MINWON_NAME
+					,SEX
+					,MINWON_PHONE
+					,DBMS_LOB.SUBSTR( MINWON_CONTENT, 4000, 1)  as MINWON_CONTENT 
+					,DBMS_LOB.SUBSTR( PROCESS_RESULT, 4000, 1)  as PROCESS_RESULT
+	            FROM CORONA_CONSULT_STATUS 
+	            WHERE DEL_YN = 0           
+           		AND ID = #{ID} 	
+		]]>
+	</select>
+	
+	
+	<update id="updateConsult" parameterType="hashmap">
+		<![CDATA[		
+			UPDATE CORONA_CONSULT_STATUS
+			SET   WRITE_DATE= #{WRITE_DATE}
+					,CONSULT_GUBUN= #{CONSULT_GUBUN}
+					,JUYA_GUBUN= #{JUYA_GUBUN}
+					,CONSULT_TIME= #{CONSULT_TIME}
+					,CONSULT_NAME= #{CONSULT_NAME}
+					,MINWON_NAME= #{MINWON_NAME}
+					,SEX= #{SEX}
+					,MINWON_PHONE= #{MINWON_PHONE}
+					,MINWON_CONTENT= #{MINWON_CONTENT}
+					,PROCESS_RESULT= #{PROCESS_RESULT}
+					,MOD_DATE	= SYSDATE
+			WHERE ID = #{ID}
+		]]>
+	</update>	
+	
+<!-- 선별진료소-->
+<insert id="insertClinicWrite" parameterType="hashmap">
+		<selectKey keyProperty="SID" resultType="string" order="BEFORE">
+			SELECT CORONA_CLINIC_SQ.NEXTVAL FROM DUAL
+		</selectKey>
+		<![CDATA[		
+			INSERT INTO CORONA_CLINIC_STATUS
+			(
+				ID
+				,WRITE_DATE
+				,CLINIC_VISIT_DATE
+				,CELL_NUM
+				,NAME
+				,SEX
+				,BIRTH
+				,JOB
+				,INSPECTION_CASE
+				,SARAE_GUBUN
+				,SUSPICION_GUBUN
+				,SUSPICION_DAE
+				,SUSPICION_SO
+				,ORG_ADDRESS
+				,ORG_ADDRESS_DTL
+				,REMARK
+				,INS_ID
+				,INS_DATE
+				,DEL_YN													  
+			)
+			VALUES
+			(
+				TRIM(#{SID})
+				
+				,TRIM(NVL(#{WRITE_DATE},''))
+				,TRIM(NVL(#{CLINIC_VISIT_DATE},''))
+				,TRIM(NVL(#{CELL_NUM},''))
+				,TRIM(NVL(#{NAME},''))
+				,TRIM(NVL(#{SEX},''))
+				,TRIM(NVL(#{BIRTH},''))
+				,TRIM(NVL(#{JOB},''))
+				,TRIM(NVL(#{INSPECTION_CASE},''))
+				,TRIM(NVL(#{SARAE_GUBUN},''))
+				,TRIM(NVL(#{SUSPICION_GUBUN},''))
+				,TRIM(NVL(#{SUSPICION_DAE},''))
+				,TRIM(NVL(#{SUSPICION_SO},''))
+				,#{ORG_ADDRESS}
+				,#{ORG_ADDRESS_DTL}
+				,#{REMARK}
+				
+				,#{INS_ID}
+				,SYSDATE
+				,0			
+			)
+			]]>
+	</insert>
+	
+	<select id="selectClinicDetail" parameterType="hashmap" resultType="hashmap">
+		<![CDATA[
+	             SELECT COUNT(*) OVER() AS TOTAL_COUNT                                
+	                    ,ID
+						,WRITE_DATE
+						,CLINIC_VISIT_DATE
+						,CELL_NUM
+						,NAME
+						,SEX
+						,BIRTH
+						,JOB
+						,INSPECTION_CASE
+						,SARAE_GUBUN
+						,SUSPICION_GUBUN
+						,SUSPICION_DAE
+						,SUSPICION_SO
+						,REMARK
+						,ORG_ADDRESS
+						,ORG_ADDRESS_DTL
+	            FROM CORONA_CLINIC_STATUS 
+	            WHERE DEL_YN = 0           
+           		AND ID = #{ID} 	
+		]]>
+	</select>
+	
+	
+	<update id="updateClinic" parameterType="hashmap">
+		<![CDATA[		
+			UPDATE CORONA_CLINIC_STATUS
+			SET WRITE_DATE= #{WRITE_DATE}
+					,CLINIC_VISIT_DATE= #{CLINIC_VISIT_DATE}
+					,CELL_NUM= #{CELL_NUM}
+					,NAME= #{NAME}
+					,SEX= #{SEX}
+					,BIRTH= #{BIRTH}
+					,JOB= #{JOB}
+					,INSPECTION_CASE= #{INSPECTION_CASE}
+					,SARAE_GUBUN= #{SARAE_GUBUN}
+					,SUSPICION_GUBUN= #{SUSPICION_GUBUN}
+					,SUSPICION_DAE= #{SUSPICION_DAE}
+					,SUSPICION_SO= #{SUSPICION_SO}
+					,ORG_ADDRESS= #{ORG_ADDRESS}
+					,ORG_ADDRESS_DTL= #{ORG_ADDRESS_DTL}
+					,REMARK= #{REMARK}
+					,MOD_DATE	= SYSDATE
+			WHERE ID = #{ID}
+		]]>
+	</update>	
+
+
+</mapper>

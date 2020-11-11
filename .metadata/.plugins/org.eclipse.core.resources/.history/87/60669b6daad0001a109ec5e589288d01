@@ -1,0 +1,372 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"	pageEncoding="UTF-8"%>
+<html>
+<head>
+<%@ include file="/WEB-INF/include/include-header.jspf"%>
+<%@ page import="java.util.Date" %>
+<%@ page import="java.text.SimpleDateFormat" %>
+<%
+	Date nowTime = new Date();
+	SimpleDateFormat sf = new SimpleDateFormat("yyyy.MM.dd hh:mm");
+%>
+
+
+<script type="text/javascript">
+	var user_right = "${sessionScope.userinfo.userright}";
+
+	$(document).ready(function() {
+			
+			//dday 계산
+			var now = new Date();
+			var then = new Date("january 26,2020");
+			var gap = now.getTime() - then.getTime();
+			gap = Math.floor(gap / (1000 * 60 * 60 * 24));
+			$('#dday').text("- 코로나 19 대응 D+" + gap + " -");
+			
+			
+			printClock();
+			
+	});
+	
+	/**
+	 *  yyyyMMdd 포맷으로 반환
+	 */
+	function getFormatDate(date){
+	    var year = date.getFullYear();              //yyyy
+	    var month = (1 + date.getMonth());          //M
+	    month = month >= 10 ? month : '0' + month;  //month 두자리로 저장
+	    var day = date.getDate();                   //d
+	    day = day >= 10 ? day : '0' + day;          //day 두자리로 저장
+	    return  year + '' + month + '' + day;       //'-' 추가하여 yyyy-mm-dd 형태 생성 가능
+	}
+	
+	function printClock() {
+	    
+	    var clock = document.getElementById("clock");            // 출력할 장소 선택
+	    var currentDate = new Date();                                     // 현재시간
+	    
+	    var calendar = currentDate.getFullYear() + "." + (currentDate.getMonth()+1) + "." + currentDate.getDate() // 현재 날짜
+	    var currentHours = addZeros(currentDate.getHours(),2); 
+	    var currentMinute = addZeros(currentDate.getMinutes() ,2);
+	    var currentSeconds =  addZeros(currentDate.getSeconds(),2);
+
+	    clock.innerHTML = "<"+calendar +" "+ currentHours+":"+currentMinute+":"+currentSeconds + " 질병관리과>&nbsp;&nbsp;"; //날짜를 출력해 줌
+	    
+	    setTimeout("printClock()",1000);         // 1초마다 printClock() 함수 호출
+	}
+
+	function addZeros(num, digit) { // 자릿수 맞춰주기
+		  var zero = '';
+		  num = num.toString();
+		  if (num.length < digit) {
+		    for (i = 0; i < digit - num.length; i++) {
+		      zero += '0';
+		    }
+		  }
+		  return zero + num;
+	}
+	
+	function go_(date){
+	    var year = date.getFullYear();              //yyyy
+	    var month = (1 + date.getMonth());          //M
+	    month = month >= 10 ? month : '0' + month;  //month 두자리로 저장
+	    var day = date.getDate();                   //d
+	    day = day >= 10 ? day : '0' + day;          //day 두자리로 저장
+	    return  year + '' + month + '' + day;       //'-' 추가하여 yyyy-mm-dd 형태 생성 가능
+	}
+
+
+</script>
+
+<style type="text/css">
+ u {
+    text-decoration: none;
+    border-bottom: 10px solid black;
+  }​
+</style>
+</head>
+
+<body>
+
+<div style="background-color:#170B3B;color:white; margin-bottom:10px; width: 100%;">
+	<a href="#this" class="btn" id="logout">
+		<img src="/corona/images/popup_title.gif" align="absmiddle">
+	</a>코로나19 관리 현황
+</div>
+
+<table style="width:100%;">
+<tr>
+<td align="center">
+		<div style="width:900px;margin-bottom:20px;border:2px solid gray;">
+			<table style="width:100%;margin-top:20px;margin-bottom:20px;">	
+				<tr>
+					<td id="dday" align="center" style="font-size: 22px;font-weight:700;">
+						<!-- - 코로나 19 대응 D+172 - -->
+					</td>
+				</tr>			
+				<tr>
+					<td align="center">
+						<h1><u>&nbsp;&nbsp;『코로나19』관리 현황&nbsp;&nbsp;</u></h1>
+					</td>
+				</tr>	 
+			</table>
+		
+		
+			<table style="width:100%;margin-top:40px;margin-bottom:20px;">				
+				<tr>
+					<td align="right" style="font-size: 20px;color:gray;font-family:굴림,monospace;font-weight: bold; ">
+					<%-- < <%= sf.format(nowTime) %> 질병관리과 >&nbsp;&nbsp;&nbsp;&nbsp; --%>
+						<div id="clock"></div>
+					</td>
+				</tr>	 
+			</table>
+
+			<table style="width:100%;padding:0px 20px 5px 0px;">	
+				<tr>
+					<td align="left" style="padding:0px 0px 10px 20px;" >
+						<h3>□ 확진자 현황</h3>
+					</td>
+					<td align="right" style="padding:0px 20px 5px 0px;">
+						<a href="/corona/manage/confirmManage.do" class="btn btn-secondary" id="statistics"><i class="fa fa-tag"></i> 확진자 관리</a>
+					</td>
+				</tr>	 
+			</table>
+				
+				<div class="col-md-12" align="center">
+					<div class="table-responsive m-b-40">
+						 <table class="table table-bordered table-data3">
+					     <thead style="background-color:#0B2161;">
+					        <tr align="center">
+											<th rowspan='2'>구분</th>
+											<th rowspan='2'>총계</th>
+											<th colspan='9'>감염경로</th>
+											<th rowspan='2'>비고</th>
+							</tr>
+					        <tr align="center">
+											<th>해외</th>
+											<th>신천지</th>
+											<th>대구</th>
+											<th>콜센터</th>
+											<th>분당<br>재생<br>병원</th>
+											<th>이태원</th>
+											<th>삼성<br>서울<br>병원</th>
+											<th>확진자<br>접촉자</th>
+											<th>기타</th>
+							</tr>
+					      </thead>
+					      <tbody>
+					      <tr>
+					      	<td align='center' style='color:#222222;'>${confirmMap.SHOWDATE}</td>
+					      	<td align='center' style='color:#222222;'>${confirmMap.CUR_TOTAL_CNT}</td>
+					      	<td align='center' style='color:#222222;' onclick="go_confirmDtl('oversea')">${confirmMap.OVERSEA}</td>
+					      	<td align='center' style='color:#222222;'>${confirmMap.SINCHEONJI}</td>
+					      	<td align='center' style='color:#222222;'>${confirmMap.DAEGU}</td>
+					      	<td align='center' style='color:#222222;'>${confirmMap.CALLCENTER}</td>
+					      	<td align='center' style='color:#222222;'>${confirmMap.BUNDANGHOS}</td>
+					      	<td align='center' style='color:#222222;'>${confirmMap.ITAEWON}</td>
+					      	<td align='center' style='color:#222222;'>${confirmMap.SAMSUNGHOS}</td>
+					      	<td align='center' style='color:#222222;'>${confirmMap.INFECTCONTACT}</td>
+					      	<td align='center' style='color:#222222;'>${confirmMap.ETC}</td>
+					      	<td rowspan='2' align='right' style='color:#222222;'>
+					      		해외확진자<br>
+								<c:forEach items="${confirmOverseaList}" var="item" varStatus="i">
+									<c:out value="${item.INFECT_SO}" />(<c:out value="${item.INFECT_SO_CNT}" />)<br>
+								</c:forEach>
+							</td>
+					      </tr>
+				   	      <tr>
+					      	<td align='center' style='color:#222222;'>누계</td>
+					      	<td align='center' style='color:#222222;'>${confirmAccumMap.CUR_TOTAL_CNT}</td>
+					      	<td align='center' style='color:#222222;'>${confirmAccumMap.OVERSEA}</td>
+					      	<td align='center' style='color:#222222;'>${confirmAccumMap.SINCHEONJI}</td>
+					      	<td align='center' style='color:#222222;'>${confirmAccumMap.DAEGU}</td>
+					      	<td align='center' style='color:#222222;'>${confirmAccumMap.CALLCENTER}</td>
+					      	<td align='center' style='color:#222222;'>${confirmAccumMap.BUNDANGHOS}</td>
+					      	<td align='center' style='color:#222222;'>${confirmAccumMap.ITAEWON}</td>
+					      	<td align='center' style='color:#222222;'>${confirmAccumMap.SAMSUNGHOS}</td>
+					      	<td align='center' style='color:#222222;'>${confirmAccumMap.INFECTCONTACT}</td>
+					      	<td align='center' style='color:#222222;'>${confirmAccumMap.ETC}</td>
+					      </tr>
+					      </tbody>
+					      
+					      </table>
+				      </div>
+				</div>
+				
+				<!-- 자가격리자 현황  -->
+				<table style="width:100%;padding:0px 20px 5px 0px;">	
+					<tr>
+						<td align="left" style="padding:0px 0px 10px 20px;" >
+							<h3>□ 자가격리자 현황</h3>
+						</td>
+						<td align="right" style="padding:0px 20px 5px 0px;">
+							<a href="/corona/manage/overseasManage.do" class="btn btn-secondary" id="statistics"><i class="fa fa-tag"></i> 국내접촉자 관리</a>
+							<a href="/corona/manage/domesticContactManage.do" class="btn btn-secondary" id="statistics"><i class="fa fa-tag"></i> 해외입국자 관리</a>
+						</td>
+					</tr>	 
+				</table>
+				
+				<div class="col-md-12" align="center">
+					<div class="table-responsive m-b-40">
+						 <table class="table table-bordered table-data3">
+					     <thead style="background-color:#0B2161;">
+					        <tr align="center">
+								<th>구분<br>일자</th>
+								<th>합계</th>
+								<th>해외 입국자</th>
+								<th>국내접촉자</th>
+							</tr>
+					      </thead>
+					      <tbody>
+						      <tr>
+						      	<td align='center' style='color:#222222;'>7월 16일</td>
+						      	<td align='center' style='color:#222222;'>1</td>
+						      	<td align='center' style='color:#222222;'>2</td>
+						      	<td align='center' style='color:#222222;'>3</td>
+						      </tr>
+					   	      <tr>
+						      	<td align='center' style='color:#222222;'>자가격리(14일간)</td>
+						      	<td align='center' style='color:#222222;'>11</td>
+						      	<td align='center' style='color:#222222;'>12</td>
+						      	<td align='center' style='color:#222222;'>13</td>
+						      </tr>
+						      <tr>
+						      	<td align='center' style='color:#222222;'>해제(소계)</td>
+						      	<td align='center' style='color:#222222;'>21</td>
+						      	<td align='center' style='color:#222222;'>22</td>
+						      	<td align='center' style='color:#222222;'>23</td>
+						      </tr>
+						      <tr>
+						      	<td align='center' style='color:#222222;'>누계</td>
+						      	<td align='center' style='color:#222222;'>31</td>
+						      	<td align='center' style='color:#222222;'>32</td>
+						      	<td align='center' style='color:#222222;'>33</td>
+						      </tr>
+					      </tbody>
+					      </table>
+				      </div>
+				</div>
+				
+				<!-- 상담 민원 현황  -->
+				<table style="width:100%;padding:0px 20px 5px 0px;">	
+					<tr>
+						<td align="left" style="padding:0px 0px 10px 20px;" >
+							<h3>□ 상담 민원 현황</h3>
+						</td>
+						<td align="right" style="padding:0px 20px 5px 0px;">
+							<a href="/corona/manage/consultManage.do" class="btn btn-secondary" id="statistics"><i class="fa fa-tag"></i> 상담 민원 관리</a>
+						</td>
+					</tr>	 
+				</table>				
+				
+				<div class="col-md-12" align="center">
+					<div class="table-responsive m-b-40">
+						 <table class="table table-bordered table-data3">
+					     <thead style="background-color:#0B2161;">
+					        <tr align="center">
+								<th rowspan='2'>구분<br>일자</th>
+								<th rowspan='2'>합계</th>
+								<th colspan='2'>재난안전대책본부</th>
+							</tr>
+					        <tr align="center">
+								<th>주간(09:00~22:00)</th>
+								<th>야간(22:00~09:00)</th>
+							</tr>
+							
+					      </thead>
+					      <tbody>
+						      <tr>
+						      	<td align='center' style='color:#222222;'>7월 16일</td>
+						      	<td align='center' style='color:#222222;'>1</td>
+						      	<td align='center' style='color:#222222;'>2</td>
+						      	<td align='center' style='color:#222222;'>3</td>
+						      </tr>
+					   	      <tr>
+						      	<td align='center' style='color:#222222;'>누계</td>
+						      	<td align='center' style='color:#222222;'>21</td>
+						      	<td align='center' style='color:#222222;'>22</td>
+						      	<td align='center' style='color:#222222;'>23</td>
+						      </tr>
+					      </tbody>
+					      </table>
+				      </div>
+				</div>
+				
+				
+				<!-- 선별진료소 검사 현황  -->
+				<table style="width:100%;padding:0px 20px 5px 0px;">	
+					<tr>
+						<td align="left" style="padding:0px 0px 10px 20px;" >
+				    		<h3>□ 선별진료소 검사 현황</h3>
+						</td>
+						<td align="right" style="padding:0px 20px 5px 0px;">
+							<a href="/corona/manage/selectionClinicManage.do" class="btn btn-secondary" id="statistics"><i class="fa fa-tag"></i> 선별진료소 검사 관리</a>
+						</td>
+					</tr>	 
+				</table>	
+
+				<div class="col-md-12" align="center">
+					<div class="table-responsive m-b-40">
+						 <table class="table table-bordered table-data3">
+					     <thead style="background-color:#0B2161;">
+					        <tr align="center">
+								<th rowspan='2'>구분<br>일자</th>
+								<th rowspan='2'>합계</th>
+								<th colspan='4'>해외</th>
+								<th rowspan='2'>국내</th>
+							</tr>
+					        <tr align="center">
+								<th>소계</th>
+								<th>유럽</th>
+								<th>미국</th>
+								<th>기타국가</th>
+							</tr>
+							
+					      </thead>
+					      <tbody>
+						      <tr>
+						      	<td align='center' style='color:#222222;'>7월 16일</td>
+						      	<td align='center' style='color:#222222;'>1</td>
+						      	<td align='center' style='color:#222222;'>2</td>
+						      	<td align='center' style='color:#222222;'>3</td>
+						      	<td align='center' style='color:#222222;'>4</td>
+						      	<td align='center' style='color:#222222;'>5</td>
+						      	<td align='center' style='color:#222222;'>6</td>
+						      </tr>
+					   	      <tr>
+						      	<td align='center' style='color:#222222;'>누계</td>
+						      	<td align='center' style='color:#222222;'>21</td>
+						      	<td align='center' style='color:#222222;'>22</td>
+						      	<td align='center' style='color:#222222;'>23</td>
+						      	<td align='center' style='color:#222222;'>24</td>
+						      	<td align='center' style='color:#222222;'>25</td>
+						      	<td align='center' style='color:#222222;'>26</td>
+						      </tr>
+					      </tbody>
+					      </table>
+				      </div>
+				</div>
+				
+				<!-- 누계 -->
+				<table style="width:100%;">	
+					<tr>
+						<td style="padding:0 20 20 20;">
+							<table style="width:100%;border:1px solid gray;">	
+								<tr>
+									<td style="padding:20px;">
+									    <h4>* 해외입국자  자가격리 해제자 검사(금일 / 누계) : 6,540</h4>
+									    <h4>* 학교 학생 및 교직원 검사 현황(금일 / 누계) : 1,584</h4>
+									    <h4>* 운수업체 종사자 검사현황(금일 / 누계) : 180</h4>
+								    </td>
+							    </tr>
+						    </table>
+						</td>
+					</tr>			
+				</table>
+				
+		</div>
+</td>
+</tr>
+</table>
+<%@ include file="/WEB-INF/include/include-body.jspf" %>
+</body>
+</html>

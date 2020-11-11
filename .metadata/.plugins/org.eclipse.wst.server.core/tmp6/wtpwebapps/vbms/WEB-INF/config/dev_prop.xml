@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd" >
+
+<properties>
+	<comment>SMS Info</comment>
+	<entry key="sms.callback">0234235325</entry>
+	<entry key="sms.targetno">01051246045</entry>
+	<entry key="sms.stat">1</entry>
+	
+	<entry key="db.url">jdbc:oracle:thin:@98.23.7.12:1521:ora10g</entry>
+	<entry key="db.username">portal</entry>
+	<entry key="db.password">ptl!#2016</entry>
+	
+	
+	<entry key="property.hey">dev_hey</entry>
+	<entry key="property.hi">dev_hi</entry>
+	
+	<entry key="log.sosong">DEBUG</entry>
+	<entry key="log.sql">INFO</entry>
+</properties>

@@ -1,0 +1,1169 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.2//EN" "http://struts.apache.org/dtds/struts-config_1_2.dtd">
+
+<struts-config>
+  <data-sources />
+  <form-beans>
+    <form-bean name="loginForm" type="nexti.ejms.common.form.LoginForm"/>
+    <form-bean name="mainForm" type="nexti.ejms.common.form.MainForm"/>
+    <form-bean name="colldocForm" type="nexti.ejms.colldoc.form.ColldocForm"/>
+    <form-bean name="formatForm" type="nexti.ejms.format.form.FormatForm"/>
+    <form-bean name="deliveryForm" type="nexti.ejms.delivery.form.DeliveryForm"/>
+    <form-bean name="noticeForm" type="nexti.ejms.notice.form.NoticeForm"/>
+    <form-bean name="commFormatForm" type="nexti.ejms.format.form.CommFormatForm"/>
+    <form-bean name="commTreatForm" type="nexti.ejms.commtreat.form.CommTreatForm"/>
+    <form-bean name="commCollDocInfoForm" type="nexti.ejms.commdocinfo.form.CommCollDocInfoForm"/>
+    <form-bean name="commsubdeptForm" type="nexti.ejms.commsubdept.form.CommSubdeptForm"/>
+    <form-bean name="deliveryRetDocViewForm" type="nexti.ejms.delivery.form.DelveryRetDocViewForm"/>
+    <form-bean name="deliveryRetDocForm" type="nexti.ejms.delivery.form.DeliveryRetDocForm"/>
+    <form-bean name="managerForm" type="nexti.ejms.organ.form.ManagerForm"/>
+    <form-bean name="deliveryCompForm" type="nexti.ejms.delivery.form.DeliveryCompForm"/>
+    <form-bean name="collsttcsForm" type="nexti.ejms.statistics.form.CollsttcsForm"/>
+    <form-bean name="inputsttcsForm" type="nexti.ejms.statistics.form.InputsttcsForm"/>
+    <form-bean name="rchsttcsForm" type="nexti.ejms.statistics.form.RchsttcsForm"/>
+    <form-bean name="reqsttcsForm" type="nexti.ejms.statistics.form.ReqsttcsForm"/>
+    <form-bean name="appListForm" type="nexti.ejms.approval.form.ApprovalListForm"/>
+    <form-bean name="appCompListForm" type="nexti.ejms.approval.form.AppCompListForm"/>
+    <form-bean name="inputingForm" type="nexti.ejms.inputing.form.InputingForm"/>
+    <form-bean name="exhibitListForm" type="nexti.ejms.exhibit.form.ExhibitListForm"/>
+    <form-bean name="inputCompleteForm" type="nexti.ejms.inputing.form.InputCompleteForm"/>
+    <form-bean name="collprocForm" type="nexti.ejms.colldoc.form.CollprocForm"/>
+    <form-bean name="commTreatDeptStatusForm" type="nexti.ejms.commtreat.form.CommTreatDeptStatusForm"/>
+    <form-bean name="inputCompTreatForm" type="nexti.ejms.commtreat.form.InputCompTreatForm"/>
+    <form-bean name="formatLineForm" type="nexti.ejms.formatLine.form.FormatLineForm"/>
+    <form-bean name="formatFixedForm" type="nexti.ejms.formatFixed.form.FormatFixedForm"/>
+    <form-bean name="formatBookForm" type="nexti.ejms.formatBook.form.FormatBookForm"/>
+    <form-bean name="deliveryDetailForm" type="nexti.ejms.delivery.form.DeliveryDetailForm"/>
+    <form-bean name="dataBookForm" type="nexti.ejms.formatBook.form.DataBookForm"/>
+    <form-bean name="categoryListForm" type="nexti.ejms.list.form.CategoryListForm"/>
+    <form-bean name="fileBookFrameForm" type="nexti.ejms.formatBook.form.FileBookFrameForm"/>    
+    <form-bean name="codeForm" type="nexti.ejms.ccd.form.CodeForm"/>
+    <form-bean name="systemAgentForm" type="nexti.ejms.agent.form.SystemAgentForm"/>  
+    <form-bean name="attrForm" type="nexti.ejms.attr.form.AttrForm"/>    
+    <form-bean name="groupForm" type="nexti.ejms.group.form.GroupForm"/>
+    <form-bean name="chrgUnitForm" type="nexti.ejms.chrgUnit.form.ChrgUnitForm"/>
+    <form-bean name="researchForm" type="nexti.ejms.research.form.ResearchForm"/>
+    <form-bean name="sinchungForm" type="nexti.ejms.sinchung.form.SinchungForm"/>
+    <form-bean name="sinchungListForm" type="nexti.ejms.sinchung.form.SinchungListForm"/>
+    <form-bean name="dataForm" type="nexti.ejms.sinchung.form.DataForm"/>
+    <form-bean name="dataListForm" type="nexti.ejms.sinchung.form.DataListForm"/> 
+    <form-bean name="addrListForm" type="nexti.ejms.addr.form.AddrListForm"/>
+    <form-bean name="usrMgrForm" type="nexti.ejms.user.form.UsrMgrForm"/>
+    <form-bean name="dataTransferForm" type="nexti.ejms.dataTransfer.form.DataTransferForm"/>
+    <form-bean name="ldapMonitoringForm" type="nexti.ejms.ldapMonitoring.form.LdapMonitoringForm"/>
+    <form-bean name="systemLogMonitoringForm" type="nexti.ejms.systemLogMonitoring.form.SystemLogMonitoringForm"/>
+    
+    <!-- Test Start -->
+    <form-bean name="workplanListForm" type="nexti.ejms.workplan.form.WorkplanListForm"/>
+    <form-bean name="workplanForm" type="nexti.ejms.workplan.form.WorkplanForm"/>
+    <!-- Test End -->
+    
+    
+  </form-beans>
+
+  <global-exceptions />
+  <global-forwards>
+ 		<forward name="login" path="/loginYN.do"/>
+ 		<forward name="global_main" path="/main.do"/>
+ 		<forward name="loginRchReqYN" path="/loginRchReqYN.do"/>
+  </global-forwards>
+  
+  <action-mappings>
+  	<action path="/messageSend" type="nexti.ejms.messanger.MessageSendAction" scope="request"/>
+  	<action path="/download" type="nexti.ejms.common.DownloadAction" scope="request"/>
+  	<action path="/bundleDownload" type="nexti.ejms.common.BundleDownloadAction" scope="request"/>
+  	<action path="/xlsDownload" type="nexti.ejms.common.XlsDownloadAction" scope="request"/>
+  	<action path="/hwpDownload" type="nexti.ejms.common.HwpDownloadAction" scope="request">
+  		<forward name="formatToHwp" path="/common/formatToHwp.jsp"/>
+  	</action>
+  	<action path="/main" type="nexti.ejms.main.action.MainAction" name="mainForm" scope="request">
+  		<forward name="main" path="/main.jsp"/>
+  	</action>  	
+  	
+  	<action path="/loginYN" type="nexti.ejms.login.action.LoginYNAction" name="loginForm" scope="request">
+   		<forward name="login" path="/login/login.jsp"/>
+   		<forward name="loginGpki" path="/login/loginGpki.jsp"/>
+ 		</action>
+ 		<action path="/loginOK" type="nexti.ejms.login.action.LoginOKAction" name="loginForm" scope="request">
+   		<forward name="back" path="/login/login.jsp"/>
+   		<forward name="backGpki" path="/login/loginGpki.jsp"/>
+ 		</action>
+ 		<action path="/certOK" type="nexti.ejms.login.action.CertOKAction" name="loginForm" scope="request">
+   		<forward name="login" path="/loginOK.do"/>
+   		<forward name="loginRchReq" path="/loginRchReqOK.do"/>
+ 		</action>
+ 		<action path="/gpkiRegistration" type="nexti.ejms.login.action.GpkiRegAction" scope="request">
+ 			<forward name="gpkiRegistration" path="/include/gpkiRegistration.jsp"/>
+ 		</action>
+ 		
+ 		
+ 		<action path="/loginRchReqYN" type="nexti.ejms.login.action.LoginRchReqYNAction" name="loginForm" scope="request">
+   		<forward name="loginRchReq" path="/login/loginRchReq.jsp"/>
+   		<forward name="loginGpkiRchReq" path="/login/loginGpkiRchReq.jsp"/>
+ 		</action>
+ 		<action path="/loginRchReqOK" type="nexti.ejms.login.action.LoginRchReqOKAction" name="loginForm" scope="request">
+   		<forward name="back" path="/login/loginRchReq.jsp"/>
+   		<forward name="backGpki" path="/login/loginGpkiRchReq.jsp"/>
+ 		</action>
+ 		
+   	<action path="/logOut" type="nexti.ejms.login.action.LogOutAction">
+    	<forward name="logout" path="/index.jsp" redirect="true"/>
+   	</action>
+ 		<action path="/ssocontrol" type="nexti.ejms.login.action.SsoControl" scope="request">
+   		<forward name="loginok" path="/loginOK.do" redirect="false"/>
+ 		</action>
+ 		<action path="/ssocount" type="nexti.ejms.login.action.SsoCount" scope="request">
+   		<forward name="loginok" path="/loginOK.do"/>
+ 		</action>
+		<action path="/myCount" type="nexti.ejms.login.action.myCount" scope="request">
+			<forward name="mycount" path="/ssocount/myCount.jsp"/>
+ 		</action>
+ 		
+ 		<!-- 조직도 데이터 목록 -->
+ 		<action path="/formation" type="nexti.ejms.formation.action.FormationAction" scope="request"/>
+ 		
+<!-- 취합문서작성 -->
+		<!-- 취합문서목록 -->
+   	<action path="/colldocList" type="nexti.ejms.colldoc.action.ColldocListAction" name="colldocForm" scope="request">
+    	<forward name="colldocList" path="/collmakedoc/colldocList.jsp"/>
+    </action>
+		<!-- 취합문서정보보기 -->
+    <action path="/colldocInfoView" type="nexti.ejms.colldoc.action.ColldocInfoViewAction" name="colldocForm" scope="request">
+    	<forward name="colldocInfoView" path="/collmakedoc/colldocInfoView.jsp"/>
+    </action>
+    <!-- 취합양식자료보기 -->
+    <action path="/colldocFormView" type="nexti.ejms.colldoc.action.ColldocFormViewAction" name="colldocForm" scope="request">
+      <forward name="colldocFormView" path="/collmakedoc/colldocFormView.jsp"/>
+    </action>
+		<!-- 선택한취합문서삭제 -->
+    <action path="/colldocDel" type="nexti.ejms.colldoc.action.ColldocDelAction" name="colldocForm" scope="request">
+      <forward name="colldocList" path="/colldocList.do"/>
+      <forward name="collprocList" path="/collprocList.do?docstate=0"/>
+      <forward name="collcompList" path="/collcompList.do"/>
+    </action>
+    
+    <!-- 새취합문서작성 -->
+    <action path="/colldocMake" type="nexti.ejms.colldoc.action.ColldocMakeAction" name="colldocForm" scope="request">
+      <forward name="colldocInfoView" path="/collmakedoc/colldocInfoView.jsp"/>
+    </action>
+    
+    <!-- 문서저장 -->
+    <action path="/colldocSave" type="nexti.ejms.colldoc.action.ColldocSaveAction" name="colldocForm" scope="request"/>
+    <!-- 결재상신 -->
+    <action path="/colldocAppRep" type="nexti.ejms.colldoc.action.ColldocAppRepAction" name="colldocForm" scope="request">
+    	<forward name="colldocList" path="/colldocList.do" redirect="true"/>
+    </action>
+    <!-- 선택한취합양식삭제 -->
+    <action path="/formatDel" type="nexti.ejms.format.action.FormatDelAction" name="colldocForm" scope="request">
+      <forward name="colldocFormView" path="/colldocFormView.do"/>
+    </action>
+    <!-- 양식추가 -->
+    <action path="/formatMake" type="nexti.ejms.format.action.FormatMakeAction" name="formatForm" scope="request">
+    	<forward name="formatMake" path="/collmakedoc/formatMake.jsp"/>		<!-- 작성형태 -->
+    </action>
+    <!-- 행추가형 양식작성 -->
+    <action path="/formatLineDef" type="nexti.ejms.formatLine.action.FormatLineDefAction" name="formatLineForm" scope="request">
+    	<forward name="formatLineDef" path="/collmakedoc/formatLineFixedDef.jsp"/>
+    </action>
+    <!-- 행추가형 속성정의 -->
+    <action path="/formatLineAtt" type="nexti.ejms.formatLine.action.FormatLineAttAction" name="formatLineForm" scope="request">
+    	<forward name="formatLineAtt" path="/collmakedoc/formatLineAtt.jsp"/>
+    </action>
+    <!-- 행추가형 저장 -->
+    <action path="/formatLineSave" type="nexti.ejms.formatLine.action.FormatLineSaveAction" name="formatLineForm" scope="request"/>
+    <!-- 고정양식형 양식작성 -->
+    <action path="/formatFixedDef" type="nexti.ejms.formatFixed.action.FormatFixedDefAction" name="formatLineForm" scope="request">
+    	<forward name="formatFixedDef" path="/collmakedoc/formatLineFixedDef.jsp"/>
+    </action>
+    <!-- 고정양식형 속성정의 -->
+    <action path="/formatFixedAtt" type="nexti.ejms.formatFixed.action.FormatFixedAttAction" name="formatFixedForm" scope="request">
+    	<forward name="formatFixedAtt" path="/collmakedoc/formatFixedAtt.jsp"/>
+    </action>
+    <!-- 고정양식형 저장 -->
+    <action path="/formatFixedSave" type="nexti.ejms.formatFixed.action.FormatFixedSaveAction" name="formatFixedForm" scope="request"/>
+    <!-- 제본자료형 작성 -->
+    <action path="/formatBookDef" type="nexti.ejms.formatBook.action.FormatBookDefAction" name="formatBookForm" scope="request">
+    	<forward name="formatBookDef" path="/collmakedoc/formatBookDef.jsp"/>
+    </action>
+    <!-- 제본자료형 저장 -->
+		<action path="/formatBookSave" type="nexti.ejms.formatBook.action.FormatBookSaveAction" name="formatBookForm" scope="request"/>
+		<!-- 제본자료형 양식첨부파일목록(iframe) -->
+		<action path="/fileBookFrame" type="nexti.ejms.formatBook.action.FileBookFrameAction" name="fileBookFrameForm" scope="request">
+			<forward name="fileBookFrame" path="/collmakedoc/fileBookFrame.jsp"/>
+    </action>
+    <!-- 제본자료형 양식첨부파일 추가 -->
+    <action path="/formatBookFileAdd" type="nexti.ejms.formatBook.action.FormatBookFileAddAction" name="formatBookForm" scope="request">
+			<forward name="formatBookDef" path="/formatBookDef.do"/>
+    </action>
+    <!-- 제본자료형 양식첨부파일 삭제 -->
+    <action path="/formatBookFileDel" type="nexti.ejms.formatBook.action.FormatBookFileDelAction" name="fileBookFrameForm" scope="request">
+    	<forward name="fileBookFrame" path="/fileBookFrame.do"/>
+    </action>
+    <!-- 공통양식 가져오기 -->
+    <action path="/formatGetComm" type="nexti.ejms.format.action.FormatGetCommAction" name="formatForm" scope="request">
+    	<forward name="formatGetComm" path="/collmakedoc/formatGetComm.jsp"/>
+    </action>
+    <!-- 공통양식 가져오기 양식목록(iframe) -->
+    <action path="/formatGetCommFrame" type="nexti.ejms.format.action.FormatGetCommFrameAction" name="formatForm" scope="request">
+    	<forward name="formatGetCommFrame" path="/collmakedoc/formatGetCommFrame.jsp"/>
+    </action>
+    <!-- 공통양식 행추가형 선택 -->
+    <action path="/formatLineGetComm" type="nexti.ejms.formatLine.action.FormatLineGetCommAction" name="formatLineForm" scope="request"/>
+    <!-- 공통양식 고정양식형 선택 -->
+    <action path="/formatFixedGetComm" type="nexti.ejms.formatFixed.action.FormatFixedGetCommAction" name="formatLineForm" scope="request"/>
+    <!-- 공통양식 제본자료형 선택 -->
+		<action path="/formatBookGetComm" type="nexti.ejms.formatBook.action.FormatBookGetCommAction" name="formatBookForm" scope="request"/>
+    <!-- 사용했던양식 가져오기 -->
+    <action path="/formatGetUsed" type="nexti.ejms.format.action.FormatGetUsedAction" name="formatForm" scope="request"> 
+    	<forward name="formatGetUsed" path="/collmakedoc/formatGetUsed.jsp"/>
+    </action>
+    <!-- 사용했던양식 가져오기 양식목록(iframe) -->
+    <action path="/formatGetUsedFrame" type="nexti.ejms.format.action.FormatGetUsedFrameAction" name="formatForm" scope="request"> 
+    	<forward name="formatGetUsedFrame" path="/collmakedoc/formatGetUsedFrame.jsp"/>
+    </action>
+    <!-- 사용했던양식 행추가형 선택 -->
+    <action path="/formatLineGetUsed" type="nexti.ejms.formatLine.action.FormatLineGetUsedAction" name="formatLineForm" scope="request"/>
+    <!-- 사용했던양식 고정양식형 선택 -->
+    <action path="/formatFixedGetUsed" type="nexti.ejms.formatFixed.action.FormatFixedGetUsedAction" name="formatLineForm" scope="request"/>
+    <!-- 사용했던양식 제본자료형 선택 -->
+		<action path="/formatBookGetUsed" type="nexti.ejms.formatBook.action.FormatBookGetUsedAction" name="formatBookForm" scope="request"/>
+		<!-- 공통/사용했던양식 행추가 미리보기 임시데이터 생성 -->
+    <action path="/formatLineProcPreview" type="nexti.ejms.formatLine.action.FormatLineProcPreviewAction" name="formatLineForm" scope="request"/>
+    <!-- 공통/사용했던양식 행추가 입력양식 미리보기 -->
+    <action path="/formatLinePreview" type="nexti.ejms.formatLine.action.FormatLinePreviewAction" name="formatLineForm" scope="request">
+    	<forward name="formatLinePreview" path="/collmakedoc/formatLineFixedPreview.jsp"/>
+    </action>
+    <!-- 공통/사용했던양식 고정양식형 미리보기 임시데이터 생성 -->
+    <action path="/formatFixedProcPreview" type="nexti.ejms.formatFixed.action.FormatFixedProcPreviewAction" name="formatFixedForm" scope="request"/>
+    <!-- 공통/사용했던양식 고정양식형 입력양식 미리보기 -->
+    <action path="/formatFixedPreview" type="nexti.ejms.formatFixed.action.FormatFixedPreviewAction" name="formatLineForm" scope="request">
+    	<forward name="formatFixedPreview" path="/collmakedoc/formatLineFixedPreview.jsp"/>
+    </action>
+    <!-- 공통/사용했던양식 제본자료형 미리보기 -->
+    <action path="/formatBookPreview" type="nexti.ejms.formatBook.action.FormatBookPreviewAction" name="formatBookForm" scope="request">
+    	<forward name="formatBookPreview" path="/collmakedoc/formatBookPreview.jsp"/>
+    </action>
+        
+    <!-- 배부 -->
+    <!-- 배부하기 목록 -->
+    <action path="/deliveryList" type="nexti.ejms.delivery.action.DeliveryListAction" name="deliveryForm" scope="request">
+    	<forward name="list" path="/delivery/deliveryList.jsp"/>
+    </action>
+  	<!-- 처리현황 -->
+    <action path="/deliveryTreatView" type="nexti.ejms.delivery.action.DeliveryTreatViewAction" name="commTreatForm" scope="request">
+      <forward name="treatview" path="/delivery/deliveryTreatView.jsp"/>
+    </action>
+    <!-- 취합문서정보 -->
+    <action path="/deliveryCollDocInfoView" type="nexti.ejms.delivery.action.DeliveryCollDocInfoViewAction" name="commCollDocInfoForm" scope="request">
+      <forward name="colldocinfo" path="/delivery/deliveryCollDocInfo.jsp"/>
+    </action>
+    <!-- 취합양식 상세 데이터 -->
+    <action path="/deliveryDetailView" type="nexti.ejms.delivery.action.DeliveryDetailViewAction" scope="request">
+      <forward name="detailview" path="/delivery/deliveryDetailView.jsp"/>
+    </action>
+    <!-- 반송 팝업창 데이터 -->
+    <action path="/deliveryRetDocView" type="nexti.ejms.delivery.action.DeliveryRetDocViewAction" name="deliveryRetDocViewForm" scope="request">
+      <forward name="popreturndoc" path="/delivery/deliveryReturnDoc.jsp"/>
+    </action>
+    <!-- 반송처리 -->
+    <action path="/deliveryRetDoc" type="nexti.ejms.delivery.action.DeliveryRetDocAction" name="deliveryRetDocForm" scope="request"/>
+    <!-- 배부처리 -->
+    <action path="/deliveryProcess" type="nexti.ejms.delivery.action.DeliveryProcessAction" scope="request">
+      <forward name="list" path="/deliveryList.do"/>
+    </action>
+    <!-- 입력담당자/승인자 지정여부 확인 -->
+    <action path="/isAssignCharge" type="nexti.ejms.delivery.action.IsAssignChargeAction"/> 
+    <!-- 행추가형 양식 구조 보기 -->
+    <action path="/deliveryFormatLineView" type="nexti.ejms.formatLine.action.DeliveryFormatLineViewAction" name="formatLineForm" scope="request">
+      <forward name="detailview" path="/deliveryDetailView.do"/>
+    </action>
+    <!-- 고정양식형 양식 구조 보기 -->
+    <action path="/deliveryFormatFixedView" type="nexti.ejms.formatFixed.action.DeliveryFormatFixedViewAction" name="formatFixedForm" scope="request">
+      <forward name="detailview" path="/deliveryDetailView.do"/>
+    </action>
+    <!-- 제본형 양식 구조 보기 -->
+    <action path="/deliveryFormatBookView" type="nexti.ejms.formatBook.action.DeliveryFormatBookViewAction" name="formatBookForm" scope="request">
+      <forward name="detailview" path="/deliveryDetailView.do"/>
+    </action>
+    
+    <!-- 배부완료목록 -->
+    <action path="/deliveryCompList" type="nexti.ejms.delivery.action.DeliveryCompListAction" name="deliveryCompForm" scope="request">
+      <forward name="list" path="/delicomp/deliCompList.jsp"/>
+    </action>
+    <!-- 취합양식 상세 데이터 -->
+    <action path="/deliCompDetailView" type="nexti.ejms.delivery.action.DeliCompDetailViewAction" scope="request">
+      <forward name="compdetailview" path="/delicomp/deliCompDetailView.jsp"/>
+    </action>
+    <!-- 처리현황 -->
+    <action path="/deliCompTreatView" type="nexti.ejms.delivery.action.DeliCompTreatViewAction" name="commTreatForm" scope="request">
+      <forward name="comptreatview" path="/delicomp/deliCompTreatView.jsp"/>
+    </action>
+    <!-- 취합문서정보 -->
+    <action path="/deliCompCollDocInfoView" type="nexti.ejms.delivery.action.DeliCompCollDocInfoViewAction" name="commCollDocInfoForm" scope="request">
+      <forward name="compdocinfo" path="/delicomp/deliCompCollDocInfo.jsp"/>
+    </action>
+    <!-- 행추가형 데이터 조회 -->
+    <action path="/deliCompFormatLineView" type="nexti.ejms.formatLine.action.DeliCompFormatLineViewAction" name="formatLineForm" scope="request">
+      <forward name="compdetailview" path="/deliCompDetailView.do"/>
+    </action>
+    <!-- 제본형 데이터 조회 -->
+    <action path="/deliCompFormatBookView" type="nexti.ejms.formatBook.action.DeliCompFormatBookViewAction" name="formatBookForm" scope="request">
+      <forward name="compdetailview" path="/deliCompDetailView.do"/>
+    </action>
+    <!-- 고정양식형 데이터 조회 -->
+    <action path="/deliCompFormatFixedView" type="nexti.ejms.formatFixed.action.DeliCompFormatFixedViewAction" name="formatFixedForm" scope="request">
+      <forward name="compdetailview" path="/deliCompDetailView.do"/>
+    </action>
+    
+    <!-- 입력 -->
+    <!-- 기안문 작성 -->
+    <action path="/draftDocument" type="nexti.ejms.elecAppr.action.DraftDocumentAction" name="formatForm" scope="request">
+      <forward name="draftDocument" path="/elecAppr/draftDocument.jsp"/>
+    </action>
+    <!-- 기안문 생성 -->
+    <action path="/exchangeSend" type="nexti.ejms.elecAppr.exchange.ExchangeSendAction" name="formatForm" scope="request"/>
+    <!-- 입력하기 목록 -->
+    <action path="/inputingList" type="nexti.ejms.inputing.action.InputingListAction" name="inputingForm" scope="request">
+      <forward name="list" path="/inputing/inputingList.jsp"/>
+    </action>
+    <!-- 취합양식 상세 데이터 엑셀업로드 프레임-->
+    <action path="/xlsUploadFrame" type="nexti.ejms.format.action.XlsUploadFrameAction" name="dataBookForm" scope="request">
+      <forward name="xlsUploadFrame" path="/inputing/xlsUploadFrame.jsp"/>
+    </action>
+    <!-- 취합양식 상세 데이터 엑셀업로드 프레임 엑셀업로드-->
+    <action path="/xlsUpload" type="nexti.ejms.format.action.XlsUploadAction" name="dataBookForm" scope="request"/>
+    <!-- 취합양식 상세 데이터 -->
+    <action path="/inputingDetailView" type="nexti.ejms.inputing.action.InputingDetailViewAction" scope="request">
+      <forward name="inputdetailview" path="/inputing/inputDetailView.jsp"/>
+    </action>
+    <!-- 취합문서정보 -->
+    <action path="/inputCollDocInfoView" type="nexti.ejms.inputing.action.InputCollDocInfoViewAction" name="commCollDocInfoForm" scope="request">
+      <forward name="inputcolldocinfo" path="/inputing/inputCollDocInfo.jsp"/>
+    </action>
+    <!-- 처리현황 -->
+    <action path="/inputTreatView" type="nexti.ejms.inputing.action.InputTreatViewAction" name="commTreatForm" scope="request">
+      <forward name="inputtreatview" path="/inputing/inputTreatView.jsp"/>
+    </action>
+    <!-- 취합문서해당없음 처리 -->
+    <action path="/collDocNotApplicable" type="nexti.ejms.inputing.action.CollDocNotApplicableAction">
+      <forward name="returnlist" path="/inputingList.do"/>
+    </action>
+    <!-- 입력완료 처리 -->
+    <action path="/inputingComplete" type="nexti.ejms.inputing.action.InputingCompleteAction">
+      <forward name="returnlist" path="/inputingList.do"/>
+    </action>
+    <!-- 입력담당 변경 처리 -->
+    <action path="/inputChangeChrgunit" type="nexti.ejms.inputing.action.InputChangeChrgunitAction" name="commCollDocInfoForm" scope="request">
+      <forward name="inputcolldocinfo" path="/inputCollDocInfo.do"/>
+    </action>
+    <!-- 담당단위 지정 여부 확인 -->
+    <action path="/isAssignChrgUnit" type="nexti.ejms.inputing.action.IsAssignChrgUnitAction"/>
+    <!-- 행추가형 조회 -->
+    <action path="/inputFormatLineView" type="nexti.ejms.formatLine.action.InputFormatLineViewAction" name="formatLineForm" scope="request">
+      <forward name="detailview" path="/inputingDetailView.do"/>
+    </action>
+    <!-- 고정양식형 조회 -->
+    <action path="/inputFormatFixedView" type="nexti.ejms.formatFixed.action.InputFormatFixedViewAction" name="formatFixedForm" scope="request">
+      <forward name="detailview" path="/inputingDetailView.do"/>
+    </action> 
+    <!-- 제본형 조회 -->
+    <action path="/inputFormatBookView" type="nexti.ejms.formatBook.action.InputFormatBookViewAction" name="formatBookForm" scope="request">
+      <forward name="detailview" path="/inputingDetailView.do"/>
+    </action>
+    <!-- 제본형 데이터 저장 -->
+    <action path="/inputDataBookSave" type="nexti.ejms.formatBook.action.InputDataBookSaveAction" name="dataBookForm" scope="request">
+      <forward name="hiddenframe" path="/inputing/inputHiddenPage.jsp"/>
+    </action>
+    <!-- 제본형 데이터 삭제 -->
+    <action path="/inputDataBookDelete" type="nexti.ejms.formatBook.action.InputDataBookDeleteAction" scope="request">
+      <forward name="hiddenframe" path="/inputing/inputHiddenPage.jsp"/>
+    </action>
+    <!-- 제본자료형 데이터 내용삭제 -->
+    <action path="/inputBookDataDel" type="nexti.ejms.formatBook.action.InputBookDataDelAction" scope="request">
+      <forward name="hiddenframe" path="/inputing/inputHiddenPage.jsp"/>
+    </action>
+    <!-- 행추가형 데이터 저장 -->
+    <action path="/inputLineDataSave" type="nexti.ejms.formatLine.action.InputLineDataSaveAction" scope="request">
+      <forward name="hiddenframe" path="/inputing/inputHiddenPage.jsp"/>
+    </action>
+    <!-- 행추가형 데이터 내용삭제 -->
+    <action path="/inputLineDataDel" type="nexti.ejms.formatLine.action.InputLineDataDelAction" scope="request">
+      <forward name="hiddenframe" path="/inputing/inputHiddenPage.jsp"/>
+    </action>
+    <!-- 고정양식형 데이터 저장 -->
+    <action path="/inputFixedDataSave" type="nexti.ejms.formatFixed.action.InputFixedDataSaveAction" scope="request">
+      <forward name="hiddenframe" path="/inputing/inputHiddenPage.jsp"/>
+    </action>
+    <!-- 고정양식형 데이터 내용삭제 -->
+    <action path="/inputFixedDataDel" type="nexti.ejms.formatFixed.action.InputFixedDataDelAction" scope="request">
+      <forward name="hiddenframe" path="/inputing/inputHiddenPage.jsp"/>
+    </action>
+    <!-- 데이터 존재여부 체크 -->
+    <action path="/isExistDataFrm" type="nexti.ejms.inputing.action.IsExistDataFrmAction"/>
+    
+    <!-- 입력완료 -->
+    <!-- 입력완료 목록 -->
+    <action path="/inputCompleteList" type="nexti.ejms.inputing.action.InputCompleteListAction" name="inputCompleteForm" scope="request">
+      <forward name="list" path="/inputcomp/inputCompleteList.jsp"/>
+    </action>
+    <!-- 취합양식 상세 데이터 -->
+    <action path="/inputCompDetailView" type="nexti.ejms.inputing.action.InputCompDetailViewAction" scope="request">
+      <forward name="incompdetailview" path="/inputcomp/inputCompDetailView.jsp"/>
+    </action>
+    <!-- 처리현황 -->
+    <action path="/inputCompTreatView" type="nexti.ejms.inputing.action.InputCompTreatViewAction" name="commTreatForm" scope="request">
+      <forward name="incomptreatview" path="/inputcomp/inputCompTreatView.jsp"/>
+    </action>
+    <!-- 취합문서정보 -->
+    <action path="/inputCompCollDocInfoView" type="nexti.ejms.inputing.action.InputCompCollDocInfoViewAction" name="commCollDocInfoForm" scope="request">
+      <forward name="incompcolldocinfo" path="/inputcomp/inputCompCollDocInfo.jsp"/>
+    </action>
+    <!-- 제본형 조회 -->
+    <action path="/inputCompFormatBookView" type="nexti.ejms.formatBook.action.InputCompFormatBookViewAction" name="formatBookForm" scope="request">
+      <forward name="detailview" path="/inputCompDetailView.do"/>
+    </action>
+    <!-- 수정할 제본형 데이터 조회 -->
+    <action path="/inpCompFrmBookModifyView" type="nexti.ejms.formatBook.action.InpCompFrmBookModifyViewAction" name="formatBookForm" scope="request">
+      <forward name="modifybookview" path="/inputcomp/inputCompDetailModify.jsp"/>
+    </action>
+    <!-- 제본형 데이터 저장 -->
+    <action path="/inpCompDataBookSave" type="nexti.ejms.formatBook.action.InpCompDataBookSaveAction" name="dataBookForm" scope="request">
+      <forward name="hiddenframe" path="/inputcomp/inputCompHiddenPage.jsp"/>
+    </action>
+    <!-- 제본형 데이터 삭제 -->
+    <action path="/inpCompDataBookDelete" type="nexti.ejms.formatBook.action.InpCompDataBookDeleteAction" scope="request">
+      <forward name="hiddenframe" path="/inputcomp/inputCompHiddenPage.jsp"/>
+    </action>
+    <!-- 행추가형 조회 -->
+    <action path="/inputCompFormatLineView" type="nexti.ejms.formatLine.action.InputCompFormatLineViewAction" name="formatLineForm" scope="request">
+      <forward name="detailview" path="/inputCompDetailView.do"/>
+    </action>
+    <!-- 수정할 행추가형 데이터 조회 -->
+    <action path="/inpCompFrmLineModifyView" type="nexti.ejms.formatLine.action.InpCompFrmLineModifyViewAction" name="formatLineForm" scope="request">
+      <forward name="modifylineview" path="/inputcomp/inputCompDetailModify.jsp"/>
+    </action>
+    <!-- 행추가형 데이터 저장 -->
+    <action path="/inpCompLineDataSave" type="nexti.ejms.formatLine.action.InpCompLineDataSaveAction" scope="request">
+      <forward name="hiddenframe" path="/inputcomp/inputCompHiddenPage.jsp"/>
+    </action>
+    <!-- 고정양식형 조회 -->
+    <action path="/inputCompFormatFixedView" type="nexti.ejms.formatFixed.action.InputCompFormatFixedViewAction" name="formatFixedForm" scope="request">
+      <forward name="detailview" path="/inputCompDetailView.do"/>
+    </action>
+    <!-- 수정할 고정양식형 조회 -->
+    <action path="/inpCompFrmFixedModifyView" type="nexti.ejms.formatFixed.action.InpCompFrmFixedModifyViewAction" name="formatFixedForm" scope="request">
+      <forward name="modifyfixedview" path="/inputcomp/inputCompDetailModify.jsp"/>
+    </action>
+    <!-- 고정양식형 데이터 저장 -->
+    <action path="/inpCompFixedDataSave" type="nexti.ejms.formatFixed.action.InpCompFixedDataSaveAction" scope="request">
+      <forward name="hiddenframe" path="/inputcomp/inputCompHiddenPage.jsp"/>
+    </action>
+    
+    <!-- 공통팝업 -->
+    <!-- 취합문서제출현황 -->
+    <action path="/collprocDeptStatus" type="nexti.ejms.colldoc.action.CollprocDeptStatusAction" name="commTreatDeptStatusForm" scope="request">
+      <forward name="view" path="/collproc/collprocDeptStatus.jsp"/>
+    </action>
+    
+    <!-- 주소찾기 --> 	
+  	<action path="/addrFindList" type="nexti.ejms.addr.action.AddrFindAction" name="addrListForm" scope="request">
+  		<forward name="list" path="/addr/addrFind.jsp"/>
+  	</action>
+    <action path="/streetCityListAction" scope="request" type="nexti.ejms.addr.action.AddrStreetCityListAction"/>
+    <action path="/streetAddrListAction" scope="request" type="nexti.ejms.addr.action.AddrStreetAddrListAction"/>
+    <!-- 취합대상부서체크 -->
+  	<action path="/targetDeptCheck" scope="request" type="nexti.ejms.commsubdept.action.TargetDeptCheckAction"/>
+    <!-- 취합 대상지정  -->
+   	<action path="/commsubdept" type="nexti.ejms.commsubdept.action.commsubdeptAction" name="commsubdeptForm" scope="request">
+  		<forward name="commsubdept" path="/common/commsubdept.jsp"/>
+  	</action>
+  	<!-- 취합대상지정조직도 -->
+  	<action path="/commsubdept/targetDeptFormationList" scope="request" type="nexti.ejms.commsubdept.action.targetDeptFormationListAction"/>
+  	<!-- 조직도 -->
+  	<action path="/commsubdept/formationList" scope="request" type="nexti.ejms.commsubdept.action.formationListAction">
+  	</action>
+  	<!-- 배포목록 -->
+  	<action path="/commsubdept/distributeList" scope="request" type="nexti.ejms.commsubdept.action.distributeListAction">
+  	</action> 
+  	<!-- 취합대상지정 내용보기 --> 	
+  	<action path="/commsubdept/commsubdeptView" scope="request" type="nexti.ejms.commsubdept.action.commsubdeptViewAction">
+  	</action> 
+  	<!-- 배포세부항목 보기 -->
+  	<action path="/commsubdept/grpdetailList" scope="request" type="nexti.ejms.commsubdept.action.grddetailListAction">
+  	</action>
+  	<!-- 취합대상지정 등록 --> 
+  	<action path="/commsubdeptInsert" scope="request" type="nexti.ejms.commsubdept.action.commsubdeptInsertAction">
+  	</action> 
+  	  	
+  	<!-- 설문대상지정  -->
+   	<action path="/commrchdept" type="nexti.ejms.commsubdept.action.commrchdeptAction" name="commsubdeptForm" scope="request">
+  		<forward name="commrchdept" path="/common/commrchdept.jsp"/>
+  	</action>
+  	<!-- 설문대상지정조직도 -->
+  	<action path="/commrchdept/researchDeptFormationList" scope="request" type="nexti.ejms.commsubdept.action.researchDeptFormationListAction"/>
+  	<!-- 설문대상지정 내용보기 --> 	
+  	<action path="/commrchdeptView" scope="request" type="nexti.ejms.commsubdept.action.commrchdeptViewAction">
+  	</action> 
+  	<!-- 설문대상지정 등록 -->
+  	<action path="/commrchdeptInsert" scope="request" type="nexti.ejms.commsubdept.action.commrchdeptInsertAction">
+  	</action>
+  	<!-- 설문대상지정 하위부서 목록 -->
+  	<action path="/researchSubDeptList" scope="request" type="nexti.ejms.commsubdept.action.ResearchSubDeptListAction">
+  	</action>
+  	
+  	<!-- 설문기타대상지정 -->  	
+  	<action path="/commrchothertarget" scope="request" type="nexti.ejms.commapproval.action.commrchothertargetAction">
+  		<forward name="commrchothertarget" path="/common/commrchothertarget.jsp"/>
+  	</action>
+  	<!-- 설문기타대상 리스트 -->
+  	<action path="/commrchothertargetList" scope="request" type="nexti.ejms.commapproval.action.commrchothertargetListAction">
+  	</action>
+  	<!-- 설문기타대상 내용보기 -->  	
+  	<action path="/commrchothertargetView" scope="request" type="nexti.ejms.commapproval.action.commrchothertargetViewAction">
+  	</action>
+  	<!-- 설문기타대상 등록 --> 
+  	<action path="/commrchothertargetInsert" scope="request" type="nexti.ejms.commapproval.action.commrchothertargetInsertAction">
+  	</action>
+  	
+		<!-- 설문그룹 설문지정 -->
+  	<action path="/commrchgrpchoice" scope="request" type="nexti.ejms.commapproval.action.commrchgrpchoiceAction">
+  		<forward name="commrchgrpchoice" path="/common/commrchgrpchoice.jsp"/>
+  	</action>
+  	<!-- 설문그룹 설문지정 리스트 -->
+  	<action path="/commrchgrpchoiceList" scope="request" type="nexti.ejms.commapproval.action.commrchgrpchoiceListAction">
+  	</action>
+  	<!-- 설문그룹 설문지정 내용보기 -->  	
+  	<action path="/commrchgrpchoiceView" scope="request" type="nexti.ejms.commapproval.action.commrchgrpchoiceViewAction">
+  	</action>
+  	<!-- 설문기타대상 등록 --> 
+  	<action path="/commrchgrpchoiceInsert" scope="request" type="nexti.ejms.commapproval.action.commrchgrpchoiceInsertAction">
+  	</action>
+ 
+ 		<!-- 결재선지정 -->
+  	<action path="/commapproval/designate" scope="request" type="nexti.ejms.commapproval.action.designateAction">
+  		<forward name="designate" path="/common/commapproval_designate.jsp"/>
+  	</action>
+  	<!-- 결재선 리스트 -->
+  	<action path="/commapproval/designateList" scope="request" type="nexti.ejms.commapproval.action.designateListAction">
+  	</action>
+  	<!-- 결재선지정 내용보기 -->
+  	<action path="/commapproval/designateView" scope="request" type="nexti.ejms.commapproval.action.designateViewAction">
+  	</action>
+  	<!-- 결재선지정 등록 -->
+  	<action path="/commapproval/designateInsert" scope="request" type="nexti.ejms.commapproval.action.designateInsertAction">
+  	</action> 
+  	
+ 		<!-- 신청서 결재선지정 -->
+  	<action path="/commreqform" scope="request" type="nexti.ejms.commapproval.action.commreqformAction">
+  		<forward name="reqform" path="/common/commreqform.jsp"/>
+  	</action>
+  	<!-- 신청서 결재선지정 내용보기 -->
+  	<action path="/commreqformView" scope="request" type="nexti.ejms.commapproval.action.commreqformViewAction">
+  	</action>
+  	<!-- 신청서 결재선지정 등록 -->
+  	<action path="/commreqformInsert" scope="request" type="nexti.ejms.commapproval.action.commreqformInsertAction">
+  	</action>   	
+  	
+  	<!-- 공통담당자지정 -->  	
+  	<action path="/commapproval/inputusr" scope="request" type="nexti.ejms.commapproval.action.inputusrAction">
+  		<forward name="inputusr" path="/common/commapproval_inputusr.jsp"/>
+  	</action>
+  	<!-- 담당자 리스트 -->
+  	<action path="/commapproval/inputusrList" scope="request" type="nexti.ejms.commapproval.action.inputusrListAction">
+  	</action>
+  	<!-- 담당자지정 내용보기 -->  	
+  	<action path="/commapproval/inputusrView" scope="request" type="nexti.ejms.commapproval.action.inputusrViewAction">
+  	</action>
+  	<!-- 담당자지정 등록 --> 
+  	<action path="/commapproval/inputusrInsert" scope="request" type="nexti.ejms.commapproval.action.inputusrInsertAction">
+  	</action> 
+  	
+  	<!-- 진행중인 취합문서 -->
+  	<!-- 진행중인취합문서 리스트 -->
+  	<action path="/collprocList" type="nexti.ejms.colldoc.action.CollprocListAction" name="colldocForm" scope="request">
+    	<forward name="list" path="/collproc/collprocList.jsp"/>
+    </action>
+    <!-- 진행중인 취합문서 양식 목록 -->
+    <action path="/collprocIfrView" type="nexti.ejms.colldoc.action.CollprocIfrViewAction" name="colldocForm" scope="request">
+  		<forward name="collprocifrview" path="/collproc/collprocIfrView.jsp"/>
+  	</action>
+  	 <!-- 진행중인 취합문서 양식 상세 데이터 -->
+    <action path="/collprocDataView" type="nexti.ejms.colldoc.action.CollprocDataViewAction" name="collprocForm" scope="request">
+      <forward name="formatview" path="/collproc/collprocFormatView.jsp"/>
+    </action>
+    <!-- 진행중인 취합문서 정보 -->
+    <action path="/collprocInfoView" type="nexti.ejms.colldoc.action.CollprocInfoViewAction" name="commCollDocInfoForm" scope="request">
+      <forward name="collprocinfoview" path="/collproc/collprocInfoView.jsp"/>
+    </action>
+  	<!-- 진행중인 취합문서 처리현황 -->
+    <action path="/collprocTreatView" type="nexti.ejms.colldoc.action.CollprocTreatViewAction" name="commTreatForm" scope="request">
+      <forward name="collproctreatview" path="/collproc/collprocTreatView.jsp"/>
+    </action>   
+  	<!-- 진행중인 취합문서 마감 팝업 -->
+    <action path="/collprocCloseView" type="nexti.ejms.colldoc.action.CollprocCloseViewAction" name="collprocForm" scope="request">
+      <forward name="collproccloseview" path="/collproc/collprocCloseView.jsp"/>
+    </action>
+    <!-- 취합마감 처리 -->
+    <action path="/collprocClose" type="nexti.ejms.colldoc.action.CollprocCloseAction" name="collprocForm" scope="request">
+    </action>
+    <!-- 기안취소처리 -->
+    <action path="/collprocProcess" type="nexti.ejms.colldoc.action.CollprocProcessAction" scope="request">
+      <forward name="collproctreatview" path="/collprocTreatView.do"/>
+      <forward name="collprocinfoview" path="/collprocInfoView.do"/>
+      <forward name="formatLineView" path="/collproc/formatLineView.do"/>
+      <forward name="formatFixedView" path="/collproc/formatFixedView.do"/>
+      <forward name="formatBookView" path="/collproc/formatBookView.do"/>
+      <forward name="list" path="/collprocList.do?docstate=0"/>
+    </action> 
+   <!-- 취합문서정보 수정 -->
+    <action path="/collprocInfoModify" type="nexti.ejms.colldoc.action.CollprocInfoModifyAction" name="commCollDocInfoForm" scope="request">
+      <forward name="collprocinfomodify" path="/collproc/collprocInfoModify.jsp"/>
+    </action>
+   <!-- 취합문서정보 저장 -->
+    <action path="/collprocInfoSave" type="nexti.ejms.colldoc.action.CollprocInfoSaveAction" name="commCollDocInfoForm" scope="request">
+      <forward name="collprocinfosave" path="/collprocInfoView.do"/>
+    </action>
+   <!-- 진행중인취합문서 행추가형 양식자료 보기 -->
+    <action path="/collproc/formatLineView" type="nexti.ejms.formatLine.action.FormatLineViewAction" name="formatLineForm" scope="request">
+      <forward name="formatlineview" path="/collprocDataView.do"/>
+    </action> 
+   <!-- 진행중인취합문서 고정양식형 양식자료 보기 -->
+    <action path="/collproc/formatFixedView" type="nexti.ejms.formatFixed.action.FormatFixedViewAction" name="formatFixedForm" scope="request">
+      <forward name="formatfixedview" path="/collprocDataView.do"/>
+    </action>    
+   <!-- 진행중인취합문서 제본형 양식자료 보기 -->
+    <action path="/collproc/formatBookView" type="nexti.ejms.formatBook.action.FormatBookViewAction" name="formatBookForm" scope="request">
+      <forward name="formatbookview" path="/collprocDataView.do"/>
+    </action>
+	 <!-- 진행중인취합문서 타부서 행추가형 양식자료 보기 -->
+    <action path="/collproc/formatLineOtherDeptDataView" type="nexti.ejms.formatLine.action.FormatLineOtherDeptDataViewAction" name="formatLineForm" scope="request">
+    	<forward name="formatlineview" path="/collproc/collprocFormatOtherDeptDataView.jsp"/>
+    </action> 
+   <!-- 진행중인취합문서 타부서 고정양식형 양식자료 보기 -->
+    <action path="/collproc/formatFixedOtherDeptDataView" type="nexti.ejms.formatFixed.action.FormatFixedOtherDeptDataViewAction" name="formatFixedForm" scope="request">
+      <forward name="formatfixedview" path="/collproc/collprocFormatOtherDeptDataView.jsp"/>
+    </action>    
+   <!-- 진행중인취합문서 타부서 제본형 양식자료 보기 -->
+    <action path="/collproc/formatBookOtherDeptDataView" type="nexti.ejms.formatBook.action.FormatBookOtherDeptDataViewAction" name="formatBookForm" scope="request">
+      <forward name="formatbookview" path="/collproc/collprocFormatOtherDeptDataView.jsp"/>
+    </action>
+        
+	<!-- 취합완료문서 -->
+  	<!-- 취합완료문서 리스트 -->
+  	<action path="/collcompList" type="nexti.ejms.colldoc.action.CollcompListAction" name="colldocForm" scope="request">
+    	<forward name="collcomplist" path="/collcomp/collcompList.jsp"/>
+    </action>
+  	<!-- 취합완료문서 양식 -->
+    <action path="/collcompDataView" type="nexti.ejms.colldoc.action.CollcompDataViewAction" name="collprocForm" scope="request">
+      <forward name="collcompdataview" path="/collcomp/collcompDataView.jsp"/>
+      <forward name="formatview" path="/collcomp/collcompFormatView.jsp"/>
+    </action>
+    <!-- 취합완료문서 정보 -->
+    <action path="/collcompInfoView" type="nexti.ejms.colldoc.action.CollcompInfoViewAction" name="commCollDocInfoForm" scope="request">
+      <forward name="collcompinfoview" path="/collcomp/collcompInfoView.jsp"/>
+    </action>
+  	<!-- 취합완료문서 처리현황 -->
+    <action path="/collcompTreatView" type="nexti.ejms.colldoc.action.CollcompTreatViewAction" name="commTreatForm" scope="request">
+      <forward name="collcomptreatview" path="/collcomp/collcompTreatView.jsp"/>
+    </action>   
+    <!-- 마감취소처리 -->
+    <action path="/collcompProcess" type="nexti.ejms.colldoc.action.CollcompProcessAction" scope="request">
+      <forward name="collcompdataview" path="/collcompDataView.do"/>
+      <forward name="collcompinfoview" path="/collcompInfoView.do"/>
+      <forward name="hidden" path="/collcomp/CloseHiddenPage.jsp"/>
+    </action> 
+   <!-- 취합완료문서 행추가형 양식자료 보기 -->
+    <action path="/collcomp/formatLineView" type="nexti.ejms.formatLine.action.FormatLineViewAction" name="formatLineForm" scope="request">
+      <forward name="formatlineview" path="/collcompDataView.do"/>
+    </action> 
+   <!-- 취합완료문서 고정양식형 양식자료 보기 -->
+    <action path="/collcomp/formatFixedView" type="nexti.ejms.formatFixed.action.FormatFixedViewAction" name="formatFixedForm" scope="request">
+      <forward name="formatfixedview" path="/collcompDataView.do"/>
+    </action>       
+   <!-- 취합완료문서 제본형 양식자료 보기 -->
+    <action path="/collcomp/formatBookView" type="nexti.ejms.formatBook.action.FormatBookViewAction" name="formatBookForm" scope="request">
+      <forward name="formatbookview" path="/collcompDataView.do"/>
+    </action>
+    <!-- 취합완료문서 순서확정 데이터 저장 -->
+    <action path="/collcomp/DataBookOrdUpdate" type="nexti.ejms.formatBook.action.DataBookOrdUpdateAction" name="dataBookForm" scope="request">
+      <forward name="hiddenframe" path="/collcomp/collcompHiddenAttFile.jsp"/>
+    </action> 
+    <!-- 취합완료문서 제본자료 생성 팝업 -->
+    <action path="/collcomp/DataBookMerge" type="nexti.ejms.formatBook.action.DataBookMergeAction" scope="request">
+      <forward name="databookmerge" path="/collcomp/collcompPopup.jsp"/>
+    </action>          
+    <!-- 취합완료문서 제본형 최종  데이터 저장 -->
+    <action path="/collcomp/DataBookCompSave" type="nexti.ejms.formatBook.action.DataBookCompSaveAction" name="dataBookForm" scope="request">
+      <forward name="hiddenframe" path="/collcomp/collcompHiddenAttFile.jsp"/>
+    </action>
+    <!-- 취합완료문서 제본형 최종  데이터 삭제 -->
+    <action path="/collcomp/DataBookCompDelete" type="nexti.ejms.formatBook.action.DataBookCompDeleteAction" name="dataBookForm" scope="request">
+      <forward name="hiddenframe" path="/collcomp/collcompHiddenAttFile.jsp"/>
+    </action>
+      	
+	<!-- 공유-->
+		<!-- 공유문서 목록 -->
+    <action path="/exhibitList" type="nexti.ejms.exhibit.action.ExhibitListAction" name="exhibitListForm" scope="request">
+    	<forward name="list" path="/exhibit/exhibitList.jsp"/>
+    </action>
+    <action path="/exhibitIframeList" type="nexti.ejms.exhibit.action.ExhibitListAction" name="exhibitListForm" scope="request">
+    	<forward name="list" path="/exhibit/exhibitIframeList.jsp"/>
+    </action>        
+  	<!-- 공유양식 정보 -->
+    <action path="/exhibitDataView" type="nexti.ejms.exhibit.action.ExhibitDataViewAction" name="collprocForm" scope="request">
+      <forward name="formatview" path="/exhibit/exhibitFormatView.jsp"/>
+    </action>
+  	<!-- 공유해제 -->
+    <action path="/exhibitClose" type="nexti.ejms.exhibit.action.ExhibitCloseAction" name="collprocForm" scope="request">
+    	<forward name="list" path="/exhibitList.do"/>
+    </action>
+    <!-- 공유양식 목록 -->
+    <action path="/exhibitIfrView" type="nexti.ejms.exhibit.action.ExhibitIfrViewAction" name="colldocForm" scope="request">
+  		<forward name="view" path="/exhibit/exhibitIfrView.jsp"/>
+  	</action>
+    <!-- 공유문서 정보 -->
+    <action path="/exhibitInfoView" type="nexti.ejms.exhibit.action.ExhibitInfoViewAction" name="commCollDocInfoForm" scope="request">
+      <forward name="view" path="/exhibit/exhibitInfoView.jsp"/>
+    </action>
+   <!-- 공유문서 정보  행추가형 양식자료 보기 -->
+    <action path="/exhibit/formatLineView" type="nexti.ejms.formatLine.action.FormatLineViewAction" name="formatLineForm" scope="request">
+      <forward name="formatlineview" path="/exhibitDataView.do"/>
+    </action> 
+   <!-- 취합완료문서 고정양식형 양식자료 보기 -->
+    <action path="/exhibit/formatFixedView" type="nexti.ejms.formatFixed.action.FormatFixedViewAction" name="formatFixedForm" scope="request">
+      <forward name="formatfixedview" path="/exhibitDataView.do"/>
+    </action>      
+   <!-- 공유문서 정보  제본형 양식자료 보기 -->
+    <action path="/exhibit/formatBookView" type="nexti.ejms.formatBook.action.FormatBookViewAction" name="formatBookForm" scope="request">
+      <forward name="formatbookview" path="/exhibitDataView.do"/>
+    </action>    
+  	
+	<!-- 관리자메뉴-->
+		<!-- 공통양식 관리 -->
+    <action path="/formatCommMgr" type="nexti.ejms.format.action.FormatCommMgrAction" name="formatForm" scope="request">
+    	<forward name="formatCommMgr" path="/collmakedoc/formatCommMgr.jsp"/>
+    </action>
+    <!-- 공통양식 관리 양식목록(iframe) -->
+    <action path="/formatCommFrameMgr" type="nexti.ejms.format.action.FormatCommFrameMgrAction" name="formatForm" scope="request">
+    	<forward name="formatCommFrameMgr" path="/collmakedoc/formatCommFrameMgr.jsp"/>
+    </action>
+    
+		<!-- 속성목록 관리 -->
+  	<action path="/attrList" type="nexti.ejms.attr.action.AttrFormAction"  name="attrForm"  scope="request" roles="admin">
+    	<forward name="list" path="/attrMgr/attrForm.jsp"/>
+    </action>
+    <action path="/attrDB" type="nexti.ejms.attr.action.AttrDBAction"  name="attrForm"  scope="request" roles="admin">
+      <forward name="back" path="/attrList.do"/>
+    </action>
+    <action path="/attrPopup" type="nexti.ejms.attr.action.AttrPopupAction" name="attrForm" scope="request" roles="admin">
+    	<forward name="main" path="/attrMgr/mainAttrModify.jsp"/>
+    	<forward name="sub" path="/attrMgr/subAttrModify.jsp"/>
+    </action>
+    <!-- 양식속성지정시 속성목록 저장 -->
+    <action path="/saveAttrList" type="nexti.ejms.attr.action.AttrListSaveAction"  name="attrForm"  scope="request"/>
+    
+	 	<!-- 취합업무사용현황 -->
+  	<action path="/collsttcsList" type="nexti.ejms.statistics.action.CollsttcsListAction" name="collsttcsForm" scope="request" roles="admin">
+    	<forward name="list" path="/mgrstat/collsttcsList.jsp"/>
+    </action>
+  	<!-- 입력업무사용현황 -->
+    <action path="/inputsttcsList" type="nexti.ejms.statistics.action.InputsttcsListAction" name="inputsttcsForm" scope="request" roles="admin">
+  		<forward name="list" path="/mgrstat/inputsttcsList.jsp"/>
+  	</action>
+  	<!-- 설문조사사용현황 -->
+    <action path="/rchsttcsList" type="nexti.ejms.statistics.action.RchsttcsListAction" name="rchsttcsForm" scope="request" roles="admin">
+  		<forward name="list" path="/mgrstat/rchsttcsList.jsp"/>
+  	</action>
+  	<!-- 신청서사용현황 -->
+    <action path="/reqsttcsList" type="nexti.ejms.statistics.action.ReqsttcsListAction" name="reqsttcsForm" scope="request" roles="admin">
+  		<forward name="list" path="/mgrstat/reqsttcsList.jsp"/>
+  	</action>
+  	<!-- LDAP 동기화 모니터링 -->
+    <action path="/ldapMonitoringList" type="nexti.ejms.ldapMonitoring.action.LdapMonitoringAction" name="ldapMonitoringForm" scope="request" roles="admin">
+  		<forward name="list" path="/mgrstat/ldapMonitoring.jsp"/>
+  	</action>
+  	<!-- System 접속 Log 모니터링 -->
+    <action path="/systemLogMonitoringList" type="nexti.ejms.systemLogMonitoring.action.SystemLogMonitoringAction" name="systemLogMonitoringForm" scope="request" roles="admin">
+  		<forward name="list" path="/mgrstat/systemLogMonitoring.jsp"/>
+  	</action>
+  	<!-- System 접속 Log 모니터링 팝업화면 -->
+    <action path="/systemLogDetailMonitoringList" type="nexti.ejms.systemLogMonitoring.action.SystemLogDetailMonitoringAction" name="systemLogMonitoringForm" scope="request" roles="admin">
+  		<forward name="list" path="/mgrstat/systemLogDetailMonitoring.jsp"/>
+  	</action>
+  	
+  	<!-- 조직관리 -->
+  	<action path="/usrMgr" type="nexti.ejms.user.action.UsrMgrMainAction"  name="usrMgrForm"  scope="request" roles="admin">
+    	<forward name="mainframe" path="/usrMgr/usrMgr.jsp"/>
+    </action>
+    <action path="/usrMgrFrame1" type="nexti.ejms.user.action.UsrMgrFrame1Action" name="usrMgrForm" scope="request" roles="admin">
+    	<forward name="frame1" path="/usrMgr/usrMgrFrame1.jsp"/>
+    </action>
+    <action path="/usrMgrFrame2" type="nexti.ejms.user.action.UsrMgrFrame2Action" name="usrMgrForm" scope="request" roles="admin">
+    	<forward name="frame2" path="/usrMgr/usrMgrFrame2.jsp"/>
+    </action>
+    <action path="/usrMgrFrame3" type="nexti.ejms.user.action.UsrMgrFrame3Action" name="usrMgrForm" scope="request">
+    	<forward name="frame3_1" path="/usrMgr/usrMgrFrame3_1.jsp"/>
+    	<forward name="frame3_2" path="/usrMgr/usrMgrFrame3_2.jsp"/>
+    </action>
+    <action path="/deptExtModify" type="nexti.ejms.user.action.DeptExtModifyAction" name="usrMgrForm" scope="request" roles="admin">
+    	<forward name="frame1" path="/usrMgrFrame1.do"/>
+    </action>
+    <action path="/deptManageDB" type="nexti.ejms.user.action.DeptManageDBAction" name="usrMgrForm" scope="request">
+    	<forward name="back" path="/usrMgrFrame3.do"/>
+    </action>
+    <action path="/searchDept" type="nexti.ejms.user.action.SearchDeptAction" name="usrMgrForm" scope="request">
+    	<forward name="list" path="/usrMgr/search_dept.jsp"/>
+    </action>
+    <action path="/searchRole" type="nexti.ejms.user.action.SearchRoleAction" name="usrMgrForm" scope="request">
+    	<forward name="list" path="/usrMgr/search_role.jsp"/>
+    </action>
+    <action path="/searchUser" type="nexti.ejms.user.action.SearchUserAction" name="usrMgrForm" scope="request">
+    	<forward name="list" path="/usrMgr/search_user.jsp"/>
+    </action>
+    
+  	<!-- 담당단위관리 -->
+  	<action path="/chrgUnitList" type="nexti.ejms.chrgUnit.action.ChrgUnitFormAction"  name="chrgUnitForm"  scope="request" roles="admin">
+    	<forward name="list" path="/chrgUnitMgr/chrgUnitForm.jsp"/>
+    </action>
+    <action path="/chrgUnitDB" type="nexti.ejms.chrgUnit.action.ChrgUnitDBAction"  name="chrgUnitForm"  scope="request" roles="admin">
+      <forward name="back" path="/chrgUnitList.do"/>
+    </action>
+    <action path="/chrgUnitPopup" type="nexti.ejms.chrgUnit.action.ChrgUnitPopupAction" name="chrgUnitForm" scope="request" roles="admin">    	
+    	<forward name="modify" path="/chrgUnitMgr/chrgUnitModify.jsp"/>
+    </action>
+    
+    <!-- 배부담당관리 -->
+  	<action path="/deliveryUserMgr" type="nexti.ejms.delivery.action.DeliveryUserMgrAction"  name="chrgUnitForm"  scope="request" roles="admin">
+    	<forward name="list" path="/deliveryUserMgr/deliveryUserMgr.jsp"/>
+    </action>
+    <action path="/deliveryUserMgrDB" type="nexti.ejms.delivery.action.DeliveryUserMgrDBAction"  name="chrgUnitForm"  scope="request" roles="admin">
+      <forward name="list" path="/deliveryUserMgr.do"/>
+    </action> 
+    
+  	<!-- 관리자변경 -->
+  	<action path="/chgMgr" type="nexti.ejms.organ.action.ChgMgrAction" name="managerForm" scope="request" roles="admin">
+  		<forward name="view" path="/mgrmanager/chgmgr.jsp"/>
+  	</action> 
+  	<action path="/chgMgrSave" type="nexti.ejms.organ.action.ChgMgrSaveAction" name="managerForm" scope="request" roles="admin">
+  		<forward name="view" path="/chgMgr.do"/>
+  	</action>
+   	<action path="/commdeptuser" type="nexti.ejms.commsubdept.action.commdeptuserAction" name="managerForm" scope="request">
+  		<forward name="commdeptuser" path="/common/commdeptuser.jsp"/>
+  	</action>  
+  	<action path="/commsubdept/deptuserList" scope="request" type="nexti.ejms.commsubdept.action.commdeptuserListAction">
+  	</action>
+  	
+  	<!-- 자료이관 -->
+  	<action path="/dataTransferList" type="nexti.ejms.dataTransfer.action.DataTransferListAction" name="dataTransferForm" scope="request" roles="admin">
+  		<forward name="dataTransferList" path="/dataTransfer/dataTransferList.jsp"/>
+  	</action>
+  	<action path="/dataTransferProc" type="nexti.ejms.dataTransfer.action.DataTransferProcAction" name="dataTransferForm" scope="request" roles="admin">
+  		<forward name="dataTransferList" path="/dataTransferList.do"/>
+  	</action>
+  	<action path="/getTgtUserList" type="nexti.ejms.dataTransfer.action.GetTgtUserListAction" scope="request" roles="admin"/>
+  	
+  	<!-- 코드관리 -->
+  	<action path="/codeList" type="nexti.ejms.ccd.action.CodeFormAction"  name="codeForm"  scope="request" roles="admin">
+    	<forward name="list" path="/ccdMgr/codeForm.jsp"/>
+    </action>
+    <action path="/codeDB" type="nexti.ejms.ccd.action.CodeDBAction"  name="codeForm"  scope="request" roles="admin">
+      <forward name="back" path="/codeList.do"/>
+    </action>
+    <action path="/codePopup" type="nexti.ejms.ccd.action.CodePopupAction" name="codeForm" scope="request" roles="admin">
+    	<forward name="main" path="/ccdMgr/mainCodeModify.jsp"/>
+    	<forward name="sub" path="/ccdMgr/subCodeModify.jsp"/>
+    </action> 
+    
+  	<!-- 배포목록관리 -->
+  	<action path="/grpList" type="nexti.ejms.group.action.GroupFormAction"  name="groupForm"  scope="request">
+    	<forward name="list" path="/grpMgr/grpForm.jsp"/>
+    </action>
+    <action path="/grpDB" type="nexti.ejms.group.action.GroupDBAction"  name="groupForm"  scope="request">
+      <forward name="back" path="/grpList.do"/>
+    </action>
+    <action path="/grpPopup" type="nexti.ejms.group.action.GroupPopupAction" name="groupForm" scope="request">
+    	<forward name="mainM" path="/grpMgr/mainGrpModify.jsp"/>
+    	<forward name="mainI" path="/grpMgr/mainGrpInsert.jsp"/>
+    	<forward name="subI" path="/grpMgr/grpPopDept.jsp"/>
+    </action>
+    <action path="/grpSave" type="nexti.ejms.group.action.GroupSaveAction" scope="request"/>
+        
+    <!-- agent관리 -->
+    <action path="/systemAgent" type="nexti.ejms.agent.action.SystemAgentAction" name="systemAgentForm" scope="request" roles="admin">
+    	<forward name="list" path="/agent/systemAgent.jsp"/>
+    </action> 
+    <action path="/systemAgentControl" type="nexti.ejms.agent.action.SystemAgentControlAction"  name="systemAgentForm"  scope="request" roles="admin">
+    	<forward name="list" path="/systemAgent.do"/>
+    </action> 
+    <action path="/systemAgentRuntime" type="nexti.ejms.agent.action.SystemAgentRuntimeAction"  name="systemAgentForm"  scope="request" roles="admin">
+    	<forward name="list" path="/agent/systemAgentRuntime.jsp"/>
+    </action>
+    <action path="/systemAgentRuntimeWriteForm" type="nexti.ejms.agent.action.SystemAgentRuntimeWriteFormAction" name="systemAgentForm"  scope="request" roles="admin">
+    	<forward name="view" path="/agent/systemAgentRuntimeWriteForm.jsp"/>
+    </action>   
+    <action path="/systemAgentRuntimeWrite" type="nexti.ejms.agent.action.SystemAgentRuntimeWriteAction"  name="systemAgentForm"  scope="request" roles="admin">
+    	<forward name="write_ok" path="/systemAgentRuntime.do"/>
+    </action>   
+    <action path="/systemAgentRuntimeDelete" type="nexti.ejms.agent.action.SystemAgentRuntimeDeleteAction"  name="systemAgentForm"  scope="request" roles="admin">
+    	<forward name="delete_ok" path="/systemAgentRuntime.do"/>
+    </action>     	
+ 	 	
+  	<!-- 공지사항 -->
+ 		<action path="/noticeList" type="nexti.ejms.notice.action.NoticeListAction" name="noticeForm" scope="request">
+    	<forward name="list" path="/mgrnotice/noticeList.jsp"/>
+    </action>
+    <action path="/noticeView" type="nexti.ejms.notice.action.NoticeViewAction" name="noticeForm" scope="request">
+    	<forward name="view" path="/mgrnotice/noticeView.jsp"/>
+    </action>
+    <action path="/noticeWrite" type="nexti.ejms.notice.action.NoticeWriteAction" name="noticeForm" scope="request" roles="admin">
+    	<forward name="write" path="/mgrnotice/noticeWrite.jsp"/>
+    </action>
+    <action path="/noticeSave" type="nexti.ejms.notice.action.NoticeSaveAction" name="noticeForm" scope="request" roles="admin">
+    	<forward name="list" path="/noticeList.do"/>
+    </action>   
+    <action path="/noticeFileDel" type="nexti.ejms.notice.action.NoticeFileDelAction" name="noticeForm" scope="request" roles="admin">
+    	<forward name="back" path="/noticeWrite.do"/>
+    </action>
+    
+    <!-- 공통 양식 리스트 -->
+    <action path="/formatList" type="nexti.ejms.format.action.FormatListAction" name="formatForm" scope="request">
+      <forward name="formatlist" path="/common/formatList.jsp"/>
+    </action>
+    
+    <!-- 설문조사  -->
+    <action path="/researchMyList" type="nexti.ejms.research.action.ResearchMyListAction" name="researchForm" scope="request">
+      <forward name="list" path="/research/researchMyList.jsp"/>
+    </action>
+    <action path="/researchGetUsed" type="nexti.ejms.research.action.ResearchGetUsedAction" name="researchForm" scope="request">
+    	<forward name="list" path="/research/researchGetUsed.jsp"/>
+    </action>    
+    <action path="/researchIfrView" type="nexti.ejms.research.action.ResearchGetUsedAction" name="researchForm" scope="request">
+  		<forward name="list" path="/research/researchIfrView.jsp"/>
+  	</action>
+  	<action path="/researchWrite" type="nexti.ejms.research.action.ResearchWriteAction" name="researchForm" scope="request">
+      <forward name="write" path="/research/researchView.jsp"/>
+    </action>     
+    <action path="/researchView" type="nexti.ejms.research.action.ResearchViewAction" name="researchForm" scope="request">
+      <forward name="rchview" path="/research/researchView.jsp"/>
+    </action>
+     <action path="/researchViewSubAjax" type="nexti.ejms.research.action.ResearchViewSubAjaxAction" name="researchForm" scope="request"> 
+    </action>
+    <action path="/researchChoice" type="nexti.ejms.research.action.ResearchChoiceAction" name="researchForm" scope="request">
+  		<forward name="view" path="/researchView.do"/>
+  	</action>
+  	<action path="/researchSave" type="nexti.ejms.research.action.ResearchSaveAction" name="researchForm" scope="request">
+			<forward name="view" path="/researchView.do"/>
+			<forward name="list" path="/researchMyList.do"/>
+    </action>
+    <action path="/researchDelete" type="nexti.ejms.research.action.ResearchDeleteAction" name="researchForm" scope="request">
+			<forward name="list" path="/researchMyList.do"/>
+    </action>
+    <action path="/researchClose" type="nexti.ejms.research.action.ResearchCloseAction">
+      <forward name="list" path="/researchMyList.do"/>         
+    </action>
+    <action path="/researchPreview" type="nexti.ejms.research.action.ResearchPreviewAction" name="researchForm" scope="request">
+      <forward name="preview" path="/research/researchPreview.jsp"/>
+    </action>
+  	<action path="/researchResult" type="nexti.ejms.research.action.ResearchResultAction" name="researchForm" scope="request">
+      <forward name="result" path="/research/researchResult.jsp"/>
+    </action>
+    <action path="/research" type="nexti.ejms.research.action.ResearchAction" name="researchForm" scope="request">
+      <forward name="view" path="/research/research.jsp"/>
+      <forward name="hidden" path="/research/researchHiddenPage.jsp"/>
+    </action> 
+    <action path="/researchAns" type="nexti.ejms.research.action.ResearchAnsAction" name="researchForm" scope="request">
+    	<forward name="hidden" path="/research/researchHiddenPage.jsp"/>
+    </action>
+    <action path="/researchParticiList" type="nexti.ejms.research.action.ResearchParticiListAction" name="researchForm" scope="request">
+      <forward name="list" path="/research/researchParticiList.jsp"/>
+    </action>
+    <action path="/researchResultToHwp" type="nexti.ejms.research.action.ResearchResultToHwpAction" name="researchForm" scope="request">
+      <forward name="hwp" path="/research/researchResultToHwp.jsp"/>
+    </action>
+    <action path="/researchIndividualToHwp" type="nexti.ejms.research.action.ResearchIndividualToHwpAction" name="researchForm" scope="request">
+      <forward name="hwp" path="/research/researchIndividualToHwp.jsp"/>
+    </action>
+    <action path="/researchResultToXls" type="nexti.ejms.research.action.ResearchResultToXlsAction" scope="request"/>
+    <action path="/researchIndividualToXls" type="nexti.ejms.research.action.ResearchIndividualToXlsAction" scope="request">
+      <forward name="xls" path="/research/researchIndividualToXls.jsp"/>
+    </action>
+    
+    <!-- 설문조사그룹 -->
+    <action path="/researchGrpMyList" type="nexti.ejms.research.action.ResearchGrpMyListAction" name="researchForm" scope="request">
+      <forward name="list" path="/research/researchGrpMyList.jsp"/>
+    </action>
+    <action path="/researchGrpGetUsed" type="nexti.ejms.research.action.ResearchGrpGetUsedAction" name="researchForm" scope="request">
+    	<forward name="list" path="/research/researchGrpGetUsed.jsp"/>
+    </action>    
+    <action path="/researchGrpIfrView" type="nexti.ejms.research.action.ResearchGrpGetUsedAction" name="researchForm" scope="request">
+  		<forward name="list" path="/research/researchGrpIfrView.jsp"/>
+  	</action>  	
+  	<action path="/researchGrpWrite" type="nexti.ejms.research.action.ResearchGrpWriteAction" name="researchForm" scope="request">
+      <forward name="write" path="/research/researchGrpView.jsp"/>
+    </action>     
+    <action path="/researchGrpView" type="nexti.ejms.research.action.ResearchGrpViewAction" name="researchForm" scope="request">
+      <forward name="view" path="/research/researchGrpView.jsp"/>
+    </action>
+    <action path="/researchGrpChoice" type="nexti.ejms.research.action.ResearchGrpChoiceAction" name="researchForm" scope="request">
+  		<forward name="view" path="/researchGrpView.do"/>
+  	</action>
+  	<action path="/researchGrpSave" type="nexti.ejms.research.action.ResearchGrpSaveAction" name="researchForm" scope="request">
+			<forward name="view" path="/researchGrpView.do"/>
+			<forward name="list" path="/researchGrpMyList.do"/>
+    </action>
+    <action path="/researchGrpDelete" type="nexti.ejms.research.action.ResearchGrpDeleteAction" name="researchForm" scope="request">
+			<forward name="list" path="/researchGrpMyList.do"/>
+    </action>
+    <action path="/researchGrpClose" type="nexti.ejms.research.action.ResearchGrpCloseAction">
+      <forward name="list" path="/researchGrpMyList.do"/>         
+    </action>
+    <action path="/researchGrpPreview" type="nexti.ejms.research.action.ResearchGrpPreviewAction" name="researchForm" scope="request">
+      <forward name="preview" path="/research/researchGrpPreview.jsp"/>
+    </action>
+    
+    <!-- 신청서 -->
+    <action path="/formList" type="nexti.ejms.sinchung.action.SinchungListAction" name="sinchungListForm" scope="request">
+      <forward name="list" path="/sinchung/sinchungList.jsp"/>
+    </action>
+    <action path="/formWrite" type="nexti.ejms.sinchung.action.SinchungWriteAction" name="sinchungForm" scope="request">
+      <forward name="write" path="/sinchung/sinchungView.jsp"/>
+    </action>
+    <action path="/formView" type="nexti.ejms.sinchung.action.SinchungViewAction" name="sinchungForm" scope="request">
+      <forward name="view" path="/sinchung/sinchungView.jsp"/>
+    </action>
+    <action path="/formSave" type="nexti.ejms.sinchung.action.SinchungSaveAction" name="sinchungForm" scope="request">
+      <forward name="list" path="/formList.do"/>
+      <forward name="view" path="/formView.do"/>      
+    </action>
+    <action path="/formDel" type="nexti.ejms.sinchung.action.SinchungDelAction" name="sinchungForm" scope="request">
+      <forward name="list" path="/formList.do"/>         
+    </action>
+    <action path="/formClose" type="nexti.ejms.sinchung.action.CloseProcAction">
+      <forward name="list" path="/formList.do"/>         
+    </action>
+    <action path="/preview" type="nexti.ejms.sinchung.action.PreviewAction" name="sinchungForm" scope="request">
+    	<forward name="prev" path="/sinchung/preview.jsp"/>
+    </action>
+    <action path="/reqForm" type="nexti.ejms.sinchung.action.SinchungAction" name="sinchungForm" scope="request">
+    	<forward name="write" path="/sinchung/sinchung.jsp"/>
+    	<forward name="hidden" path="/sinchung/sinchungHiddenPage.jsp"/>
+    </action> 
+    <action path="/reqModify" type="nexti.ejms.sinchung.action.SinchungModifyAction" name="sinchungForm" scope="request">
+    	<forward name="modify" path="/sinchung/sinchungModify.jsp"/>
+    </action>
+    <action path="/doList" type="nexti.ejms.sinchung.action.DoListAction" name="sinchungListForm" scope="request">
+    	<forward name="parentFrame" path="/sinchung/sinchungDoList.jsp"/>
+    </action>
+    <action path="/doIfr" type="nexti.ejms.sinchung.action.DoIfrAction" name="sinchungListForm" scope="request">
+    	<forward name="list" path="/sinchung/doIfr.jsp"/>
+    </action>
+    <action path="/myList" type="nexti.ejms.sinchung.action.MyListAction" name="dataListForm" scope="request">
+    	<forward name="list" path="/sinchung/sinchungMyList.jsp"/>
+    </action>
+    <action path="/getUsedList" type="nexti.ejms.sinchung.action.GetUsedListAction" name="sinchungListForm" scope="request">
+    	<forward name="parentFrame" path="/sinchung/sinchungGetUsed.jsp"/>
+    </action>
+    <action path="/getUsedIfr" type="nexti.ejms.sinchung.action.GetUsedIfrAction" name="sinchungListForm" scope="request">
+    	<forward name="list" path="/sinchung/getUsedIfr.jsp"/>
+    </action>    
+    <action path="/jupsuList" type="nexti.ejms.sinchung.action.JupsuListAction" name="dataListForm" scope="request">
+    	<forward name="list" path="/sinchung/jupsuList.jsp"/>
+    </action>  
+    <action path="/jupsuView" type="nexti.ejms.sinchung.action.JupsuViewAction" name="dataForm" scope="request">
+    	<forward name="view" path="/sinchung/jupsuView.jsp"/>
+    </action> 
+    <action path="/jupsuXls" type="nexti.ejms.sinchung.action.JupsuXlsAction" name="dataListForm" scope="request">
+    	<forward name="excel" path="/sinchung/jupsuXls.jsp"/>
+    </action>
+    <action path="/sancView" type="nexti.ejms.sinchung.action.SancViewAction" name="dataForm" scope="request">
+    	<forward name="view" path="/sinchung/sancView.jsp"/>
+    </action>
+    <action path="/dataSave" type="nexti.ejms.sinchung.action.DataSaveAction" name="dataForm" scope="request">
+    	<forward name="hidden" path="/sinchung/sinchungHiddenPage.jsp"/>
+   	</action>
+    <action path="/selectUsed" type="nexti.ejms.sinchung.action.SelectUsedAction"/> 
+    <action path="/procJupsu" type="nexti.ejms.sinchung.action.JupsuProcAction"/>    
+    <action path="/myCancel" type="nexti.ejms.sinchung.action.CancelAction"/>
+    
+    <!-- 외부망 설문조사그룹 -->
+    <action path="/outsideRchGrpSave" type="nexti.ejms.outside.action.OutsideRchGrpSaveAction"/>
+    <action path="/outsideRchGrpDel" type="nexti.ejms.outside.action.OutsideRchGrpDelAction"/>
+    <action path="/outsideRchGrpView" type="nexti.ejms.outside.action.OutsideRchGrpViewAction" name="researchForm" scope="request">
+      <forward name="view" path="/outside/outsideRchGrpView.jsp"/>
+    </action>
+    
+    <!-- 외부망 설문조사 -->
+    <action path="/outsideRchResultList" type="nexti.ejms.outside.action.OutsideRchResultListAction"/>
+    <action path="/outsideRchList" type="nexti.ejms.outside.action.OutsideRchListAction"/>
+    <action path="/outsideCnt" type="nexti.ejms.outside.action.OutsideCntAction"/>
+    <action path="/outsideRchResult" type="nexti.ejms.outside.action.OutsideRchResultAction"/>
+    <action path="/outsideRchResultView" type="nexti.ejms.research.action.ResearchResultAction" name="researchForm" scope="request">
+      <forward name="result" path="/research/researchResult.jsp"/>
+    </action>
+    <action path="/outsideRchSave" type="nexti.ejms.outside.action.OutsideRchSaveAction"/>
+    <action path="/outsideRchDel" type="nexti.ejms.outside.action.OutsideRchDelAction"/>
+    <action path="/outsideRchAnsDel" type="nexti.ejms.outside.action.OutsideRchAnsDelAction"/>
+    <action path="/outsideRchView" type="nexti.ejms.outside.action.OutsideRchViewAction" name="researchForm" scope="request">
+    	<forward name="hidden" path="/outside/outsideHiddenPage.jsp"/>
+      <forward name="view" path="/outside/outsideRchView.jsp"/>
+    </action>
+    <action path="/outsideRchAns" type="nexti.ejms.outside.action.OutsideRchAnsAction" name="researchForm" scope="request">
+    	<forward name="hidden" path="/outside/outsideHiddenPage.jsp"/>
+    </action>
+    <!-- 외부망 신청서 -->
+    <action path="/outsideReqList" type="nexti.ejms.outside.action.OutsideReqListAction"/>
+    <action path="/outsideReqResult" type="nexti.ejms.outside.action.OutsideReqResultAction"/>
+    <action path="/outsideReqSave" type="nexti.ejms.outside.action.OutsideReqSaveAction"/>
+    <action path="/outsideReqDel" type="nexti.ejms.outside.action.OutsideReqDelAction"/>
+    <action path="/outsideReqAnsDel" type="nexti.ejms.outside.action.OutsideReqAnsDelAction"/>
+    <action path="/outsideReqView" type="nexti.ejms.outside.action.OutsideReqViewAction" name="sinchungForm" scope="request">
+    	<forward name="hidden" path="/outside/outsideReqHiddenPage.jsp"/>
+      <forward name="view" path="/outside/outsideReqView.jsp"/>
+    </action>    
+    <action path="/outsideReqAns" type="nexti.ejms.outside.action.OutsideReqAnsAction" name="dataForm" scope="request">
+     	<!-- <forward name="hidden" path="/outside/outsideHiddenPage.jsp"/>  -->
+     	<forward name="hidden" path="/outside/outsideReqHiddenPage.jsp"/>
+    </action>
+    
+    <!-- Test Start -->
+    <action path="/workplanList" type="nexti.ejms.workplan.action.WorkplanListAction" name="workplanListForm" scope="request">
+    	<forward name="list" path="/workplan/workplanList.jsp"/>
+    </action>
+    <action path="/workplanIframeList" type="nexti.ejms.workplan.action.WorkplanListAction" name="workplanListForm" scope="request">
+    	<forward name="list" path="/workplan/workplanIframeList.jsp"/>
+    </action>
+    <action path="/workplanMake" type="nexti.ejms.workplan.action.WorkplanMakeAction" name="workplanForm" scope="request">
+      <forward name="workplanMake" path="/workplan/workplanMake.jsp"/>
+    </action>
+    <action path="/workplanSave" type="nexti.ejms.workplan.action.WorkplanSaveAction" name="workplanForm" scope="request">
+      <forward name="list" path="/workplanList.do"/>
+    </action>
+    <action path="/workplanDelEnd" type="nexti.ejms.workplan.action.WorkplanDelEndAction" name="workplanForm" scope="request">
+      <forward name="list" path="/workplanList.do"/>
+    </action>
+    <action path="/workplanInfoView" type="nexti.ejms.workplan.action.WorkplanInfoViewAction" name="workplanForm" scope="request">
+      <forward name="workplanInfoView" path="/workplan/workplanInfoView.jsp"/>
+    </action>
+    
+    <action path="/workResultList" type="nexti.ejms.workplan.action.WorkResultListAction" name="workplanForm" scope="request">
+      <forward name="list" path="/workplan/workResultList.jsp"/>
+    </action>
+    <action path="/workResultSave" type="nexti.ejms.workplan.action.WorkResultSaveAction" name="workplanForm" scope="request">
+      <forward name="list" path="/workResultList.do"/>
+    </action>
+    <action path="/workResultDelete" type="nexti.ejms.workplan.action.WorkResultDeleteAction" name="workplanForm" scope="request">
+      <forward name="list" path="/workResultList.do"/>
+    </action>
+    <action path="/workResultView" type="nexti.ejms.workplan.action.WorkResultViewAction" name="workplanForm" scope="request">
+      <forward name="view" path="/workplan/workResultView.jsp"/>
+    </action>
+    <action path="/workResultWrite" type="nexti.ejms.workplan.action.WorkResultWriteAction" name="workplanForm" scope="request">
+      <forward name="view" path="/workplan/workResultView.jsp"/>
+    </action>
+    <!-- Test End -->
+    
+  </action-mappings>
+  
+  <controller processorClass="nexti.ejms.common.NewRequestProcessor"/>
+  <message-resources parameter="nexti.ejms.common.ApplicationResources"/>
+</struts-config>

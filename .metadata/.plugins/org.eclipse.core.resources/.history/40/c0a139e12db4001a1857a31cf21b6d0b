@@ -1,0 +1,82 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+
+<html>
+<head>
+<%@ include file="/WEB-INF/include/include-header.jspf" %>
+
+<script type="text/javascript">
+
+$(document).ready(function(){
+	/* 로그아웃 */
+	$("#logout").on("click", function(e){
+		e.preventDefault();				
+		fn_logout();
+	});
+});
+
+//로그아웃
+function fn_logout(){
+	var comSubmit = new ComSubmit();			
+	comSubmit.setUrl("<c:url value='/logoutVisitor.do' />");
+	comSubmit.submit();
+}
+</script>
+
+
+</head>
+<body bgcolor="#FFFFFF">
+
+<form id="form1" name="form1">
+<input type="hidden" id="USER_ID" name="USER_ID" value="${sessionScope.userinfo.userId}">
+<c:set var="u_rt" value="${sessionScope.userinfo.userright}"/>
+
+<!-- 타이틀 -->
+<div style="background-color:#170B3B;color:white; margin-bottom:10px; width: 100%;">
+	<a href="#this" class="btn" id="logout">
+		<img src="/service/images/popup_title.gif" align="absmiddle">
+	</a>일자리 컨텐츠 조회
+</div>
+
+
+<br>
+	<table class="table table-borderless table-data3">
+	     <thead style="background-color:#0B2161;">
+	        <tr align="center">
+	        	<th>NO</th>
+				<th>부서코드</th>
+				<th>채용구분</th>
+				<th>응시번호</th>
+				<th>고시공고번호</th>
+				<th>고시공고명</th>
+				<th>성명</th>
+				<th>주민번호</th>
+				<th>주소</th>
+				<th>주소상세</th>
+				<th>우편번호</th>
+				<th>전화번호</th>
+				<th>참여희망사업</th>
+				<th>기타사항</th>
+				<th>장애인(본인,가족여부)</th>
+				<th>장애종류(장애정도)</th>
+				<th>장애종류(장애종류)</th>
+				<th>취업보호.지원대상자(국가유공자)</th>
+				<th>한부모가정</th>
+				<th>노숙자</th>
+				<th>결혼이주여성</th>
+				<th>북한탈주민</th>
+				<th>자격증정보</th>
+				<th>응시분야</th>
+				<th>응시날짜</th>
+				<th>응시상태</th>
+				<th>담당자</th>
+				<th>담당자코멘트</th>
+			</tr>
+	      </thead>
+	      <tbody id='publicBusiness_table'>
+	      </tbody>
+				</table>
+
+	<%@ include file="/WEB-INF/include/include-body.jspf" %>
+	
+</body>
+</html>

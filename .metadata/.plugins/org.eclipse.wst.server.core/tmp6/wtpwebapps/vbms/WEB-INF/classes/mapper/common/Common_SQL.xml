@@ -1,0 +1,217 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="common">
+	
+	<sql id="pagingPre">
+		<![CDATA[
+   			SELECT 
+			    AAA.*
+			FROM(
+			    SELECT 
+			        ROWNUM AS RNUM,
+			        AA.*
+			    FROM(  
+ 		]]>
+ 	</sql>
+ 	
+ 	<sql id="pagingPost">
+ 		<![CDATA[
+ 			 	) AA
+ 			 	WHERE 
+                	ROWNUM <= #{END}
+			) AAA
+			WHERE 
+			    AAA.RNUM >= #{START}
+ 		]]>
+ 	</sql>
+
+	
+	<select id="selectFileInfo" parameterType="hashmap" resultType="hashmap">
+		<![CDATA[
+			SELECT
+			    STORED_FILE_NAME,
+			    ORIGINAL_FILE_NAME
+			FROM
+			    BUILDING_MNG_DAEJANG
+			WHERE
+			    DGNS_NO = #{DGNS_NO}
+		]]>
+	</select>
+	
+	
+	
+	<update id="updateFile" parameterType="hashmap">
+		<![CDATA[
+			UPDATE BUILDING_MNG_DAEJANG
+			SET ORIGINAL_FILE_NAME = #{ORIGINAL_FILE_NAME}, 
+				STORED_FILE_NAME = #{STORED_FILE_NAME}
+			WHERE DGNS_NO = '1'
+		]]>
+	</update>
+	
+
+	
+	
+	
+	<select id="selectStructList" parameterType="hashmap" resultType="hashmap">		
+		<![CDATA[			
+			SELECT CODE_ID, CODE_NAME 
+			FROM BUILDING_CODE_LIST
+			WHERE GROUP_ID = 2
+			ORDER BY CODE_SEQ ASC
+		]]>
+	</select>
+	
+	
+	
+	<select id="selectPurposeList" parameterType="hashmap" resultType="hashmap">		
+		<![CDATA[			
+			SELECT CODE_ID, CODE_NAME 
+			FROM BUILDING_CODE_LIST
+			WHERE GROUP_ID = 3
+			ORDER BY CODE_SEQ ASC
+		]]>
+	</select>
+	
+	
+	<select id="selectStateList" parameterType="hashmap" resultType="hashmap">		
+		<![CDATA[			
+			SELECT CODE_ID, CODE_NAME 
+			FROM BUILDING_CODE_LIST
+			WHERE GROUP_ID = 4
+			ORDER BY CODE_SEQ ASC
+		]]>
+	</select>
+	
+	
+	
+	<select id="selectIdApproveList" parameterType="hashmap" resultType="hashmap">
+		<include refid="common.pagingPre"/>	
+		<![CDATA[			
+			SELECT ROW_NUMBER() OVER (ORDER BY USER_ID DESC) RNUM,
+				   USER_ID, 
+				   USER_NAME, DEPT_NAME, CLASS_NAME, 
+				   POSITION_NAME, USER_TEL, APPLY_REASON 
+			FROM BUILDING_USER_MASTER
+			WHERE DEL_YN = '0'			
+			AND USER_STATUS = #{USER_STATUS}
+		]]>
+		<include refid="common.pagingPost"/>
+	</select>
+	
+	
+	<update id="updateIdApprove" parameterType="hashmap">
+		<![CDATA[
+			UPDATE BUILDING_USER_MASTER
+			SET
+				USER_STATUS = '0',				
+				APPROVE_DATE = SYSDATE
+			WHERE
+				USER_ID IN ( ${ID_LIST} )
+		]]>
+	</update>
+	
+	
+	<select id="idApproveListDetail" parameterType="hashmap" resultType="hashmap">
+		<![CDATA[
+			SELECT                
+                USER_ID, 
+				USER_NAME,
+				USER_RIGHT, 
+				DEPT_NAME, 
+				CLASS_NAME, 
+				POSITION_NAME, 
+				USER_TEL, 
+				APPLY_REASON				         
+            FROM
+              BUILDING_USER_MASTER
+            WHERE DEL_YN = '0'
+            AND USER_ID = #{USER_ID}				
+		]]>
+	</select>
+	
+	
+	<update id="updateIdApproveList" parameterType="hashmap">
+		<![CDATA[
+			UPDATE BUILDING_USER_MASTER
+			SET
+				USER_RIGHT = #{USER_RIGHT},							  
+			    MOD_DATE = SYSDATE
+			WHERE  
+				USER_ID = #{USER_ID}
+		]]>
+	</update>
+	
+	
+	<update id="deleteIdApproveList" parameterType="hashmap">
+		<![CDATA[
+			UPDATE BUILDING_USER_MASTER
+			SET
+				DEL_YN = '1',				
+				DEL_DATE = SYSDATE
+			WHERE
+				USER_ID = #{USER_ID}
+		]]>
+	</update>
+	
+	
+	
+	
+	<select id="test" resultType="String">		
+		<![CDATA[			
+			SELECT DEPT_NAME FROM  BUILDING_USER_MASTER
+        	WHERE USER_ID = 'bluegreen' 
+		]]>
+	</select>
+	
+	
+	
+	
+	<delete id="deleteDgnsUserData" parameterType="hashmap">
+		<![CDATA[
+			TRUNCATE TABLE  BUILDING_USER_MASTER			
+		]]>
+	</delete>
+	
+	
+	
+	
+	
+	<select id="selectArimService" parameterType="hashmap" resultType="hashmap">		
+		<![CDATA[									
+				SELECT '1' GB, TO_DATE(CORRTN_ORDER, 'YYYYMMDD') - TRUNC(SYSDATE) DAY_CNT, BLD_DONG, BLD_ADDR1, BLD_OWNER, CORRTN_ORDER TDAY, PERFORM_USERID, PERFORM_USERHNO 
+                            FROM BUILDING_MNG_DAEJANG
+                            WHERE DEL_YN = '0'
+                            AND DISPLAY_YN = '0'            
+                            AND CORRTN_ORDER IS NOT NULL                            
+                            AND CORRTN_ORDER = TO_CHAR(SYSDATE+1, 'YYYYMMDD') 
+                UNION ALL               
+                SELECT '2' GB, TO_DATE(EXEC_IMPOSE_DATE, 'YYYYMMDD') - TRUNC(SYSDATE) DAY_CNT, BLD_DONG, BLD_ADDR1, BLD_OWNER, EXEC_IMPOSE_DATE TDAY, PERFORM_USERID, PERFORM_USERHNO 
+                            FROM BUILDING_MNG_DAEJANG
+                            WHERE DEL_YN = '0'
+                            AND DISPLAY_YN = '0'             
+                            AND EXEC_IMPOSE_DATE IS NOT NULL
+                            AND EXEC_IMPOSE_DATE = TO_CHAR(SYSDATE+1, 'YYYYMMDD') 
+                UNION ALL
+                SELECT '3' GB, TO_DATE(TAX_DEP_NOTEDATE, 'YYYYMMDD') - TRUNC(SYSDATE) DAY_CNT, BLD_DONG, BLD_ADDR1, BLD_OWNER, TAX_DEP_NOTEDATE TDAY, PERFORM_USERID, PERFORM_USERHNO 
+                            FROM BUILDING_MNG_DAEJANG
+                            WHERE DEL_YN = '0'
+                            AND DISPLAY_YN = '0'             
+                            AND TAX_DEP_NOTEDATE IS NOT NULL
+                            AND TAX_DEP_NOTEDATE = TO_CHAR(SYSDATE+1, 'YYYYMMDD')         	   
+		]]>
+	</select>
+	
+	
+	
+	
+	<select id="getnBeforeDay" parameterType="hashmap" resultType="String">
+		<![CDATA[	
+			SELECT TO_CHAR(SYSDATE+${NDAY}, 'YYYYMMDD')  FROM DUAL         
+		]]>
+	</select>
+	
+	
+		
+</mapper>

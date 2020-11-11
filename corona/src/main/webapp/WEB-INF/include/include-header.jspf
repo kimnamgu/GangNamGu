@@ -1,0 +1,83 @@
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %> 
+
+
+
+<!-- Fontfaces CSS-->
+<link href="/corona/bootstrap/css/font-face.css" rel="stylesheet" media="all">
+<link href="/corona/bootstrap/vendor/font-awesome-4.7/css/font-awesome.min.css" rel="stylesheet" media="all">
+<link href="/corona/bootstrap/vendor/font-awesome-5/css/fontawesome-all.min.css" rel="stylesheet" media="all">
+<link href="/corona/bootstrap/vendor/mdi-font/css/material-design-iconic-font.min.css" rel="stylesheet" media="all">
+
+<!-- Bootstrap CSS-->
+<link href="/corona/bootstrap/vendor/bootstrap-4.1/bootstrap.min.css" rel="stylesheet" media="all">
+
+<!-- Vendor CSS-->
+<link href="/corona/bootstrap/vendor/animsition/animsition.min.css" rel="stylesheet" media="all">
+<link href="/corona/bootstrap/vendor/bootstrap-progressbar/bootstrap-progressbar-3.3.4.min.css" rel="stylesheet" media="all">
+<link href="/corona/bootstrap/vendor/wow/animate.css" rel="stylesheet" media="all">
+<link href="/corona/bootstrap/vendor/css-hamburgers/hamburgers.min.css" rel="stylesheet" media="all">
+<link href="/corona/bootstrap/vendor/slick/slick.css" rel="stylesheet" media="all">
+<link href="/corona/bootstrap/vendor/select2/select2.min.css" rel="stylesheet" media="all">
+<link href="/corona/bootstrap/vendor/perfect-scrollbar/perfect-scrollbar.css" rel="stylesheet" media="all">
+
+<!-- Main CSS-->
+<link href="/corona/bootstrap/css/theme.css" rel="stylesheet" media="all">
+ 
+
+
+
+<!-- Jquery JS-->
+<script src="/corona/bootstrap/vendor/jquery-3.2.1.min.js"></script>
+<!-- Bootstrap JS-->
+<script src="/corona/bootstrap/vendor/bootstrap-4.1/popper.min.js"></script>
+<script src="/corona/bootstrap/vendor/bootstrap-4.1/bootstrap.min.js"></script>
+<!-- Vendor JS       -->
+<script src="/corona/bootstrap/vendor/slick/slick.min.js">
+</script>
+<script src="/corona/bootstrap/vendor/wow/wow.min.js"></script>
+<script src="/corona/bootstrap/vendor/animsition/animsition.min.js"></script>
+<script src="/corona/bootstrap/vendor/bootstrap-progressbar/bootstrap-progressbar.min.js">
+</script>
+<script src="/corona/bootstrap/vendor/counter-up/jquery.waypoints.min.js"></script>
+<script src="/corona/bootstrap/vendor/counter-up/jquery.counterup.min.js">
+</script>
+<script src="/corona/bootstrap/vendor/circle-progress/circle-progress.min.js"></script>
+<script src="/corona/bootstrap/vendor/perfect-scrollbar/perfect-scrollbar.js"></script>
+<script src="/corona/bootstrap/vendor/chartjs/Chart.bundle.min.js"></script>
+<script src="/corona/bootstrap/vendor/select2/select2.min.js">
+</script>
+
+<!-- Main JS-->
+<script src="/corona/bootstrap/js/main.js"></script>
+
+
+<!-- alert -->
+<script src="/corona/jquery.modal-master/js/DesignAlert.js"></script>
+<script src="/corona/jquery.modal-master/js/jquery.modal.js"></script>
+<script src="/corona/jquery.modal-master/js/jquery.modal.min.js"></script>
+
+<link href="/corona/jquery.modal-master/css/jquery.modal.css" rel="stylesheet">
+<link href="/corona/jquery.modal-master/css/jquery.modal.theme-atlant.css" rel="stylesheet">
+<link href="/corona/jquery.modal-master/css/jquery.modal.theme-xenon.css" rel="stylesheet">
+
+
+<!-- jQuery -->
+<link rel="stylesheet" type="text/css" href="/corona/css/jquery-ui.css" />
+<!-- <script src="http://code.jquery.com/jquery.min.js"></script>-->
+<script type="text/javascript" src="<c:url value='/js/jquery.min.js'/>"></script>
+<script type="text/javascript" src="<c:url value='/js/jquery-ui.js'/>"></script>
+<script type="text/javascript" src="<c:url value='/js/jquery.cookie.js'/>"></script>
+<script type="text/javascript" src="<c:url value='/js/jquery.form.js'/>"></script>
+<script src="<c:url value='/js/common.js'/>" charset="utf-8"></script>
+
+<!-- 
+<link rel="stylesheet" type="text/css" href="/corona/css/common.css" />
+<link rel="stylesheet" type="text/css" href="/corona/css/import.css" />
+<link rel="stylesheet" type="text/css" href="/corona/css/skin01.css" />
+<link rel="stylesheet" type="text/css" href="/corona/css/corona.css" />
+ -->
+
+
+

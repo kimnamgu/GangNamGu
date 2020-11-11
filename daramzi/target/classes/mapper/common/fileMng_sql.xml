@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="file">
+    
+    <insert id="fileupload">
+        <![CDATA[
+		    INSERT INTO file_house (
+		        fileseq,
+		        filename,
+		        fileExtension,
+		        filerealname,
+		        filesize,
+		        categoryCode,
+		        boardIdx,
+		        folderPath,
+		        id,
+		        ins_dt
+		    ) VALUES (
+		        #{fileSeq},
+		        #{fileName},
+		        #{fileExtension}, 
+		        #{fileRealName},
+		        #{fileSize},
+		        #{categoryCode},
+		        #{boardIdx},
+				#{folderPath},
+		        #{id},
+		        sysdate()
+	        )
+        ]]>
+    </insert>
+    
+	<select id="selectFile" parameterType="String" resultType="FileVO">
+      <![CDATA[
+		select * from file_house 
+		]]>
+		where fileIdx = #{fileIdx} 
+    </select>
+    
+   	<delete id="deleteFile">
+	<![CDATA[
+		delete from file_house where fileIdx = #{fileIdx}
+	]]>
+    </delete>
+</mapper>

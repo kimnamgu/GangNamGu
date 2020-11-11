@@ -1,0 +1,1038 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="iljali">
+	
+	<!--임기제 공무원 응시자 정보 등록  -->
+	<insert id="insertTermOfficialInfo" parameterType="hashmap">
+		<![CDATA[
+			INSERT INTO ILJALI_TERM_OFFICIAL
+			(
+				BUSEO_NO
+				,HIRE_GUBUN
+				,APPLICATION_SEQ
+				,NOT_ANCMT_MGT_NO
+				,NOTIFICATION_NO
+				,NOTIFICATION_NM
+				,UUID
+				,NAME
+				,JUMIN_NO
+				,MULTI_NATION_YN
+				,ADDRESS
+				,ADDRESS_DETAIL
+				,POST_NO
+				,PHONE
+				,PAYMENT
+				,PAYMENT_YN
+				,APPLY_DATE
+				,APPLY_STATE
+				,INS_DATE
+			)
+			VALUES
+			(			
+			    #{buseo_no}
+			    ,#{hire_gubun}
+			    ,'M'||TO_CHAR(sysdate,'YY')||NVL((select MATCH_NO from ILJALI_BUSEO_MATCH where BUSEO_NO = #{buseo_no}),'000')||LPAD(
+				    											nvl(
+				    												(select TO_NUMBER(SUBSTR(MAX(APPLICATION_SEQ), 9,4))+1 From ILJALI_TERM_OFFICIAL WHERE NOT_ANCMT_MGT_NO = #{not_ancmt_mgt_no})
+				    											,1)
+			    											, 4, '0') 
+			    ,#{not_ancmt_mgt_no}
+				,#{notification_no}
+				,#{notification_nm}
+				,#{uuid}
+				,#{name}
+				,#{jumin_no}
+				,#{multi_nation_yn}
+				,#{address}
+				,#{address_detail}
+				,#{post_no}
+				,#{phone}
+				,#{payment}
+				,#{payment_yn}
+				,sysdate
+				,#{apply_state}
+				,sysdate
+			)
+		]]>
+	</insert>
+	
+	
+	<!--임기제 공무원 응시자 정보 수정  -->
+	<update id="updateVolunteerTermOfficialInfo" parameterType="hashmap">
+		<![CDATA[
+			UPDATE ILJALI_TERM_OFFICIAL				
+			SET NAME	= #{name}
+				,MULTI_NATION_YN	= #{multi_nation_yn}
+				,ADDRESS	= #{address}
+				,ADDRESS_DETAIL	= #{address_detail}
+				,POST_NO	= #{post_no}
+				,PHONE	= #{phone}
+				,PAYMENT	= #{payment}
+				,UPD_DATE =	sysdate
+			WHERE NOT_ANCMT_MGT_NO = #{not_ancmt_mgt_no}
+			AND JUMIN_NO = #{jumin_no}
+			AND DEL_YN = '0'
+		]]>		
+	</update>
+	
+	<!--임기제 공무원 응시자 결제 여부 수정  -->
+	<update id="updateTermOfficialPaymentYN" parameterType="hashmap">
+		<![CDATA[
+			UPDATE ILJALI_TERM_OFFICIAL				
+			SET PAYMENT_YN	= #{payment_yn}
+				,PAYMENT_DATE  = TO_DATE(#{payment_date},'YYYYMMDDHH24MISS')
+				,PAYMENT_ID = #{payment_id}
+			WHERE NOT_ANCMT_MGT_NO = #{not_ancmt_mgt_no}
+			AND JUMIN_NO = #{jumin_no}
+			AND DEL_YN = '0'
+		]]>		
+	</update>
+	
+	<!--임기제 공무원 응시자 마스터 정보 수정  -->
+	<update id="updateTermOfficialMaster" parameterType="hashmap">
+		<![CDATA[
+			UPDATE ILJALI_TERM_OFFICIAL				
+			SET MASTER_NM	= #{master_nm}
+				,MASTER_COMMENT	= #{master_comment}
+				,APPLY_STATE	= #{apply_state}
+				,UPD_DATE =	sysdate
+			WHERE NOT_ANCMT_MGT_NO = #{not_ancmt_mgt_no}
+			AND JUMIN_NO = #{jumin_no}
+			AND DEL_YN = '0'
+		]]>		
+	</update>
+	
+	
+	<!--임기제 공무원 응시자 정보 삭제  -->
+	<update id="deleteTermOfficialInfo" parameterType="hashmap">
+		<![CDATA[
+			UPDATE ILJALI_TERM_OFFICIAL				
+			SET DEL_YN = '1',				
+				DEL_DATE = SYSDATE
+			WHERE NOT_ANCMT_MGT_NO = #{not_ancmt_mgt_no}
+			AND JUMIN_NO = #{jumin_no}
+		]]>		
+	</update>
+	
+<!--     <delete id="deleteTermOfficialInfo">
+	<![CDATA[
+		delete from ILJALI_TERM_OFFICIAL 
+		WHERE NOT_ANCMT_MGT_NO = #{not_ancmt_mgt_no}
+		AND JUMIN_NO = #{jumin_no}
+	]]>
+    </delete> -->
+	
+	
+	<!--임기제 공무원 응시자 정보 조회  -->
+	<select id="getTermOfficialInfo" parameterType="hashmap" resultType="hashmap">
+		<![CDATA[
+			SELECT 
+				BUSEO_NO
+				,HIRE_GUBUN
+				,APPLICATION_SEQ
+				,NOT_ANCMT_MGT_NO
+				,NOTIFICATION_NO
+				,NOTIFICATION_NM
+				,UUID
+				,NAME
+				,JUMIN_NO
+				,MULTI_NATION_YN
+				,ADDRESS
+				,ADDRESS_DETAIL
+				,POST_NO
+				,PHONE
+				,TO_CHAR(PAYMENT_DATE, 'YYYY.MM.DD HH24:MI:SS') PAYMENT_DATE
+				,PAYMENT_ID
+				,PAYMENT
+				,PAYMENT_YN
+				,TO_CHAR(APPLY_DATE, 'YYYY.MM.DD HH24:MI:SS') APPLY_DATE
+				,APPLY_STATE
+				,MASTER_NM
+				,MASTER_COMMENT
+            FROM ILJALI_TERM_OFFICIAL
+			WHERE NOT_ANCMT_MGT_NO = #{not_ancmt_mgt_no}
+			AND JUMIN_NO = #{jumin_no}
+			AND DEL_YN = '0'
+		]]>
+	</select>
+	
+	
+	<select id="selectTermOfficialList" parameterType="hashmap" resultType="hashmap">
+		<![CDATA[
+			SELECT 
+				BUSEO_NO
+				,HIRE_GUBUN
+				,APPLICATION_SEQ
+				,NOT_ANCMT_MGT_NO
+				,NOTIFICATION_NM
+				,NOTIFICATION_NO
+				,UUID
+				,NAME
+				,JUMIN_NO
+				,MULTI_NATION_YN
+				,ADDRESS
+				,ADDRESS_DETAIL
+				,POST_NO
+				,PHONE
+				,TO_CHAR(PAYMENT_DATE, 'YYYY.MM.DD HH24:MI:SS') PAYMENT_DATE
+				,PAYMENT_ID
+				,PAYMENT
+				,PAYMENT_YN
+				,TO_CHAR(APPLY_DATE, 'YYYY.MM.DD HH24:MI:SS') APPLY_DATE
+				,APPLY_STATE
+				,MASTER_NM
+				,MASTER_COMMENT
+            FROM ILJALI_TERM_OFFICIAL
+			WHERE 1=1 
+		]]>
+		<if test="uuid != null and uuid !=''">
+			AND UUID = #{uuid}
+		</if>
+		<if test="apply_state != null and apply_state !=''">
+			AND APPLY_STATE = #{apply_state}
+			AND TO_CHAR(NVL(UPD_DATE, ''), 'YYYYMMDD') = TO_CHAR(SYSDATE, 'YYYYMMDD')
+		</if>
+			AND DEL_YN = '0'
+	</select>
+	
+
+	<!--기간제 근로자 응시자 정보 등록  -->
+	<insert id="insertTermWorkerInfo" parameterType="hashmap">
+		<![CDATA[
+			INSERT INTO ILJALI_TERM_WORKER
+			(
+				BUSEO_NO
+				,HIRE_GUBUN
+				,APPLICATION_SEQ
+				,NOT_ANCMT_MGT_NO
+				,NOTIFICATION_NO
+				,NOTIFICATION_NM
+				,UUID
+				,NAME
+				,SEX
+				,JUMIN_NO
+				,ADDRESS
+				,ADDRESS_DETAIL
+				,POST_NO
+				,PHONE
+				,NATIONAL_MERIT_YN
+				,DRIVE_YN
+				,DRIVE_CLASS_JONG
+				,DRIVE_CLASS_GUBUN
+				,APPLY_DATE
+				,APPLY_STATE
+				,INS_DATE
+			)
+			VALUES
+			(			
+			    #{buseo_no}
+			    ,#{hire_gubun}
+   			    ,'M'||TO_CHAR(sysdate,'YY')||NVL((select MATCH_NO from ILJALI_BUSEO_MATCH where BUSEO_NO = #{buseo_no}),'000')||LPAD(
+    											nvl(
+    												(select TO_NUMBER(SUBSTR(MAX(APPLICATION_SEQ), 9,4))+1 From ILJALI_TERM_WORKER WHERE NOT_ANCMT_MGT_NO = #{not_ancmt_mgt_no})
+    											,1)
+   											, 4, '0') 
+			    ,#{not_ancmt_mgt_no}
+				,#{notification_no}
+				,#{notification_nm}
+				,#{uuid}
+				,#{name}
+				,#{sex}
+				,#{jumin_no}
+				,#{address}
+				,#{address_detail}
+				,#{post_no}
+				,#{phone}
+				,#{national_merit_yn}
+				,#{drive_yn}
+				,#{drive_class_jong}
+				,#{drive_class_gubun}
+				,sysdate
+				,#{apply_state}
+				,sysdate
+			)
+		]]>
+	</insert>
+	
+	
+	<!--기간제 근로자 응시자 정보 수정  -->
+	<update id="updateVolunteerTermWorkerInfo" parameterType="hashmap">
+		<![CDATA[
+			UPDATE ILJALI_TERM_WORKER				
+			SET NAME	= #{name}
+				,SEX	= #{sex}
+				,ADDRESS	= #{address}
+				,ADDRESS_DETAIL	= #{address_detail}
+				,POST_NO	= #{post_no}
+				,PHONE	= #{phone}
+				,NATIONAL_MERIT_YN	= #{national_merit_yn}
+				,DRIVE_YN	= #{drive_yn}
+				,DRIVE_CLASS_JONG	= #{drive_class_jong}
+				,DRIVE_CLASS_GUBUN	= #{drive_class_gubun}
+				,UPD_DATE =	sysdate
+			WHERE NOT_ANCMT_MGT_NO = #{not_ancmt_mgt_no}
+			AND JUMIN_NO = #{jumin_no}
+			AND DEL_YN = '0'
+		]]>		
+	</update>
+	
+	<!--기간제 근로자 응시자 마스터 정보 수정  -->
+	<update id="updateTermWorkerMaster" parameterType="hashmap">
+		<![CDATA[
+			UPDATE ILJALI_TERM_WORKER				
+			SET MASTER_NM	= #{master_nm}
+				,MASTER_COMMENT	= #{master_comment}
+				,APPLY_STATE	= #{apply_state}
+				,UPD_DATE =	sysdate
+			WHERE NOT_ANCMT_MGT_NO = #{not_ancmt_mgt_no}
+			AND JUMIN_NO = #{jumin_no}
+			AND DEL_YN = '0'
+		]]>		
+	</update>
+	
+	
+	<!--기간제 근로자 응시자 정보 삭제  -->
+	<update id="deleteTermWorkerInfo" parameterType="hashmap">
+		<![CDATA[
+			UPDATE ILJALI_TERM_WORKER				
+			SET DEL_YN = '1',				
+				DEL_DATE = SYSDATE
+			WHERE NOT_ANCMT_MGT_NO = #{not_ancmt_mgt_no}
+			AND JUMIN_NO = #{jumin_no}
+		]]>		
+	</update>
+	
+<!--     <delete id="deleteTermWorkerInfo">
+	<![CDATA[
+		delete from ILJALI_TERM_WORKER 
+		WHERE NOT_ANCMT_MGT_NO = #{not_ancmt_mgt_no}
+		AND JUMIN_NO = #{jumin_no}
+	]]>
+    </delete> -->
+	
+	<!--기간제 근로자 응시자 정보 조회  -->
+	<select id="getTermWorkerInfo" parameterType="hashmap" resultType="hashmap">
+		<![CDATA[
+			SELECT 
+				BUSEO_NO
+				,HIRE_GUBUN
+				,APPLICATION_SEQ
+				,NOT_ANCMT_MGT_NO
+				,NOTIFICATION_NO
+				,NOTIFICATION_NM
+				,UUID
+				,NAME
+				,SEX
+				,JUMIN_NO
+				,ADDRESS
+				,ADDRESS_DETAIL
+				,POST_NO
+				,PHONE
+				,NATIONAL_MERIT_YN
+				,DRIVE_YN
+				,DRIVE_CLASS_JONG
+				,DRIVE_CLASS_GUBUN
+				,TO_CHAR(APPLY_DATE, 'YYYY.MM.DD HH24:MI:SS') APPLY_DATE
+				,APPLY_STATE
+				,MASTER_NM
+				,MASTER_COMMENT
+            FROM ILJALI_TERM_WORKER
+			WHERE NOT_ANCMT_MGT_NO = #{not_ancmt_mgt_no}
+			AND JUMIN_NO = #{jumin_no}
+			AND DEL_YN = '0'
+		]]>
+	</select>
+	
+	<select id="selectTermWorkerList" parameterType="hashmap" resultType="hashmap">
+		<![CDATA[
+			SELECT 
+				BUSEO_NO
+				,HIRE_GUBUN
+				,APPLICATION_SEQ
+				,NOT_ANCMT_MGT_NO
+				,NOTIFICATION_NM
+				,NOTIFICATION_NO
+				,UUID
+				,NAME
+				,SEX
+				,JUMIN_NO
+				,ADDRESS
+				,ADDRESS_DETAIL
+				,POST_NO
+				,PHONE
+				,NATIONAL_MERIT_YN
+				,DRIVE_YN
+				,DRIVE_CLASS_JONG
+				,DRIVE_CLASS_GUBUN
+				,TO_CHAR(APPLY_DATE, 'YYYY.MM.DD HH24:MI:SS') APPLY_DATE
+				,APPLY_STATE
+				,MASTER_NM
+				,MASTER_COMMENT
+            FROM ILJALI_TERM_WORKER
+			WHERE 1=1 
+		]]>
+		<if test="uuid != null and uuid !=''">
+			AND UUID = #{uuid}
+		</if>
+		<if test="apply_state != null and apply_state !=''">
+			AND APPLY_STATE = #{apply_state}
+			AND TO_CHAR(NVL(UPD_DATE, ''), 'YYYYMMDD') = TO_CHAR(SYSDATE, 'YYYYMMDD')
+		</if>			
+			AND DEL_YN = '0'
+	</select>
+	
+	
+	<!--공공근로사업참여자 정보 등록  -->
+	<insert id="insertPublicBusinessInfo" parameterType="hashmap">
+		<![CDATA[
+			INSERT INTO ILJALI_PUBLIC_BUSINESS
+			(
+				BUSEO_NO
+				,HIRE_GUBUN
+				,APPLICATION_SEQ
+				,NOT_ANCMT_MGT_NO
+				,NOTIFICATION_NO
+				,NOTIFICATION_NM
+				,UUID
+				,NAME
+				,JUMIN_NO
+				,ADDRESS
+				,ADDRESS_DETAIL
+				,POST_NO
+				,PHONE
+				,HOPE_BUSINESS
+				,ETC
+				,OBSTACLE
+				,OBSTACLE_DEGREE
+				,OBSTACLE_CLASS
+				,SUPPORT_YN
+				,ONE_PARRENT_YN
+				,HOMELESS
+				,MARRIAGE_MIG_YN
+				,NORTH_ESCAPE_YN
+				,LICENSE_INFO
+				,APPLY_DATE
+				,APPLY_STATE
+				,INS_DATE
+			)
+			VALUES
+			(			
+			    #{buseo_no}
+			    ,#{hire_gubun}
+   			    ,'M'||TO_CHAR(sysdate,'YY')||NVL((select MATCH_NO from ILJALI_BUSEO_MATCH where BUSEO_NO = #{buseo_no}),'000')||LPAD(
+    											nvl(
+    												(select TO_NUMBER(SUBSTR(MAX(APPLICATION_SEQ), 9,4))+1 From ILJALI_PUBLIC_BUSINESS WHERE NOT_ANCMT_MGT_NO = #{not_ancmt_mgt_no})
+    											,1)
+   											, 4, '0') 
+			    ,#{not_ancmt_mgt_no}
+				,#{notification_no}
+				,#{notification_nm}
+				,#{uuid}
+				,#{name}
+				,#{jumin_no}
+				,#{address}
+				,#{address_detail}
+				,#{post_no}
+				,#{phone}
+				,#{hope_business}
+				,#{etc}
+				,#{obstacle}
+				,#{obstacle_degree}
+				,#{obstacle_class}
+				,#{support_yn}
+				,#{one_parrent_yn}
+				,#{homeless}
+				,#{marriage_mig_yn}
+				,#{north_escape_yn}
+				,#{license_info}
+				,sysdate
+				,#{apply_state}
+				,sysdate
+			)
+		]]>
+	</insert>
+	
+	
+	<!--공공근로사업참여자 정보 수정  -->
+	<update id="updateVolunteerPublicBusinessInfo" parameterType="hashmap">
+		<![CDATA[
+			UPDATE ILJALI_PUBLIC_BUSINESS				
+			SET NAME = #{name}
+				,ADDRESS  = #{address}
+				,ADDRESS_DETAIL = #{address_detail}
+				,POST_NO = #{post_no}
+				,PHONE = #{phone}
+				,HOPE_BUSINESS = #{hope_business}
+				,ETC = #{etc}
+				,OBSTACLE = #{obstacle}
+				,OBSTACLE_DEGREE = #{obstacle_degree}
+				,OBSTACLE_CLASS = #{obstacle_class}
+				,SUPPORT_YN = #{support_yn}
+				,ONE_PARRENT_YN = #{one_parrent_yn}
+				,HOMELESS = #{homeless}
+				,MARRIAGE_MIG_YN = #{marriage_mig_yn}
+				,NORTH_ESCAPE_YN = #{north_escape_yn}
+				,LICENSE_INFO = #{license_info}
+				,UPD_DATE =	sysdate
+			WHERE NOT_ANCMT_MGT_NO = #{not_ancmt_mgt_no}
+			AND JUMIN_NO = #{jumin_no}
+			AND DEL_YN = '0'
+		]]>		
+	</update>
+	
+	<!--공공근로사업참여자 마스터 정보 수정  -->
+	<update id="updatePublicBusinessMaster" parameterType="hashmap">
+		<![CDATA[
+			UPDATE ILJALI_PUBLIC_BUSINESS				
+			SET MASTER_NM	= #{master_nm}
+				,MASTER_COMMENT	= #{master_comment}
+				,APPLY_STATE	= #{apply_state}
+				,UPD_DATE =	sysdate
+			WHERE NOT_ANCMT_MGT_NO = #{not_ancmt_mgt_no}
+			AND JUMIN_NO = #{jumin_no}
+			AND DEL_YN = '0'
+		]]>		
+	</update>
+	
+	
+	<!--공공근로사업참여자 정보 삭제  -->
+	<update id="deletePublicBusinessInfo" parameterType="hashmap">
+		<![CDATA[
+			UPDATE ILJALI_PUBLIC_BUSINESS				
+			SET DEL_YN = '1',				
+				DEL_DATE = SYSDATE
+			WHERE NOT_ANCMT_MGT_NO = #{not_ancmt_mgt_no}
+			AND JUMIN_NO = #{jumin_no}
+			AND DEL_YN = '0'
+		]]>		
+	</update>
+	
+<!--     <delete id="deletePublicBusinessInfo">
+	<![CDATA[
+		delete from ILJALI_PUBLIC_BUSINESS 
+		WHERE NOT_ANCMT_MGT_NO = #{not_ancmt_mgt_no}
+		AND JUMIN_NO = #{jumin_no}
+	]]>
+    </delete> -->
+	
+	<!--공공근로사업참여자 정보 조회  -->
+	<select id="getPublicBusinessInfo" parameterType="hashmap" resultType="hashmap">
+		<![CDATA[
+			SELECT 
+				BUSEO_NO
+				,HIRE_GUBUN
+				,APPLICATION_SEQ
+				,NOT_ANCMT_MGT_NO
+				,NOTIFICATION_NO
+				,NOTIFICATION_NM
+				,UUID
+				,NAME
+				,JUMIN_NO
+				,ADDRESS
+				,ADDRESS_DETAIL
+				,POST_NO
+				,PHONE
+				,HOPE_BUSINESS
+				,ETC
+				,OBSTACLE
+				,OBSTACLE_DEGREE
+				,OBSTACLE_CLASS
+				,SUPPORT_YN
+				,ONE_PARRENT_YN
+				,HOMELESS
+				,MARRIAGE_MIG_YN
+				,NORTH_ESCAPE_YN
+				,DBMS_LOB.SUBSTR(LICENSE_INFO, DBMS_LOB.GETLENGTH(LICENSE_INFO)) AS LICENSE_INFO
+				,TO_CHAR(APPLY_DATE, 'YYYY.MM.DD HH24:MI:SS') APPLY_DATE
+				,APPLY_STATE
+				,MASTER_NM
+				,MASTER_COMMENT
+            FROM ILJALI_PUBLIC_BUSINESS
+			WHERE NOT_ANCMT_MGT_NO = #{not_ancmt_mgt_no}
+			AND JUMIN_NO = #{jumin_no}
+			AND DEL_YN = '0'
+		]]>
+	</select>
+	
+	<select id="selectPublicBusinessList" parameterType="hashmap" resultType="hashmap">
+		<![CDATA[
+			SELECT 
+				BUSEO_NO
+				,HIRE_GUBUN
+				,APPLICATION_SEQ
+				,NOT_ANCMT_MGT_NO
+				,NOTIFICATION_NM
+				,NOTIFICATION_NO
+				,UUID
+				,NAME
+				,JUMIN_NO
+				,ADDRESS
+				,ADDRESS_DETAIL
+				,POST_NO
+				,PHONE
+				,HOPE_BUSINESS
+				,ETC
+				,OBSTACLE
+				,OBSTACLE_DEGREE
+				,OBSTACLE_CLASS
+				,SUPPORT_YN
+				,ONE_PARRENT_YN
+				,HOMELESS
+				,MARRIAGE_MIG_YN
+				,NORTH_ESCAPE_YN
+				,DBMS_LOB.SUBSTR(LICENSE_INFO, DBMS_LOB.GETLENGTH(LICENSE_INFO)) AS LICENSE_INFO
+				,TO_CHAR(APPLY_DATE, 'YYYY.MM.DD HH24:MI:SS') APPLY_DATE
+				,APPLY_STATE
+				,MASTER_NM
+				,MASTER_COMMENT
+            FROM ILJALI_PUBLIC_BUSINESS
+			WHERE 1=1 
+		]]>
+		<if test="uuid != null and uuid !=''">
+			AND UUID = #{uuid}
+		</if>
+		<if test="apply_state != null and apply_state !=''">
+			AND APPLY_STATE = #{apply_state}
+			AND TO_CHAR(NVL(UPD_DATE, ''), 'YYYYMMDD') = TO_CHAR(SYSDATE, 'YYYYMMDD')
+		</if>			
+			AND DEL_YN = '0'
+	</select>
+	
+	<!-- 고시공고 좋아요 등록 -->
+	<insert id="insertGood" parameterType="hashmap">
+		<![CDATA[
+			INSERT INTO ILJALI_GOOD
+			(
+				NOT_ANCMT_MGT_NO
+				,UUID
+				,INS_DATE
+			)
+			VALUES
+			(			
+				#{not_ancmt_mgt_no}
+				,#{uuid}
+				,sysdate
+			)
+		]]>
+	</insert>
+	
+	<!--고시공고 좋아요 삭제  -->
+<!--     <delete id="deleteGood">
+	<![CDATA[
+		delete from ILJALI_GOOD 
+		WHERE NOT_ANCMT_MGT_NO = #{not_ancmt_mgt_no}
+		AND UUID = #{uuid}
+	]]>
+    </delete> -->
+	
+	<update id="deleteGood" parameterType="hashmap">
+		<![CDATA[
+			UPDATE ILJALI_GOOD				
+			SET DEL_YN = '1',				
+				DEL_DATE = SYSDATE
+			WHERE NOT_ANCMT_MGT_NO = #{not_ancmt_mgt_no}
+			AND UUID = #{uuid}
+			AND DEL_YN = '0'
+		]]>		
+	</update>
+	
+	<!--고시공고 좋아요 조회  -->
+	<select id="getGood" parameterType="hashmap" resultType="hashmap">
+		<![CDATA[
+			SELECT 
+				NOT_ANCMT_MGT_NO
+				,UUID
+            FROM ILJALI_GOOD
+			WHERE NOT_ANCMT_MGT_NO = #{not_ancmt_mgt_no}
+			AND UUID = #{uuid}
+			AND DEL_YN = '0'
+		]]>
+	</select>
+	
+	
+	<!-- 고시공고 스크랩 등록 -->
+	<insert id="insertScrap" parameterType="hashmap">
+		<![CDATA[
+			INSERT INTO ILJALI_SCRAP
+			(
+				NOT_ANCMT_MGT_NO
+				,UUID
+				,INS_DATE
+			)
+			VALUES
+			(			
+				#{not_ancmt_mgt_no}
+				,#{uuid}
+				,sysdate
+			)
+		]]>
+	</insert>
+	
+	<!--고시공고 스크랩 삭제  -->
+<!--     <delete id="deleteScrap">
+	<![CDATA[
+		delete from ILJALI_SCRAP 
+		WHERE NOT_ANCMT_MGT_NO = #{not_ancmt_mgt_no}
+		AND UUID = #{uuid}
+	]]>
+    </delete> -->
+	
+	<update id="deleteScrap" parameterType="hashmap">
+		<![CDATA[
+			UPDATE ILJALI_SCRAP				
+			SET DEL_YN = '1',				
+				DEL_DATE = SYSDATE
+			WHERE NOT_ANCMT_MGT_NO = #{not_ancmt_mgt_no}
+			AND UUID = #{uuid}
+			AND DEL_YN = '0'
+		]]>		
+	</update>
+	
+	<!--고시공고 스크랩 조회  -->
+	<select id="getScrap" parameterType="hashmap" resultType="hashmap">
+		<![CDATA[
+			SELECT 
+				NOT_ANCMT_MGT_NO
+				,UUID
+            FROM ILJALI_SCRAP
+			WHERE NOT_ANCMT_MGT_NO = #{not_ancmt_mgt_no}
+			AND UUID = #{uuid}
+			AND DEL_YN = '0'
+		]]>
+	</select>
+	
+	<select id="selectMyScrapList" parameterType="hashmap" resultType="hashmap">
+		<![CDATA[
+			SELECT 
+				NOT_ANCMT_MGT_NO
+            FROM ILJALI_SCRAP
+			WHERE UUID = #{uuid}
+			AND DEL_YN = '0'
+		]]>
+	</select>
+	
+	
+	<!--첨부파일  -->
+	<insert id="fileupload" parameterType="hashmap">
+		<selectKey keyProperty="file_id" resultType="string" order="BEFORE">
+			SELECT ILJALI_ATTACH_FILE_SQ.NEXTVAL FROM DUAL
+		</selectKey>
+	
+		<![CDATA[
+			INSERT INTO ILJALI_ATTACH_FILE
+			(
+				FILE_ID
+				,FILE_GB
+				,NOT_ANCMT_MGT_NO
+				,UUID
+				,JUMIN_NO
+				,FILE_NAME
+				,INS_DATE
+			)
+			VALUES
+			(			
+			    #{file_id}
+			    ,#{file_gb}
+				,#{not_ancmt_mgt_no}
+				,#{uuid}
+				,#{jumin_no}
+				,#{file_name}
+				,sysdate
+			)
+		]]>
+	</insert>
+	
+	<select id="selectFile" parameterType="hashmap" resultType="hashmap">
+		<![CDATA[
+			SELECT 
+				FILE_ID
+				,FILE_GB
+				,NOT_ANCMT_MGT_NO
+				,UUID
+				,JUMIN_NO
+				,FILE_NAME
+            FROM ILJALI_ATTACH_FILE
+			WHERE FILE_ID = #{file_id}
+			AND DEL_YN = '0'
+		]]>
+	</select>
+	
+	<select id="selectTermOfficialHeadList" parameterType="hashmap" resultType="hashmap">
+		<![CDATA[
+			SELECT 
+                NOT_ANCMT_MGT_NO
+                ,MAX(NOTIFICATION_NM)
+            FROM ILJALI_TERM_OFFICIAL
+            GROUP BY NOT_ANCMT_MGT_NO
+            ORDER BY NOT_ANCMT_MGT_NO DESC
+		]]>
+	</select>
+	
+	<!-- 파일명 관리 -->
+	<insert id="insertMangeIljaliFile" parameterType="hashmap">
+		<selectKey keyProperty="file_id" resultType="string" order="BEFORE">
+			SELECT ILJALI_ATTACH_FILE_SQ.NEXTVAL FROM DUAL
+		</selectKey>
+	
+		<![CDATA[
+			INSERT INTO ILJALI_ATTACH_FILE
+			(
+				FILE_ID
+				,FILE_GB
+				,UUID
+				,NOT_ANCMT_MGT_NO
+				,JUMIN_NO
+				,FILE_NAME
+				,INS_DATE
+			)
+			VALUES
+			(			
+			    #{file_id}
+			    ,#{file_gb}
+				,#{uuid}
+				,#{not_ancmt_mgt_no}
+				,#{jumin_no}
+				,#{file_name}
+				,sysdate
+			)
+		]]>
+	</insert>
+	
+	<update id="deleteMangeIljaliFile" parameterType="hashmap">
+		<![CDATA[
+			UPDATE ILJALI_ATTACH_FILE				
+			SET DEL_YN = '1',				
+				DEL_DATE = SYSDATE
+			WHERE FILE_ID = #{file_id}
+		]]>		
+	</update>
+	
+	<select id="selectMangeIljaliFileList" parameterType="hashmap" resultType="hashmap">
+		<![CDATA[
+			SELECT 
+				FILE_ID
+				,FILE_GB
+				,UUID
+				,NOT_ANCMT_MGT_NO
+				,JUMIN_NO
+				,FILE_NAME
+            FROM ILJALI_ATTACH_FILE
+			WHERE 1=1 
+		]]>
+			AND UUID = #{uuid}
+			AND NOT_ANCMT_MGT_NO = #{not_ancmt_mgt_no}
+			AND DEL_YN = '0'
+	</select>
+	
+	
+	
+	<!-- 화면 조회 -->
+	<select id="selectTermOfficialViewList" parameterType="hashmap" resultType="hashmap">
+		<![CDATA[
+			SELECT 
+			    AAA.*
+			FROM(
+			    SELECT 
+			        ROWNUM AS RNUM,
+			        AA.*
+			    FROM(  
+				
+					SELECT 
+						COUNT(*) OVER() AS TOTAL_COUNT
+						,BUSEO_NO
+						,HIRE_GUBUN
+						,APPLICATION_SEQ
+						,NOT_ANCMT_MGT_NO
+						,NOTIFICATION_NO
+						,NOTIFICATION_NM
+						,UUID
+						,NAME
+						,JUMIN_NO
+						,MULTI_NATION_YN
+						,ADDRESS
+						,ADDRESS_DETAIL
+						,POST_NO
+						,PHONE
+						,PAYMENT
+						,TO_CHAR(APPLY_DATE, 'YYYY.MM.DD HH24:MI:SS') APPLY_DATE
+						,APPLY_STATE
+						,MASTER_NM
+						,MASTER_COMMENT
+		            FROM ILJALI_TERM_OFFICIAL
+					WHERE 1=1 
+				]]>
+				
+				<if test="name != null and name !=''">
+					AND NAME LIKE '%' || #{name} ||'%'
+				</if>
+				<if test="notification_nm != null and notification_nm !=''">
+					AND NOTIFICATION_NM LIKE '%' || #{notification_nm} ||'%'
+				</if>
+				<if test="apply_state != null and apply_state !=''">
+					AND APPLY_STATE = #{apply_state}
+				</if>
+				<if test="not_ancmt_mgt_no != null and not_ancmt_mgt_no !=''">
+					AND NOT_ANCMT_MGT_NO = #{not_ancmt_mgt_no}
+				</if>
+				<if test="from_date != null and from_date !=''">
+					AND TO_CHAR(INS_DATE,'YYYYMMDD') <![CDATA[>=]]> #{from_date}
+				</if>
+				<if test="to_date != null and to_date !=''">
+					AND TO_CHAR(INS_DATE,'YYYYMMDD') <![CDATA[<=]]> #{to_date}
+				</if>
+					AND DEL_YN = '0'
+					ORDER BY INS_DATE DESC				
+		 		<![CDATA[
+ 			 	) AA
+ 			 	WHERE 
+                	ROWNUM <= #{END1}
+			) AAA
+			WHERE 
+			    AAA.RNUM >= #{START1}
+ 		]]>
+	</select>
+	
+	<select id="selectTermWorkerViewList" parameterType="hashmap" resultType="hashmap">
+		<![CDATA[
+			SELECT 
+			    AAA.*
+			FROM(
+			    SELECT 
+			        ROWNUM AS RNUM,
+			        AA.*
+			    FROM(  
+		
+						SELECT 
+							COUNT(*) OVER() AS TOTAL_COUNT
+							,BUSEO_NO
+							,HIRE_GUBUN
+							,APPLICATION_SEQ
+							,NOT_ANCMT_MGT_NO
+							,NOTIFICATION_NO
+							,NOTIFICATION_NM
+							,UUID
+							,NAME
+							,SEX
+							,JUMIN_NO
+							,ADDRESS
+							,ADDRESS_DETAIL
+							,POST_NO
+							,PHONE
+							,NATIONAL_MERIT_YN
+							,DRIVE_YN
+							,DRIVE_CLASS_JONG
+							,DRIVE_CLASS_GUBUN
+							,TO_CHAR(APPLY_DATE, 'YYYY.MM.DD HH24:MI:SS') APPLY_DATE
+							,APPLY_STATE
+							,MASTER_NM
+							,MASTER_COMMENT
+			            FROM ILJALI_TERM_WORKER
+						WHERE 1=1 
+					]]>
+					<if test="name != null and name !=''">
+						AND NAME like '%' || #{name} ||'%'
+					</if>
+					<if test="notification_nm != null and notification_nm !=''">
+						AND NOTIFICATION_NM LIKE '%' || #{notification_nm} ||'%'
+					</if>
+					<if test="apply_state != null and apply_state !=''">
+						AND APPLY_STATE = #{apply_state}
+					</if>
+					<if test="not_ancmt_mgt_no != null and not_ancmt_mgt_no !=''">
+						AND NOT_ANCMT_MGT_NO = #{not_ancmt_mgt_no}
+					</if>
+					<if test="from_date != null and from_date !=''">
+						AND TO_CHAR(INS_DATE,'YYYYMMDD') <![CDATA[>=]]> #{from_date}
+					</if>
+					<if test="to_date != null and to_date !=''">
+						AND TO_CHAR(INS_DATE,'YYYYMMDD') <![CDATA[<=]]> #{to_date}
+					</if>
+						AND DEL_YN = '0'
+						ORDER BY INS_DATE DESC				
+		 		<![CDATA[
+ 			 	) AA
+ 			 	WHERE 
+                	ROWNUM <= #{END1}
+			) AAA
+			WHERE 
+			    AAA.RNUM >= #{START1}
+ 		]]>
+	</select>
+	
+	
+	<select id="selectPublicBusinessViewList" parameterType="hashmap" resultType="hashmap">
+		<![CDATA[
+		
+			SELECT 
+			    AAA.*
+			FROM(
+			    SELECT 
+			        ROWNUM AS RNUM,
+			        AA.*
+			    FROM(  
+		
+						SELECT 
+							COUNT(*) OVER() AS TOTAL_COUNT
+							,BUSEO_NO
+							,HIRE_GUBUN
+							,APPLICATION_SEQ
+							,NOT_ANCMT_MGT_NO
+							,NOTIFICATION_NO
+							,NOTIFICATION_NM
+							,UUID
+							,NAME
+							,JUMIN_NO
+							,ADDRESS
+							,ADDRESS_DETAIL
+							,POST_NO
+							,PHONE
+							,HOPE_BUSINESS
+							,ETC
+							,OBSTACLE
+							,OBSTACLE_DEGREE
+							,OBSTACLE_CLASS
+							,SUPPORT_YN
+							,ONE_PARRENT_YN
+							,HOMELESS
+							,MARRIAGE_MIG_YN
+							,NORTH_ESCAPE_YN
+							,DBMS_LOB.SUBSTR(LICENSE_INFO, DBMS_LOB.GETLENGTH(LICENSE_INFO)) AS LICENSE_INFO
+							,TO_CHAR(APPLY_DATE, 'YYYY.MM.DD HH24:MI:SS') APPLY_DATE
+							,APPLY_STATE
+							,MASTER_NM
+							,MASTER_COMMENT
+			            FROM ILJALI_PUBLIC_BUSINESS
+						WHERE 1=1 
+					]]>
+					<if test="name != null and name !=''">
+						AND NAME like '%' || #{name} ||'%'
+					</if>
+					<if test="notification_nm != null and notification_nm !=''">
+						AND NOTIFICATION_NM LIKE '%' || #{notification_nm} ||'%'
+					</if>
+					<if test="apply_state != null and apply_state !=''">
+						AND APPLY_STATE = #{apply_state}
+					</if>
+					<if test="not_ancmt_mgt_no != null and not_ancmt_mgt_no !=''">
+						AND NOT_ANCMT_MGT_NO = #{not_ancmt_mgt_no}
+					</if>
+					<if test="from_date != null and from_date !=''">
+						AND TO_CHAR(INS_DATE,'YYYYMMDD') <![CDATA[>=]]> #{from_date}
+					</if>
+					<if test="to_date != null and to_date !=''">
+						AND TO_CHAR(INS_DATE,'YYYYMMDD') <![CDATA[<=]]> #{to_date}
+					</if>
+						AND DEL_YN = '0'
+						ORDER BY INS_DATE DESC				
+		 		<![CDATA[
+ 			 	) AA
+ 			 	WHERE 
+                	ROWNUM <= #{END1}
+			) AAA
+			WHERE 
+			    AAA.RNUM >= #{START1}
+ 		]]>
+	</select>
+	
+</mapper>

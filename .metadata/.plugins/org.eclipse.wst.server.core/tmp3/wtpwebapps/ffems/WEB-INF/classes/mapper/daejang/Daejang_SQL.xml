@@ -1,0 +1,231 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="daejang">
+
+	<select id="selectFfemsDataList" parameterType="hashmap" resultType="hashmap">
+		<include refid="common.pagingPre"/> 
+		  SELECT COUNT(*) OVER() AS TOTAL_COUNT,                                
+                    ID                  ,                                                           
+                    OUT_COMMENT1        ,
+                    OUT_COMMENT2        ,
+                    OUT_COMMENT3        ,
+                    GIJUN_DATE          ,
+                    ORIGINAL_FILE_NAME  ,
+                    STORED_FILE_NAME    ,
+                    FILE_SIZE	        ,
+                    TO_CHAR(INS_DATE, 'YYYY.MM.DD HH24:MI:SS') INS_DATE                              
+          FROM FAST_FINANCE_ATTACH_FILE
+          WHERE DEL_YN = '0'		
+		<include refid="common.pagingPost"/> 
+	</select>
+	
+	
+	
+	
+	<select id="selectFastFinanceList" parameterType="hashmap" resultType="hashmap">		
+		<![CDATA[			  
+				SELECT  SAUP_DEPT_NM    ,    
+					    IN_AMT1         ,      
+					    IN_AMT2         , 
+					    IN_AMT3         ,					    
+					    TO_CHAR((IN_PER1 * 100), '990.9') IN_PER1,
+					    IN_AMT4			,
+					    IN_AMT5         ,
+					    TO_CHAR((IN_PER2 * 100), '990.9') IN_PER2
+				FROM FAST_FINANCE_EXECUTION_LIST
+				WHERE DEL_YN = '0'							 
+		]]>
+		<choose>
+		<when test='UPLOAD_FLAG != null and UPLOAD_FLAG !=""'>
+		AND UPLOAD_FLAG = #{UPLOAD_FLAG}
+		</when>
+		<otherwise>
+		AND UPLOAD_FLAG = (   SELECT MAX(UPLOAD_FLAG) 
+						      FROM 
+						  	  (
+						          SELECT UPLOAD_FLAG 
+							      FROM FAST_FINANCE_EXECUTION_LIST
+							      GROUP BY UPLOAD_FLAG
+						      )
+						  )
+		</otherwise>
+		</choose>						
+		ORDER BY ID ASC		
+	</select>
+	
+	<select id="ffemsDataDetail" parameterType="hashmap" resultType="hashmap">
+		<![CDATA[
+			SELECT                                
+                    ID                  ,                                                            
+                    OUT_COMMENT1        ,
+                    OUT_COMMENT2        ,
+                    OUT_COMMENT3        ,
+                    GIJUN_DATE          ,
+                    ORIGINAL_FILE_NAME  ,
+                    STORED_FILE_NAME    ,
+                    FILE_SIZE	        ,
+                    TO_CHAR(INS_DATE, 'YYYY.MM.DD HH24:MI:SS') INS_DATE                              
+          FROM FAST_FINANCE_ATTACH_FILE
+          WHERE DEL_YN = '0'         
+		]]>
+		<choose>
+		<when test='UPLOAD_FLAG != null and UPLOAD_FLAG !=""'>
+		AND ID = #{UPLOAD_FLAG}
+		</when>
+		<otherwise>
+		AND ID = (   SELECT MAX(UPLOAD_FLAG) 
+						      FROM 
+						  	  (
+						          SELECT UPLOAD_FLAG 
+							      FROM FAST_FINANCE_EXECUTION_LIST
+							      GROUP BY UPLOAD_FLAG
+						      )
+						  )
+		</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insertFinanceData" parameterType="hashmap" useGeneratedKeys="true" keyProperty="ID">
+		<selectKey keyProperty="FFID" resultType="string" order="BEFORE">
+			SELECT FAST_FINANCE_LIST_SQ.NEXTVAL FROM DUAL
+		</selectKey>		
+		<![CDATA[
+			INSERT INTO FAST_FINANCE_EXECUTION_LIST
+			(
+				  ID                  ,				  					
+				  SAUP_DEPT_NM        ,
+				  IN_AMT1             ,
+				  IN_AMT2             ,  
+				  IN_AMT3             ,
+				  IN_PER1		      ,
+				  IN_AMT4             ,
+				  IN_AMT5             ,
+				  IN_PER2			  ,	  			 
+				  BIGO       	 	  ,
+				  UPLOAD_FLAG		  ,
+				  INS_ID        	  ,
+				  INS_DEPT     		  ,
+				  INS_DATE				
+			)
+			VALUES
+			(			
+			    #{FFID},					
+				#{SAUP_DEPT_NM},				
+				REPLACE(#{IN_AMT1}, ',', ''),
+				REPLACE(#{IN_AMT2}, ',', ''),
+				REPLACE(#{IN_AMT3}, ',', ''),
+				#{IN_PER1}		      ,
+				REPLACE(#{IN_AMT4}, ',', ''),
+				REPLACE(#{IN_AMT5}, ',', ''), 
+				#{IN_PER2}		      ,            
+                #{BIGO},
+                #{UPLOAD_FLAG},															
+				#{INS_ID},
+				#{INS_DEPT},
+				SYSDATE				
+			)
+		]]>
+	</insert>
+	
+	
+	
+	
+	<select id="mainSaupBasicDetail" parameterType="hashmap" resultType="hashmap">
+		<![CDATA[
+			SELECT  ID                  ,
+					SAUP_FIELD1_GB      ,				
+					SAUP_NM             ,
+					SAUP_DETAIL         ,
+					SAUP_BUDGET_AMT     ,
+					SAUP_START_DATE     ,
+					SAUP_END_DATE       ,
+					SAUP_OPEN_DATE      ,					
+					SAUP_DEPT_CD        ,
+					SAUP_DEPT_NM        ,
+					SAUP_DAMDANG_ID     ,
+					SAUP_DAMDANG_NM     ,
+					SAUP_DAMDANG_TEL    ,
+					SAUP_DEPT_TEAMJANG  ,
+					SAUP_TEAMJANG_TEL   ,
+					SAUP_DEPT_GWAJANG   ,
+					SAUP_GWAJANG_TEL	,
+					INS_ID              ,
+					INS_DEPT            ,
+					INS_DATE			   
+            FROM BIMS_MAIN_SAUP_MASTER     
+            WHERE DEL_YN = '0'            
+            AND ID = #{ID}
+		]]>
+	</select>
+	
+	
+
+	
+	
+	
+	
+	<update id="deleteFfemsFileData" parameterType="hashmap">
+		<![CDATA[
+			UPDATE FAST_FINANCE_ATTACH_FILE
+			SET
+				DEL_YN = '1',
+				DEL_ID = #{MOD_ID},
+				DEL_DEPT = #{MOD_DEPT},
+				DEL_DATE = SYSDATE
+			WHERE
+				ID = #{SID}
+		]]>
+	</update>
+	
+	
+	<update id="deleteFfemsDetailData" parameterType="hashmap">
+		<![CDATA[
+			UPDATE FAST_FINANCE_EXECUTION_LIST
+			SET
+				DEL_YN = '1',
+				DEL_ID = #{MOD_ID},
+				DEL_DEPT = #{MOD_DEPT},
+				DEL_DATE = SYSDATE
+			WHERE
+				ID = #{ID}
+		]]>
+	</update>
+	
+		
+	
+	
+	<insert id="insertFile" parameterType="hashmap">		
+		<![CDATA[
+			INSERT INTO FAST_FINANCE_ATTACH_FILE
+			(
+				ID,				
+				GIJUN_DATE,
+				OUT_COMMENT1,
+				OUT_COMMENT2,
+				OUT_COMMENT3,
+				ORIGINAL_FILE_NAME,
+				STORED_FILE_NAME,
+				FILE_SIZE,				
+				INS_DATE,
+				DEL_YN
+			)
+			VALUES
+			(
+				FAST_FINANCE_FILE_SQ.NEXTVAL,							
+				#{GIJUN_DATE},
+				#{OUT_COMMENT1},
+				#{OUT_COMMENT2},
+				#{OUT_COMMENT3},				
+				#{ORIGINAL_FILE_NAME},
+				#{STORED_FILE_NAME},
+				#{FILE_SIZE},				
+				SYSDATE,
+				'0'
+			)
+		]]>
+		<selectKey keyProperty="FID" resultType="Integer" order="AFTER">
+			SELECT FAST_FINANCE_FILE_SQ.CURRVAL AS FID FROM DUAL
+		</selectKey>
+	</insert>
+</mapper>

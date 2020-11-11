@@ -1,0 +1,973 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="officework">
+	
+	<select id="selectOfficeworkRegList" parameterType="hashmap" resultType="hashmap">
+		<include refid="common.pagingPre"/> 
+		<![CDATA[
+			SELECT
+                ROW_NUMBER() OVER (ORDER BY A.OW_DEPT_RANK ASC) RNUM,
+                A.ID ID,
+                A.OW_NAME OW_NAME,
+                A.OW_DEPT_NM OW_DEPT_NM,
+                A.OW_TYPE1 OW_TYPE1,
+                A.OW_TYPE2 OW_TYPE2,
+                A.OW_TYPE3 OW_TYPE3,
+                A.FIRST_TRUST_DATE FIRST_TRUST_DATE,
+                A.TRUST_STOP_DATE TRUST_STOP_DATE,              
+                B.CS_INST_NAME CS_INST_NAME,
+                B.CUR_TRUST_STDATE CUR_TRUST_STDATE,
+                B.CUR_TRUST_EDDATE CUR_TRUST_EDDATE                            
+            FROM
+                OMS_TRUST_MASTER A  LEFT OUTER JOIN  
+               ( SELECT OW_ID, CS_INST_NAME, 
+                        CUR_TRUST_STDATE, CUR_TRUST_EDDATE, DEL_YN
+                 FROM OMS_CONSIGNMENT_STATUS
+                 WHERE (OW_ID, CUR_TRUST_EDDATE) IN ( SELECT OW_ID, MAX(CUR_TRUST_EDDATE) FROM OMS_CONSIGNMENT_STATUS WHERE DEL_YN = '0' GROUP BY OW_ID )
+                 AND DEL_YN = '0'
+               ) B ON A.ID = B.OW_ID
+            WHERE A.DEL_YN = '0'			
+		]]>		
+		<if test="OW_DEPT_CD != null and OW_DEPT_CD !=''">
+		AND A.OW_DEPT_CD = #{OW_DEPT_CD}
+		</if>
+		<if test="OW_DEPT_NM != null and OW_DEPT_NM !=''">
+		AND A.OW_DEPT_NM LIKE '%'|| #{OW_DEPT_NM} ||'%'
+		</if>
+		<if test="OW_NAME != null and OW_NAME !=''">
+		AND A.OW_NAME LIKE '%'|| #{OW_NAME} ||'%'
+		</if>
+		<if test="STOP_DATE_VAL != null and STOP_DATE_VAL !=''">
+		AND TO_CHAR(ADD_MONTHS(SYSDATE,+4),'YYYYMMDD') &gt;=  B.CUR_TRUST_EDDATE
+		AND TO_CHAR(SYSDATE,'YYYYMMDD') &lt;= B.CUR_TRUST_EDDATE
+		</if>		
+		<include refid="common.pagingPost"/> 
+	</select>
+	
+	<insert id="insertofficeworkBasic" parameterType="hashmap" useGeneratedKeys="true" keyProperty="ID">
+		<selectKey keyProperty="ID" resultType="string" order="BEFORE">
+			SELECT OMS_TRUST_MASTER_SQ.NEXTVAL FROM DUAL
+		</selectKey>
+		<![CDATA[
+			INSERT INTO OMS_TRUST_MASTER
+			(
+				ID,
+			    OW_NAME,
+			    OW_DEPT_CD,
+			    OW_DEPT_NM,
+			    OW_TYPE1,
+			    OW_TYPE2,
+			    OW_TYPE3,
+			    OW_BASE_RULES, 			   
+			    OW_CONTENTS,
+			    SISEL_POSITION,
+			    SISEL_SCALE,		    			   			  
+			    SISEL_CMPT_DATE,
+			    FIRST_TRUST_DATE,
+			    USE_OBJECT,
+			    USE_CNT,
+			    TRUST_STOP_DATE,
+			    CHG_CHIEF,
+			    CHG_CHIEF_TEL,
+			    CHG_PRSN,
+			    CHG_PRSN_TEL,
+			    INS_ID,
+			    INS_DEPT,			    
+			    INS_DATE,
+			    OW_DEPT_RANK			    
+			)
+			VALUES
+			(
+				#{ID}, 
+				#{OW_NAME},
+				#{OW_DEPT_CD},
+				#{OW_DEPT_NM},
+				#{OW_TYPE1},
+				#{OW_TYPE2},
+				#{OW_TYPE3},
+				#{OW_BASE_RULES},
+				#{OW_CONTENTS},
+				#{SISEL_POSITION},
+				#{SISEL_SCALE},			  
+				REPLACE(#{SISEL_CMPT_DATE}, '-', ''),			    			   
+			    REPLACE(#{FIRST_TRUST_DATE}, '-', ''),
+			    #{USE_OBJECT},
+			    #{USE_CNT},				
+				REPLACE(#{TRUST_STOP_DATE}, '-', ''),
+				#{CHG_CHIEF},
+			    #{CHG_CHIEF_TEL},
+			    #{CHG_PRSN},
+			    #{CHG_PRSN_TEL},
+			    #{INS_ID},
+			    #{INS_DEPT},
+			    SYSDATE,
+			    #{OW_DEPT_RANK}			   
+			)
+		]]>
+	</insert>
+	
+	
+	
+	
+	<select id="officeworkBasicDetail" parameterType="hashmap" resultType="hashmap">
+		<![CDATA[
+			SELECT
+				ID,			   
+			    OW_NAME,
+			    OW_DEPT_CD,
+			    OW_DEPT_NM,
+			    OW_TYPE1,
+			    OW_TYPE2,
+			    OW_TYPE3,
+			    OW_BASE_RULES, 			   
+			    OW_CONTENTS,
+			    SISEL_POSITION,
+			    SISEL_SCALE,		    			   			  
+			    SISEL_CMPT_DATE,
+			    FIRST_TRUST_DATE,
+			    USE_OBJECT,
+			    USE_CNT,
+			    TRUST_STOP_DATE,
+			    CHG_CHIEF,
+			    CHG_CHIEF_TEL,
+			    CHG_PRSN,
+			    CHG_PRSN_TEL,
+			    INS_ID,
+			    INS_DEPT,			    			  
+			    INS_DATE			    
+			FROM
+				OMS_TRUST_MASTER
+			WHERE
+				ID = #{ID}		
+		]]>
+	</select>
+	
+	<update id="updateOfficeworkBasic" parameterType="hashmap">
+		<![CDATA[
+			UPDATE OMS_TRUST_MASTER 
+			SET
+				OW_NAME = #{OW_NAME},
+			    OW_DEPT_CD = #{OW_DEPT_CD},
+			    OW_DEPT_NM = #{OW_DEPT_NM},
+			    OW_TYPE1 = #{OW_TYPE1},
+			    OW_TYPE2 = #{OW_TYPE2},
+			    OW_TYPE3 = #{OW_TYPE3},
+			    OW_BASE_RULES = #{OW_BASE_RULES}, 			   
+			    OW_CONTENTS = #{OW_CONTENTS},
+			    SISEL_POSITION = #{SISEL_POSITION},
+			    SISEL_SCALE = #{SISEL_SCALE},		    			   			  
+			    SISEL_CMPT_DATE = REPLACE(#{SISEL_CMPT_DATE}, '-', ''),
+			    FIRST_TRUST_DATE = REPLACE(#{FIRST_TRUST_DATE}, '-', ''),
+			    USE_OBJECT = #{USE_OBJECT},
+			    USE_CNT = #{USE_CNT},
+			    TRUST_STOP_DATE = REPLACE(#{TRUST_STOP_DATE}, '-', ''),
+			    CHG_CHIEF = #{CHG_CHIEF},
+			    CHG_CHIEF_TEL = #{CHG_CHIEF_TEL},
+			    CHG_PRSN = #{CHG_PRSN},
+			    CHG_PRSN_TEL = #{CHG_PRSN_TEL},
+			    MOD_ID = #{MOD_ID},
+			    MOD_DEPT = #{MOD_DEPT},			  
+			    MOD_DATE = SYSDATE
+			WHERE
+				ID = #{ID}	
+		]]>
+	</update>
+	
+	<update id="deleteOfficeworkBasic" parameterType="hashmap">
+		<![CDATA[
+			UPDATE OMS_TRUST_MASTER
+			SET
+				DEL_YN = '1',
+				DEL_ID = #{DEL_ID},
+			    DEL_DEPT = #{DEL_DEPT},
+				DEL_DATE = SYSDATE
+			WHERE
+				ID = #{ID}
+		]]>
+	</update>
+	
+	
+	<select id="selectConsignStatus" parameterType="hashmap" resultType="hashmap">
+		<include refid="common.pagingPre"/> 
+		<![CDATA[			
+			SELECT
+                ROW_NUMBER() OVER (ORDER BY CUR_TRUST_EDDATE DESC) RNUM,
+                A.ID ID,
+                A.CS_CHOICE_METHOD CS_CHOICE_METHOD,
+                A.CUR_TRUST_STDATE CUR_TRUST_STDATE,
+                A.CUR_TRUST_EDDATE CUR_TRUST_EDDATE,
+                A.CS_INST_NAME CS_INST_NAME,
+                A.CS_HEADER_NAME CS_HEADER_NAME,
+                A.CS_INST_CHG CS_INST_CHG,
+                DECODE(B.ORIGINAL_FILE_NAME, NULL, '', 'Y') ATTACH               
+            FROM
+                OMS_CONSIGNMENT_STATUS A LEFT OUTER JOIN (
+                    SELECT BD_LST_ID, ORIGINAL_FILE_NAME
+                    FROM OMS_ATTACH_FILE
+                    WHERE ID IN ( SELECT MAX(ID) FROM OMS_ATTACH_FILE WHERE DEL_YN = '0' AND BOARD_ID = #{BOARD_ID} GROUP BY BD_LST_ID ) 
+                ) B ON A.ID = B.BD_LST_ID
+            WHERE
+                A.DEL_YN = '0'
+            AND A.OW_ID = #{OW_ID}     
+		]]>
+		<include refid="common.pagingPost"/> 
+	</select>
+	
+	
+	<insert id="insertConsignStatus" parameterType="hashmap" useGeneratedKeys="true" keyProperty="ID">
+		<selectKey keyProperty="ID" resultType="string" order="BEFORE">
+			SELECT OMS_CONSIGNMENT_STATUS_SQ.NEXTVAL FROM DUAL
+		</selectKey>
+		<![CDATA[
+			INSERT INTO OMS_CONSIGNMENT_STATUS
+			(
+				ID,
+				OW_ID,
+				CS_CHOICE_METHOD,
+				CS_REASON,
+				CS_INST_NAME,
+				CS_INST_REGLR,
+				CS_INST_NONREGLR,
+				CS_HEADER_NAME,
+				CS_HEADER_CAREER,
+				CUR_TRUST_STDATE,
+				CUR_TRUST_EDDATE,
+				RESIGN_NUMBER,
+				RESIGN_DELIB_YN,
+				CS_INST_CHG,
+				CS_INST_CHGTEL,
+				INS_ID,
+				INS_DEPT,			
+				INS_DATE				
+			)
+			VALUES
+			(
+				#{ID},
+				#{OW_ID},
+				#{CS_CHOICE_METHOD},
+				#{CS_REASON},
+				#{CS_INST_NAME},
+				#{CS_INST_REGLR},
+				#{CS_INST_NONREGLR},
+				#{CS_HEADER_NAME},
+				#{CS_HEADER_CAREER},
+				REPLACE(#{CUR_TRUST_STDATE}, '-', ''),
+				REPLACE(#{CUR_TRUST_EDDATE}, '-', ''),
+				#{RESIGN_NUMBER},
+				#{RESIGN_DELIB_YN},
+				#{CS_INST_CHG},
+				#{CS_INST_CHGTEL},
+				#{INS_ID},
+				#{INS_DEPT},				
+				SYSDATE	   
+			)
+		]]>
+	</insert>
+	
+	
+	<select id="consignStatusDetail" parameterType="hashmap" resultType="hashmap">
+		<![CDATA[
+			SELECT
+				ID,
+				OW_ID,
+				CS_CHOICE_METHOD,
+				CS_REASON,
+				CS_INST_NAME,
+				CS_INST_REGLR,
+				CS_INST_NONREGLR,
+				CS_HEADER_NAME,
+				CS_HEADER_CAREER,
+				CUR_TRUST_STDATE,
+				CUR_TRUST_EDDATE,
+				RESIGN_NUMBER,
+				RESIGN_DELIB_YN,
+				CS_INST_CHG,
+				CS_INST_CHGTEL,
+				INS_ID,
+				INS_DEPT
+			FROM
+				OMS_CONSIGNMENT_STATUS
+			WHERE
+				ID = #{ID}		
+		]]>
+	</select>
+	
+	<update id="updateConsignStatus" parameterType="hashmap">
+		<![CDATA[
+			UPDATE OMS_CONSIGNMENT_STATUS 
+			SET CS_CHOICE_METHOD = #{CS_CHOICE_METHOD},
+				CS_REASON = #{CS_REASON},
+				CS_INST_NAME = #{CS_INST_NAME},
+				CS_INST_REGLR = #{CS_INST_REGLR},
+				CS_INST_NONREGLR = #{CS_INST_NONREGLR},
+				CS_HEADER_NAME = #{CS_HEADER_NAME}, 
+				CS_HEADER_CAREER = #{CS_HEADER_CAREER},
+				CUR_TRUST_STDATE = #{CUR_TRUST_STDATE},
+				CUR_TRUST_EDDATE = #{CUR_TRUST_EDDATE},
+				RESIGN_NUMBER = #{RESIGN_NUMBER},
+				RESIGN_DELIB_YN = #{RESIGN_DELIB_YN},
+				CS_INST_CHG = #{CS_INST_CHG},
+				CS_INST_CHGTEL = #{CS_INST_CHGTEL},
+				MOD_ID = #{MOD_ID},
+				MOD_DEPT = #{MOD_DEPT},
+			    MOD_DATE = SYSDATE 
+			WHERE
+				ID = #{ID}	
+		]]>
+	</update>
+	
+	<update id="deleteConsignStatus" parameterType="hashmap">
+		<![CDATA[
+			UPDATE OMS_CONSIGNMENT_STATUS
+			SET
+				DEL_YN = '1',
+				DEL_ID = #{DEL_ID},
+				DEL_DEPT = #{DEL_DEPT},
+				DEL_DATE = SYSDATE
+			WHERE
+				ID = #{ID}
+		]]>
+	</update>
+	
+	
+	
+	
+	
+	
+	
+	<select id="selectBudgetStatusList" parameterType="hashmap" resultType="hashmap">
+		<include refid="common.pagingPre"/> 
+		<![CDATA[
+			SELECT
+				ROW_NUMBER() OVER (ORDER BY BG_YEAR DESC) RNUM,
+			    ID,
+			    OW_ID,
+				BG_YEAR,
+				BG_TOTAL_COST,
+				BG_GUK_COST,
+				BG_SI_COST,
+				BG_GU_COST,
+				CONT_EVALU_YN,
+				WON_CHOICE_METHOD,
+				WON_CHOICE_STANDARD   
+			FROM
+			    OMS_BUDGET_STATUS
+			WHERE
+				DEL_YN = '0'
+			AND OW_ID = #{OW_ID}
+		]]>
+		<include refid="common.pagingPost"/> 
+	</select>
+	
+	
+	<insert id="insertBudgetStatus" parameterType="hashmap" useGeneratedKeys="true" keyProperty="ID">
+		<selectKey keyProperty="ID" resultType="string" order="BEFORE">
+			SELECT OMS_BUDGET_STATUS_SQ.NEXTVAL FROM DUAL
+		</selectKey>
+		<![CDATA[
+			INSERT INTO OMS_BUDGET_STATUS
+			(
+				ID,
+				OW_ID,
+				BG_YEAR,
+				BG_TOTAL_COST,
+				BG_GUK_COST,
+				BG_SI_COST,
+				BG_GU_COST,
+				CONT_EVALU_YN,
+				WON_CHOICE_METHOD,
+				WON_CHOICE_STANDARD,
+				INS_ID,
+				INS_DEPT, 			
+				INS_DATE				
+			)
+			VALUES
+			(
+				#{ID},
+				#{OW_ID},
+				#{BG_YEAR},
+				#{BG_TOTAL_COST},
+				#{BG_GUK_COST},
+				#{BG_SI_COST},
+				#{BG_GU_COST},
+				#{CONT_EVALU_YN},
+				#{WON_CHOICE_METHOD},				
+				#{WON_CHOICE_STANDARD},
+				#{INS_ID},
+				#{INS_DEPT},
+				SYSDATE
+			)
+		]]>
+	</insert>
+	
+	
+	<select id="budgetStatusDetail" parameterType="hashmap" resultType="hashmap">
+		<![CDATA[
+			SELECT
+				 ID,                
+				 OW_ID,                
+				 BG_YEAR,                
+				 BG_TOTAL_COST,                
+				 BG_GUK_COST,                
+				 BG_SI_COST,
+				 BG_GU_COST,                
+				 CONT_EVALU_YN,                
+				 WON_CHOICE_METHOD,                
+				 WON_CHOICE_STANDARD,
+				 INS_ID,
+				 INS_DEPT
+			FROM
+				OMS_BUDGET_STATUS
+			WHERE
+				ID = #{ID}		
+		]]>
+	</select>
+	
+	<update id="updateBudgetStatus" parameterType="hashmap">
+		<![CDATA[
+			UPDATE OMS_BUDGET_STATUS 
+			SET  BG_YEAR = #{BG_YEAR},
+				 BG_TOTAL_COST = REPLACE(#{BG_TOTAL_COST}, ',', ''),             
+				 BG_GUK_COST = REPLACE(#{BG_GUK_COST}, ',', ''),
+				 BG_SI_COST = REPLACE(#{BG_SI_COST}, ',', ''),
+				 BG_GU_COST = REPLACE(#{BG_GU_COST}, ',', ''),                
+				 CONT_EVALU_YN = #{CONT_EVALU_YN},                
+				 WON_CHOICE_METHOD = #{WON_CHOICE_METHOD},                
+				 WON_CHOICE_STANDARD = #{WON_CHOICE_STANDARD},
+				 MOD_ID = #{MOD_ID},
+				 MOD_DEPT = #{MOD_DEPT},
+			     MOD_DATE = SYSDATE
+			WHERE
+				ID = #{ID}	
+		]]>
+	</update>
+	
+	<update id="deleteBudgetStatus" parameterType="hashmap">
+		<![CDATA[
+			UPDATE OMS_BUDGET_STATUS
+			SET
+				DEL_YN = '1',
+				DEL_ID = #{MOD_ID},
+				DEL_DEPT = #{MOD_DEPT},
+				DEL_DATE = SYSDATE
+			WHERE
+				ID = #{ID}
+		]]>
+	</update>
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	<select id="selectSuperviseStatusList" parameterType="hashmap" resultType="hashmap">
+		<include refid="common.pagingPre"/> 
+		<![CDATA[
+			SELECT
+				ROW_NUMBER() OVER (ORDER BY ID DESC) RNUM,
+			    ID,
+				OW_ID,
+				SV_ILJA,
+				SV_PERSON,
+				SV_CONTENTS,
+				SV_INDCATE_ITEM,
+				SV_ACTION_RESULT
+			FROM
+			    OMS_SUPERVISE_STATUS
+			WHERE
+				DEL_YN = '0'
+			AND OW_ID = #{OW_ID}
+		]]>
+		<include refid="common.pagingPost"/> 
+	</select>
+	
+	
+	
+	<select id="selectManageEvalStatusList" parameterType="hashmap" resultType="hashmap">
+		<include refid="common.pagingPre"/> 
+		<![CDATA[
+			SELECT
+				ROW_NUMBER() OVER (ORDER BY ID DESC) RNUM,
+			    ID,
+				OW_ID,
+				ME_ILJA,
+				ME_EVAL_CONTENTS,
+				ME_EVAL_RESULT
+			FROM
+			    OMS_MNGEVAL_STATUS
+			WHERE
+				DEL_YN = '0'
+			AND OW_ID = #{OW_ID}
+		]]>
+		<include refid="common.pagingPost"/> 
+	</select>
+	
+	
+	<insert id="insertSuperviseStatus" parameterType="hashmap" useGeneratedKeys="true" keyProperty="ID">
+		<selectKey keyProperty="ID" resultType="string" order="BEFORE">
+			SELECT OMS_SUPERVISE_STATUS_SQ.NEXTVAL FROM DUAL
+		</selectKey>
+		<![CDATA[
+			INSERT INTO OMS_SUPERVISE_STATUS
+			(
+				ID,
+				OW_ID,
+				SV_ILJA,
+				SV_PERSON,
+				SV_CONTENTS,
+				SV_INDCATE_ITEM,
+				SV_ACTION_RESULT,
+				INS_ID,
+				INS_DEPT,		
+				INS_DATE				
+			)
+			VALUES
+			(
+				#{ID},
+				#{OW_ID},
+				REPLACE(#{SV_ILJA}, '-', ''),
+				#{SV_PERSON},
+				#{SV_CONTENTS},
+				#{SV_INDCATE_ITEM},
+				#{SV_ACTION_RESULT},
+				#{INS_ID},
+				#{INS_DEPT},
+				SYSDATE
+			)
+		]]>
+	</insert>
+	
+	
+	<insert id="insertManageEvalStatus" parameterType="hashmap" useGeneratedKeys="true" keyProperty="ID">
+		<selectKey keyProperty="ID" resultType="string" order="BEFORE">
+			SELECT OMS_MNGEVAL_STATUS_SQ.NEXTVAL FROM DUAL
+		</selectKey>
+		<![CDATA[
+			INSERT INTO OMS_MNGEVAL_STATUS
+			(
+				ID,
+				OW_ID,
+				ME_ILJA,
+				ME_EVAL_CONTENTS,
+				ME_EVAL_RESULT,
+				INS_ID,
+				INS_DEPT, 			
+				INS_DATE				
+			)
+			VALUES
+			(
+				#{ID},
+				#{OW_ID},
+				REPLACE(#{ME_ILJA}, '-', ''),
+				#{ME_EVAL_CONTENTS},
+				#{ME_EVAL_RESULT},
+				#{INS_ID},
+				#{INS_DEPT},
+				SYSDATE
+			)
+		]]>
+	</insert>
+	
+	<select id="superviseStatusDetail" parameterType="hashmap" resultType="hashmap">
+		<![CDATA[
+			SELECT
+				  ID,                
+				  OW_ID,             
+				  SV_ILJA,           
+				  SV_PERSON,         
+				  SV_CONTENTS,       
+				  SV_INDCATE_ITEM,   
+				  SV_ACTION_RESULT,
+				  INS_ID,
+				  INS_DEPT
+			FROM
+				OMS_SUPERVISE_STATUS
+			WHERE
+				ID = #{ID}
+		]]>
+	</select>
+	
+	<update id="updateSuperviseStatus" parameterType="hashmap">
+		<![CDATA[
+			UPDATE OMS_SUPERVISE_STATUS 
+			SET   SV_ILJA = REPLACE(#{SV_ILJA}, '-', ''),          
+				  SV_PERSON = #{SV_PERSON},         
+				  SV_CONTENTS = #{SV_CONTENTS},        
+				  SV_INDCATE_ITEM = #{SV_INDCATE_ITEM},   
+				  SV_ACTION_RESULT = #{SV_ACTION_RESULT},
+				  MOD_ID = #{MOD_ID},
+				  MOD_DEPT = #{MOD_DEPT},
+				  MOD_DATE = SYSDATE
+			WHERE
+				ID = #{ID}	
+		]]>
+	</update>
+	
+	<update id="deleteSuperviseStatus" parameterType="hashmap">
+		<![CDATA[
+			UPDATE OMS_SUPERVISE_STATUS
+			SET
+				DEL_YN = '1',
+				DEL_ID = #{MOD_ID},
+				DEL_DEPT = #{MOD_DEPT},				
+				DEL_DATE = SYSDATE
+			WHERE
+				ID = #{ID}
+		]]>
+	</update>
+	
+	<select id="manageEvalStatusDetail" parameterType="hashmap" resultType="hashmap">
+		<![CDATA[
+			SELECT
+				  ID,
+				  OW_ID,
+				  ME_ILJA,
+				  ME_EVAL_CONTENTS,
+				  ME_EVAL_RESULT,
+				  INS_ID,
+				  INS_DEPT
+			FROM
+				OMS_MNGEVAL_STATUS
+			WHERE
+				ID = #{ID}
+		]]>
+	</select>
+	
+	<update id="updateManageEvalStatus" parameterType="hashmap">
+		<![CDATA[
+			UPDATE OMS_MNGEVAL_STATUS 
+			SET   ME_ILJA = REPLACE(#{ME_ILJA}, '-', ''),
+				  ME_EVAL_CONTENTS = #{ME_EVAL_CONTENTS},
+				  ME_EVAL_RESULT = #{ME_EVAL_RESULT},
+				  MOD_ID = #{MOD_ID},
+				  MOD_DEPT = #{MOD_DEPT},
+				  MOD_DATE = SYSDATE
+			WHERE
+				ID = #{ID}	
+		]]>
+	</update>
+	
+	<update id="deleteManageEvalStatus" parameterType="hashmap">
+		<![CDATA[
+			UPDATE OMS_MNGEVAL_STATUS
+			SET
+				DEL_YN = '1',
+				DEL_ID = #{MOD_ID},
+				DEL_DEPT = #{MOD_DEPT},				
+				DEL_DATE = SYSDATE
+			WHERE
+				ID = #{ID}
+		]]>
+	</update>
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	<select id="selectqualiDelibStatusList" parameterType="hashmap" resultType="hashmap">
+		<include refid="common.pagingPre"/> 
+		<![CDATA[
+			SELECT
+				ROW_NUMBER() OVER (ORDER BY ID DESC) RNUM,
+			    ID,
+			    OW_ID,				
+				QD_ILJA,
+				QD_CONTENTS,
+				QD_RESULT,
+				QD_BIGO
+			FROM
+			    OMS_QUALIDELIB_STATUS
+			WHERE
+				DEL_YN = '0'
+			AND OW_ID = #{OW_ID}
+		]]>
+		<include refid="common.pagingPost"/> 
+	</select>
+	
+	
+	<select id="selectguAssembAgreementList" parameterType="hashmap" resultType="hashmap">
+		<include refid="common.pagingPre"/> 
+		<![CDATA[
+			SELECT
+				ROW_NUMBER() OVER (ORDER BY ID DESC) RNUM,
+				ID,
+			    OW_ID,
+  				GA_ILJA,  
+  				GA_RESULT,
+  				GA_BIGO
+			FROM
+			    OMS_GUASSEMBLY_AGREEMENT
+			WHERE
+				DEL_YN = '0'
+			AND OW_ID = #{OW_ID}
+		]]>
+		<include refid="common.pagingPost"/> 
+	</select>
+	
+	
+	<insert id="insertQualiDelibStatus" parameterType="hashmap" useGeneratedKeys="true" keyProperty="ID">
+		<selectKey keyProperty="ID" resultType="string" order="BEFORE">
+			SELECT OMS_QUALIDELIB_STATUS_SQ.NEXTVAL FROM DUAL
+		</selectKey>
+		<![CDATA[
+			INSERT INTO OMS_QUALIDELIB_STATUS
+			(
+				ID,
+			    OW_ID,				
+				QD_ILJA,
+				QD_CONTENTS,
+				QD_RESULT,
+				QD_BIGO,
+				INS_ID,
+				INS_DEPT,
+				INS_DATE				
+			)
+			VALUES
+			(
+				#{ID},
+			    #{OW_ID},				
+				REPLACE(#{QD_ILJA}, '-', ''),
+				#{QD_CONTENTS},
+				#{QD_RESULT},
+				#{QD_BIGO},
+				#{INS_ID},
+				#{INS_DEPT},
+				SYSDATE
+			)
+		]]>
+	</insert>
+	
+	
+	<insert id="insertGuAssembAgreement" parameterType="hashmap" useGeneratedKeys="true" keyProperty="ID">
+		<selectKey keyProperty="ID" resultType="string" order="BEFORE">
+			SELECT OMS_GUASSEMBLY_AGREEMENT_SQ.NEXTVAL FROM DUAL
+			OMS_GUASSEMBLY_AGREEMENT_SQ
+		</selectKey>
+		<![CDATA[
+			INSERT INTO OMS_GUASSEMBLY_AGREEMENT
+			(
+				ID,
+			    OW_ID,
+  				GA_ILJA,  
+  				GA_RESULT,
+  				GA_BIGO,
+  				INS_ID,
+				INS_DEPT,
+  				INS_DATE			
+			)
+			VALUES
+			(
+				#{ID},
+			    #{OW_ID},
+  				REPLACE(#{GA_ILJA}, '-', ''),
+  				#{GA_RESULT},
+  				#{GA_BIGO},
+  				#{INS_ID},
+				#{INS_DEPT},
+				SYSDATE
+			)
+		]]>
+	</insert>
+	
+	<select id="qualiDelibStatusDetail" parameterType="hashmap" resultType="hashmap">
+		<![CDATA[
+			SELECT
+				  ID,
+				  OW_ID,
+				  QD_ILJA,
+				  QD_CONTENTS,
+				  QD_RESULT,
+				  QD_BIGO,
+				  INS_ID,
+				  INS_DEPT
+			FROM
+				OMS_QUALIDELIB_STATUS
+			WHERE
+				ID = #{ID}
+		]]>
+	</select>
+	
+	<update id="updateQualiDelibStatus" parameterType="hashmap">
+		<![CDATA[
+			UPDATE OMS_QUALIDELIB_STATUS 
+			SET   QD_ILJA = REPLACE(#{QD_ILJA}, '-', ''),
+				  QD_CONTENTS = #{QD_CONTENTS},
+				  QD_RESULT = #{QD_RESULT},
+				  QD_BIGO = #{QD_BIGO},
+				  MOD_ID = #{MOD_ID},
+				  MOD_DEPT = #{MOD_DEPT},
+				  MOD_DATE = SYSDATE
+			WHERE
+				ID = #{ID}	
+		]]>
+	</update>
+	
+	<update id="deleteQualiDelibStatus" parameterType="hashmap">
+		<![CDATA[
+			UPDATE OMS_QUALIDELIB_STATUS
+			SET
+				DEL_YN = '1',
+				DEL_ID = #{MOD_ID},
+				DEL_DEPT = #{MOD_DEPT},
+				DEL_DATE = SYSDATE
+			WHERE
+				ID = #{ID}
+		]]>
+	</update>
+	
+	
+	<select id="guAssembAgreementUpdateDetail" parameterType="hashmap" resultType="hashmap">
+		<![CDATA[
+			SELECT
+				  ID,
+				  OW_ID,
+				  GA_ILJA,
+				  GA_RESULT,
+				  GA_BIGO,
+				  INS_ID,
+				  INS_DEPT
+			FROM
+				OMS_GUASSEMBLY_AGREEMENT
+			WHERE
+				ID = #{ID}
+		]]>
+	</select>
+	
+	<update id="updateGuAssembAgreement" parameterType="hashmap">
+		<![CDATA[
+			UPDATE OMS_GUASSEMBLY_AGREEMENT 
+			SET   GA_ILJA = REPLACE(#{GA_ILJA}, '-', ''),
+				  GA_RESULT = #{GA_RESULT},
+				  GA_BIGO = #{GA_BIGO},
+				  MOD_ID = #{MOD_ID},
+				  MOD_DEPT = #{MOD_DEPT},
+				  MOD_DATE = SYSDATE
+			WHERE
+				ID = #{ID}	
+		]]>
+	</update>
+	
+	<update id="deleteGuAssembAgreement" parameterType="hashmap">
+		<![CDATA[
+			UPDATE OMS_GUASSEMBLY_AGREEMENT
+			SET
+				DEL_YN = '1',
+				DEL_ID = #{MOD_ID},
+				DEL_DEPT = #{MOD_DEPT},
+				DEL_DATE = SYSDATE
+			WHERE
+				ID = #{ID}
+		]]>
+	</update>
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	<select id="selectTrustOworkStatusList" parameterType="hashmap" resultType="hashmap">
+		<include refid="common.pagingPre"/> 
+		<![CDATA[
+			SELECT
+                ROW_NUMBER() OVER (ORDER BY A.OW_DEPT_RANK ASC) RNUM,
+                A.ID ID,
+                A.OW_NAME OW_NAME,
+                A.OW_DEPT_NM OW_DEPT_NM,
+                A.OW_TYPE1 OW_TYPE1,
+                A.OW_TYPE2 OW_TYPE2,
+                A.OW_TYPE3 OW_TYPE3,
+                A.FIRST_TRUST_DATE FIRST_TRUST_DATE,
+                B.CS_CHOICE_METHOD CS_CHOICE_METHOD,
+                B.CS_INST_NAME CS_INST_NAME,
+                B.CUR_TRUST_STDATE CUR_TRUST_STDATE,
+                B.CUR_TRUST_EDDATE CUR_TRUST_EDDATE,               
+                C.BG_TOTAL_COST BG_TOTAL_COST,
+                C.BG_YEAR BG_YEAR               
+            FROM
+                OMS_TRUST_MASTER A  LEFT OUTER JOIN  
+               ( SELECT OW_ID, CS_CHOICE_METHOD, CS_INST_NAME, CUR_TRUST_STDATE, 
+                        CUR_TRUST_EDDATE, DEL_YN
+                 FROM OMS_CONSIGNMENT_STATUS
+                 WHERE (OW_ID, CUR_TRUST_EDDATE) IN ( SELECT OW_ID, MAX(CUR_TRUST_EDDATE) FROM OMS_CONSIGNMENT_STATUS WHERE DEL_YN = '0' GROUP BY OW_ID )
+                 AND DEL_YN = '0'
+               ) B ON A.ID = B.OW_ID
+               LEFT OUTER JOIN (  SELECT OW_ID, BG_YEAR, BG_TOTAL_COST
+                 FROM OMS_BUDGET_STATUS
+                 WHERE DEL_YN = '0'
+                 AND ( OW_ID, BG_YEAR ) IN ( SELECT OW_ID, MAX(BG_YEAR) FROM OMS_BUDGET_STATUS WHERE DEL_YN = '0' GROUP BY OW_ID )                 
+               ) C ON A.ID = C.OW_ID
+            WHERE A.DEL_YN = '0'      
+		]]>
+		<if test="OW_DEPT_CD != null and OW_DEPT_CD !=''">
+		AND A.OW_DEPT_CD = #{OW_DEPT_CD}
+		</if>
+		<if test="OW_NAME != null and OW_NAME !=''">
+		AND A.OW_NAME LIKE '%'|| #{OW_NAME} ||'%'
+		</if>
+		<if test="OW_DEPT_NM != null and OW_DEPT_NM !=''">
+		AND A.OW_DEPT_NM LIKE '%'|| #{OW_DEPT_NM} ||'%'
+		</if>
+		<if test="IN_ST_DATE != null and IN_ST_DATE !=''">
+		AND TO_CHAR(A.INS_DATE, 'YYYYMMDD') &gt;= REPLACE(#{IN_ST_DATE},'-','')
+		</if>
+		<if test="IN_ED_DATE != null and IN_ED_DATE !=''">
+		AND TO_CHAR(A.INS_DATE, 'YYYYMMDD') &lt;= REPLACE(#{IN_ED_DATE},'-','')
+		</if>
+		<if test="OW_TYPE1 != null and OW_TYPE1 !=''">
+		AND A.OW_TYPE1 = #{OW_TYPE1}
+		</if>
+		<if test="OW_TYPE2 != null and OW_TYPE2 !=''">
+		AND A.OW_TYPE2 = #{OW_TYPE2}
+		</if>
+		<if test="OW_TYPE3 != null and OW_TYPE3 !=''">
+		AND A.OW_TYPE3 = #{OW_TYPE3}
+		</if>
+		<if test="CS_INST_NAME != null and CS_INST_NAME !=''">
+		AND B.CS_INST_NAME LIKE '%'|| #{CS_INST_NAME} ||'%'
+		</if>
+		<if test="CS_CHOICE_METHOD != null and CS_CHOICE_METHOD !=''">
+		AND B.CS_CHOICE_METHOD = #{CS_CHOICE_METHOD}
+		</if>		
+		<if test="TRUST_STOP_STDATE != null and TRUST_STOP_STDATE !=''">
+		AND A.TRUST_STOP_DATE &gt;= #{TRUST_STOP_STDATE}
+		</if>
+		<if test="TRUST_STOP_EDDATE != null and TRUST_STOP_EDDATE !=''">
+		AND A.TRUST_STOP_DATE &lt;= #{TRUST_STOP_EDDATE}
+		</if>			
+		<if test="BUDGET_AMT1 != null and BUDGET_AMT1 !=''">
+		AND C.BG_TOTAL_COST &gt;= #{BUDGET_AMT1}
+		</if>
+		<if test="BUDGET_AMT2 != null and BUDGET_AMT2 !=''">
+		AND C.BG_TOTAL_COST &lt;= #{BUDGET_AMT2}
+		</if>
+		<if test="TRUST_CONTINUE_YN == '01'">
+		AND A.TRUST_STOP_DATE IS NOT NULL
+		</if>
+		<if test="TRUST_CONTINUE_YN == '02'">
+		AND A.TRUST_STOP_DATE IS NULL
+		</if>
+		<if test="BG_YEAR != null and BG_YEAR !=''">
+		AND C.BG_YEAR = TO_CHAR(SYSDATE, 'YYYY')
+		</if>		
+		<include refid="common.pagingPost"/> 
+	</select>
+</mapper>

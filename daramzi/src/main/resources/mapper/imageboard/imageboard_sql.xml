@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="imageboard">
+    
+<sql id="COMMON_PAGING_HEADER">
+		select R.* FROM(	
+	</sql>
+	
+	<sql id="COMMON_PAGING_TAIL">
+		) R
+		LIMIT #{listNum, jdbcType=INTEGER} OFFSET #{start, jdbcType=INTEGER}	
+	</sql>
+
+    
+    <select id="imageboardList" parameterType="ImageBoardVO" resultType="ImageBoardVO">
+      <include refid="COMMON_PAGING_HEADER"/>
+      <![CDATA[
+		    select a.fileIdx
+					,a.fileSeq
+					,a.fileName
+					,a.fileExtension
+					,a.fileRealName
+					,a.fileSize
+					,a.boardIdx
+					,a.id
+					,a.folderPath
+					,a.del_yn
+					,a.open_yn
+					,a.down_yn
+					,a.fileDescription
+					,a.ins_dt
+					,a.upt_dt
+					,(select count(1) from file_recommend where fileIdx = a.fileIdx and recommendYN = 'Y') as recommendYcnt
+					,(select count(1) from file_recommend where fileIdx = a.fileIdx and recommendYN = 'N') as recommendNcnt
+					,(select recommendYN from file_recommend where fileIdx = a.fileIdx and id = #{id}) as recommendYN
+		    from file_house a
+		]]> 
+		<where>
+		
+		and categoryCode = #{categoryCode}
+		
+		<if test="boardIdx != null and boardIdx != ''"> <!-- 게시판 IDX 가 있을경우 -->
+			and boardIdx = #{boardIdx}	
+		</if>
+		
+		<if test="keyWord != null and keyWord != ''">   
+				<if test="keyField == 'name'">
+					and fileName LIKE CONCAT('%',#{keyWord},'%')
+				</if>
+				<if test="keyField == 'title'">
+					and title = #{keyWord, jdbcType=VARCHAR}
+				</if>
+		</if>
+		</where>
+		<![CDATA[
+    		order by fileSeq desc
+		]]> 
+      <include refid="COMMON_PAGING_TAIL"/>
+    </select> 
+    
+	<select id="imageboardListCnt" parameterType="ImageBoardVO" resultType="integer">
+      <![CDATA[
+		    select count(1) as cnt
+		    from file_house
+		]]> 
+		<where>
+		and categoryCode = #{categoryCode}
+		
+		<if test="boardIdx != null and boardIdx != ''"> <!-- 게시판 IDX 가 있을경우 -->
+			and boardIdx = #{boardIdx}	
+		</if>
+		
+		<if test="keyWord != null and keyWord != ''">   
+				<if test="keyField == 'name'">
+					and fileName LIKE CONCAT('%',#{keyWord},'%')
+				</if>
+				<if test="keyField == 'title'">
+					and title = #{keyWord, jdbcType=VARCHAR}
+				</if>
+				<if test="keyField == 'content'">
+					and content = #{keyWord, jdbcType=VARCHAR}
+				</if>	
+		</if>
+		</where>
+    </select> 
+    
+  	<select id="selectFile" parameterType="String" resultType="ImageBoardVO">
+      <![CDATA[
+		select * from file_house 
+		]]>
+		where fileIdx = #{fileIdx} 
+    </select>
+    
+   	<delete id="deleteFile">
+	<![CDATA[
+		delete from file_house where fileIdx = #{fileIdx}
+	]]>
+    </delete>
+    
+    
+    <select id="selectFolder" parameterType="String" resultType="ImageBoardVO">
+      <![CDATA[
+		    select folderName
+		    from file_folder
+		    where id = #{id}
+		    and folderDepth = 3
+		]]> 
+    </select>
+    
+   	<delete id="delFileInPath">
+	<![CDATA[
+		delete from file_house 
+		where id = #{id}
+		and folderPath = #{folderPath}
+	]]>
+    </delete>
+    
+    
+    <insert id="insertFileRecommend">
+        <![CDATA[
+		    INSERT INTO file_recommend (
+		        fileIdx,
+		        id,
+		        recommendYN,
+		        ins_dt
+		    ) VALUES (
+		        #{fileIdx}, 
+		        #{id},
+		        #{recommendYN},
+		        sysdate()
+	        )
+        ]]>
+    </insert>
+    
+    <delete id="deleteFileRecommend">
+	<![CDATA[
+		delete from file_recommend 
+		where id = #{id}
+		and fileIdx = #{fileIdx}
+	]]>
+    </delete>
+    
+    <select id="selectRecommendCnt" parameterType="ImageBoardVO" resultType="ImageBoardVO">
+      <![CDATA[
+		    select 
+				(select count(1) from file_recommend where fileIdx = #{fileIdx} and recommendYN = 'Y') as recommendYcnt
+				,(select count(1) from file_recommend where fileIdx = #{fileIdx} and recommendYN = 'N') as recommendNcnt
+		]]> 
+    </select>
+     
+</mapper>

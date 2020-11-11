@@ -1,0 +1,11 @@
+package manpower.manage.dao;
+
+import org.springframework.stereotype.Repository;
+
+import manpower.common.dao.AbstractDAO;
+
+@Repository("daejangDAO")
+public class ManageDAO extends AbstractDAO{
+
+	
+}

@@ -1,0 +1,42 @@
+package fds.daejang.dao;
+
+import java.util.List;
+import java.util.Map;
+
+import org.springframework.stereotype.Repository;
+
+import fds.common.dao.AbstractDAO;
+
+@Repository("daejangDAO")
+public class DaejangDAO extends AbstractDAO{
+
+	@SuppressWarnings("unchecked")
+	public List<Map<String, Object>> selectFixedDateList(Map<String, Object> map) throws Exception{
+		return (List<Map<String, Object>>)selectPagingList("daejang.selectFixedDateList", map);
+	}
+		
+	public void insertFixedDateData(Map<String, Object> map) throws Exception{
+		insert("daejang.insertFixedDateData", map);
+	}
+	
+	public void insertFile(Map<String, Object> map) throws Exception{
+		insert("common.insertFile", map);
+	}
+	
+	
+	@SuppressWarnings("unchecked")
+	public Map<String, Object> fixedDateDataDetail(Map<String, Object> map) throws Exception{
+		return (Map<String, Object>) selectOne("daejang.fixedDateDataDetail", map);
+	}
+	
+	public void updateFixedDateData(Map<String, Object> map) throws Exception{
+		update("daejang.updateFixedDateData", map);
+	}
+
+	public void deleteFixedDateData(Map<String, Object> map) throws Exception{
+		update("daejang.deleteFixedDateData", map);
+	}
+	
+	
+
+}

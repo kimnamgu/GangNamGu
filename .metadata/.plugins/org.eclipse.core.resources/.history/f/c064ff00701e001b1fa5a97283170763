@@ -1,0 +1,98 @@
+package manpower.write.controller;
+
+import javax.annotation.Resource;
+
+import org.apache.log4j.Logger;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.servlet.ModelAndView;
+
+import manpower.common.common.CommandMap;
+import manpower.write.dao.WriteDAO;
+import manpower.write.service.WriteService;
+
+@Controller
+public class WriteController {
+	Logger log = Logger.getLogger(this.getClass());
+	
+	
+	@Resource(name="writeService")
+	private WriteService writeService;
+	
+	@Resource(name="writeDAO")
+	private WriteDAO writeDAO;
+	
+	/*공지사항*/
+	@RequestMapping(value="/write/noticeMng.do")
+    public ModelAndView noticeMng(CommandMap commandMap) throws Exception{
+    	System.out.println("noticeMng탐");
+		ModelAndView mv = new ModelAndView("/write/noticeMng");
+    	
+    	return mv;
+    }
+	
+	/*임금관리*/
+	@RequestMapping(value="/write/paymentMng.do")
+    public ModelAndView paymentMng(CommandMap commandMap) throws Exception{
+    	System.out.println("paymentMng탐");
+		ModelAndView mv = new ModelAndView("/write/paymentMng");
+    	
+    	return mv;
+    }
+	
+	/*인력관리*/
+	@RequestMapping(value="/write/workerMng.do")
+    public ModelAndView workerMng(CommandMap commandMap) throws Exception{
+    	System.out.println("workerMng탐");
+		ModelAndView mv = new ModelAndView("/write/workerMng");
+    	
+    	return mv;
+    }
+	
+	/*사업관리*/
+	@RequestMapping(value="/write/businessMng.do")
+    public ModelAndView businessMng(CommandMap commandMap) throws Exception{
+    	System.out.println("businessMng탐");
+		ModelAndView mv = new ModelAndView("/write/businessMng");
+    	
+    	return mv;
+    }
+	
+	/*은행코드관리*/
+	@RequestMapping(value="/write/bankMng.do")
+    public ModelAndView bankMng(CommandMap commandMap) throws Exception{
+    	System.out.println("bankMng탐");
+		ModelAndView mv = new ModelAndView("/write/bankMng");
+    	
+    	return mv;
+    }
+	
+	/*통계관리*/
+	@RequestMapping(value="/write/manpowerStatus.do")
+    public ModelAndView manpowerStatus(CommandMap commandMap) throws Exception{
+    	System.out.println("manpowerStatus탐");
+		ModelAndView mv = new ModelAndView("/write/manpowerStatus");
+    	
+    	return mv;
+    }
+	
+	/*권한관리*/
+	@RequestMapping(value="/write/authorityMng.do")
+    public ModelAndView authorityMng(CommandMap commandMap) throws Exception{
+    	System.out.println("authorityMng탐");
+		ModelAndView mv = new ModelAndView("/write/authorityMng");
+    	
+    	return mv;
+    }
+	
+	
+	/*소득세관리*/
+	@RequestMapping(value="/write/incomeMng.do")
+    public ModelAndView incomeMng(CommandMap commandMap) throws Exception{
+    	System.out.println("incomeMng탐");
+		ModelAndView mv = new ModelAndView("/write/incomeMng");
+    	
+    	return mv;
+    }
+	
+}

@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE web-app PUBLIC "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN" "http://java.sun.com/dtd/web-app_2_3.dtd">
+<web-app>
+	<filter>
+		<filter-name>Encoding Filter</filter-name>
+		<filter-class>nexti.ejms.common.EncodingFilter</filter-class>
+		<init-param>
+			<param-name>encoding</param-name>
+			<param-value>EUC-KR</param-value>
+		</init-param>
+	</filter>
+
+	<filter-mapping>
+		<filter-name>Encoding Filter</filter-name>
+		<url-pattern>/*</url-pattern>
+	</filter-mapping>
+
+	<listener>
+		<listener-class>nexti.ejms.common.NewServletContextListener</listener-class>
+	</listener>
+
+	<servlet>
+		<servlet-name>action</servlet-name>
+		<servlet-class>org.apache.struts.action.ActionServlet</servlet-class>
+		<init-param>
+			<param-name>config</param-name>
+			<param-value>/WEB-INF/config/struts-config.xml</param-value>
+		</init-param>		
+		<init-param>
+			<param-name>debug</param-name>
+			<param-value>3</param-value>
+		</init-param>
+		<init-param>
+			<param-name>detail</param-name>
+			<param-value>3</param-value>
+		</init-param>
+		<load-on-startup>0</load-on-startup>
+	</servlet>
+<!-- 
+	<servlet>
+		<servlet-name>InitLegacy</servlet-name>    
+		<servlet-class>com.api.lo.legacy</servlet-class>
+		<load-on-startup>100</load-on-startup>
+	 </servlet>
+	 <servlet>
+		<servlet-name>SSOInLegacyManager</servlet-name>   
+		<servlet-class>com.api.SSOInLegacyManager</servlet-class>
+	 </servlet>
+	 <servlet>
+		<servlet-name>SSOOutLegacyManager</servlet-name>
+		<servlet-class>com.api.SSOOutLegacyManager</servlet-class> 
+	 </servlet>
+	 <servlet>
+		<servlet-name>SSOLegacyManager</servlet-name>
+		<servlet-class>com.api.SSOLegacyManager</servlet-class> 
+	 </servlet> 
+
+	 <servlet-mapping>
+		<servlet-name>SSOInLegacyManager</servlet-name>
+		<url-pattern>/servlet/SSOInLegacyManager</url-pattern>
+	 </servlet-mapping>
+	 <servlet-mapping>
+		<servlet-name>SSOOutLegacyManager</servlet-name>
+		<url-pattern>/servlet/SSOOutLegacyManager</url-pattern>
+	 </servlet-mapping>
+	 <servlet-mapping>
+		<servlet-name>SSOLegacyManager</servlet-name>
+		<url-pattern>/servlet/SSOLegacyManager</url-pattern>
+	 </servlet-mapping>
+-->
+	<servlet-mapping>
+		<servlet-name>action</servlet-name>
+		<url-pattern>*.do</url-pattern>
+	</servlet-mapping>
+	<session-config>
+		<session-timeout>480</session-timeout>
+	</session-config>
+<!-- 
+	<env-entry>  
+		<env-entry-name>sso_url</env-entry-name>    
+		<env-entry-value>111.17.1.17</env-entry-value>
+		<env-entry-type>java.lang.String</env-entry-type>
+	 </env-entry>
+	 <env-entry>
+		<env-entry-name>sso_port</env-entry-name>    
+		<env-entry-value>8001</env-entry-value>
+		<env-entry-type>java.lang.String</env-entry-type>
+	 </env-entry>
+	 <env-entry>
+		<env-entry-name>ltnr_url</env-entry-name>    
+		<env-entry-value>/sso/servlet/SSOListener</env-entry-value>
+		<env-entry-type>java.lang.String</env-entry-type>
+	 </env-entry>
+	 <env-entry>
+		<env-entry-name>legc_id</env-entry-name>
+		<env-entry-value>ejms</env-entry-value>
+		<env-entry-type>java.lang.String</env-entry-type>
+	 </env-entry>
+	 <env-entry> 
+		<env-entry-name>link_page</env-entry-name>
+		<env-entry-value>/ssocontrol.do</env-entry-value>
+		<env-entry-type>java.lang.String</env-entry-type>
+	 </env-entry>
+	<env-entry>
+		<env-entry-name>ses_name1</env-entry-name>
+		<env-entry-value>sso_user_sn</env-entry-value>
+		<env-entry-type>java.lang.String</env-entry-type>
+	 </env-entry>
+	 <env-entry>
+		<env-entry-name>ses_name2</env-entry-name>
+		<env-entry-value> </env-entry-value>
+		<env-entry-type>java.lang.String</env-entry-type>
+	 </env-entry>
+	 <env-entry>
+		<env-entry-name>ses_name3</env-entry-name>
+		<env-entry-value> </env-entry-value>
+		<env-entry-type>java.lang.String</env-entry-type>
+	 </env-entry>
+	<env-entry>
+		<env-entry-name>ses_name4</env-entry-name>
+		<env-entry-value> </env-entry-value>
+		<env-entry-type>java.lang.String</env-entry-type>
+	 </env-entry>
+	<env-entry>
+		<env-entry-name>ses_name5</env-entry-name>
+		<env-entry-value> </env-entry-value>
+		<env-entry-type>java.lang.String</env-entry-type>
+	 </env-entry>
+-->
+	<!-- index, formation(부서 검색)를 제외한 jsp 직접접근 제한 -->
+	<security-constraint> 
+        <web-resource-collection> 
+            <web-resource-name>unsecuredapp</web-resource-name> 
+            <url-pattern>/index.jsp</url-pattern>
+             <url-pattern>/b.jsp</url-pattern>
+              <url-pattern>/c.jsp</url-pattern>
+            <url-pattern>/formation/formation.jsp</url-pattern>
+            <url-pattern>/passwordEncrypt.jsp</url-pattern>
+            <!-- sso관련 jsp 접근 허용(sso관련 경로) -->
+            <url-pattern>/SSOMODULE/*</url-pattern>
+        </web-resource-collection>
+        <user-data-constraint> 
+            <transport-guarantee>NONE</transport-guarantee> 
+        </user-data-constraint> 
+    </security-constraint>
+     
+	<security-constraint> 
+    	<web-resource-collection> 
+        	<web-resource-name>securedapp</web-resource-name> 
+            <url-pattern>*.jsp</url-pattern> 
+        </web-resource-collection> 
+        <user-data-constraint> 
+            <transport-guarantee>CONFIDENTIAL</transport-guarantee> 
+        </user-data-constraint> 
+    </security-constraint> 
+   
+</web-app>

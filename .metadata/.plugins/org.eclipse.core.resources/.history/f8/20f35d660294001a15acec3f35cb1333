@@ -1,0 +1,44 @@
+package com.scheduler;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
+import javax.annotation.Resource;
+
+import org.apache.log4j.Logger;
+import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.stereotype.Component;
+
+import service.daejang.service.DaejangService;
+
+@Component
+public class Scheduler {
+	
+	Logger log = Logger.getLogger(this.getClass());
+
+	@Resource(name="daejangService")
+	private DaejangService daejangService;
+
+	/*매분마다 확인*/
+    @Scheduled(cron = "*/4 * * * * *")
+    public void cronTest1(){
+        try {
+        	
+        	Date dt = new Date();
+        	SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd, hh:mm:ss a");  
+        	System.out.println("batch Start!!! [" + sdf.format(dt).toString() + "]#####################################################################\t");
+        	
+/*    		CommandMap commandMap = new CommandMap();    	
+    		
+    		Map<String,Object> recentResult = null;
+    		
+    		commandMap.clear();
+    		recentResult = daejangService.getDocIssueReserveRecent(commandMap.getMap());
+    		
+			System.out.println("recentResult 값 확인 : " + recentResult.toString());*/
+    		System.out.println("batch End!!! [" + sdf.format(dt).toString() + "]#####################################################################\t");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+}

@@ -1,0 +1,314 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="daejang">
+	
+	<select id="selectFixedDateList" parameterType="hashmap" resultType="hashmap">
+		<include refid="common.pagingPre"/> 
+		<![CDATA[
+			SELECT
+                  ROW_NUMBER() OVER (ORDER BY FIXDATE_GRANT_DATE DESC NULLS LAST) RNUM,
+                  A.ID,
+                  A.DONG_CD_OLD,
+                  B.DONG_CD_NEW,
+                  B.DEPT_ID,
+                  B.DONG_NAME_OLD,
+                  B.DONG_NAME_NEW,
+                  SUBSTR(A.FIXDATE_GRANT_DATE,0,4) YEAR,
+                  SUBSTR(A.FIXDATE_GRANT_DATE,5,2) MONTH,
+                  TENANT_NAME,                  
+                  FIXDATE_GRANT_DATE,                  
+                  LINK_IMG_NM           
+            FROM FIXED_DATE_DAEJANG A LEFT OUTER JOIN FIXED_DONG_LIST B 
+            ON A.DONG_CD_OLD = B.DONG_CD_OLD
+            WHERE A.DEL_YN = '0'			
+		]]>
+		<if test="DONG != null and DONG !=''">
+		AND A.DONG_CD_OLD = #{DONG}
+		</if>
+		<if test="YEAR != null and YEAR !=''">
+		AND SUBSTR(A.FIXDATE_GRANT_DATE, 0, 4) = #{YEAR}
+		</if>
+		<if test="MONTH != null and MONTH !=''">
+		AND SUBSTR(A.FIXDATE_GRANT_DATE, 5, 2) = #{MONTH}
+		</if>
+		<if test="TENANT_NAME != null and TENANT_NAME !=''">
+		AND A.TENANT_NAME = #{TENANT_NAME}
+		</if>
+		<include refid="common.pagingPost"/> 
+	</select>
+	
+	
+	<insert id="insertFixedDateData" parameterType="hashmap" useGeneratedKeys="true" keyProperty="ID">
+		<selectKey keyProperty="ID" resultType="string" order="BEFORE">
+			SELECT FIXED_DATE_DAEJANG_SQ.NEXTVAL FROM DUAL
+		</selectKey>
+		<![CDATA[
+			INSERT INTO FIXED_DATE_DAEJANG
+			(
+				ID,
+				DONG_CD_OLD,				
+				TENANT_NAME,
+				FIXDATE_GRANT_DATE,
+				LINK_IMG_NM,
+				BIGO,
+				INS_ID,
+				INS_DEPT,
+				INS_DATE										    
+			)
+			VALUES
+			(
+				#{ID},				
+				#{DONG_CD_OLD},			   
+			    #{TENANT_NAME},			    
+			    REPLACE(#{FIXDATE_GRANT_DATE}, '-', ''),
+			    #{LINK_IMG_NM},
+			    #{BIGO},			   		    			    
+			    #{INS_ID},	   
+			    #{INS_DEPT},
+			    SYSDATE
+			)
+		]]>
+	</insert>
+	
+	
+	
+	<select id="fixedDateDataDetail" parameterType="hashmap" resultType="hashmap">
+		<![CDATA[
+			SELECT                 
+                  A.ID,
+                  A.DONG_CD_OLD,
+                  B.DONG_CD_NEW,
+                  B.DEPT_ID,
+                  B.DONG_NAME_OLD,
+                  B.DONG_NAME_NEW,
+                  SUBSTR(A.FIXDATE_GRANT_DATE,0,4) YEAR,
+                  SUBSTR(A.FIXDATE_GRANT_DATE,5,2) MONTH,
+                  TENANT_NAME,                  
+                  FIXDATE_GRANT_DATE,                  
+                  LINK_IMG_NM,
+                  BIGO           
+            FROM FIXED_DATE_DAEJANG A LEFT OUTER JOIN FIXED_DONG_LIST B 
+            ON A.DONG_CD_OLD = B.DONG_CD_OLD
+            WHERE A.DEL_YN = '0'
+            AND A.ID = #{ID} 	
+		]]>
+	</select>
+	
+	
+	
+	<update id="updateFixedDateData" parameterType="hashmap">
+		<![CDATA[
+			UPDATE FIXED_DATE_DAEJANG
+			SET	FIXDATE_GRANT_DATE = REPLACE(#{FIXDATE_GRANT_DATE}, '-', ''),
+			    TENANT_NAME = #{TENANT_NAME},
+			    BIGO = #{BIGO},			    
+		]]>
+			<if test="LINK_IMG_NM != null and LINK_IMG_NM !=''">
+				DONG_CD_OLD = #{DONG_CD_OLD},
+				LINK_IMG_NM = #{LINK_IMG_NM},
+			</if> 
+			    MOD_ID = #{MOD_ID},
+			    MOD_DEPT = #{MOD_DEPT},			    
+			    MOD_DATE = SYSDATE			
+			WHERE
+				ID = #{ID}
+	</update>
+	
+	
+	<update id="deleteGiftAccept" parameterType="hashmap">
+		<![CDATA[
+			UPDATE GIFT_ACCEPT_MASTER
+			SET
+				DEL_YN = '1',
+				DEL_ID = #{DEL_ID},
+				DEL_DEPT = #{DEL_DEPT},
+				DEL_DATE = SYSDATE
+			WHERE
+				ID = #{ID}
+		]]>
+	</update>
+	
+		
+	<select id="giftMngStatus" parameterType="hashmap" resultType="hashmap">
+		<![CDATA[
+			SELECT
+				ID,
+				MAST_ID,
+				TAKE_DATE,
+				TAKE_PSN_CLASS_CD,
+				TAKE_PSN_CLASS_NM,
+				TAKE_PSN_ID,		   
+			    TAKE_PSN_NM,
+			    KEEP_PLACE,
+			    BIGO   
+			FROM
+				GIFT_MNG_DAEJANG
+			WHERE
+				MAST_ID = #{MID}
+				AND DEL_YN = '0'		
+		]]>
+	</select>
+	
+	
+	
+	<insert id="insertGiftMng" parameterType="hashmap" useGeneratedKeys="true" keyProperty="ID">
+		<selectKey keyProperty="ID" resultType="string" order="BEFORE">
+			SELECT GIFT_MNG_DAEJANG_SQ.NEXTVAL FROM DUAL
+		</selectKey>
+		<![CDATA[
+			INSERT INTO GIFT_MNG_DAEJANG
+			(
+				ID,
+			    MAST_ID,
+  				TAKE_DATE,
+  				TAKE_PSN_CLASS_CD,
+  				TAKE_PSN_CLASS_NM,
+  				TAKE_PSN_ID,
+  				TAKE_PSN_NM,
+  				KEEP_PLACE,
+  				BIGO,
+			    INS_ID,	   
+			    INS_DEPT,			    
+			    INS_DATE			    
+			)
+			VALUES
+			(
+				#{ID},				
+				#{MID},			  
+			    REPLACE(#{TAKE_DATE}, '-', ''),
+			    #{TAKE_PSN_CLASS_CD},
+			    #{TAKE_PSN_CLASS_NM},
+			    #{TAKE_PSN_ID},
+			    #{TAKE_PSN_NM},		
+			    #{KEEP_PLACE},
+			    #{BIGO},			    		    			   
+			    #{INS_ID},			   
+			    #{INS_DEPT},
+			    SYSDATE			   
+			)
+		]]>
+	</insert>
+
+	
+	<update id="updateGiftMng" parameterType="hashmap">
+		<![CDATA[
+			UPDATE GIFT_MNG_DAEJANG
+			SET
+				TAKE_DATE = REPLACE(#{TAKE_DATE}, '-', ''),
+				TAKE_PSN_CLASS_CD = #{TAKE_PSN_CLASS_CD},
+			    TAKE_PSN_CLASS_NM = #{TAKE_PSN_CLASS_NM},
+			    TAKE_PSN_ID = #{TAKE_PSN_ID},
+			    TAKE_PSN_NM = #{TAKE_PSN_NM},
+			    KEEP_PLACE = #{KEEP_PLACE},
+			    BIGO = #{BIGO}			
+			WHERE
+				MAST_ID = #{MID}
+		]]>
+	</update>
+	
+	
+	<update id="deleteGiftMng" parameterType="hashmap">
+		<![CDATA[
+			UPDATE GIFT_MNG_DAEJANG
+			SET 
+				 DEL_YN = '1',
+				 DEL_ID = #{DEL_ID},
+				 DEL_DEPT = #{DEL_DEPT},
+				 DEL_DATE = SYSDATE				 
+			WHERE
+				MAST_ID = #{MID}
+		]]>
+	</update>
+	
+	
+		
+	
+	<select id="giftSellStatus" parameterType="hashmap" resultType="hashmap">
+		<![CDATA[
+			SELECT
+				ID,
+				MAST_ID,
+				APPRAISED_VALUE,
+				APPRAISED_INSTITUTE,
+				SELL_DATE,
+				SELL_METHOD_GB,
+				SELL_AMT,
+				BIGO	   
+			FROM
+				GIFT_SELL_DAEJANG
+			WHERE
+				MAST_ID = #{MID}
+				AND DEL_YN = '0'		
+		]]>
+	</select>
+	
+	
+	
+	<insert id="insertGiftSell" parameterType="hashmap" useGeneratedKeys="true" keyProperty="ID">
+		<selectKey keyProperty="ID" resultType="string" order="BEFORE">
+			SELECT GIFT_SELL_DAEJANG_SQ.NEXTVAL FROM DUAL
+		</selectKey>
+		<![CDATA[
+			INSERT INTO GIFT_SELL_DAEJANG
+			(
+				ID,                 
+				MAST_ID,
+				APPRAISED_VALUE,
+				APPRAISED_INSTITUTE,
+				SELL_DATE,
+				SELL_METHOD_GB,
+				SELL_AMT,
+				BIGO,
+			    INS_ID,
+			    INS_DEPT,
+			    INS_DATE			    
+			)
+			VALUES
+			(
+				#{ID},                 
+				#{MID},
+				REPLACE(#{APPRAISED_VALUE}, ',', ''),
+				#{APPRAISED_INSTITUTE},				
+				REPLACE(#{SELL_DATE}, '-', ''),
+				#{SELL_METHOD_GB},
+				REPLACE(#{SELL_AMT}, ',', ''),
+				#{BIGO},
+			    #{INS_ID},			   
+			    #{INS_DEPT},
+			    SYSDATE			   
+			)
+		]]>
+	</insert>
+	
+	<update id="updateGiftSell" parameterType="hashmap">
+		<![CDATA[
+			UPDATE GIFT_SELL_DAEJANG
+			SET
+				APPRAISED_VALUE = REPLACE(#{APPRAISED_VALUE}, ',', ''),
+				APPRAISED_INSTITUTE = #{APPRAISED_INSTITUTE},
+			    SELL_DATE = REPLACE(#{SELL_DATE}, '-', ''),			    
+			    SELL_METHOD_GB = #{SELL_METHOD_GB},
+			    SELL_AMT = REPLACE(#{SELL_AMT}, ',', ''),
+			    BIGO = #{BIGO}			
+			WHERE
+				MAST_ID = #{MID}
+		]]>
+	</update>
+	
+	
+	<update id="deleteGiftSell" parameterType="hashmap">
+		<![CDATA[
+			UPDATE GIFT_SELL_DAEJANG
+			SET
+				DEL_YN = '1',
+				DEL_ID = #{DEL_ID},
+				DEL_DEPT = #{DEL_DEPT},
+				DEL_DATE = SYSDATE
+			WHERE
+				MAST_ID = #{MID}
+		]]>
+	</update>
+	
+	
+</mapper>

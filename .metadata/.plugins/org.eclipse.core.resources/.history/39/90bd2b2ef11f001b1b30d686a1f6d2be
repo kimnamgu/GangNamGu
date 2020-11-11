@@ -1,0 +1,27 @@
+package manpower.write.dao;
+
+import java.util.Map;
+
+import org.springframework.stereotype.Repository;
+
+import manpower.common.dao.AbstractDAO;
+
+@Repository("writeDAO")
+public class WriteDAO extends AbstractDAO{
+
+	/*공지사항*/
+	public void insertNoticeWrite(Map<String, Object> map) throws Exception{
+		insert("write.insertNoticeWrite", map);
+	}
+	
+	@SuppressWarnings("unchecked")
+	public Map<String, Object> selectNoticeDetail(Map<String, Object> map) throws Exception{
+		return (Map<String, Object>) selectOne("write.selectNoticeDetail", map);
+	}
+	
+	public void updateNotice(Map<String, Object> map) throws Exception{
+		System.out.println("dao updateNotice확인");
+		System.out.println("map확인" + map.toString());
+		update("write.updateConfirm", map);
+	}
+}

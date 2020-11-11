@@ -1,0 +1,2444 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<FlowViewLayout Version="1.2">
+  <StrutsActivity path="/messageSend.do" location="50,50" dimension="265,96" />
+  <StrutsActivity path="/download.do" location="0,5465" dimension="239,96" />
+  <StrutsActivity path="/bundleDownload.do" location="3353,5324" dimension="276,96" />
+  <StrutsActivity path="/xlsDownload.do" location="5220,5324" dimension="254,96" />
+  <StrutsActivity path="/hwpDownload.do" location="0,4750" dimension="264,96" />
+  <StrutsActivity path="/main.do" location="3903,392" dimension="225,96" />
+  <StrutsActivity path="/loginYN.do" location="3057,196" dimension="244,96" />
+  <StrutsActivity path="/loginOK.do" location="3616,196" dimension="244,96" />
+  <StrutsActivity path="/certOK.do" location="2150,50" dimension="236,96" />
+  <StrutsActivity path="/gpkiRegistration.do" location="4250,50" dimension="242,96" />
+  <StrutsActivity path="/loginRchReqYN.do" location="4556,196" dimension="284,96" />
+  <StrutsActivity path="/loginRchReqOK.do" location="4172,196" dimension="284,96" />
+  <StrutsActivity path="/logOut.do" location="2924,0" dimension="238,96" />
+  <StrutsActivity path="/ssocontrol.do" location="3468,0" dimension="222,96" />
+  <StrutsActivity path="/ssocount.do" location="3790,0" dimension="215,96" />
+  <StrutsActivity path="/myCount.do" location="4151,3290" dimension="213,96" />
+  <StrutsActivity path="/formation.do" location="5150,150" dimension="279,96" />
+  <StrutsActivity path="/colldocList.do" location="983,2364" dimension="269,96" />
+  <StrutsActivity path="/colldocInfoView.do" location="2310,3290" dimension="298,96" />
+  <StrutsActivity path="/colldocFormView.do" location="2621,2364" dimension="305,96" />
+  <StrutsActivity path="/colldocDel.do" location="793,2168" dimension="269,96" />
+  <StrutsActivity path="/colldocMake.do" location="2708,3290" dimension="280,96" />
+  <StrutsActivity path="/colldocSave.do" location="4123,2852" dimension="276,96" />
+  <StrutsActivity path="/colldocAppRep.do" location="1162,2168" dimension="293,96" />
+  <StrutsActivity path="/formatDel.do" location="2642,2168" dimension="263,96" />
+  <StrutsActivity path="/formatMake.do" location="3580,4458" dimension="274,96" />
+  <StrutsActivity path="/formatLineDef.do" location="4501,2998" dimension="308,96" />
+  <StrutsActivity path="/formatLineAtt.do" location="351,4166" dimension="305,96" />
+  <StrutsActivity path="/formatLineSave.do" location="2570,5183" dimension="314,96" />
+  <StrutsActivity path="/formatFixedDef.do" location="4909,2998" dimension="320,96" />
+  <StrutsActivity path="/formatFixedAtt.do" location="1460,3874" dimension="317,96" />
+  <StrutsActivity path="/formatFixedSave.do" location="0,5183" dimension="326,96" />
+  <StrutsActivity path="/formatBookDef.do" location="1510,2364" dimension="318,96" />
+  <StrutsActivity path="/formatBookSave.do" location="741,5183" dimension="324,96" />
+  <StrutsActivity path="/fileBookFrame.do" location="1895,2364" dimension="312,96" />
+  <StrutsActivity path="/formatBookFileAdd.do" location="1500,2168" dimension="339,96" />
+  <StrutsActivity path="/formatBookFileDel.do" location="1884,2168" dimension="335,96" />
+  <StrutsActivity path="/formatGetComm.do" location="2093,4166" dimension="300,96" />
+  <StrutsActivity path="/formatGetCommFrame.do" location="2713,3582" dimension="333,96" />
+  <StrutsActivity path="/formatLineGetComm.do" location="3975,5042" dimension="344,96" />
+  <StrutsActivity path="/formatFixedGetComm.do" location="5181,4750" dimension="356,96" />
+  <StrutsActivity path="/formatBookGetComm.do" location="1201,5042" dimension="354,96" />
+  <StrutsActivity path="/formatGetUsed.do" location="0,4458" dimension="289,96" />
+  <StrutsActivity path="/formatGetUsedFrame.do" location="0,3874" dimension="322,96" />
+  <StrutsActivity path="/formatLineGetUsed.do" location="4752,5042" dimension="333,96" />
+  <StrutsActivity path="/formatFixedGetUsed.do" location="3585,5042" dimension="345,96" />
+  <StrutsActivity path="/formatBookGetUsed.do" location="4364,5042" dimension="343,96" />
+  <StrutsActivity path="/formatLineProcPreview.do" location="1600,5042" dimension="354,96" />
+  <StrutsActivity path="/formatLinePreview.do" location="0,3290" dimension="330,96" />
+  <StrutsActivity path="/formatFixedProcPreview.do" location="4366,4750" dimension="366,96" />
+  <StrutsActivity path="/formatFixedPreview.do" location="430,3290" dimension="342,96" />
+  <StrutsActivity path="/formatBookPreview.do" location="1567,3582" dimension="340,96" />
+  <StrutsActivity path="/deliveryList.do" location="2982,2364" dimension="273,96" />
+  <StrutsActivity path="/deliveryTreatView.do" location="4686,3874" dimension="307,96" />
+  <StrutsActivity path="/deliveryCollDocInfoView.do" location="787,3582" dimension="345,96" />
+  <StrutsActivity path="/deliveryDetailView.do" location="1843,1876" dimension="312,96" />
+  <StrutsActivity path="/deliveryRetDocView.do" location="367,3874" dimension="320,96" />
+  <StrutsActivity path="/deliveryRetDoc.do" location="681,5324" dimension="294,96" />
+  <StrutsActivity path="/deliveryProcess.do" location="2971,2168" dimension="295,96" />
+  <StrutsActivity path="/isAssignCharge.do" location="1359,5324" dimension="293,96" />
+  <StrutsActivity path="/deliveryFormatLineView.do" location="1356,1680" dimension="358,96" />
+  <StrutsActivity path="/deliveryFormatFixedView.do" location="1814,1680" dimension="370,96" />
+  <StrutsActivity path="/deliveryFormatBookView.do" location="2284,1680" dimension="368,96" />
+  <StrutsActivity path="/deliveryCompList.do" location="5038,3874" dimension="306,96" />
+  <StrutsActivity path="/deliCompDetailView.do" location="4761,1388" dimension="323,96" />
+  <StrutsActivity path="/deliCompTreatView.do" location="1097,3874" dimension="318,96" />
+  <StrutsActivity path="/deliCompCollDocInfoView.do" location="5337,3290" dimension="356,96" />
+  <StrutsActivity path="/deliCompFormatLineView.do" location="4264,1192" dimension="369,96" />
+  <StrutsActivity path="/deliCompFormatBookView.do" location="4733,1192" dimension="379,96" />
+  <StrutsActivity path="/deliCompFormatFixedView.do" location="5212,1192" dimension="381,96" />
+  <StrutsActivity path="/draftDocument.do" location="1746,4166" dimension="302,96" />
+  <StrutsActivity path="/exchangeSend.do" location="3022,4750" dimension="438,96" />
+  <StrutsActivity path="/inputingList.do" location="240,2364" dimension="279,96" />
+  <StrutsActivity path="/xlsUploadFrame.do" location="4828,4166" dimension="293,96" />
+  <StrutsActivity path="/xlsUpload.do" location="4614,5324" dimension="260,96" />
+  <StrutsActivity path="/inputingDetailView.do" location="2609,900" dimension="318,96" />
+  <StrutsActivity path="/inputCollDocInfoView.do" location="2334,3582" dimension="334,96" />
+  <StrutsActivity path="/inputTreatView.do" location="3467,4166" dimension="296,96" />
+  <StrutsActivity path="/collDocNotApplicable.do" location="0,2168" dimension="335,96" />
+  <StrutsActivity path="/inputingComplete.do" location="435,2168" dimension="313,96" />
+  <StrutsActivity path="/inputChangeChrgunit.do" location="4644,2656" dimension="332,96" />
+  <StrutsActivity path="/isAssignChrgUnit.do" location="4355,5183" dimension="307,96" />
+  <StrutsActivity path="/inputFormatLineView.do" location="1920,704" dimension="343,96" />
+  <StrutsActivity path="/inputFormatFixedView.do" location="2363,704" dimension="355,96" />
+  <StrutsActivity path="/inputFormatBookView.do" location="2818,704" dimension="353,96" />
+  <StrutsActivity path="/inputDataBookSave.do" location="931,2656" dimension="339,96" />
+  <StrutsActivity path="/inputDataBookDelete.do" location="1370,2656" dimension="348,96" />
+  <StrutsActivity path="/inputBookDataDel.do" location="1818,2656" dimension="332,96" />
+  <StrutsActivity path="/inputLineDataSave.do" location="2250,2656" dimension="329,96" />
+  <StrutsActivity path="/inputLineDataDel.do" location="2679,2656" dimension="322,96" />
+  <StrutsActivity path="/inputFixedDataSave.do" location="3101,2656" dimension="341,96" />
+  <StrutsActivity path="/inputFixedDataDel.do" location="3542,2656" dimension="334,96" />
+  <StrutsActivity path="/isExistDataFrm.do" location="1020,5324" dimension="294,96" />
+  <StrutsActivity path="/inputCompleteList.do" location="2183,3874" dimension="314,96" />
+  <StrutsActivity path="/inputCompDetailView.do" location="1990,1388" dimension="334,96" />
+  <StrutsActivity path="/inputCompTreatView.do" location="4218,3582" dimension="329,96" />
+  <StrutsActivity path="/inputCompCollDocInfoView.do" location="4925,3290" dimension="367,96" />
+  <StrutsActivity path="/inputCompFormatBookView.do" location="1483,1192" dimension="386,96" />
+  <StrutsActivity path="/inpCompFrmBookModifyView.do" location="1790,2998" dimension="396,96" />
+  <StrutsActivity path="/inpCompDataBookSave.do" location="0,2998" dimension="361,96" />
+  <StrutsActivity path="/inpCompDataBookDelete.do" location="460,2998" dimension="370,96" />
+  <StrutsActivity path="/inputCompFormatLineView.do" location="1969,1192" dimension="376,96" />
+  <StrutsActivity path="/inpCompFrmLineModifyView.do" location="2286,2998" dimension="386,96" />
+  <StrutsActivity path="/inpCompLineDataSave.do" location="931,2998" dimension="351,96" />
+  <StrutsActivity path="/inputCompFormatFixedView.do" location="2445,1192" dimension="388,96" />
+  <StrutsActivity path="/inpCompFrmFixedModifyView.do" location="2772,2998" dimension="398,96" />
+  <StrutsActivity path="/inpCompFixedDataSave.do" location="1382,2998" dimension="363,96" />
+  <StrutsActivity path="/collprocDeptStatus.do" location="2542,3874" dimension="314,96" />
+  <StrutsActivity path="/addrFindList.do" location="2733,4750" dimension="244,96" />
+  <StrutsActivity path="/targetDeptCheck.do" location="2750,550" dimension="341,96" />
+  <StrutsActivity path="/commsubdept.do" location="4965,3582" dimension="327,96" />
+  <StrutsActivity path="/commsubdept/targetDeptFormationList.do" location="3942,4750" dimension="379,96" />
+  <StrutsActivity path="/commsubdept/formationList.do" location="1843,5183" dimension="320,96" />
+  <StrutsActivity path="/commsubdept/distributeList.do" location="2208,5183" dimension="317,96" />
+  <StrutsActivity path="/commsubdept/commsubdeptView.do" location="2398,5042" dimension="353,96" />
+  <StrutsActivity path="/commsubdept/grpdetailList.do" location="2929,5183" dimension="314,96" />
+  <StrutsActivity path="/commsubdeptInsert.do" location="0,5042" dimension="356,96" />
+  <StrutsActivity path="/commrchdept.do" location="5337,3582" dimension="325,96" />
+  <StrutsActivity path="/commrchdept/researchDeptFormationList.do" location="3505,4750" dimension="392,96" />
+  <StrutsActivity path="/commrchdeptView.do" location="2796,5042" dimension="351,96" />
+  <StrutsActivity path="/commrchdeptInsert.do" location="1999,5042" dimension="354,96" />
+  <StrutsActivity path="/researchSubDeptList.do" location="4850,550" dimension="361,96" />
+  <StrutsActivity path="/commrchothertarget.do" location="5450,550" dimension="363,96" />
+  <StrutsActivity path="/commrchothertargetList.do" location="6050,550" dimension="381,96" />
+  <StrutsActivity path="/commrchothertargetView.do" location="5450,750" dimension="389,96" />
+  <StrutsActivity path="/commrchothertargetInsert.do" location="6050,750" dimension="392,96" />
+  <StrutsActivity path="/commrchgrpchoice.do" location="3650,850" dimension="357,96" />
+  <StrutsActivity path="/commrchgrpchoiceList.do" location="3650,1050" dimension="375,96" />
+  <StrutsActivity path="/commrchgrpchoiceView.do" location="3050,1150" dimension="383,96" />
+  <StrutsActivity path="/commrchgrpchoiceInsert.do" location="3650,1250" dimension="386,96" />
+  <StrutsActivity path="/commapproval/designate.do" location="1050,4166" dimension="303,96" />
+  <StrutsActivity path="/commapproval/designateList.do" location="1477,5183" dimension="321,96" />
+  <StrutsActivity path="/commapproval/designateView.do" location="5507,5042" dimension="329,96" />
+  <StrutsActivity path="/commapproval/designateInsert.do" location="5130,5042" dimension="332,96" />
+  <StrutsActivity path="/commreqform.do" location="3468,3582" dimension="330,96" />
+  <StrutsActivity path="/commreqformView.do" location="401,5042" dimension="356,96" />
+  <StrutsActivity path="/commreqformInsert.do" location="4777,4750" dimension="359,96" />
+  <StrutsActivity path="/commapproval/inputusr.do" location="3808,4166" dimension="296,96" />
+  <StrutsActivity path="/commapproval/inputusrList.do" location="3288,5183" dimension="314,96" />
+  <StrutsActivity path="/commapproval/inputusrView.do" location="1110,5183" dimension="322,96" />
+  <StrutsActivity path="/commapproval/inputusrInsert.do" location="371,5183" dimension="325,96" />
+  <StrutsActivity path="/collprocList.do" location="0,216" dimension="273,96" />
+  <StrutsActivity path="/collprocIfrView.do" location="5166,4166" dimension="292,96" />
+  <StrutsActivity path="/collprocDataView.do" location="1434,412" dimension="306,96" />
+  <StrutsActivity path="/collprocInfoView.do" location="2502,216" dimension="302,96" />
+  <StrutsActivity path="/collprocTreatView.do" location="373,216" dimension="307,96" />
+  <StrutsActivity path="/collprocCloseView.do" location="3977,3874" dimension="310,96" />
+  <StrutsActivity path="/collprocClose.do" location="2701,5324" dimension="284,96" />
+  <StrutsActivity path="/collprocProcess.do" location="1217,0" dimension="295,96" />
+  <StrutsActivity path="/collprocInfoModify.do" location="2901,3874" dimension="314,96" />
+  <StrutsActivity path="/collprocInfoSave.do" location="2578,0" dimension="301,96" />
+  <StrutsActivity path="/collproc/formatLineView.do" location="1207,216" dimension="315,96" />
+  <StrutsActivity path="/collproc/formatFixedView.do" location="779,216" dimension="327,96" />
+  <StrutsActivity path="/collproc/formatBookView.do" location="1622,216" dimension="325,96" />
+  <StrutsActivity path="/collproc/formatLineOtherDeptDataView.do" location="5150,1350" dimension="396,96" />
+  <StrutsActivity path="/collproc/formatFixedOtherDeptDataView.do" location="5750,1350" dimension="408,96" />
+  <StrutsActivity path="/collproc/formatBookOtherDeptDataView.do" location="3950,1450" dimension="406,96" />
+  <StrutsActivity path="/collcompList.do" location="1319,4458" dimension="280,96" />
+  <StrutsActivity path="/collcompDataView.do" location="925,900" dimension="313,96" />
+  <StrutsActivity path="/collcompInfoView.do" location="303,900" dimension="309,96" />
+  <StrutsActivity path="/collcompTreatView.do" location="3260,3874" dimension="314,96" />
+  <StrutsActivity path="/collcompProcess.do" location="218,704" dimension="302,96" />
+  <StrutsActivity path="/collcomp/formatLineView.do" location="708,704" dimension="315,96" />
+  <StrutsActivity path="/collcomp/formatFixedView.do" location="1123,704" dimension="327,96" />
+  <StrutsActivity path="/collcomp/formatBookView.do" location="1550,704" dimension="325,96" />
+  <StrutsActivity path="/collcomp/DataBookOrdUpdate.do" location="3215,2998" dimension="344,96" />
+  <StrutsActivity path="/collcomp/DataBookMerge.do" location="732,3874" dimension="320,96" />
+  <StrutsActivity path="/collcomp/DataBookCompSave.do" location="3659,2998" dimension="344,96" />
+  <StrutsActivity path="/collcomp/DataBookCompDelete.do" location="4103,2998" dimension="353,96" />
+  <StrutsActivity path="/exhibitList.do" location="924,4750" dimension="261,96" />
+  <StrutsActivity path="/exhibitIframeList.do" location="1230,4750" dimension="261,96" />
+  <StrutsActivity path="/exhibitDataView.do" location="3128,1876" dimension="294,96" />
+  <StrutsActivity path="/exhibitClose.do" location="5750,3050" dimension="272,96" />
+  <StrutsActivity path="/exhibitIfrView.do" location="1644,4458" dimension="280,96" />
+  <StrutsActivity path="/exhibitInfoView.do" location="5503,4166" dimension="290,96" />
+  <StrutsActivity path="/exhibit/formatLineView.do" location="2697,1680" dimension="315,96" />
+  <StrutsActivity path="/exhibit/formatFixedView.do" location="3112,1680" dimension="327,96" />
+  <StrutsActivity path="/exhibit/formatBookView.do" location="3539,1680" dimension="325,96" />
+  <StrutsActivity path="/formatCommMgr.do" location="701,4166" dimension="304,96" />
+  <StrutsActivity path="/formatCommFrameMgr.do" location="1952,3582" dimension="337,96" />
+  <StrutsActivity path="/attrList.do" location="5194,2364" dimension="237,96" />
+  <StrutsActivity path="/attrDB.do" location="5200,2168" dimension="225,96" />
+  <StrutsActivity path="/attrPopup.do" location="3666,3290" dimension="244,96" />
+  <StrutsActivity path="/saveAttrList.do" location="5519,5324" dimension="252,96" />
+  <StrutsActivity path="/collsttcsList.do" location="1969,4458" dimension="279,96" />
+  <StrutsActivity path="/inputsttcsList.do" location="334,4458" dimension="286,96" />
+  <StrutsActivity path="/rchsttcsList.do" location="2293,4458" dimension="278,96" />
+  <StrutsActivity path="/reqsttcsList.do" location="2616,4458" dimension="278,96" />
+  <StrutsActivity path="/ldapMonitoringList.do" location="1850,950" dimension="340,96" />
+  <StrutsActivity path="/systemLogMonitoringList.do" location="3050,950" dimension="407,96" />
+  <StrutsActivity path="/systemLogDetailMonitoringList.do" location="5750,950" dimension="438,96" />
+  <StrutsActivity path="/usrMgr.do" location="5750,2050" dimension="259,96" />
+  <StrutsActivity path="/usrMgrFrame1.do" location="5750,2250" dimension="272,96" />
+  <StrutsActivity path="/usrMgrFrame2.do" location="650,2350" dimension="272,96" />
+  <StrutsActivity path="/usrMgrFrame3.do" location="5750,2450" dimension="272,96" />
+  <StrutsActivity path="/deptExtModify.do" location="5450,2650" dimension="273,96" />
+  <StrutsActivity path="/deptManageDB.do" location="5750,2850" dimension="278,96" />
+  <StrutsActivity path="/searchDept.do" location="50,2850" dimension="255,96" />
+  <StrutsActivity path="/searchRole.do" location="650,2850" dimension="252,96" />
+  <StrutsActivity path="/searchUser.do" location="1250,2850" dimension="268,96" />
+  <StrutsActivity path="/chrgUnitList.do" location="3311,2364" dimension="293,96" />
+  <StrutsActivity path="/chrgUnitDB.do" location="3317,2168" dimension="281,96" />
+  <StrutsActivity path="/chrgUnitPopup.do" location="2438,4166" dimension="300,96" />
+  <StrutsActivity path="/deliveryUserMgr.do" location="350,1750" dimension="300,96" />
+  <StrutsActivity path="/deliveryUserMgrDB.do" location="3950,1750" dimension="316,96" />
+  <StrutsActivity path="/chgMgr.do" location="3981,2364" dimension="246,96" />
+  <StrutsActivity path="/chgMgrSave.do" location="3969,2168" dimension="271,96" />
+  <StrutsActivity path="/commdeptuser.do" location="3843,3582" dimension="330,96" />
+  <StrutsActivity path="/commsubdept/deptuserList.do" location="3192,5042" dimension="348,96" />
+  <StrutsActivity path="/dataTransferList.do" location="5750,1150" dimension="321,96" />
+  <StrutsActivity path="/dataTransferProc.do" location="1250,1350" dimension="327,96" />
+  <StrutsActivity path="/getTgtUserList.do" location="2450,1350" dimension="312,96" />
+  <StrutsActivity path="/codeList.do" location="4903,2364" dimension="246,96" />
+  <StrutsActivity path="/codeDB.do" location="4909,2168" dimension="234,96" />
+  <StrutsActivity path="/codePopup.do" location="3147,3290" dimension="253,96" />
+  <StrutsActivity path="/grpList.do" location="4285,2364" dimension="264,96" />
+  <StrutsActivity path="/grpDB.do" location="4291,2168" dimension="252,96" />
+  <StrutsActivity path="/grpPopup.do" location="1047,3290" dimension="271,96" />
+  <StrutsActivity path="/grpSave.do" location="4308,5324" dimension="261,96" />
+  <StrutsActivity path="/systemAgent.do" location="2284,2364" dimension="272,96" />
+  <StrutsActivity path="/systemAgentControl.do" location="2264,2168" dimension="312,96" />
+  <StrutsActivity path="/systemAgentRuntime.do" location="5253,1876" dimension="317,96" />
+  <StrutsActivity path="/systemAgentRuntimeWriteForm.do" location="4507,3290" dimension="373,96" />
+  <StrutsActivity path="/systemAgentRuntimeWrite.do" location="5015,1680" dimension="345,96" />
+  <StrutsActivity path="/systemAgentRuntimeDelete.do" location="5460,1680" dimension="351,96" />
+  <StrutsActivity path="/noticeList.do" location="4597,2364" dimension="257,96" />
+  <StrutsActivity path="/noticeView.do" location="5160,4458" dimension="265,96" />
+  <StrutsActivity path="/noticeWrite.do" location="3653,2364" dimension="267,96" />
+  <StrutsActivity path="/noticeSave.do" location="4594,2168" dimension="264,96" />
+  <StrutsActivity path="/noticeFileDel.do" location="3649,2168" dimension="275,96" />
+  <StrutsActivity path="/formatList.do" location="309,4750" dimension="263,96" />
+  <StrutsActivity path="/researchMyList.do" location="4090,900" dimension="297,96" />
+  <StrutsActivity path="/researchGetUsed.do" location="5389,3874" dimension="306,96" />
+  <StrutsActivity path="/researchIfrView.do" location="0,4166" dimension="306,96" />
+  <StrutsActivity path="/researchWrite.do" location="5114,900" dimension="290,96" />
+  <StrutsActivity path="/researchView.do" location="4726,900" dimension="288,96" />
+  <StrutsActivity path="/researchChoice.do" location="4873,704" dimension="299,96" />
+  <StrutsActivity path="/researchSave.do" location="4486,704" dimension="287,96" />
+  <StrutsActivity path="/researchDelete.do" location="4090,704" dimension="296,96" />
+  <StrutsActivity path="/researchClose.do" location="3699,704" dimension="291,96" />
+  <StrutsActivity path="/researchPreview.do" location="1398,4166" dimension="303,96" />
+  <StrutsActivity path="/researchResult.do" location="4489,4166" dimension="294,96" />
+  <StrutsActivity path="/research.do" location="617,4750" dimension="262,96" />
+  <StrutsActivity path="/researchAns.do" location="665,4458" dimension="282,96" />
+  <StrutsActivity path="/researchParticiList.do" location="3619,3874" dimension="313,96" />
+  <StrutsActivity path="/researchResultToHwp.do" location="3091,3582" dimension="332,96" />
+  <StrutsActivity path="/researchIndividualToHwp.do" location="0,3582" dimension="352,96" />
+  <StrutsActivity path="/researchResultToXls.do" location="6050,2650" dimension="322,96" />
+  <StrutsActivity path="/researchIndividualToXls.do" location="5750,3250" dimension="342,96" />
+  <StrutsActivity path="/researchGrpMyList.do" location="5750,3450" dimension="316,96" />
+  <StrutsActivity path="/researchGrpGetUsed.do" location="5750,3650" dimension="325,96" />
+  <StrutsActivity path="/researchGrpIfrView.do" location="5750,3850" dimension="325,96" />
+  <StrutsActivity path="/researchGrpWrite.do" location="6050,4050" dimension="309,96" />
+  <StrutsActivity path="/researchGrpView.do" location="6050,4250" dimension="307,96" />
+  <StrutsActivity path="/researchGrpChoice.do" location="6050,4450" dimension="318,96" />
+  <StrutsActivity path="/researchGrpSave.do" location="5750,4650" dimension="306,96" />
+  <StrutsActivity path="/researchGrpDelete.do" location="5750,4850" dimension="315,96" />
+  <StrutsActivity path="/researchGrpClose.do" location="6050,5050" dimension="310,96" />
+  <StrutsActivity path="/researchGrpPreview.do" location="6050,5250" dimension="322,96" />
+  <StrutsActivity path="/formList.do" location="796,1388" dimension="289,96" />
+  <StrutsActivity path="/formWrite.do" location="397,1388" dimension="299,96" />
+  <StrutsActivity path="/formView.do" location="0,1388" dimension="297,96" />
+  <StrutsActivity path="/formSave.do" location="74,1192" dimension="296,96" />
+  <StrutsActivity path="/formDel.do" location="776,1192" dimension="289,96" />
+  <StrutsActivity path="/formClose.do" location="1165,1192" dimension="273,96" />
+  <StrutsActivity path="/preview.do" location="1536,4750" dimension="261,96" />
+  <StrutsActivity path="/reqForm.do" location="4216,4458" dimension="271,96" />
+  <StrutsActivity path="/reqModify.do" location="4332,3874" dimension="309,96" />
+  <StrutsActivity path="/doList.do" location="2142,4750" dimension="254,96" />
+  <StrutsActivity path="/doIfr.do" location="2441,4750" dimension="247,96" />
+  <StrutsActivity path="/myList.do" location="1842,4750" dimension="255,96" />
+  <StrutsActivity path="/getUsedList.do" location="992,4458" dimension="282,96" />
+  <StrutsActivity path="/getUsedIfr.do" location="3260,4458" dimension="275,96" />
+  <StrutsActivity path="/jupsuList.do" location="4847,4458" dimension="268,96" />
+  <StrutsActivity path="/jupsuView.do" location="2939,4458" dimension="276,96" />
+  <StrutsActivity path="/jupsuXls.do" location="5470,4458" dimension="265,96" />
+  <StrutsActivity path="/sancView.do" location="3899,4458" dimension="272,96" />
+  <StrutsActivity path="/dataSave.do" location="4532,4458" dimension="270,96" />
+  <StrutsActivity path="/selectUsed.do" location="3030,5324" dimension="278,96" />
+  <StrutsActivity path="/procJupsu.do" location="3674,5324" dimension="274,96" />
+  <StrutsActivity path="/myCancel.do" location="4919,5324" dimension="256,96" />
+  <StrutsActivity path="/outsideRchGrpSave.do" location="6050,5450" dimension="315,96" />
+  <StrutsActivity path="/outsideRchGrpDel.do" location="350,5550" dimension="308,96" />
+  <StrutsActivity path="/outsideRchGrpView.do" location="950,5550" dimension="316,96" />
+  <StrutsActivity path="/outsideRchResultList.do" location="1550,5550" dimension="321,96" />
+  <StrutsActivity path="/outsideRchList.do" location="2150,5550" dimension="289,96" />
+  <StrutsActivity path="/outsideCnt.do" location="3993,5324" dimension="270,96" />
+  <StrutsActivity path="/outsideRchResult.do" location="4707,5183" dimension="303,96" />
+  <StrutsActivity path="/outsideRchResultView.do" location="3050,5550" dimension="294,96" />
+  <StrutsActivity path="/outsideRchSave.do" location="5403,5183" dimension="296,96" />
+  <StrutsActivity path="/outsideRchDel.do" location="2033,5324" dimension="289,96" />
+  <StrutsActivity path="/outsideRchAnsDel.do" location="3647,5183" dimension="309,96" />
+  <StrutsActivity path="/outsideRchView.do" location="2783,4166" dimension="297,96" />
+  <StrutsActivity path="/outsideRchAns.do" location="1583,3290" dimension="291,96" />
+  <StrutsActivity path="/outsideReqList.do" location="4850,5550" dimension="289,96" />
+  <StrutsActivity path="/outsideReqResult.do" location="5055,5183" dimension="303,96" />
+  <StrutsActivity path="/outsideReqSave.do" location="0,5324" dimension="296,96" />
+  <StrutsActivity path="/outsideReqDel.do" location="2367,5324" dimension="289,96" />
+  <StrutsActivity path="/outsideReqAnsDel.do" location="4001,5183" dimension="309,96" />
+  <StrutsActivity path="/outsideReqView.do" location="3125,4166" dimension="297,96" />
+  <StrutsActivity path="/outsideReqAns.do" location="1974,3290" dimension="291,96" />
+  <StrutsActivity path="/workplanList.do" location="4250,5550" dimension="289,96" />
+  <StrutsActivity path="/workplanIframeList.do" location="3650,5550" dimension="289,96" />
+  <StrutsActivity path="/workplanMake.do" location="3050,1450" dimension="300,96" />
+  <StrutsActivity path="/workplanSave.do" location="5450,5550" dimension="296,96" />
+  <StrutsActivity path="/workplanDelEnd.do" location="6350,2150" dimension="309,96" />
+  <StrutsActivity path="/workplanInfoView.do" location="6050,1550" dimension="318,96" />
+  <StrutsActivity path="/workResultList.do" location="6350,1350" dimension="298,96" />
+  <StrutsActivity path="/workResultSave.do" location="6350,1750" dimension="305,96" />
+  <StrutsActivity path="/workResultDelete.do" location="6350,1950" dimension="314,96" />
+  <StrutsActivity path="/workResultView.do" location="6350,2350" dimension="306,96" />
+  <StrutsActivity path="/workResultWrite.do" location="6350,2850" dimension="308,96" />
+  <StrutsActivity path="login;6" location="3262,7" dimension="106,81" />
+  <StrutsActivity path="global_main;6" location="3960,203" dimension="112,81" />
+  <StrutsActivity path="loginRchReqYN;6" location="4625,7" dimension="146,81" />
+  <StrutsActivity path="/common/formatToHwp.jsp" location="41,4946" dimension="182,51" />
+  <StrutsActivity path="/main.jsp" location="3975,588" dimension="81,51" />
+  <StrutsActivity path="/login/login.jsp" location="3382,414" dimension="113,51" />
+  <StrutsActivity path="/login/loginGpki.jsp" location="6050,1750" dimension="137,51" />
+  <StrutsActivity path="/include/gpkiRegistration.jsp" location="50,1850" dimension="184,51" />
+  <StrutsActivity path="/login/loginGpkiRchReq.jsp" location="950,1850" dimension="177,51" />
+  <StrutsActivity path="/login/loginRchReq.jsp" location="4464,414" dimension="153,51" />
+  <StrutsActivity path="/index.jsp" location="1550,1850" dimension="83,51" />
+  <StrutsActivity path="/ssocount/myCount.jsp" location="4305,3486" dimension="157,51" />
+  <StrutsActivity path="/collmakedoc/colldocList.jsp" location="1026,2560" dimension="184,51" />
+  <StrutsActivity path="/collmakedoc/colldocInfoView.jsp" location="2547,3486" dimension="213,51" />
+  <StrutsActivity path="/collmakedoc/colldocFormView.jsp" location="2663,2560" dimension="220,51" />
+  <StrutsActivity path="/collmakedoc/formatMake.jsp" location="3621,4654" dimension="192,51" />
+  <StrutsActivity path="/collmakedoc/formatLineFixedDef.jsp" location="4953,3194" dimension="232,51" />
+  <StrutsActivity path="/collmakedoc/formatLineAtt.jsp" location="403,4362" dimension="201,51" />
+  <StrutsActivity path="/collmakedoc/formatFixedAtt.jsp" location="1515,4070" dimension="207,51" />
+  <StrutsActivity path="/collmakedoc/formatBookDef.jsp" location="1565,2560" dimension="209,51" />
+  <StrutsActivity path="/collmakedoc/fileBookFrame.jsp" location="1950,2560" dimension="203,51" />
+  <StrutsActivity path="/collmakedoc/formatGetComm.jsp" location="2134,4362" dimension="218,51" />
+  <StrutsActivity path="/collmakedoc/formatGetCommFrame.jsp" location="2754,3778" dimension="251,51" />
+  <StrutsActivity path="/collmakedoc/formatGetUsed.jsp" location="41,4654" dimension="207,51" />
+  <StrutsActivity path="/collmakedoc/formatGetUsedFrame.jsp" location="41,4070" dimension="240,51" />
+  <StrutsActivity path="/collmakedoc/formatLineFixedPreview.jsp" location="256,3486" dimension="254,51" />
+  <StrutsActivity path="/collmakedoc/formatBookPreview.jsp" location="1621,3778" dimension="231,51" />
+  <StrutsActivity path="/delivery/deliveryList.jsp" location="3039,2560" dimension="159,51" />
+  <StrutsActivity path="/delivery/deliveryTreatView.jsp" location="4743,4070" dimension="193,51" />
+  <StrutsActivity path="/delivery/deliveryCollDocInfo.jsp" location="857,3778" dimension="205,51" />
+  <StrutsActivity path="/delivery/deliveryDetailView.jsp" location="1900,2072" dimension="198,51" />
+  <StrutsActivity path="/delivery/deliveryReturnDoc.jsp" location="428,4070" dimension="198,51" />
+  <StrutsActivity path="/delicomp/deliCompList.jsp" location="5101,4070" dimension="179,51" />
+  <StrutsActivity path="/delicomp/deliCompDetailView.jsp" location="4814,1584" dimension="218,51" />
+  <StrutsActivity path="/delicomp/deliCompTreatView.jsp" location="1149,4070" dimension="213,51" />
+  <StrutsActivity path="/delicomp/deliCompCollDocInfo.jsp" location="5402,3486" dimension="225,51" />
+  <StrutsActivity path="/elecAppr/draftDocument.jsp" location="1803,4362" dimension="188,51" />
+  <StrutsActivity path="/inputing/inputingList.jsp" location="296,2560" dimension="167,51" />
+  <StrutsActivity path="/inputing/xlsUploadFrame.jsp" location="4880,4362" dimension="189,51" />
+  <StrutsActivity path="/inputing/inputDetailView.jsp" location="2673,1096" dimension="189,51" />
+  <StrutsActivity path="/inputing/inputCollDocInfo.jsp" location="2403,3778" dimension="196,51" />
+  <StrutsActivity path="/inputing/inputTreatView.jsp" location="3523,4362" dimension="184,51" />
+  <StrutsActivity path="/inputCollDocInfo.do" location="4732,2852" dimension="155,81" />
+  <StrutsActivity path="/inputing/inputHiddenPage.jsp" location="1885,2902" dimension="197,51" />
+  <StrutsActivity path="/inputcomp/inputCompleteList.jsp" location="2232,4070" dimension="216,51" />
+  <StrutsActivity path="/inputcomp/inputCompDetailView.jsp" location="2039,1584" dimension="236,51" />
+  <StrutsActivity path="/inputcomp/inputCompTreatView.jsp" location="4267,3778" dimension="231,51" />
+  <StrutsActivity path="/inputcomp/inputCompCollDocInfo.jsp" location="4987,3486" dimension="243,51" />
+  <StrutsActivity path="/inputcomp/inputCompDetailModify.jsp" location="2355,3194" dimension="248,51" />
+  <StrutsActivity path="/inputcomp/inputCompHiddenPage.jsp" location="754,3194" dimension="244,51" />
+  <StrutsActivity path="/collproc/collprocDeptStatus.jsp" location="2597,4070" dimension="204,51" />
+  <StrutsActivity path="/addr/addrFind.jsp" location="2790,4946" dimension="130,51" />
+  <StrutsActivity path="/common/commsubdept.jsp" location="5035,3778" dimension="186,51" />
+  <StrutsActivity path="/common/commrchdept.jsp" location="5407,3778" dimension="184,51" />
+  <StrutsActivity path="/common/commrchothertarget.jsp" location="4250,5850" dimension="219,51" />
+  <StrutsActivity path="/common/commrchgrpchoice.jsp" location="4550,5850" dimension="213,51" />
+  <StrutsActivity path="/common/commapproval_designate.jsp" location="1079,4362" dimension="245,51" />
+  <StrutsActivity path="/common/commreqform.jsp" location="3540,3778" dimension="186,51" />
+  <StrutsActivity path="/common/commapproval_inputusr.jsp" location="3837,4362" dimension="238,51" />
+  <StrutsActivity path="/collproc/collprocList.jsp" location="55,434" dimension="163,51" />
+  <StrutsActivity path="/collproc/collprocIfrView.jsp" location="5221,4362" dimension="182,51" />
+  <StrutsActivity path="/collproc/collprocFormatView.jsp" location="1482,608" dimension="209,51" />
+  <StrutsActivity path="/collproc/collprocInfoView.jsp" location="2557,434" dimension="192,51" />
+  <StrutsActivity path="/collproc/collprocTreatView.jsp" location="427,434" dimension="197,51" />
+  <StrutsActivity path="/collproc/collprocCloseView.jsp" location="4032,4070" dimension="200,51" />
+  <StrutsActivity path="/collproc/collprocInfoModify.jsp" location="2956,4070" dimension="204,51" />
+  <StrutsActivity path="/collproc/collprocFormatOtherDeptDataView.jsp" location="1550,5950" dimension="290,51" />
+  <StrutsActivity path="/collcomp/collcompList.jsp" location="1370,4654" dimension="177,51" />
+  <StrutsActivity path="/collcomp/collcompFormatView.jsp" location="812,1096" dimension="223,51" />
+  <StrutsActivity path="/collcomp/collcompDataView.jsp" location="1135,1096" dimension="210,51" />
+  <StrutsActivity path="/collcomp/collcompInfoView.jsp" location="354,1096" dimension="206,51" />
+  <StrutsActivity path="/collcomp/collcompTreatView.jsp" location="3311,4070" dimension="211,51" />
+  <StrutsActivity path="/collcomp/CloseHiddenPage.jsp" location="0,922" dimension="203,51" />
+  <StrutsActivity path="/collcomp/collcompHiddenAttFile.jsp" location="3715,3194" dimension="232,51" />
+  <StrutsActivity path="/collcomp/collcompPopup.jsp" location="795,4070" dimension="194,51" />
+  <StrutsActivity path="/exhibit/exhibitList.jsp" location="980,4946" dimension="149,51" />
+  <StrutsActivity path="/exhibit/exhibitIframeList.jsp" location="1269,4946" dimension="183,51" />
+  <StrutsActivity path="/exhibit/exhibitFormatView.jsp" location="3178,2072" dimension="195,51" />
+  <StrutsActivity path="/exhibit/exhibitIfrView.jsp" location="1700,4654" dimension="168,51" />
+  <StrutsActivity path="/exhibit/exhibitInfoView.jsp" location="5559,4362" dimension="178,51" />
+  <StrutsActivity path="/collmakedoc/formatCommMgr.jsp" location="742,4362" dimension="222,51" />
+  <StrutsActivity path="/collmakedoc/formatCommFrameMgr.jsp" location="1993,3778" dimension="255,51" />
+  <StrutsActivity path="/attrMgr/attrForm.jsp" location="5240,2560" dimension="145,51" />
+  <StrutsActivity path="/attrMgr/mainAttrModify.jsp" location="3556,3486" dimension="184,51" />
+  <StrutsActivity path="/attrMgr/subAttrModify.jsp" location="3840,3486" dimension="176,51" />
+  <StrutsActivity path="/mgrstat/collsttcsList.jsp" location="2028,4654" dimension="161,51" />
+  <StrutsActivity path="/mgrstat/inputsttcsList.jsp" location="392,4654" dimension="170,51" />
+  <StrutsActivity path="/mgrstat/rchsttcsList.jsp" location="2352,4654" dimension="159,51" />
+  <StrutsActivity path="/mgrstat/reqsttcsList.jsp" location="2675,4654" dimension="159,51" />
+  <StrutsActivity path="/mgrstat/ldapMonitoring.jsp" location="2150,6050" dimension="183,51" />
+  <StrutsActivity path="/mgrstat/systemLogMonitoring.jsp" location="2450,6050" dimension="217,51" />
+  <StrutsActivity path="/mgrstat/systemLogDetailMonitoring.jsp" location="2750,6050" dimension="248,51" />
+  <StrutsActivity path="/usrMgr/usrMgr.jsp" location="2150,2850" dimension="135,51" />
+  <StrutsActivity path="/usrMgr/usrMgrFrame1.jsp" location="2450,2850" dimension="175,51" />
+  <StrutsActivity path="/usrMgr/usrMgrFrame2.jsp" location="2750,2850" dimension="175,51" />
+  <StrutsActivity path="/usrMgr/usrMgrFrame3_2.jsp" location="3050,2850" dimension="187,51" />
+  <StrutsActivity path="/usrMgr/usrMgrFrame3_1.jsp" location="3350,2850" dimension="187,51" />
+  <StrutsActivity path="/usrMgr/search_dept.jsp" location="3650,2850" dimension="160,51" />
+  <StrutsActivity path="/usrMgr/search_role.jsp" location="5150,2850" dimension="156,51" />
+  <StrutsActivity path="/usrMgr/search_user.jsp" location="5450,2850" dimension="158,51" />
+  <StrutsActivity path="/chrgUnitMgr/chrgUnitForm.jsp" location="3357,2560" dimension="201,51" />
+  <StrutsActivity path="/chrgUnitMgr/chrgUnitModify.jsp" location="2482,4362" dimension="211,51" />
+  <StrutsActivity path="/deliveryUserMgr/deliveryUserMgr.jsp" location="6050,6050" dimension="231,51" />
+  <StrutsActivity path="/mgrmanager/chgmgr.jsp" location="4019,2560" dimension="170,51" />
+  <StrutsActivity path="/common/commdeptuser.jsp" location="3913,3778" dimension="189,51" />
+  <StrutsActivity path="/dataTransfer/dataTransferList.jsp" location="650,2550" dimension="207,51" />
+  <StrutsActivity path="/ccdMgr/codeForm.jsp" location="4949,2560" dimension="154,51" />
+  <StrutsActivity path="/ccdMgr/mainCodeModify.jsp" location="3033,3486" dimension="193,51" />
+  <StrutsActivity path="/ccdMgr/subCodeModify.jsp" location="3326,3486" dimension="185,51" />
+  <StrutsActivity path="/grpMgr/grpForm.jsp" location="4344,2560" dimension="145,51" />
+  <StrutsActivity path="/grpMgr/mainGrpInsert.jsp" location="817,3486" dimension="174,51" />
+  <StrutsActivity path="/grpMgr/mainGrpModify.jsp" location="1091,3486" dimension="183,51" />
+  <StrutsActivity path="/grpMgr/grpPopDept.jsp" location="1374,3486" dimension="164,51" />
+  <StrutsActivity path="/agent/systemAgent.jsp" location="2341,2560" dimension="158,51" />
+  <StrutsActivity path="/agent/systemAgentRuntime.jsp" location="5310,2072" dimension="203,51" />
+  <StrutsActivity path="/agent/systemAgentRuntimeWriteForm.jsp" location="4564,3486" dimension="259,51" />
+  <StrutsActivity path="/mgrnotice/noticeList.jsp" location="4643,2560" dimension="165,51" />
+  <StrutsActivity path="/mgrnotice/noticeView.jsp" location="5206,4654" dimension="173,51" />
+  <StrutsActivity path="/mgrnotice/noticeWrite.jsp" location="3699,2560" dimension="175,51" />
+  <StrutsActivity path="/common/formatList.jsp" location="359,4946" dimension="162,51" />
+  <StrutsActivity path="/research/researchMyList.jsp" location="4147,1096" dimension="182,51" />
+  <StrutsActivity path="/research/researchGetUsed.jsp" location="5446,4070" dimension="191,51" />
+  <StrutsActivity path="/research/researchIfrView.jsp" location="61,4362" dimension="184,51" />
+  <StrutsActivity path="/research/researchView.jsp" location="4978,1096" dimension="173,51" />
+  <StrutsActivity path="/research/researchPreview.jsp" location="1455,4362" dimension="188,51" />
+  <StrutsActivity path="/research/researchResult.jsp" location="4546,4362" dimension="179,51" />
+  <StrutsActivity path="/research/research.jsp" location="674,4946" dimension="147,51" />
+  <StrutsActivity path="/research/researchHiddenPage.jsp" location="700,4654" dimension="212,51" />
+  <StrutsActivity path="/research/researchParticiList.jsp" location="3676,4070" dimension="198,51" />
+  <StrutsActivity path="/research/researchResultToHwp.jsp" location="3148,3778" dimension="217,51" />
+  <StrutsActivity path="/research/researchIndividualToHwp.jsp" location="57,3778" dimension="237,51" />
+  <StrutsActivity path="/research/researchIndividualToXls.jsp" location="2150,6250" dimension="227,51" />
+  <StrutsActivity path="/research/researchGrpMyList.jsp" location="2450,6250" dimension="201,51" />
+  <StrutsActivity path="/research/researchGrpGetUsed.jsp" location="2750,6250" dimension="210,51" />
+  <StrutsActivity path="/research/researchGrpIfrView.jsp" location="3050,6250" dimension="203,51" />
+  <StrutsActivity path="/research/researchGrpView.jsp" location="3350,6250" dimension="192,51" />
+  <StrutsActivity path="/research/researchGrpPreview.jsp" location="3650,6250" dimension="207,51" />
+  <StrutsActivity path="/sinchung/sinchungList.jsp" location="853,1584" dimension="175,51" />
+  <StrutsActivity path="/sinchung/sinchungView.jsp" location="236,1584" dimension="183,51" />
+  <StrutsActivity path="/sinchung/preview.jsp" location="1592,4946" dimension="149,51" />
+  <StrutsActivity path="/sinchung/sinchung.jsp" location="4273,4654" dimension="157,51" />
+  <StrutsActivity path="/sinchung/sinchungHiddenPage.jsp" location="4556,4654" dimension="222,51" />
+  <StrutsActivity path="/sinchung/sinchungModify.jsp" location="4389,4070" dimension="195,51" />
+  <StrutsActivity path="/sinchung/sinchungDoList.jsp" location="2173,4946" dimension="191,51" />
+  <StrutsActivity path="/sinchung/doIfr.jsp" location="2498,4946" dimension="133,51" />
+  <StrutsActivity path="/sinchung/sinchungMyList.jsp" location="1873,4946" dimension="192,51" />
+  <StrutsActivity path="/sinchung/sinchungGetUsed.jsp" location="1032,4654" dimension="201,51" />
+  <StrutsActivity path="/sinchung/getUsedIfr.jsp" location="3316,4654" dimension="162,51" />
+  <StrutsActivity path="/sinchung/jupsuList.jsp" location="4903,4654" dimension="155,51" />
+  <StrutsActivity path="/sinchung/jupsuView.jsp" location="2995,4654" dimension="163,51" />
+  <StrutsActivity path="/sinchung/jupsuXls.jsp" location="5526,4654" dimension="152,51" />
+  <StrutsActivity path="/sinchung/sancView.jsp" location="3956,4654" dimension="158,51" />
+  <StrutsActivity path="/outside/outsideRchGrpView.jsp" location="3950,6350" dimension="202,51" />
+  <StrutsActivity path="/outside/outsideRchView.jsp" location="2840,4362" dimension="183,51" />
+  <StrutsActivity path="/outside/outsideHiddenPage.jsp" location="1823,3486" dimension="202,51" />
+  <StrutsActivity path="/outside/outsideReqView.jsp" location="3182,4362" dimension="183,51" />
+  <StrutsActivity path="/workplan/workplanList.jsp" location="3950,2750" dimension="175,51" />
+  <StrutsActivity path="/workplan/workplanIframeList.jsp" location="350,3150" dimension="209,51" />
+  <StrutsActivity path="/workplan/workplanMake.jsp" location="1250,3150" dimension="186,51" />
+  <StrutsActivity path="/workplan/workplanInfoView.jsp" location="50,5650" dimension="204,51" />
+  <StrutsActivity path="/workplan/workResultList.jsp" location="6350,3650" dimension="184,51" />
+  <StrutsActivity path="/workplan/workResultView.jsp" location="6350,3850" dimension="192,51" />
+  <StrutsActivity path="/workplan/workplanframeList.jsp" location="4250,2750" dimension="206,51" />
+  <StrutsActivity path="/workplan/MyJsp.jsp" location="5450,3050" dimension="141,51" />
+  <StrutsActivity path="/collmakedoc/formatCustomAtt.jsp" location="459,3778" dimension="221,51" />
+  <StrutsActivity path="/ldapMonitoring/ldapMonitoring.jsp" location="4850,1850" dimension="225,51" />
+  <StrutsActivity path="/systemLogMonitoring/systemLogMonitoring.jsp" location="2450,1950" dimension="293,51" />
+  <StrutsActivity path="/systemLogMonitoring/systemLogDetailMonitoring.jsp" location="50,2050" dimension="324,51" />
+  <StrutsActivity path="/approval/approvalList.jsp" location="4383,2072" dimension="169,51" />
+  <StrutsActivity path="/approval/appDocInfo.jsp" location="3909,1898" dimension="168,51" />
+  <StrutsActivity path="/approval/appTreatView.jsp" location="4208,4362" dimension="177,51" />
+  <StrutsActivity path="/approval/appFormatView.jsp" location="556,2072" dimension="189,51" />
+  <StrutsActivity path="/apprcomp/apprCompList.jsp" location="1885,4070" dimension="189,51" />
+  <StrutsActivity path="/apprcomp/appComDocInfo.jsp" location="1248,3778" dimension="203,51" />
+  <StrutsActivity path="/apprcomp/appCompTreatView.jsp" location="4646,3778" dimension="219,51" />
+  <StrutsActivity path="/apprcomp/appCompFormatView.jsp" location="3427,1584" dimension="231,51" />
+  <StrutsActivity path="/ssocount/ecount.jsp" location="4061,3486" dimension="144,51" />
+  <StrutsActivity path="/exhibit/workplanframeList.jsp" location="50,2550" dimension="193,51" />
+  <StrutsActivity path="/workplan/workplanFormatView.jsp" location="50,3150" dimension="221,51" />
+  <StrutsActivity path="/streetCityListAction.do" location="6350,3050" dimension="291,96" />
+  <StrutsActivity path="/streetAddrListAction.do" />
+  <StrutsTransition id="/colldocAppRep.do,colldocList,/colldocList.do,1" routingType="0">
+    <AutomaticBendpoints>
+      <AbsolutePoint location="1237,2264" />
+      <AbsolutePoint location="1237,2364" />
+    </AutomaticBendpoints>
+  </StrutsTransition>
+  <StrutsTransition id="/loginYN.do,loginGpki,/login/loginGpki.jsp,1" routingType="0">
+    <AutomaticBendpoints>
+      <AbsolutePoint location="3186,292" />
+      <AbsolutePoint location="3186,815" />
+      <AbsolutePoint location="4678,815" />
+      <AbsolutePoint location="4678,1795" />
+      <AbsolutePoint location="6050,1795" />
+    </AutomaticBendpoints>
+  </StrutsTransition>
+  <StrutsTransition id="/chrgUnitDB.do,back,/chrgUnitList.do,1" routingType="0">
+    <AutomaticBendpoints>
+      <AbsolutePoint location="3457,2264" />
+      <AbsolutePoint location="3457,2364" />
+    </AutomaticBendpoints>
+  </StrutsTransition>
+  <StrutsTransition id="/deliveryCollDocInfoView.do,colldocinfo,/delivery/deliveryCollDocInfo.jsp,1" routingType="0">
+    <AutomaticBendpoints>
+      <AbsolutePoint location="959,3678" />
+      <AbsolutePoint location="959,3778" />
+    </AutomaticBendpoints>
+  </StrutsTransition>
+  <StrutsTransition id="/grpPopup.do,mainI,/grpMgr/mainGrpInsert.jsp,1" routingType="0">
+    <AutomaticBendpoints>
+      <AbsolutePoint location="1047,3338" />
+      <AbsolutePoint location="904,3338" />
+      <AbsolutePoint location="904,3486" />
+    </AutomaticBendpoints>
+  </StrutsTransition>
+  <StrutsTransition id="/chrgUnitList.do,list,/chrgUnitMgr/chrgUnitForm.jsp,1" routingType="0">
+    <AutomaticBendpoints>
+      <AbsolutePoint location="3457,2460" />
+      <AbsolutePoint location="3457,2560" />
+    </AutomaticBendpoints>
+  </StrutsTransition>
+  <StrutsTransition id="/getUsedList.do,parentFrame,/sinchung/sinchungGetUsed.jsp,1" routingType="0">
+    <AutomaticBendpoints>
+      <AbsolutePoint location="1133,4554" />
+      <AbsolutePoint location="1133,4654" />
+    </AutomaticBendpoints>
+  </StrutsTransition>
+  <StrutsTransition id="/collcomp/formatLineView.do,formatlineview,/collcompDataView.do,1" routingType="0">
+    <AutomaticBendpoints>
+      <AbsolutePoint location="940,800" />
+      <AbsolutePoint location="940,900" />
+    </AutomaticBendpoints>
+  </StrutsTransition>
+  <StrutsTransition id="/researchGrpView.do,view,/research/researchGrpView.jsp,1" routingType="0">
+    <AutomaticBendpoints>
+      <AbsolutePoint location="6357,4298" />
+      <AbsolutePoint location="6447,4298" />
+      <AbsolutePoint location="6447,6476" />
+      <AbsolutePoint location="3446,6476" />
+      <AbsolutePoint location="3446,6301" />
+    </AutomaticBendpoints>
+  </StrutsTransition>
+  <StrutsTransition id="/researchView.do,rchview,/research/researchView.jsp,1" routingType="0">
+    <AutomaticBendpoints>
+      <AbsolutePoint location="4993,996" />
+      <AbsolutePoint location="4993,1096" />
+    </AutomaticBendpoints>
+  </StrutsTransition>
+  <StrutsTransition id="/deliveryCompList.do,list,/delicomp/deliCompList.jsp,1" routingType="0">
+    <AutomaticBendpoints>
+      <AbsolutePoint location="5191,3970" />
+      <AbsolutePoint location="5191,4070" />
+    </AutomaticBendpoints>
+  </StrutsTransition>
+  <StrutsTransition id="/workplanList.do,list,/workplan/workplanList.jsp,1" routingType="0">
+    <AutomaticBendpoints>
+      <AbsolutePoint location="4394,5646" />
+      <AbsolutePoint location="4394,5776" />
+      <AbsolutePoint location="6769,5776" />
+      <AbsolutePoint location="6769,3431" />
+      <AbsolutePoint location="4037,3431" />
+      <AbsolutePoint location="4037,2801" />
+    </AutomaticBendpoints>
+  </StrutsTransition>
+  <StrutsTransition id="/inpCompFrmBookModifyView.do,modifybookview,/inputcomp/inputCompDetailModify.jsp,1" routingType="0">
+    <AutomaticBendpoints>
+      <AbsolutePoint location="1989,3094" />
+      <AbsolutePoint location="1989,3219" />
+      <AbsolutePoint location="2355,3219" />
+    </AutomaticBendpoints>
+  </StrutsTransition>
+  <StrutsTransition id="/formatGetCommFrame.do,formatGetCommFrame,/collmakedoc/formatGetCommFrame.jsp,1" routingType="0">
+    <AutomaticBendpoints>
+      <AbsolutePoint location="2879,3678" />
+      <AbsolutePoint location="2879,3778" />
+    </AutomaticBendpoints>
+  </StrutsTransition>
+  <StrutsTransition id="/collcomp/DataBookCompDelete.do,hiddenframe,/collcomp/collcompHiddenAttFile.jsp,1" routingType="0">
+    <AutomaticBendpoints>
+      <AbsolutePoint location="4279,3094" />
+      <AbsolutePoint location="4279,3219" />
+      <AbsolutePoint location="3947,3219" />
+    </AutomaticBendpoints>
+  </StrutsTransition>
+  <StrutsTransition id="/researchGrpGetUsed.do,list,/research/researchGrpGetUsed.jsp,1" routingType="0">
+    <AutomaticBendpoints>
+      <AbsolutePoint location="5750,3698" />
+      <AbsolutePoint location="5359,3698" />
+      <AbsolutePoint location="5359,4065" />
+      <AbsolutePoint location="5933,4065" />
+      <AbsolutePoint location="5933,4569" />
+      <AbsolutePoint location="6290,4569" />
+      <AbsolutePoint location="6290,4795" />
+      <AbsolutePoint location="6587,4795" />
+      <AbsolutePoint location="6587,6506" />
+      <AbsolutePoint location="2855,6506" />
+      <AbsolutePoint location="2855,6301" />
+    </AutomaticBendpoints>
+  </StrutsTransition>
+  <StrutsTransition id="/formatGetUsedFrame.do,formatGetUsedFrame,/collmakedoc/formatGetUsedFrame.jsp,1" routingType="0">
+    <AutomaticBendpoints>
+      <AbsolutePoint location="161,3970" />
+      <AbsolutePoint location="161,4070" />
+    </AutomaticBendpoints>
+  </StrutsTransition>
+  <StrutsTransition id="/fileBookFrame.do,fileBookFrame,/collmakedoc/fileBookFrame.jsp,1" routingType="0">
+    <AutomaticBendpoints>
+      <AbsolutePoint location="2051,2460" />
+      <AbsolutePoint location="2051,2560" />
+    </AutomaticBendpoints>
+  </StrutsTransition>
+  <StrutsTransition id="/collprocDataView.do,formatview,/collproc/collprocFormatView.jsp,1" routingType="0">
+    <AutomaticBendpoints>
+      <AbsolutePoint location="1587,508" />
+      <AbsolutePoint location="1587,608" />
+    </AutomaticBendpoints>
+  </StrutsTransition>
+  <StrutsTransition id="/outsideReqView.do,hidden,/outside/outsideHiddenPage.jsp,1" routingType="0">
+    <AutomaticBendpoints>
+      <AbsolutePoint location="3245,4166" />
+      <AbsolutePoint location="3245,3865" />
+      <AbsolutePoint location="2325,3865" />
+      <AbsolutePoint location="2325,3511" />
+      <AbsolutePoint location="2025,3511" />
+    </AutomaticBendpoints>
+  </StrutsTransition>
+  <StrutsTransition id="/attrList.do,list,/attrMgr/attrForm.jsp,1" routingType="0">
+    <AutomaticBendpoints>
+      <AbsolutePoint location="5312,2460" />
+      <AbsolutePoint location="5312,2560" />
+    </AutomaticBendpoints>
+  </StrutsTransition>
+  <StrutsTransition id="/collprocInfoSave.do,collprocinfosave,/collprocInfoView.do,1" routingType="0">
+    <AutomaticBendpoints>
+      <AbsolutePoint location="2728,96" />
+      <AbsolutePoint location="2728,216" />
+    </AutomaticBendpoints>
+  </StrutsTransition>
+  <StrutsTransition id="/collcomp/formatBookView.do,formatbookview,/collcompDataView.do,1" routingType="0">
+    <AutomaticBendpoints>
+      <AbsolutePoint location="1712,800" />
+      <AbsolutePoint location="1712,935" />
+      <AbsolutePoint location="1238,935" />
+    </AutomaticBendpoints>
+  </StrutsTransition>
+  <StrutsTransition id="/collprocInfoView.do,collprocinfoview,/collproc/collprocInfoView.jsp,1" routingType="0">
+    <AutomaticBendpoints>
+      <AbsolutePoint location="2653,312" />
+      <AbsolutePoint location="2653,434" />
+    </AutomaticBendpoints>
+  </StrutsTransition>
+  <StrutsTransition id="/attrDB.do,back,/attrList.do,1" routingType="0">
+    <AutomaticBendpoints>
+      <AbsolutePoint location="5312,2264" />
+      <AbsolutePoint location="5312,2364" />
+    </AutomaticBendpoints>
+  </StrutsTransition>
+  <StrutsTransition id="/outsideRchView.do,view,/outside/outsideRchView.jsp,1" routingType="0">
+    <AutomaticBendpoints>
+      <AbsolutePoint location="2931,4262" />
+      <AbsolutePoint location="2931,4362" />
+    </AutomaticBendpoints>
+  </StrutsTransition>
+  <StrutsTransition id="/collprocList.do,list,/collproc/collprocList.jsp,1" routingType="0">
+    <AutomaticBendpoints>
+      <AbsolutePoint location="136,312" />
+      <AbsolutePoint location="136,434" />
+    </AutomaticBendpoints>
+  </StrutsTransition>
+  <StrutsTransition id="/formatMake.do,formatMake,/collmakedoc/formatMake.jsp,1" routingType="0">
+    <AutomaticBendpoints>
+      <AbsolutePoint location="3717,4554" />
+      <AbsolutePoint location="3717,4654" />
+    </AutomaticBendpoints>
+  </StrutsTransition>
+  <StrutsTransition id="/inputLineDataDel.do,hiddenframe,/inputing/inputHiddenPage.jsp,1" routingType="0">
+    <AutomaticBendpoints>
+      <AbsolutePoint location="2840,2752" />
+      <AbsolutePoint location="2840,2767" />
+      <AbsolutePoint location="2013,2767" />
+      <AbsolutePoint location="2013,2902" />
+    </AutomaticBendpoints>
+  </StrutsTransition>
+  <StrutsTransition id="/inpCompLineDataSave.do,hiddenframe,/inputcomp/inputCompHiddenPage.jsp,1" routingType="0">
+    <AutomaticBendpoints>
+      <AbsolutePoint location="983,3094" />
+      <AbsolutePoint location="983,3194" />
+    </AutomaticBendpoints>
+  </StrutsTransition>
+  <StrutsTransition id="/ssocount.do,loginok,/loginOK.do,1" routingType="0">
+    <AutomaticBendpoints>
+      <AbsolutePoint location="3845,96" />
+      <AbsolutePoint location="3845,196" />
+    </AutomaticBendpoints>
+  </StrutsTransition>
+  <StrutsTransition id="/outsideRchAns.do,hidden,/outside/outsideHiddenPage.jsp,1" routingType="0">
+    <AutomaticBendpoints>
+      <AbsolutePoint location="1838,3386" />
+      <AbsolutePoint location="1838,3486" />
+    </AutomaticBendpoints>
+  </StrutsTransition>
+  <StrutsTransition id="/chgMgr.do,view,/mgrmanager/chgmgr.jsp,1" routingType="0">
+    <AutomaticBendpoints>
+      <AbsolutePoint location="4104,2460" />
+      <AbsolutePoint location="4104,2560" />
+    </AutomaticBendpoints>
+  </StrutsTransition>
+  <StrutsTransition id="/researchParticiList.do,list,/research/researchParticiList.jsp,1" routingType="0">
+    <AutomaticBendpoints>
+      <AbsolutePoint location="3775,3970" />
+      <AbsolutePoint location="3775,4070" />
+    </AutomaticBendpoints>
+  </StrutsTransition>
+  <StrutsTransition id="/doIfr.do,list,/sinchung/doIfr.jsp,1" routingType="0">
+    <AutomaticBendpoints>
+      <AbsolutePoint location="2564,4846" />
+      <AbsolutePoint location="2564,4946" />
+    </AutomaticBendpoints>
+  </StrutsTransition>
+  <StrutsTransition id="/exhibitInfoView.do,view,/exhibit/exhibitInfoView.jsp,1" routingType="0">
+    <AutomaticBendpoints>
+      <AbsolutePoint location="5648,4262" />
+      <AbsolutePoint location="5648,4362" />
+    </AutomaticBendpoints>
+  </StrutsTransition>
+  <StrutsTransition id="/commrchothertarget.do,commrchothertarget,/common/commrchothertarget.jsp,1" routingType="0">
+    <AutomaticBendpoints>
+      <AbsolutePoint location="5450,598" />
+      <AbsolutePoint location="5316,598" />
+      <AbsolutePoint location="5316,865" />
+      <AbsolutePoint location="4708,865" />
+      <AbsolutePoint location="4708,1825" />
+      <AbsolutePoint location="6125,1825" />
+      <AbsolutePoint location="6125,2575" />
+      <AbsolutePoint location="5400,2575" />
+      <AbsolutePoint location="5400,3209" />
+      <AbsolutePoint location="6107,3209" />
+      <AbsolutePoint location="6107,4015" />
+      <AbsolutePoint location="5993,4015" />
+      <AbsolutePoint location="5993,4599" />
+      <AbsolutePoint location="-105,4599" />
+      <AbsolutePoint location="-105,5875" />
+      <AbsolutePoint location="4250,5875" />
+    </AutomaticBendpoints>
+  </StrutsTransition>
+  <StrutsTransition id="/formDel.do,list,/formList.do,1" routingType="0">
+    <AutomaticBendpoints>
+      <AbsolutePoint location="970,1288" />
+      <AbsolutePoint location="970,1388" />
+    </AutomaticBendpoints>
+  </StrutsTransition>
+  <StrutsTransition id="/outsideRchGrpView.do,view,/outside/outsideRchGrpView.jsp,1" routingType="0">
+    <AutomaticBendpoints>
+      <AbsolutePoint location="1108,5646" />
+      <AbsolutePoint location="1108,6375" />
+      <AbsolutePoint location="3950,6375" />
+    </AutomaticBendpoints>
+  </StrutsTransition>
+  <StrutsTransition id="/noticeView.do,view,/mgrnotice/noticeView.jsp,1" routingType="0">
+    <AutomaticBendpoints>
+      <AbsolutePoint location="5292,4554" />
+      <AbsolutePoint location="5292,4654" />
+    </AutomaticBendpoints>
+  </StrutsTransition>
+  <StrutsTransition id="/inputCompTreatView.do,incomptreatview,/inputcomp/inputCompTreatView.jsp,1" routingType="0">
+    <AutomaticBendpoints>
+      <AbsolutePoint location="4382,3678" />
+      <AbsolutePoint location="4382,3778" />
+    </AutomaticBendpoints>
+  </StrutsTransition>
+  <StrutsTransition id="/hwpDownload.do,formatToHwp,/common/formatToHwp.jsp,1" routingType="0">
+    <AutomaticBendpoints>
+      <AbsolutePoint location="132,4846" />
+      <AbsolutePoint location="132,4946" />
+    </AutomaticBendpoints>
+  </StrutsTransition>
+  <StrutsTransition id="/attrPopup.do,main,/attrMgr/mainAttrModify.jsp,1" routingType="0">
+    <AutomaticBendpoints>
+      <AbsolutePoint location="3725,3386" />
+      <AbsolutePoint location="3725,3486" />
+    </AutomaticBendpoints>
+  </StrutsTransition>
+  <StrutsTransition id="/collproc/formatLineView.do,formatlineview,/collprocDataView.do,1" routingType="0">
+    <AutomaticBendpoints>
+      <AbsolutePoint location="1449,312" />
+      <AbsolutePoint location="1449,412" />
+    </AutomaticBendpoints>
+  </StrutsTransition>
+  <StrutsTransition id="/xlsUploadFrame.do,xlsUploadFrame,/inputing/xlsUploadFrame.jsp,1" routingType="0">
+    <AutomaticBendpoints>
+      <AbsolutePoint location="4974,4262" />
+      <AbsolutePoint location="4974,4362" />
+    </AutomaticBendpoints>
+  </StrutsTransition>
+  <StrutsTransition id="/deliCompFormatBookView.do,compdetailview,/deliCompDetailView.do,1" routingType="0">
+    <AutomaticBendpoints>
+      <AbsolutePoint location="4922,1288" />
+      <AbsolutePoint location="4922,1388" />
+    </AutomaticBendpoints>
+  </StrutsTransition>
+  <StrutsTransition id="/inputingComplete.do,returnlist,/inputingList.do,1" routingType="0">
+    <AutomaticBendpoints>
+      <AbsolutePoint location="504,2264" />
+      <AbsolutePoint location="504,2364" />
+    </AutomaticBendpoints>
+  </StrutsTransition>
+  <StrutsTransition id="/noticeList.do,list,/mgrnotice/noticeList.jsp,1" routingType="0">
+    <AutomaticBendpoints>
+      <AbsolutePoint location="4725,2460" />
+      <AbsolutePoint location="4725,2560" />
+    </AutomaticBendpoints>
+  </StrutsTransition>
+  <StrutsTransition id="/formatCommFrameMgr.do,formatCommFrameMgr,/collmakedoc/formatCommFrameMgr.jsp,1" routingType="0">
+    <AutomaticBendpoints>
+      <AbsolutePoint location="2120,3678" />
+      <AbsolutePoint location="2120,3778" />
+    </AutomaticBendpoints>
+  </StrutsTransition>
+  <StrutsTransition id="/loginRchReqYN.do,loginGpkiRchReq,/login/loginGpkiRchReq.jsp,1" routingType="0">
+    <AutomaticBendpoints>
+      <AbsolutePoint location="4840,261" />
+      <AbsolutePoint location="6709,261" />
+      <AbsolutePoint location="6709,1661" />
+      <AbsolutePoint location="1043,1661" />
+      <AbsolutePoint location="1043,1850" />
+    </AutomaticBendpoints>
+  </StrutsTransition>
+  <StrutsTransition id="/loginRchReqOK.do,backGpki,/login/loginGpkiRchReq.jsp,1" routingType="0">
+    <AutomaticBendpoints>
+      <AbsolutePoint location="4314,292" />
+      <AbsolutePoint location="4314,357" />
+      <AbsolutePoint location="-135,357" />
+      <AbsolutePoint location="-135,1725" />
+      <AbsolutePoint location="1013,1725" />
+      <AbsolutePoint location="1013,1850" />
+    </AutomaticBendpoints>
+  </StrutsTransition>
+  <StrutsTransition id="/usrMgrFrame1.do,frame1,/usrMgr/usrMgrFrame1.jsp,1" routingType="0">
+    <AutomaticBendpoints>
+      <AbsolutePoint location="5750,2309" />
+      <AbsolutePoint location="2594,2309" />
+      <AbsolutePoint location="2594,2850" />
+    </AutomaticBendpoints>
+  </StrutsTransition>
+  <StrutsTransition id="/inputDataBookDelete.do,hiddenframe,/inputing/inputHiddenPage.jsp,1" routingType="0">
+    <AutomaticBendpoints>
+      <AbsolutePoint location="1544,2752" />
+      <AbsolutePoint location="1544,2927" />
+      <AbsolutePoint location="1885,2927" />
+    </AutomaticBendpoints>
+  </StrutsTransition>
+  <StrutsTransition id="/researchGrpMyList.do,list,/research/researchGrpMyList.jsp,1" routingType="0">
+    <AutomaticBendpoints>
+      <AbsolutePoint location="6066,3468" />
+      <AbsolutePoint location="6739,3468" />
+      <AbsolutePoint location="6739,6176" />
+      <AbsolutePoint location="2550,6176" />
+      <AbsolutePoint location="2550,6250" />
+    </AutomaticBendpoints>
+  </StrutsTransition>
+  <StrutsTransition id="/usrMgrFrame3.do,frame3_1,/usrMgr/usrMgrFrame3_1.jsp,1" routingType="0">
+    <AutomaticBendpoints>
+      <AbsolutePoint location="5750,2505" />
+      <AbsolutePoint location="4612,2505" />
+      <AbsolutePoint location="4612,2968" />
+      <AbsolutePoint location="3443,2968" />
+      <AbsolutePoint location="3443,2901" />
+    </AutomaticBendpoints>
+  </StrutsTransition>
+  <StrutsTransition id="/reqModify.do,modify,/sinchung/sinchungModify.jsp,1" routingType="0">
+    <AutomaticBendpoints>
+      <AbsolutePoint location="4486,3970" />
+      <AbsolutePoint location="4486,4070" />
+    </AutomaticBendpoints>
+  </StrutsTransition>
+  <StrutsTransition id="/researchWrite.do,write,/research/researchView.jsp,1" routingType="0">
+    <AutomaticBendpoints>
+      <AbsolutePoint location="5136,996" />
+      <AbsolutePoint location="5136,1096" />
+    </AutomaticBendpoints>
+  </StrutsTransition>
+  <StrutsTransition id="/inputsttcsList.do,list,/mgrstat/inputsttcsList.jsp,1" routingType="0">
+    <AutomaticBendpoints>
+      <AbsolutePoint location="477,4554" />
+      <AbsolutePoint location="477,4654" />
+    </AutomaticBendpoints>
+  </StrutsTransition>
+  <StrutsTransition id="/researchIndividualToXls.do,xls,/research/researchIndividualToXls.jsp,1" routingType="0">
+    <AutomaticBendpoints>
+      <AbsolutePoint location="5750,3265" />
+      <AbsolutePoint location="4902,3265" />
+      <AbsolutePoint location="4902,3865" />
+      <AbsolutePoint location="4302,3865" />
+      <AbsolutePoint location="4302,4328" />
+      <AbsolutePoint location="4504,4328" />
+      <AbsolutePoint location="4504,4720" />
+      <AbsolutePoint location="5612,4720" />
+      <AbsolutePoint location="5612,4925" />
+      <AbsolutePoint location="-15,4925" />
+      <AbsolutePoint location="-15,6275" />
+      <AbsolutePoint location="2150,6275" />
+    </AutomaticBendpoints>
+  </StrutsTransition>
+  <StrutsTransition id="/collcompProcess.do,collcompinfoview,/collcompInfoView.do,1" routingType="0">
+    <AutomaticBendpoints>
+      <AbsolutePoint location="369,800" />
+      <AbsolutePoint location="369,900" />
+    </AutomaticBendpoints>
+  </StrutsTransition>
+  <StrutsTransition id="/exhibitList.do,list,/exhibit/exhibitList.jsp,1" routingType="0">
+    <AutomaticBendpoints>
+      <AbsolutePoint location="1084,4846" />
+      <AbsolutePoint location="1084,4946" />
+    </AutomaticBendpoints>
+  </StrutsTransition>
+  <StrutsTransition id="/codePopup.do,main,/ccdMgr/mainCodeModify.jsp,1" routingType="0">
+    <AutomaticBendpoints>
+      <AbsolutePoint location="3211,3386" />
+      <AbsolutePoint location="3211,3486" />
+    </AutomaticBendpoints>
+  </StrutsTransition>
+  <StrutsTransition id="/dataSave.do,hidden,/sinchung/sinchungHiddenPage.jsp,1" routingType="0">
+    <AutomaticBendpoints>
+      <AbsolutePoint location="4667,4554" />
+      <AbsolutePoint location="4667,4654" />
+    </AutomaticBendpoints>
+  </StrutsTransition>
+  <StrutsTransition id="/usrMgr.do,mainframe,/usrMgr/usrMgr.jsp,1" routingType="0">
+    <AutomaticBendpoints>
+      <AbsolutePoint location="5750,2098" />
+      <AbsolutePoint location="5528,2098" />
+      <AbsolutePoint location="5528,2279" />
+      <AbsolutePoint location="2279,2279" />
+      <AbsolutePoint location="2279,2575" />
+      <AbsolutePoint location="2192,2575" />
+      <AbsolutePoint location="2192,2850" />
+    </AutomaticBendpoints>
+  </StrutsTransition>
+  <StrutsTransition id="/systemAgentRuntimeDelete.do,delete_ok,/systemAgentRuntime.do,1" routingType="0">
+    <AutomaticBendpoints>
+      <AbsolutePoint location="5555,1776" />
+      <AbsolutePoint location="5555,1876" />
+    </AutomaticBendpoints>
+  </StrutsTransition>
+  <StrutsTransition id="/workplanDelEnd.do,list,/workplanList.do,1" routingType="0">
+    <AutomaticBendpoints>
+      <AbsolutePoint location="6659,2198" />
+      <AbsolutePoint location="6709,2198" />
+      <AbsolutePoint location="6709,5716" />
+      <AbsolutePoint location="4424,5716" />
+      <AbsolutePoint location="4424,5646" />
+    </AutomaticBendpoints>
+  </StrutsTransition>
+  <StrutsTransition id="/loginRchReqYN.do,loginRchReq,/login/loginRchReq.jsp,1" routingType="0">
+    <AutomaticBendpoints>
+      <AbsolutePoint location="4602,292" />
+      <AbsolutePoint location="4602,414" />
+    </AutomaticBendpoints>
+  </StrutsTransition>
+  <StrutsTransition id="/systemAgentRuntimeWriteForm.do,view,/agent/systemAgentRuntimeWriteForm.jsp,1" routingType="0">
+    <AutomaticBendpoints>
+      <AbsolutePoint location="4693,3386" />
+      <AbsolutePoint location="4693,3486" />
+    </AutomaticBendpoints>
+  </StrutsTransition>
+  <StrutsTransition id="/collproc/formatLineOtherDeptDataView.do,formatlineview,/collproc/collprocFormatOtherDeptDataView.jsp,1" routingType="0">
+    <AutomaticBendpoints>
+      <AbsolutePoint location="5150,1373" />
+      <AbsolutePoint location="4567,1373" />
+      <AbsolutePoint location="4567,2505" />
+      <AbsolutePoint location="-75,2505" />
+      <AbsolutePoint location="-75,5975" />
+      <AbsolutePoint location="1550,5975" />
+    </AutomaticBendpoints>
+  </StrutsTransition>
+  <StrutsTransition id="/collcompProcess.do,collcompdataview,/collcompDataView.do,1" routingType="0">
+    <AutomaticBendpoints>
+      <AbsolutePoint location="399,800" />
+      <AbsolutePoint location="399,865" />
+      <AbsolutePoint location="1081,865" />
+      <AbsolutePoint location="1081,900" />
+    </AutomaticBendpoints>
+  </StrutsTransition>
+  <StrutsTransition id="/systemAgentRuntimeWrite.do,write_ok,/systemAgentRuntime.do,1" routingType="0">
+    <AutomaticBendpoints>
+      <AbsolutePoint location="5268,1776" />
+      <AbsolutePoint location="5268,1876" />
+    </AutomaticBendpoints>
+  </StrutsTransition>
+  <StrutsTransition id="/rchsttcsList.do,list,/mgrstat/rchsttcsList.jsp,1" routingType="0">
+    <AutomaticBendpoints>
+      <AbsolutePoint location="2432,4554" />
+      <AbsolutePoint location="2432,4654" />
+    </AutomaticBendpoints>
+  </StrutsTransition>
+  <StrutsTransition id="/codePopup.do,sub,/ccdMgr/subCodeModify.jsp,1" routingType="0">
+    <AutomaticBendpoints>
+      <AbsolutePoint location="3341,3386" />
+      <AbsolutePoint location="3341,3486" />
+    </AutomaticBendpoints>
+  </StrutsTransition>
+  <StrutsTransition id="/formatBookPreview.do,formatBookPreview,/collmakedoc/formatBookPreview.jsp,1" routingType="0">
+    <AutomaticBendpoints>
+      <AbsolutePoint location="1737,3678" />
+      <AbsolutePoint location="1737,3778" />
+    </AutomaticBendpoints>
+  </StrutsTransition>
+  <StrutsTransition id="/outsideRchResultView.do,result,/research/researchResult.jsp,1" routingType="0">
+    <AutomaticBendpoints>
+      <AbsolutePoint location="3197,5550" />
+      <AbsolutePoint location="3197,5435" />
+      <AbsolutePoint location="6507,5435" />
+      <AbsolutePoint location="6507,4428" />
+      <AbsolutePoint location="4635,4428" />
+      <AbsolutePoint location="4635,4413" />
+    </AutomaticBendpoints>
+  </StrutsTransition>
+  <StrutsTransition id="/researchAns.do,hidden,/research/researchHiddenPage.jsp,1" routingType="0">
+    <AutomaticBendpoints>
+      <AbsolutePoint location="806,4554" />
+      <AbsolutePoint location="806,4654" />
+    </AutomaticBendpoints>
+  </StrutsTransition>
+  <StrutsTransition id="/researchIndividualToHwp.do,hwp,/research/researchIndividualToHwp.jsp,1" routingType="0">
+    <AutomaticBendpoints>
+      <AbsolutePoint location="176,3678" />
+      <AbsolutePoint location="176,3778" />
+    </AutomaticBendpoints>
+  </StrutsTransition>
+  <StrutsTransition id="/deliveryUserMgrDB.do,list,/deliveryUserMgr.do,1" routingType="0">
+    <AutomaticBendpoints>
+      <AbsolutePoint location="3950,1798" />
+      <AbsolutePoint location="650,1798" />
+    </AutomaticBendpoints>
+  </StrutsTransition>
+  <StrutsTransition id="/collcomp/formatFixedView.do,formatfixedview,/collcompDataView.do,1" routingType="0">
+    <AutomaticBendpoints>
+      <AbsolutePoint location="1223,800" />
+      <AbsolutePoint location="1223,900" />
+    </AutomaticBendpoints>
+  </StrutsTransition>
+  <StrutsTransition id="/deliCompFormatFixedView.do,compdetailview,/deliCompDetailView.do,1" routingType="0">
+    <AutomaticBendpoints>
+      <AbsolutePoint location="5402,1288" />
+      <AbsolutePoint location="5402,1303" />
+      <AbsolutePoint location="4952,1303" />
+      <AbsolutePoint location="4952,1388" />
+    </AutomaticBendpoints>
+  </StrutsTransition>
+  <StrutsTransition id="/collprocIfrView.do,collprocifrview,/collproc/collprocIfrView.jsp,1" routingType="0">
+    <AutomaticBendpoints>
+      <AbsolutePoint location="5312,4262" />
+      <AbsolutePoint location="5312,4362" />
+    </AutomaticBendpoints>
+  </StrutsTransition>
+  <StrutsTransition id="/commapproval/designate.do,designate,/common/commapproval_designate.jsp,1" routingType="0">
+    <AutomaticBendpoints>
+      <AbsolutePoint location="1201,4262" />
+      <AbsolutePoint location="1201,4362" />
+    </AutomaticBendpoints>
+  </StrutsTransition>
+  <StrutsTransition id="/inputFixedDataDel.do,hiddenframe,/inputing/inputHiddenPage.jsp,1" routingType="0">
+    <AutomaticBendpoints>
+      <AbsolutePoint location="3709,2752" />
+      <AbsolutePoint location="3709,2816" />
+      <AbsolutePoint location="2043,2816" />
+      <AbsolutePoint location="2043,2902" />
+    </AutomaticBendpoints>
+  </StrutsTransition>
+  <StrutsTransition id="/attrPopup.do,sub,/attrMgr/subAttrModify.jsp,1" routingType="0">
+    <AutomaticBendpoints>
+      <AbsolutePoint location="3855,3386" />
+      <AbsolutePoint location="3855,3486" />
+    </AutomaticBendpoints>
+  </StrutsTransition>
+  <StrutsTransition id="/researchGrpClose.do,list,/researchGrpMyList.do,1" routingType="0">
+    <AutomaticBendpoints>
+      <AbsolutePoint location="6360,5098" />
+      <AbsolutePoint location="6617,5098" />
+      <AbsolutePoint location="6617,3627" />
+      <AbsolutePoint location="5908,3627" />
+      <AbsolutePoint location="5908,3546" />
+    </AutomaticBendpoints>
+  </StrutsTransition>
+  <StrutsTransition id="/workResultWrite.do,view,/workplan/workResultView.jsp,1" routingType="0">
+    <AutomaticBendpoints>
+      <AbsolutePoint location="6350,2898" />
+      <AbsolutePoint location="6137,2898" />
+      <AbsolutePoint location="6137,3716" />
+      <AbsolutePoint location="6446,3716" />
+      <AbsolutePoint location="6446,3850" />
+    </AutomaticBendpoints>
+  </StrutsTransition>
+  <StrutsTransition id="/colldocFormView.do,colldocFormView,/collmakedoc/colldocFormView.jsp,1" routingType="0">
+    <AutomaticBendpoints>
+      <AbsolutePoint location="2773,2460" />
+      <AbsolutePoint location="2773,2560" />
+    </AutomaticBendpoints>
+  </StrutsTransition>
+  <StrutsTransition id="/collprocCloseView.do,collproccloseview,/collproc/collprocCloseView.jsp,1" routingType="0">
+    <AutomaticBendpoints>
+      <AbsolutePoint location="4132,3970" />
+      <AbsolutePoint location="4132,4070" />
+    </AutomaticBendpoints>
+  </StrutsTransition>
+  <StrutsTransition id="/researchGetUsed.do,list,/research/researchGetUsed.jsp,1" routingType="0">
+    <AutomaticBendpoints>
+      <AbsolutePoint location="5542,3970" />
+      <AbsolutePoint location="5542,4070" />
+    </AutomaticBendpoints>
+  </StrutsTransition>
+  <StrutsTransition id="/ssocontrol.do,loginok,/loginOK.do,1" routingType="0">
+    <AutomaticBendpoints>
+      <AbsolutePoint location="3631,96" />
+      <AbsolutePoint location="3631,196" />
+    </AutomaticBendpoints>
+  </StrutsTransition>
+  <StrutsTransition id="/colldocMake.do,colldocInfoView,/collmakedoc/colldocInfoView.jsp,1" routingType="0">
+    <AutomaticBendpoints>
+      <AbsolutePoint location="2745,3386" />
+      <AbsolutePoint location="2745,3486" />
+    </AutomaticBendpoints>
+  </StrutsTransition>
+  <StrutsTransition id="/researchResult.do,result,/research/researchResult.jsp,1" routingType="0">
+    <AutomaticBendpoints>
+      <AbsolutePoint location="4636,4262" />
+      <AbsolutePoint location="4636,4362" />
+    </AutomaticBendpoints>
+  </StrutsTransition>
+  <StrutsTransition id="/deliveryDetailView.do,detailview,/delivery/deliveryDetailView.jsp,1" routingType="0">
+    <AutomaticBendpoints>
+      <AbsolutePoint location="1999,1972" />
+      <AbsolutePoint location="1999,2072" />
+    </AutomaticBendpoints>
+  </StrutsTransition>
+  <StrutsTransition id="/sancView.do,view,/sinchung/sancView.jsp,1" routingType="0">
+    <AutomaticBendpoints>
+      <AbsolutePoint location="4035,4554" />
+      <AbsolutePoint location="4035,4654" />
+    </AutomaticBendpoints>
+  </StrutsTransition>
+  <StrutsTransition id="/researchMyList.do,list,/research/researchMyList.jsp,1" routingType="0">
+    <AutomaticBendpoints>
+      <AbsolutePoint location="4238,996" />
+      <AbsolutePoint location="4238,1096" />
+    </AutomaticBendpoints>
+  </StrutsTransition>
+  <StrutsTransition id="/gpkiRegistration.do,gpkiRegistration,/include/gpkiRegistration.jsp,1" routingType="0">
+    <AutomaticBendpoints>
+      <AbsolutePoint location="4371,50" />
+      <AbsolutePoint location="4371,-75" />
+      <AbsolutePoint location="-45,-75" />
+      <AbsolutePoint location="-45,1875" />
+      <AbsolutePoint location="50,1875" />
+    </AutomaticBendpoints>
+  </StrutsTransition>
+  <StrutsTransition id="/workResultView.do,view,/workplan/workResultView.jsp,1" routingType="0">
+    <AutomaticBendpoints>
+      <AbsolutePoint location="6503,2446" />
+      <AbsolutePoint location="6503,2767" />
+      <AbsolutePoint location="6227,2767" />
+      <AbsolutePoint location="6227,3875" />
+      <AbsolutePoint location="6350,3875" />
+    </AutomaticBendpoints>
+  </StrutsTransition>
+  <StrutsTransition id="/collprocProcess.do,collprocinfoview,/collprocInfoView.do,1" routingType="0">
+    <AutomaticBendpoints>
+      <AbsolutePoint location="1512,35" />
+      <AbsolutePoint location="2052,35" />
+      <AbsolutePoint location="2052,264" />
+      <AbsolutePoint location="2502,264" />
+    </AutomaticBendpoints>
+  </StrutsTransition>
+  <StrutsTransition id="/researchPreview.do,preview,/research/researchPreview.jsp,1" routingType="0">
+    <AutomaticBendpoints>
+      <AbsolutePoint location="1549,4262" />
+      <AbsolutePoint location="1549,4362" />
+    </AutomaticBendpoints>
+  </StrutsTransition>
+  <StrutsTransition id="/exhibitClose.do,list,/exhibitList.do,1" routingType="0">
+    <AutomaticBendpoints>
+      <AbsolutePoint location="5750,3116" />
+      <AbsolutePoint location="-15,3116" />
+      <AbsolutePoint location="-15,4895" />
+      <AbsolutePoint location="1054,4895" />
+      <AbsolutePoint location="1054,4846" />
+    </AutomaticBendpoints>
+  </StrutsTransition>
+  <StrutsTransition id="/inputingList.do,list,/inputing/inputingList.jsp,1" routingType="0">
+    <AutomaticBendpoints>
+      <AbsolutePoint location="379,2460" />
+      <AbsolutePoint location="379,2560" />
+    </AutomaticBendpoints>
+  </StrutsTransition>
+  <StrutsTransition id="/inputDataBookSave.do,hiddenframe,/inputing/inputHiddenPage.jsp,1" routingType="0">
+    <AutomaticBendpoints>
+      <AbsolutePoint location="1100,2752" />
+      <AbsolutePoint location="1100,2816" />
+      <AbsolutePoint location="1953,2816" />
+      <AbsolutePoint location="1953,2902" />
+    </AutomaticBendpoints>
+  </StrutsTransition>
+  <StrutsTransition id="/inputFormatBookView.do,detailview,/inputingDetailView.do,1" routingType="0">
+    <AutomaticBendpoints>
+      <AbsolutePoint location="2912,800" />
+      <AbsolutePoint location="2912,900" />
+    </AutomaticBendpoints>
+  </StrutsTransition>
+  <StrutsTransition id="/formWrite.do,write,/sinchung/sinchungView.jsp,1" routingType="0">
+    <AutomaticBendpoints>
+      <AbsolutePoint location="404,1484" />
+      <AbsolutePoint location="404,1584" />
+    </AutomaticBendpoints>
+  </StrutsTransition>
+  <StrutsTransition id="/certOK.do,loginRchReq,/loginRchReqOK.do,1" routingType="0">
+    <AutomaticBendpoints>
+      <AbsolutePoint location="2278,146" />
+      <AbsolutePoint location="2278,165" />
+      <AbsolutePoint location="4314,165" />
+      <AbsolutePoint location="4314,196" />
+    </AutomaticBendpoints>
+  </StrutsTransition>
+  <StrutsTransition id="/deliveryFormatLineView.do,detailview,/deliveryDetailView.do,1" routingType="0">
+    <AutomaticBendpoints>
+      <AbsolutePoint location="1535,1776" />
+      <AbsolutePoint location="1535,1924" />
+      <AbsolutePoint location="1843,1924" />
+    </AutomaticBendpoints>
+  </StrutsTransition>
+  <StrutsTransition id="/inputTreatView.do,inputtreatview,/inputing/inputTreatView.jsp,1" routingType="0">
+    <AutomaticBendpoints>
+      <AbsolutePoint location="3615,4262" />
+      <AbsolutePoint location="3615,4362" />
+    </AutomaticBendpoints>
+  </StrutsTransition>
+  <StrutsTransition id="/myCount.do,mycount,/ssocount/myCount.jsp,1" routingType="0">
+    <AutomaticBendpoints>
+      <AbsolutePoint location="4320,3386" />
+      <AbsolutePoint location="4320,3486" />
+    </AutomaticBendpoints>
+  </StrutsTransition>
+  <StrutsTransition id="/formatBookFileAdd.do,formatBookDef,/formatBookDef.do,1" routingType="0">
+    <AutomaticBendpoints>
+      <AbsolutePoint location="1669,2264" />
+      <AbsolutePoint location="1669,2364" />
+    </AutomaticBendpoints>
+  </StrutsTransition>
+  <StrutsTransition id="/draftDocument.do,draftDocument,/elecAppr/draftDocument.jsp,1" routingType="0">
+    <AutomaticBendpoints>
+      <AbsolutePoint location="1897,4262" />
+      <AbsolutePoint location="1897,4362" />
+    </AutomaticBendpoints>
+  </StrutsTransition>
+  <StrutsTransition id="/inputCompDetailView.do,incompdetailview,/inputcomp/inputCompDetailView.jsp,1" routingType="0">
+    <AutomaticBendpoints>
+      <AbsolutePoint location="2157,1484" />
+      <AbsolutePoint location="2157,1584" />
+    </AutomaticBendpoints>
+  </StrutsTransition>
+  <StrutsTransition id="/deptManageDB.do,back,/usrMgrFrame3.do,1" routingType="0">
+    <AutomaticBendpoints>
+      <AbsolutePoint location="5916,2850" />
+      <AbsolutePoint location="5916,2546" />
+    </AutomaticBendpoints>
+  </StrutsTransition>
+  <StrutsTransition id="/myList.do,list,/sinchung/sinchungMyList.jsp,1" routingType="0">
+    <AutomaticBendpoints>
+      <AbsolutePoint location="1969,4846" />
+      <AbsolutePoint location="1969,4946" />
+    </AutomaticBendpoints>
+  </StrutsTransition>
+  <StrutsTransition id="/formView.do,view,/sinchung/sinchungView.jsp,1" routingType="0">
+    <AutomaticBendpoints>
+      <AbsolutePoint location="251,1484" />
+      <AbsolutePoint location="251,1584" />
+    </AutomaticBendpoints>
+  </StrutsTransition>
+  <StrutsTransition id="/deliveryList.do,list,/delivery/deliveryList.jsp,1" routingType="0">
+    <AutomaticBendpoints>
+      <AbsolutePoint location="3118,2460" />
+      <AbsolutePoint location="3118,2560" />
+    </AutomaticBendpoints>
+  </StrutsTransition>
+  <StrutsTransition id="/inputCompFormatBookView.do,detailview,/inputCompDetailView.do,1" routingType="0">
+    <AutomaticBendpoints>
+      <AbsolutePoint location="1676,1288" />
+      <AbsolutePoint location="1676,1431" />
+      <AbsolutePoint location="1990,1431" />
+    </AutomaticBendpoints>
+  </StrutsTransition>
+  <StrutsTransition id="/inputCompleteList.do,list,/inputcomp/inputCompleteList.jsp,1" routingType="0">
+    <AutomaticBendpoints>
+      <AbsolutePoint location="2340,3970" />
+      <AbsolutePoint location="2340,4070" />
+    </AutomaticBendpoints>
+  </StrutsTransition>
+  <StrutsTransition id="/systemAgent.do,list,/agent/systemAgent.jsp,1" routingType="0">
+    <AutomaticBendpoints>
+      <AbsolutePoint location="2420,2460" />
+      <AbsolutePoint location="2420,2560" />
+    </AutomaticBendpoints>
+  </StrutsTransition>
+  <StrutsTransition id="/inpCompFrmLineModifyView.do,modifylineview,/inputcomp/inputCompDetailModify.jsp,1" routingType="0">
+    <AutomaticBendpoints>
+      <AbsolutePoint location="2479,3094" />
+      <AbsolutePoint location="2479,3194" />
+    </AutomaticBendpoints>
+  </StrutsTransition>
+  <StrutsTransition id="/doList.do,parentFrame,/sinchung/sinchungDoList.jsp,1" routingType="0">
+    <AutomaticBendpoints>
+      <AbsolutePoint location="2269,4846" />
+      <AbsolutePoint location="2269,4946" />
+    </AutomaticBendpoints>
+  </StrutsTransition>
+  <StrutsTransition id="/exhibit/formatLineView.do,formatlineview,/exhibitDataView.do,1" routingType="0">
+    <AutomaticBendpoints>
+      <AbsolutePoint location="2854,1776" />
+      <AbsolutePoint location="2854,1924" />
+      <AbsolutePoint location="3128,1924" />
+    </AutomaticBendpoints>
+  </StrutsTransition>
+  <StrutsTransition id="/collDocNotApplicable.do,returnlist,/inputingList.do,1" routingType="0">
+    <AutomaticBendpoints>
+      <AbsolutePoint location="255,2264" />
+      <AbsolutePoint location="255,2364" />
+    </AutomaticBendpoints>
+  </StrutsTransition>
+  <StrutsTransition id="/researchGrpIfrView.do,list,/research/researchGrpIfrView.jsp,1" routingType="0">
+    <AutomaticBendpoints>
+      <AbsolutePoint location="6023,3946" />
+      <AbsolutePoint location="6023,4599" />
+      <AbsolutePoint location="6110,4599" />
+      <AbsolutePoint location="6110,5012" />
+      <AbsolutePoint location="6001,5012" />
+      <AbsolutePoint location="6001,5916" />
+      <AbsolutePoint location="3151,5916" />
+      <AbsolutePoint location="3151,6250" />
+    </AutomaticBendpoints>
+  </StrutsTransition>
+  <StrutsTransition id="/formatDel.do,colldocFormView,/colldocFormView.do,1" routingType="0">
+    <AutomaticBendpoints>
+      <AbsolutePoint location="2773,2264" />
+      <AbsolutePoint location="2773,2364" />
+    </AutomaticBendpoints>
+  </StrutsTransition>
+  <StrutsTransition id="/collprocProcess.do,formatBookView,/collproc/formatBookView.do,1" routingType="0">
+    <AutomaticBendpoints>
+      <AbsolutePoint location="1512,65" />
+      <AbsolutePoint location="1784,65" />
+      <AbsolutePoint location="1784,216" />
+    </AutomaticBendpoints>
+  </StrutsTransition>
+  <StrutsTransition id="/workResultDelete.do,list,/workResultList.do,1" routingType="0">
+    <AutomaticBendpoints>
+      <AbsolutePoint location="6664,1998" />
+      <AbsolutePoint location="6679,1998" />
+      <AbsolutePoint location="6679,1428" />
+      <AbsolutePoint location="6648,1428" />
+    </AutomaticBendpoints>
+  </StrutsTransition>
+  <StrutsTransition id="/exhibit/formatBookView.do,formatbookview,/exhibitDataView.do,1" routingType="0">
+    <AutomaticBendpoints>
+      <AbsolutePoint location="3701,1776" />
+      <AbsolutePoint location="3701,1924" />
+      <AbsolutePoint location="3422,1924" />
+    </AutomaticBendpoints>
+  </StrutsTransition>
+  <StrutsTransition id="/formatBookDef.do,formatBookDef,/collmakedoc/formatBookDef.jsp,1" routingType="0">
+    <AutomaticBendpoints>
+      <AbsolutePoint location="1669,2460" />
+      <AbsolutePoint location="1669,2560" />
+    </AutomaticBendpoints>
+  </StrutsTransition>
+  <StrutsTransition id="/workplanMake.do,workplanMake,/workplan/workplanMake.jsp,1" routingType="0">
+    <AutomaticBendpoints>
+      <AbsolutePoint location="3050,1499" />
+      <AbsolutePoint location="-75,1499" />
+      <AbsolutePoint location="-75,2409" />
+      <AbsolutePoint location="15,2409" />
+      <AbsolutePoint location="15,2968" />
+      <AbsolutePoint location="1343,2968" />
+      <AbsolutePoint location="1343,3150" />
+    </AutomaticBendpoints>
+  </StrutsTransition>
+  <StrutsTransition id="/certOK.do,login,/loginOK.do,1" routingType="0">
+    <AutomaticBendpoints>
+      <AbsolutePoint location="2386,111" />
+      <AbsolutePoint location="3738,111" />
+      <AbsolutePoint location="3738,196" />
+    </AutomaticBendpoints>
+  </StrutsTransition>
+  <StrutsTransition id="/research.do,hidden,/research/researchHiddenPage.jsp,1" routingType="0">
+    <AutomaticBendpoints>
+      <AbsolutePoint location="748,4750" />
+      <AbsolutePoint location="748,4705" />
+    </AutomaticBendpoints>
+  </StrutsTransition>
+  <StrutsTransition id="/researchGrpSave.do,view,/researchGrpView.do,1" routingType="0">
+    <AutomaticBendpoints>
+      <AbsolutePoint location="5903,4650" />
+      <AbsolutePoint location="5903,4298" />
+      <AbsolutePoint location="6050,4298" />
+    </AutomaticBendpoints>
+  </StrutsTransition>
+  <StrutsTransition id="/grpDB.do,back,/grpList.do,1" routingType="0">
+    <AutomaticBendpoints>
+      <AbsolutePoint location="4417,2264" />
+      <AbsolutePoint location="4417,2364" />
+    </AutomaticBendpoints>
+  </StrutsTransition>
+  <StrutsTransition id="/formSave.do,list,/formList.do,1" routingType="0">
+    <AutomaticBendpoints>
+      <AbsolutePoint location="252,1288" />
+      <AbsolutePoint location="252,1303" />
+      <AbsolutePoint location="940,1303" />
+      <AbsolutePoint location="940,1388" />
+    </AutomaticBendpoints>
+  </StrutsTransition>
+  <StrutsTransition id="/deptExtModify.do,frame1,/usrMgrFrame1.do,1" routingType="0">
+    <AutomaticBendpoints>
+      <AbsolutePoint location="5586,2650" />
+      <AbsolutePoint location="5586,2279" />
+      <AbsolutePoint location="5750,2279" />
+    </AutomaticBendpoints>
+  </StrutsTransition>
+  <StrutsTransition id="/deliveryFormatFixedView.do,detailview,/deliveryDetailView.do,1" routingType="0">
+    <AutomaticBendpoints>
+      <AbsolutePoint location="1999,1776" />
+      <AbsolutePoint location="1999,1876" />
+    </AutomaticBendpoints>
+  </StrutsTransition>
+  <StrutsTransition id="/deliveryTreatView.do,treatview,/delivery/deliveryTreatView.jsp,1" routingType="0">
+    <AutomaticBendpoints>
+      <AbsolutePoint location="4839,3970" />
+      <AbsolutePoint location="4839,4070" />
+    </AutomaticBendpoints>
+  </StrutsTransition>
+  <StrutsTransition id="/inputLineDataSave.do,hiddenframe,/inputing/inputHiddenPage.jsp,1" routingType="0">
+    <AutomaticBendpoints>
+      <AbsolutePoint location="2414,2752" />
+      <AbsolutePoint location="2414,2927" />
+      <AbsolutePoint location="2082,2927" />
+    </AutomaticBendpoints>
+  </StrutsTransition>
+  <StrutsTransition id="/inpCompFixedDataSave.do,hiddenframe,/inputcomp/inputCompHiddenPage.jsp,1" routingType="0">
+    <AutomaticBendpoints>
+      <AbsolutePoint location="1552,3094" />
+      <AbsolutePoint location="1552,3219" />
+      <AbsolutePoint location="998,3219" />
+    </AutomaticBendpoints>
+  </StrutsTransition>
+  <StrutsTransition id="/deliCompCollDocInfoView.do,compdocinfo,/delicomp/deliCompCollDocInfo.jsp,1" routingType="0">
+    <AutomaticBendpoints>
+      <AbsolutePoint location="5515,3386" />
+      <AbsolutePoint location="5515,3486" />
+    </AutomaticBendpoints>
+  </StrutsTransition>
+  <StrutsTransition id="/collcomp/DataBookOrdUpdate.do,hiddenframe,/collcomp/collcompHiddenAttFile.jsp,1" routingType="0">
+    <AutomaticBendpoints>
+      <AbsolutePoint location="3385,3094" />
+      <AbsolutePoint location="3385,3219" />
+      <AbsolutePoint location="3715,3219" />
+    </AutomaticBendpoints>
+  </StrutsTransition>
+  <StrutsTransition id="/inputingDetailView.do,inputdetailview,/inputing/inputDetailView.jsp,1" routingType="0">
+    <AutomaticBendpoints>
+      <AbsolutePoint location="2768,996" />
+      <AbsolutePoint location="2768,1096" />
+    </AutomaticBendpoints>
+  </StrutsTransition>
+  <StrutsTransition id="/collproc/formatFixedOtherDeptDataView.do,formatfixedview,/collproc/collprocFormatOtherDeptDataView.jsp,1" routingType="0">
+    <AutomaticBendpoints>
+      <AbsolutePoint location="5954,1446" />
+      <AbsolutePoint location="5954,2016" />
+      <AbsolutePoint location="-45,2016" />
+      <AbsolutePoint location="-45,5806" />
+      <AbsolutePoint location="1695,5806" />
+      <AbsolutePoint location="1695,5950" />
+    </AutomaticBendpoints>
+  </StrutsTransition>
+  <StrutsTransition id="/collprocProcess.do,list,/collprocList.do,1" routingType="0">
+    <AutomaticBendpoints>
+      <AbsolutePoint location="1217,5" />
+      <AbsolutePoint location="35,5" />
+      <AbsolutePoint location="35,216" />
+    </AutomaticBendpoints>
+  </StrutsTransition>
+  <StrutsTransition id="/collproc/formatBookOtherDeptDataView.do,formatbookview,/collproc/collprocFormatOtherDeptDataView.jsp,1" routingType="0">
+    <AutomaticBendpoints>
+      <AbsolutePoint location="4356,1517" />
+      <AbsolutePoint location="5990,1517" />
+      <AbsolutePoint location="5990,2022" />
+      <AbsolutePoint location="6237,2022" />
+      <AbsolutePoint location="6237,2499" />
+      <AbsolutePoint location="6435,2499" />
+      <AbsolutePoint location="6435,2822" />
+      <AbsolutePoint location="6335,2822" />
+      <AbsolutePoint location="6335,4021" />
+      <AbsolutePoint location="6483,4021" />
+      <AbsolutePoint location="6483,5975" />
+      <AbsolutePoint location="1840,5975" />
+    </AutomaticBendpoints>
+  </StrutsTransition>
+  <StrutsTransition id="/researchIfrView.do,list,/research/researchIfrView.jsp,1" routingType="0">
+    <AutomaticBendpoints>
+      <AbsolutePoint location="153,4262" />
+      <AbsolutePoint location="153,4362" />
+    </AutomaticBendpoints>
+  </StrutsTransition>
+  <StrutsTransition id="/inputChangeChrgunit.do,inputcolldocinfo,/inputCollDocInfo.do,1" routingType="0">
+    <AutomaticBendpoints>
+      <AbsolutePoint location="4810,2752" />
+      <AbsolutePoint location="4810,2852" />
+    </AutomaticBendpoints>
+  </StrutsTransition>
+  <StrutsTransition id="/inputFixedDataSave.do,hiddenframe,/inputing/inputHiddenPage.jsp,1" routingType="0">
+    <AutomaticBendpoints>
+      <AbsolutePoint location="3271,2752" />
+      <AbsolutePoint location="3271,2968" />
+      <AbsolutePoint location="1983,2968" />
+      <AbsolutePoint location="1983,2953" />
+    </AutomaticBendpoints>
+  </StrutsTransition>
+  <StrutsTransition id="/collprocDeptStatus.do,view,/collproc/collprocDeptStatus.jsp,1" routingType="0">
+    <AutomaticBendpoints>
+      <AbsolutePoint location="2699,3970" />
+      <AbsolutePoint location="2699,4070" />
+    </AutomaticBendpoints>
+  </StrutsTransition>
+  <StrutsTransition id="/formatCommMgr.do,formatCommMgr,/collmakedoc/formatCommMgr.jsp,1" routingType="0">
+    <AutomaticBendpoints>
+      <AbsolutePoint location="853,4262" />
+      <AbsolutePoint location="853,4362" />
+    </AutomaticBendpoints>
+  </StrutsTransition>
+  <StrutsTransition id="/loginRchReqOK.do,back,/login/loginRchReq.jsp,1" routingType="0">
+    <AutomaticBendpoints>
+      <AbsolutePoint location="4456,244" />
+      <AbsolutePoint location="4540,244" />
+      <AbsolutePoint location="4540,414" />
+    </AutomaticBendpoints>
+  </StrutsTransition>
+  <StrutsTransition id="/formatFixedAtt.do,formatFixedAtt,/collmakedoc/formatFixedAtt.jsp,1" routingType="0">
+    <AutomaticBendpoints>
+      <AbsolutePoint location="1618,3970" />
+      <AbsolutePoint location="1618,4070" />
+    </AutomaticBendpoints>
+  </StrutsTransition>
+  <StrutsTransition id="/usrMgrFrame2.do,frame2,/usrMgr/usrMgrFrame2.jsp,1" routingType="0">
+    <AutomaticBendpoints>
+      <AbsolutePoint location="786,2446" />
+      <AbsolutePoint location="786,2535" />
+      <AbsolutePoint location="2640,2535" />
+      <AbsolutePoint location="2640,2875" />
+      <AbsolutePoint location="2750,2875" />
+    </AutomaticBendpoints>
+  </StrutsTransition>
+  <StrutsTransition id="/deliveryUserMgr.do,list,/deliveryUserMgr/deliveryUserMgr.jsp,1" routingType="0">
+    <AutomaticBendpoints>
+      <AbsolutePoint location="350,1798" />
+      <AbsolutePoint location="-135,1798" />
+      <AbsolutePoint location="-135,6116" />
+      <AbsolutePoint location="6165,6116" />
+      <AbsolutePoint location="6165,6101" />
+    </AutomaticBendpoints>
+  </StrutsTransition>
+  <StrutsTransition id="/main.do,main,/main.jsp,1" routingType="0">
+    <AutomaticBendpoints>
+      <AbsolutePoint location="4015,488" />
+      <AbsolutePoint location="4015,588" />
+    </AutomaticBendpoints>
+  </StrutsTransition>
+  <StrutsTransition id="/collcompList.do,collcomplist,/collcomp/collcompList.jsp,1" routingType="0">
+    <AutomaticBendpoints>
+      <AbsolutePoint location="1459,4554" />
+      <AbsolutePoint location="1459,4654" />
+    </AutomaticBendpoints>
+  </StrutsTransition>
+  <StrutsTransition id="/colldocDel.do,collcompList,/collcompList.do,1" routingType="0">
+    <AutomaticBendpoints>
+      <AbsolutePoint location="907,2264" />
+      <AbsolutePoint location="907,2279" />
+      <AbsolutePoint location="-105,2279" />
+      <AbsolutePoint location="-105,4428" />
+      <AbsolutePoint location="1470,4428" />
+      <AbsolutePoint location="1470,4458" />
+    </AutomaticBendpoints>
+  </StrutsTransition>
+  <StrutsTransition id="/researchGrpPreview.do,preview,/research/researchGrpPreview.jsp,1" routingType="0">
+    <AutomaticBendpoints>
+      <AbsolutePoint location="6050,5298" />
+      <AbsolutePoint location="5941,5298" />
+      <AbsolutePoint location="5941,6275" />
+      <AbsolutePoint location="3857,6275" />
+    </AutomaticBendpoints>
+  </StrutsTransition>
+  <StrutsTransition id="/collcomp/DataBookCompSave.do,hiddenframe,/collcomp/collcompHiddenAttFile.jsp,1" routingType="0">
+    <AutomaticBendpoints>
+      <AbsolutePoint location="3831,3094" />
+      <AbsolutePoint location="3831,3194" />
+    </AutomaticBendpoints>
+  </StrutsTransition>
+  <StrutsTransition id="/researchSave.do,list,/researchMyList.do,1" routingType="0">
+    <AutomaticBendpoints>
+      <AbsolutePoint location="4618,800" />
+      <AbsolutePoint location="4618,948" />
+      <AbsolutePoint location="4387,948" />
+    </AutomaticBendpoints>
+  </StrutsTransition>
+  <StrutsTransition id="/researchChoice.do,view,/researchView.do,1" routingType="0">
+    <AutomaticBendpoints>
+      <AbsolutePoint location="4999,800" />
+      <AbsolutePoint location="4999,900" />
+    </AutomaticBendpoints>
+  </StrutsTransition>
+  <StrutsTransition id="/researchClose.do,list,/researchMyList.do,1" routingType="0">
+    <AutomaticBendpoints>
+      <AbsolutePoint location="3990,752" />
+      <AbsolutePoint location="4071,752" />
+      <AbsolutePoint location="4071,931" />
+      <AbsolutePoint location="4090,931" />
+    </AutomaticBendpoints>
+  </StrutsTransition>
+  <StrutsTransition id="/inputFormatLineView.do,detailview,/inputingDetailView.do,1" routingType="0">
+    <AutomaticBendpoints>
+      <AbsolutePoint location="2091,800" />
+      <AbsolutePoint location="2091,935" />
+      <AbsolutePoint location="2609,935" />
+    </AutomaticBendpoints>
+  </StrutsTransition>
+  <StrutsTransition id="/collcomp/DataBookMerge.do,databookmerge,/collcomp/collcompPopup.jsp,1" routingType="0">
+    <AutomaticBendpoints>
+      <AbsolutePoint location="892,3970" />
+      <AbsolutePoint location="892,4070" />
+    </AutomaticBendpoints>
+  </StrutsTransition>
+  <StrutsTransition id="/inputCompFormatLineView.do,detailview,/inputCompDetailView.do,1" routingType="0">
+    <AutomaticBendpoints>
+      <AbsolutePoint location="2157,1288" />
+      <AbsolutePoint location="2157,1388" />
+    </AutomaticBendpoints>
+  </StrutsTransition>
+  <StrutsTransition id="/inpCompFrmFixedModifyView.do,modifyfixedview,/inputcomp/inputCompDetailModify.jsp,1" routingType="0">
+    <AutomaticBendpoints>
+      <AbsolutePoint location="2971,3094" />
+      <AbsolutePoint location="2971,3219" />
+      <AbsolutePoint location="2603,3219" />
+    </AutomaticBendpoints>
+  </StrutsTransition>
+  <StrutsTransition id="/deliveryProcess.do,list,/deliveryList.do,1" routingType="0">
+    <AutomaticBendpoints>
+      <AbsolutePoint location="3118,2264" />
+      <AbsolutePoint location="3118,2364" />
+    </AutomaticBendpoints>
+  </StrutsTransition>
+  <StrutsTransition id="/commdeptuser.do,commdeptuser,/common/commdeptuser.jsp,1" routingType="0">
+    <AutomaticBendpoints>
+      <AbsolutePoint location="4008,3678" />
+      <AbsolutePoint location="4008,3778" />
+    </AutomaticBendpoints>
+  </StrutsTransition>
+  <StrutsTransition id="/formatList.do,formatlist,/common/formatList.jsp,1" routingType="0">
+    <AutomaticBendpoints>
+      <AbsolutePoint location="440,4846" />
+      <AbsolutePoint location="440,4946" />
+    </AutomaticBendpoints>
+  </StrutsTransition>
+  <StrutsTransition id="/grpPopup.do,mainM,/grpMgr/mainGrpModify.jsp,1" routingType="0">
+    <AutomaticBendpoints>
+      <AbsolutePoint location="1182,3386" />
+      <AbsolutePoint location="1182,3486" />
+    </AutomaticBendpoints>
+  </StrutsTransition>
+  <StrutsTransition id="/collsttcsList.do,list,/mgrstat/collsttcsList.jsp,1" routingType="0">
+    <AutomaticBendpoints>
+      <AbsolutePoint location="2108,4554" />
+      <AbsolutePoint location="2108,4654" />
+    </AutomaticBendpoints>
+  </StrutsTransition>
+  <StrutsTransition id="/logOut.do,logout,/index.jsp,1" routingType="0">
+    <AutomaticBendpoints>
+      <AbsolutePoint location="3043,0" />
+      <AbsolutePoint location="3043,-135" />
+      <AbsolutePoint location="-105,-135" />
+      <AbsolutePoint location="-105,1954" />
+      <AbsolutePoint location="1591,1954" />
+      <AbsolutePoint location="1591,1901" />
+    </AutomaticBendpoints>
+  </StrutsTransition>
+  <StrutsTransition id="/collprocInfoModify.do,collprocinfomodify,/collproc/collprocInfoModify.jsp,1" routingType="0">
+    <AutomaticBendpoints>
+      <AbsolutePoint location="3058,3970" />
+      <AbsolutePoint location="3058,4070" />
+    </AutomaticBendpoints>
+  </StrutsTransition>
+  <StrutsTransition id="/codeDB.do,back,/codeList.do,1" routingType="0">
+    <AutomaticBendpoints>
+      <AbsolutePoint location="5026,2264" />
+      <AbsolutePoint location="5026,2364" />
+    </AutomaticBendpoints>
+  </StrutsTransition>
+  <StrutsTransition id="/jupsuView.do,view,/sinchung/jupsuView.jsp,1" routingType="0">
+    <AutomaticBendpoints>
+      <AbsolutePoint location="3077,4554" />
+      <AbsolutePoint location="3077,4654" />
+    </AutomaticBendpoints>
+  </StrutsTransition>
+  <StrutsTransition id="/chgMgrSave.do,view,/chgMgr.do,1" routingType="0">
+    <AutomaticBendpoints>
+      <AbsolutePoint location="4104,2264" />
+      <AbsolutePoint location="4104,2364" />
+    </AutomaticBendpoints>
+  </StrutsTransition>
+  <StrutsTransition id="/dataTransferProc.do,dataTransferList,/dataTransferList.do,1" routingType="0">
+    <AutomaticBendpoints>
+      <AbsolutePoint location="1413,1350" />
+      <AbsolutePoint location="1413,1303" />
+      <AbsolutePoint location="3570,1303" />
+      <AbsolutePoint location="3570,1177" />
+      <AbsolutePoint location="5750,1177" />
+    </AutomaticBendpoints>
+  </StrutsTransition>
+  <StrutsTransition id="/formatFixedDef.do,formatFixedDef,/collmakedoc/formatLineFixedDef.jsp,1" routingType="0">
+    <AutomaticBendpoints>
+      <AbsolutePoint location="5069,3094" />
+      <AbsolutePoint location="5069,3194" />
+    </AutomaticBendpoints>
+  </StrutsTransition>
+  <StrutsTransition id="/usrMgrFrame3.do,frame3_2,/usrMgr/usrMgrFrame3_2.jsp,1" routingType="0">
+    <AutomaticBendpoints>
+      <AbsolutePoint location="5886,2546" />
+      <AbsolutePoint location="5886,2626" />
+      <AbsolutePoint location="3086,2626" />
+      <AbsolutePoint location="3086,2850" />
+    </AutomaticBendpoints>
+  </StrutsTransition>
+  <StrutsTransition id="/formatGetComm.do,formatGetComm,/collmakedoc/formatGetComm.jsp,1" routingType="0">
+    <AutomaticBendpoints>
+      <AbsolutePoint location="2243,4262" />
+      <AbsolutePoint location="2243,4362" />
+    </AutomaticBendpoints>
+  </StrutsTransition>
+  <StrutsTransition id="/getUsedIfr.do,list,/sinchung/getUsedIfr.jsp,1" routingType="0">
+    <AutomaticBendpoints>
+      <AbsolutePoint location="3397,4554" />
+      <AbsolutePoint location="3397,4654" />
+    </AutomaticBendpoints>
+  </StrutsTransition>
+  <StrutsTransition id="/commapproval/inputusr.do,inputusr,/common/commapproval_inputusr.jsp,1" routingType="0">
+    <AutomaticBendpoints>
+      <AbsolutePoint location="3956,4262" />
+      <AbsolutePoint location="3956,4362" />
+    </AutomaticBendpoints>
+  </StrutsTransition>
+  <StrutsTransition id="/collcompTreatView.do,collcomptreatview,/collcomp/collcompTreatView.jsp,1" routingType="0">
+    <AutomaticBendpoints>
+      <AbsolutePoint location="3417,3970" />
+      <AbsolutePoint location="3417,4070" />
+    </AutomaticBendpoints>
+  </StrutsTransition>
+  <StrutsTransition id="/inputCollDocInfoView.do,inputcolldocinfo,/inputing/inputCollDocInfo.jsp,1" routingType="0">
+    <AutomaticBendpoints>
+      <AbsolutePoint location="2501,3678" />
+      <AbsolutePoint location="2501,3778" />
+    </AutomaticBendpoints>
+  </StrutsTransition>
+  <StrutsTransition id="/deliCompTreatView.do,comptreatview,/delicomp/deliCompTreatView.jsp,1" routingType="0">
+    <AutomaticBendpoints>
+      <AbsolutePoint location="1256,3970" />
+      <AbsolutePoint location="1256,4070" />
+    </AutomaticBendpoints>
+  </StrutsTransition>
+  <StrutsTransition id="/addrFindList.do,list,/addr/addrFind.jsp,1" routingType="0">
+    <AutomaticBendpoints>
+      <AbsolutePoint location="2855,4846" />
+      <AbsolutePoint location="2855,4946" />
+    </AutomaticBendpoints>
+  </StrutsTransition>
+  <StrutsTransition id="/collprocProcess.do,formatLineView,/collproc/formatLineView.do,1" routingType="0">
+    <AutomaticBendpoints>
+      <AbsolutePoint location="1364,96" />
+      <AbsolutePoint location="1364,216" />
+    </AutomaticBendpoints>
+  </StrutsTransition>
+  <StrutsTransition id="/inputFormatFixedView.do,detailview,/inputingDetailView.do,1" routingType="0">
+    <AutomaticBendpoints>
+      <AbsolutePoint location="2624,800" />
+      <AbsolutePoint location="2624,900" />
+    </AutomaticBendpoints>
+  </StrutsTransition>
+  <StrutsTransition id="/chrgUnitPopup.do,modify,/chrgUnitMgr/chrgUnitModify.jsp,1" routingType="0">
+    <AutomaticBendpoints>
+      <AbsolutePoint location="2588,4262" />
+      <AbsolutePoint location="2588,4362" />
+    </AutomaticBendpoints>
+  </StrutsTransition>
+  <StrutsTransition id="/noticeSave.do,list,/noticeList.do,1" routingType="0">
+    <AutomaticBendpoints>
+      <AbsolutePoint location="4726,2264" />
+      <AbsolutePoint location="4726,2364" />
+    </AutomaticBendpoints>
+  </StrutsTransition>
+  <StrutsTransition id="/deliCompFormatLineView.do,compdetailview,/deliCompDetailView.do,1" routingType="0">
+    <AutomaticBendpoints>
+      <AbsolutePoint location="4448,1288" />
+      <AbsolutePoint location="4448,1431" />
+      <AbsolutePoint location="4761,1431" />
+    </AutomaticBendpoints>
+  </StrutsTransition>
+  <StrutsTransition id="/researchSave.do,view,/researchView.do,1" routingType="0">
+    <AutomaticBendpoints>
+      <AbsolutePoint location="4741,800" />
+      <AbsolutePoint location="4741,900" />
+    </AutomaticBendpoints>
+  </StrutsTransition>
+  <StrutsTransition id="/deliveryFormatBookView.do,detailview,/deliveryDetailView.do,1" routingType="0">
+    <AutomaticBendpoints>
+      <AbsolutePoint location="2468,1776" />
+      <AbsolutePoint location="2468,1924" />
+      <AbsolutePoint location="2155,1924" />
+    </AutomaticBendpoints>
+  </StrutsTransition>
+  <StrutsTransition id="/colldocList.do,colldocList,/collmakedoc/colldocList.jsp,1" routingType="0">
+    <AutomaticBendpoints>
+      <AbsolutePoint location="1117,2460" />
+      <AbsolutePoint location="1117,2560" />
+    </AutomaticBendpoints>
+  </StrutsTransition>
+  <StrutsTransition id="/exhibitIfrView.do,view,/exhibit/exhibitIfrView.jsp,1" routingType="0">
+    <AutomaticBendpoints>
+      <AbsolutePoint location="1784,4554" />
+      <AbsolutePoint location="1784,4654" />
+    </AutomaticBendpoints>
+  </StrutsTransition>
+  <StrutsTransition id="/noticeWrite.do,write,/mgrnotice/noticeWrite.jsp,1" routingType="0">
+    <AutomaticBendpoints>
+      <AbsolutePoint location="3786,2460" />
+      <AbsolutePoint location="3786,2560" />
+    </AutomaticBendpoints>
+  </StrutsTransition>
+  <StrutsTransition id="/outsideReqAns.do,hidden,/outside/outsideHiddenPage.jsp,1" routingType="0">
+    <AutomaticBendpoints>
+      <AbsolutePoint location="2010,3386" />
+      <AbsolutePoint location="2010,3486" />
+    </AutomaticBendpoints>
+  </StrutsTransition>
+  <StrutsTransition id="/loginYN.do,login,/login/login.jsp,1" routingType="0">
+    <AutomaticBendpoints>
+      <AbsolutePoint location="3216,292" />
+      <AbsolutePoint location="3216,449" />
+      <AbsolutePoint location="3382,449" />
+    </AutomaticBendpoints>
+  </StrutsTransition>
+  <StrutsTransition id="/reqForm.do,hidden,/sinchung/sinchungHiddenPage.jsp,1" routingType="0">
+    <AutomaticBendpoints>
+      <AbsolutePoint location="4445,4554" />
+      <AbsolutePoint location="4445,4679" />
+      <AbsolutePoint location="4556,4679" />
+    </AutomaticBendpoints>
+  </StrutsTransition>
+  <StrutsTransition id="/reqForm.do,write,/sinchung/sinchung.jsp,1" routingType="0">
+    <AutomaticBendpoints>
+      <AbsolutePoint location="4351,4554" />
+      <AbsolutePoint location="4351,4654" />
+    </AutomaticBendpoints>
+  </StrutsTransition>
+  <StrutsTransition id="/jupsuXls.do,excel,/sinchung/jupsuXls.jsp,1" routingType="0">
+    <AutomaticBendpoints>
+      <AbsolutePoint location="5602,4554" />
+      <AbsolutePoint location="5602,4654" />
+    </AutomaticBendpoints>
+  </StrutsTransition>
+  <StrutsTransition id="/collcompInfoView.do,collcompinfoview,/collcomp/collcompInfoView.jsp,1" routingType="0">
+    <AutomaticBendpoints>
+      <AbsolutePoint location="457,996" />
+      <AbsolutePoint location="457,1096" />
+    </AutomaticBendpoints>
+  </StrutsTransition>
+  <StrutsTransition id="/workplanIframeList.do,list,/workplan/workplanIframeList.jsp,1" routingType="0">
+    <AutomaticBendpoints>
+      <AbsolutePoint location="3794,5646" />
+      <AbsolutePoint location="3794,6206" />
+      <AbsolutePoint location="6799,6206" />
+      <AbsolutePoint location="6799,3761" />
+      <AbsolutePoint location="1333,3761" />
+      <AbsolutePoint location="1333,3265" />
+      <AbsolutePoint location="454,3265" />
+      <AbsolutePoint location="454,3201" />
+    </AutomaticBendpoints>
+  </StrutsTransition>
+  <StrutsTransition id="/inpCompDataBookSave.do,hiddenframe,/inputcomp/inputCompHiddenPage.jsp,1" routingType="0">
+    <AutomaticBendpoints>
+      <AbsolutePoint location="35,3094" />
+      <AbsolutePoint location="35,3219" />
+      <AbsolutePoint location="754,3219" />
+    </AutomaticBendpoints>
+  </StrutsTransition>
+  <StrutsTransition id="/loginOK.do,back,/login/login.jsp,1" routingType="0">
+    <AutomaticBendpoints>
+      <AbsolutePoint location="3738,292" />
+      <AbsolutePoint location="3738,439" />
+      <AbsolutePoint location="3495,439" />
+    </AutomaticBendpoints>
+  </StrutsTransition>
+  <StrutsTransition id="/research.do,view,/research/research.jsp,1" routingType="0">
+    <AutomaticBendpoints>
+      <AbsolutePoint location="748,4846" />
+      <AbsolutePoint location="748,4946" />
+    </AutomaticBendpoints>
+  </StrutsTransition>
+  <StrutsTransition id="/grpList.do,list,/grpMgr/grpForm.jsp,1" routingType="0">
+    <AutomaticBendpoints>
+      <AbsolutePoint location="4417,2460" />
+      <AbsolutePoint location="4417,2560" />
+    </AutomaticBendpoints>
+  </StrutsTransition>
+  <StrutsTransition id="/collprocProcess.do,formatFixedView,/collproc/formatFixedView.do,1" routingType="0">
+    <AutomaticBendpoints>
+      <AbsolutePoint location="1217,65" />
+      <AbsolutePoint location="942,65" />
+      <AbsolutePoint location="942,216" />
+    </AutomaticBendpoints>
+  </StrutsTransition>
+  <StrutsTransition id="/exhibitDataView.do,formatview,/exhibit/exhibitFormatView.jsp,1" routingType="0">
+    <AutomaticBendpoints>
+      <AbsolutePoint location="3275,1972" />
+      <AbsolutePoint location="3275,2072" />
+    </AutomaticBendpoints>
+  </StrutsTransition>
+  <StrutsTransition id="/researchGrpDelete.do,list,/researchGrpMyList.do,1" routingType="0">
+    <AutomaticBendpoints>
+      <AbsolutePoint location="6065,4898" />
+      <AbsolutePoint location="6679,4898" />
+      <AbsolutePoint location="6679,3498" />
+      <AbsolutePoint location="6066,3498" />
+    </AutomaticBendpoints>
+  </StrutsTransition>
+  <StrutsTransition id="/formatLineAtt.do,formatLineAtt,/collmakedoc/formatLineAtt.jsp,1" routingType="0">
+    <AutomaticBendpoints>
+      <AbsolutePoint location="503,4262" />
+      <AbsolutePoint location="503,4362" />
+    </AutomaticBendpoints>
+  </StrutsTransition>
+  <StrutsTransition id="/researchGrpWrite.do,write,/research/researchGrpView.jsp,1" routingType="0">
+    <AutomaticBendpoints>
+      <AbsolutePoint location="6050,4098" />
+      <AbsolutePoint location="5868,4098" />
+      <AbsolutePoint location="5868,4569" />
+      <AbsolutePoint location="5693,4569" />
+      <AbsolutePoint location="5693,5012" />
+      <AbsolutePoint location="5851,5012" />
+      <AbsolutePoint location="5851,6316" />
+      <AbsolutePoint location="3476,6316" />
+      <AbsolutePoint location="3476,6301" />
+    </AutomaticBendpoints>
+  </StrutsTransition>
+  <StrutsTransition id="/preview.do,prev,/sinchung/preview.jsp,1" routingType="0">
+    <AutomaticBendpoints>
+      <AbsolutePoint location="1666,4846" />
+      <AbsolutePoint location="1666,4946" />
+    </AutomaticBendpoints>
+  </StrutsTransition>
+  <StrutsTransition id="/loginOK.do,backGpki,/login/loginGpki.jsp,1" routingType="0">
+    <AutomaticBendpoints>
+      <AbsolutePoint location="3635,292" />
+      <AbsolutePoint location="3635,1565" />
+      <AbsolutePoint location="5916,1565" />
+      <AbsolutePoint location="5916,1761" />
+      <AbsolutePoint location="6050,1761" />
+    </AutomaticBendpoints>
+  </StrutsTransition>
+  <StrutsTransition id="/collproc/formatFixedView.do,formatfixedview,/collprocDataView.do,1" routingType="0">
+    <AutomaticBendpoints>
+      <AbsolutePoint location="942,312" />
+      <AbsolutePoint location="942,460" />
+      <AbsolutePoint location="1434,460" />
+    </AutomaticBendpoints>
+  </StrutsTransition>
+  <StrutsTransition id="/collcompDataView.do,collcompdataview,/collcomp/collcompDataView.jsp,1" routingType="0">
+    <AutomaticBendpoints>
+      <AbsolutePoint location="1150,996" />
+      <AbsolutePoint location="1150,1096" />
+    </AutomaticBendpoints>
+  </StrutsTransition>
+  <StrutsTransition id="/systemLogMonitoringList.do,list,/mgrstat/systemLogMonitoring.jsp,1" routingType="0">
+    <AutomaticBendpoints>
+      <AbsolutePoint location="3457,1011" />
+      <AbsolutePoint location="4648,1011" />
+      <AbsolutePoint location="4648,2087" />
+      <AbsolutePoint location="5165,2087" />
+      <AbsolutePoint location="5165,2816" />
+      <AbsolutePoint location="6287,2816" />
+      <AbsolutePoint location="6287,3916" />
+      <AbsolutePoint location="6387,3916" />
+      <AbsolutePoint location="6387,6146" />
+      <AbsolutePoint location="2550,6146" />
+      <AbsolutePoint location="2550,6101" />
+    </AutomaticBendpoints>
+  </StrutsTransition>
+  <StrutsTransition id="/deliCompDetailView.do,compdetailview,/delicomp/deliCompDetailView.jsp,1" routingType="0">
+    <AutomaticBendpoints>
+      <AbsolutePoint location="4922,1484" />
+      <AbsolutePoint location="4922,1584" />
+    </AutomaticBendpoints>
+  </StrutsTransition>
+  <StrutsTransition id="/systemAgentRuntime.do,list,/agent/systemAgentRuntime.jsp,1" routingType="0">
+    <AutomaticBendpoints>
+      <AbsolutePoint location="5411,1972" />
+      <AbsolutePoint location="5411,2072" />
+    </AutomaticBendpoints>
+  </StrutsTransition>
+  <StrutsTransition id="/formatLineDef.do,formatLineDef,/collmakedoc/formatLineFixedDef.jsp,1" routingType="0">
+    <AutomaticBendpoints>
+      <AbsolutePoint location="4655,3094" />
+      <AbsolutePoint location="4655,3219" />
+      <AbsolutePoint location="4953,3219" />
+    </AutomaticBendpoints>
+  </StrutsTransition>
+  <StrutsTransition id="/dataTransferList.do,dataTransferList,/dataTransfer/dataTransferList.jsp,1" routingType="0">
+    <AutomaticBendpoints>
+      <AbsolutePoint location="6071,1198" />
+      <AbsolutePoint location="6769,1198" />
+      <AbsolutePoint location="6769,1921" />
+      <AbsolutePoint location="5676,1921" />
+      <AbsolutePoint location="5676,2475" />
+      <AbsolutePoint location="753,2475" />
+      <AbsolutePoint location="753,2550" />
+    </AutomaticBendpoints>
+  </StrutsTransition>
+  <StrutsTransition id="/collprocTreatView.do,collproctreatview,/collproc/collprocTreatView.jsp,1" routingType="0">
+    <AutomaticBendpoints>
+      <AbsolutePoint location="526,312" />
+      <AbsolutePoint location="526,434" />
+    </AutomaticBendpoints>
+  </StrutsTransition>
+  <StrutsTransition id="/inpCompDataBookDelete.do,hiddenframe,/inputcomp/inputCompHiddenPage.jsp,1" routingType="0">
+    <AutomaticBendpoints>
+      <AbsolutePoint location="769,3094" />
+      <AbsolutePoint location="769,3194" />
+    </AutomaticBendpoints>
+  </StrutsTransition>
+  <StrutsTransition id="/colldocInfoView.do,colldocInfoView,/collmakedoc/colldocInfoView.jsp,1" routingType="0">
+    <AutomaticBendpoints>
+      <AbsolutePoint location="2562,3386" />
+      <AbsolutePoint location="2562,3486" />
+    </AutomaticBendpoints>
+  </StrutsTransition>
+  <StrutsTransition id="/searchUser.do,list,/usrMgr/search_user.jsp,1" routingType="0">
+    <AutomaticBendpoints>
+      <AbsolutePoint location="1355,2850" />
+      <AbsolutePoint location="1355,2309" />
+      <AbsolutePoint location="1858,2309" />
+      <AbsolutePoint location="1858,2087" />
+      <AbsolutePoint location="1678,2087" />
+      <AbsolutePoint location="1678,1865" />
+      <AbsolutePoint location="3791,1865" />
+      <AbsolutePoint location="3791,1964" />
+      <AbsolutePoint location="3965,1964" />
+      <AbsolutePoint location="3965,2731" />
+      <AbsolutePoint location="4516,2731" />
+      <AbsolutePoint location="4516,2767" />
+      <AbsolutePoint location="5529,2767" />
+      <AbsolutePoint location="5529,2850" />
+    </AutomaticBendpoints>
+  </StrutsTransition>
+  <StrutsTransition id="/exhibit/formatFixedView.do,formatfixedview,/exhibitDataView.do,1" routingType="0">
+    <AutomaticBendpoints>
+      <AbsolutePoint location="3275,1776" />
+      <AbsolutePoint location="3275,1876" />
+    </AutomaticBendpoints>
+  </StrutsTransition>
+  <StrutsTransition id="/formatFixedPreview.do,formatFixedPreview,/collmakedoc/formatLineFixedPreview.jsp,1" routingType="0">
+    <AutomaticBendpoints>
+      <AbsolutePoint location="495,3386" />
+      <AbsolutePoint location="495,3486" />
+    </AutomaticBendpoints>
+  </StrutsTransition>
+  <StrutsTransition id="/systemLogDetailMonitoringList.do,list,/mgrstat/systemLogDetailMonitoring.jsp,1" routingType="0">
+    <AutomaticBendpoints>
+      <AbsolutePoint location="6173,1046" />
+      <AbsolutePoint location="6173,1461" />
+      <AbsolutePoint location="5856,1461" />
+      <AbsolutePoint location="5856,1725" />
+      <AbsolutePoint location="6299,1725" />
+      <AbsolutePoint location="6299,2295" />
+      <AbsolutePoint location="6769,2295" />
+      <AbsolutePoint location="6769,3401" />
+      <AbsolutePoint location="4940,3401" />
+      <AbsolutePoint location="4940,3793" />
+      <AbsolutePoint location="5008,3793" />
+      <AbsolutePoint location="5008,4015" />
+      <AbsolutePoint location="5838,4015" />
+      <AbsolutePoint location="5838,4629" />
+      <AbsolutePoint location="6200,4629" />
+      <AbsolutePoint location="6200,4961" />
+      <AbsolutePoint location="5881,4961" />
+      <AbsolutePoint location="5881,6075" />
+      <AbsolutePoint location="2998,6075" />
+    </AutomaticBendpoints>
+  </StrutsTransition>
+  <StrutsTransition id="/commsubdept.do,commsubdept,/common/commsubdept.jsp,1" routingType="0">
+    <AutomaticBendpoints>
+      <AbsolutePoint location="5128,3678" />
+      <AbsolutePoint location="5128,3778" />
+    </AutomaticBendpoints>
+  </StrutsTransition>
+  <StrutsTransition id="/deliveryRetDocView.do,popreturndoc,/delivery/deliveryReturnDoc.jsp,1" routingType="0">
+    <AutomaticBendpoints>
+      <AbsolutePoint location="527,3970" />
+      <AbsolutePoint location="527,4070" />
+    </AutomaticBendpoints>
+  </StrutsTransition>
+  <StrutsTransition id="/researchGrpSave.do,list,/researchGrpMyList.do,1" routingType="0">
+    <AutomaticBendpoints>
+      <AbsolutePoint location="6056,4698" />
+      <AbsolutePoint location="6587,4698" />
+      <AbsolutePoint location="6587,3528" />
+      <AbsolutePoint location="6066,3528" />
+    </AutomaticBendpoints>
+  </StrutsTransition>
+  <StrutsTransition id="/researchGrpChoice.do,view,/researchGrpView.do,1" routingType="0">
+    <AutomaticBendpoints>
+      <AbsolutePoint location="6209,4450" />
+      <AbsolutePoint location="6209,4346" />
+    </AutomaticBendpoints>
+  </StrutsTransition>
+  <StrutsTransition id="/grpPopup.do,subI,/grpMgr/grpPopDept.jsp,1" routingType="0">
+    <AutomaticBendpoints>
+      <AbsolutePoint location="1318,3338" />
+      <AbsolutePoint location="1456,3338" />
+      <AbsolutePoint location="1456,3486" />
+    </AutomaticBendpoints>
+  </StrutsTransition>
+  <StrutsTransition id="/collproc/formatBookView.do,formatbookview,/collprocDataView.do,1" routingType="0">
+    <AutomaticBendpoints>
+      <AbsolutePoint location="1725,312" />
+      <AbsolutePoint location="1725,412" />
+    </AutomaticBendpoints>
+  </StrutsTransition>
+  <StrutsTransition id="/outsideRchView.do,hidden,/outside/outsideHiddenPage.jsp,1" routingType="0">
+    <AutomaticBendpoints>
+      <AbsolutePoint location="2931,4166" />
+      <AbsolutePoint location="2931,4015" />
+      <AbsolutePoint location="1924,4015" />
+      <AbsolutePoint location="1924,3537" />
+    </AutomaticBendpoints>
+  </StrutsTransition>
+  <StrutsTransition id="/systemAgentControl.do,list,/systemAgent.do,1" routingType="0">
+    <AutomaticBendpoints>
+      <AbsolutePoint location="2420,2264" />
+      <AbsolutePoint location="2420,2364" />
+    </AutomaticBendpoints>
+  </StrutsTransition>
+  <StrutsTransition id="/workplanInfoView.do,workplanInfoView,/workplan/workplanInfoView.jsp,1" routingType="0">
+    <AutomaticBendpoints>
+      <AbsolutePoint location="6209,1646" />
+      <AbsolutePoint location="6209,2626" />
+      <AbsolutePoint location="5976,2626" />
+      <AbsolutePoint location="5976,2767" />
+      <AbsolutePoint location="6167,2767" />
+      <AbsolutePoint location="6167,3793" />
+      <AbsolutePoint location="5636,3793" />
+      <AbsolutePoint location="5636,3728" />
+      <AbsolutePoint location="-15,3728" />
+      <AbsolutePoint location="-15,4865" />
+      <AbsolutePoint location="3162,4865" />
+      <AbsolutePoint location="3162,5161" />
+      <AbsolutePoint location="5816,5161" />
+      <AbsolutePoint location="5816,6016" />
+      <AbsolutePoint location="152,6016" />
+      <AbsolutePoint location="152,5701" />
+    </AutomaticBendpoints>
+  </StrutsTransition>
+  <StrutsTransition id="/commrchdept.do,commrchdept,/common/commrchdept.jsp,1" routingType="0">
+    <AutomaticBendpoints>
+      <AbsolutePoint location="5499,3678" />
+      <AbsolutePoint location="5499,3778" />
+    </AutomaticBendpoints>
+  </StrutsTransition>
+  <StrutsTransition id="/reqsttcsList.do,list,/mgrstat/reqsttcsList.jsp,1" routingType="0">
+    <AutomaticBendpoints>
+      <AbsolutePoint location="2755,4554" />
+      <AbsolutePoint location="2755,4654" />
+    </AutomaticBendpoints>
+  </StrutsTransition>
+  <StrutsTransition id="/exhibitIframeList.do,list,/exhibit/exhibitIframeList.jsp,1" routingType="0">
+    <AutomaticBendpoints>
+      <AbsolutePoint location="1360,4846" />
+      <AbsolutePoint location="1360,4946" />
+    </AutomaticBendpoints>
+  </StrutsTransition>
+  <StrutsTransition id="/workResultSave.do,list,/workResultList.do,1" routingType="0">
+    <AutomaticBendpoints>
+      <AbsolutePoint location="6502,1750" />
+      <AbsolutePoint location="6502,1446" />
+    </AutomaticBendpoints>
+  </StrutsTransition>
+  <StrutsTransition id="/formSave.do,view,/formView.do,1" routingType="0">
+    <AutomaticBendpoints>
+      <AbsolutePoint location="222,1288" />
+      <AbsolutePoint location="222,1388" />
+    </AutomaticBendpoints>
+  </StrutsTransition>
+  <StrutsTransition id="/colldocDel.do,colldocList,/colldocList.do,1" routingType="0">
+    <AutomaticBendpoints>
+      <AbsolutePoint location="998,2264" />
+      <AbsolutePoint location="998,2364" />
+    </AutomaticBendpoints>
+  </StrutsTransition>
+  <StrutsTransition id="/commreqform.do,reqform,/common/commreqform.jsp,1" routingType="0">
+    <AutomaticBendpoints>
+      <AbsolutePoint location="3633,3678" />
+      <AbsolutePoint location="3633,3778" />
+    </AutomaticBendpoints>
+  </StrutsTransition>
+  <StrutsTransition id="/inputCompFormatFixedView.do,detailview,/inputCompDetailView.do,1" routingType="0">
+    <AutomaticBendpoints>
+      <AbsolutePoint location="2445,1240" />
+      <AbsolutePoint location="2408,1240" />
+      <AbsolutePoint location="2408,1431" />
+      <AbsolutePoint location="2324,1431" />
+    </AutomaticBendpoints>
+  </StrutsTransition>
+  <StrutsTransition id="/inputBookDataDel.do,hiddenframe,/inputing/inputHiddenPage.jsp,1" routingType="0">
+    <AutomaticBendpoints>
+      <AbsolutePoint location="1983,2752" />
+      <AbsolutePoint location="1983,2902" />
+    </AutomaticBendpoints>
+  </StrutsTransition>
+  <StrutsTransition id="/codeList.do,list,/ccdMgr/codeForm.jsp,1" routingType="0">
+    <AutomaticBendpoints>
+      <AbsolutePoint location="5026,2460" />
+      <AbsolutePoint location="5026,2560" />
+    </AutomaticBendpoints>
+  </StrutsTransition>
+  <StrutsTransition id="/searchDept.do,list,/usrMgr/search_dept.jsp,1" routingType="0">
+    <AutomaticBendpoints>
+      <AbsolutePoint location="177,2850" />
+      <AbsolutePoint location="177,2626" />
+      <AbsolutePoint location="1470,2626" />
+      <AbsolutePoint location="1470,1828" />
+      <AbsolutePoint location="2941,1828" />
+      <AbsolutePoint location="2941,2575" />
+      <AbsolutePoint location="3016,2575" />
+      <AbsolutePoint location="3016,2767" />
+      <AbsolutePoint location="3739,2767" />
+      <AbsolutePoint location="3739,2850" />
+    </AutomaticBendpoints>
+  </StrutsTransition>
+  <StrutsTransition id="/commrchgrpchoice.do,commrchgrpchoice,/common/commrchgrpchoice.jsp,1" routingType="0">
+    <AutomaticBendpoints>
+      <AbsolutePoint location="3650,915" />
+      <AbsolutePoint location="3510,915" />
+      <AbsolutePoint location="3510,1495" />
+      <AbsolutePoint location="3879,1495" />
+      <AbsolutePoint location="3879,2087" />
+      <AbsolutePoint location="4265,2087" />
+      <AbsolutePoint location="4265,2701" />
+      <AbsolutePoint location="4477,2701" />
+      <AbsolutePoint location="4477,3465" />
+      <AbsolutePoint location="716,3465" />
+      <AbsolutePoint location="716,4136" />
+      <AbsolutePoint location="4186,4136" />
+      <AbsolutePoint location="4186,4720" />
+      <AbsolutePoint location="4336,4720" />
+      <AbsolutePoint location="4336,5298" />
+      <AbsolutePoint location="4599,5298" />
+      <AbsolutePoint location="4599,5850" />
+    </AutomaticBendpoints>
+  </StrutsTransition>
+  <StrutsTransition id="/collcompDataView.do,formatview,/collcomp/collcompFormatView.jsp,1" routingType="0">
+    <AutomaticBendpoints>
+      <AbsolutePoint location="1020,996" />
+      <AbsolutePoint location="1020,1096" />
+    </AutomaticBendpoints>
+  </StrutsTransition>
+  <StrutsTransition id="/collprocProcess.do,collproctreatview,/collprocTreatView.do,1" routingType="0">
+    <AutomaticBendpoints>
+      <AbsolutePoint location="1217,35" />
+      <AbsolutePoint location="526,35" />
+      <AbsolutePoint location="526,216" />
+    </AutomaticBendpoints>
+  </StrutsTransition>
+  <StrutsTransition id="/colldocDel.do,collprocList,/collprocList.do,1" routingType="0">
+    <AutomaticBendpoints>
+      <AbsolutePoint location="946,2264" />
+      <AbsolutePoint location="946,2309" />
+      <AbsolutePoint location="-15,2309" />
+      <AbsolutePoint location="-15,264" />
+      <AbsolutePoint location="0,264" />
+    </AutomaticBendpoints>
+  </StrutsTransition>
+  <StrutsTransition id="/formClose.do,list,/formList.do,1" routingType="0">
+    <AutomaticBendpoints>
+      <AbsolutePoint location="1235,1288" />
+      <AbsolutePoint location="1235,1431" />
+      <AbsolutePoint location="1085,1431" />
+    </AutomaticBendpoints>
+  </StrutsTransition>
+  <StrutsTransition id="/searchRole.do,list,/usrMgr/search_role.jsp,1" routingType="0">
+    <AutomaticBendpoints>
+      <AbsolutePoint location="845,2946" />
+      <AbsolutePoint location="845,3165" />
+      <AbsolutePoint location="1013,3165" />
+      <AbsolutePoint location="1013,3561" />
+      <AbsolutePoint location="5321,3561" />
+      <AbsolutePoint location="5321,2875" />
+      <AbsolutePoint location="5306,2875" />
+    </AutomaticBendpoints>
+  </StrutsTransition>
+  <StrutsTransition id="/workplanSave.do,list,/workplanList.do,1" routingType="0">
+    <AutomaticBendpoints>
+      <AbsolutePoint location="5598,5550" />
+      <AbsolutePoint location="5598,5510" />
+      <AbsolutePoint location="4394,5510" />
+      <AbsolutePoint location="4394,5550" />
+    </AutomaticBendpoints>
+  </StrutsTransition>
+  <StrutsTransition id="/researchDelete.do,list,/researchMyList.do,1" routingType="0">
+    <AutomaticBendpoints>
+      <AbsolutePoint location="4238,800" />
+      <AbsolutePoint location="4238,900" />
+    </AutomaticBendpoints>
+  </StrutsTransition>
+  <StrutsTransition id="loginRchReqYN;6,null,/loginRchReqYN.do,1" routingType="0">
+    <AutomaticBendpoints>
+      <AbsolutePoint location="4698,88" />
+      <AbsolutePoint location="4698,196" />
+    </AutomaticBendpoints>
+  </StrutsTransition>
+  <StrutsTransition id="/jupsuList.do,list,/sinchung/jupsuList.jsp,1" routingType="0">
+    <AutomaticBendpoints>
+      <AbsolutePoint location="4981,4554" />
+      <AbsolutePoint location="4981,4654" />
+    </AutomaticBendpoints>
+  </StrutsTransition>
+  <StrutsTransition id="/workResultList.do,list,/workplan/workResultList.jsp,1" routingType="0">
+    <AutomaticBendpoints>
+      <AbsolutePoint location="6648,1398" />
+      <AbsolutePoint location="6799,1398" />
+      <AbsolutePoint location="6799,3675" />
+      <AbsolutePoint location="6534,3675" />
+    </AutomaticBendpoints>
+  </StrutsTransition>
+  <StrutsTransition id="/collcompProcess.do,hidden,/collcomp/CloseHiddenPage.jsp,1" routingType="0">
+    <AutomaticBendpoints>
+      <AbsolutePoint location="218,752" />
+      <AbsolutePoint location="101,752" />
+      <AbsolutePoint location="101,922" />
+    </AutomaticBendpoints>
+  </StrutsTransition>
+  <StrutsTransition id="/inputCompCollDocInfoView.do,incompcolldocinfo,/inputcomp/inputCompCollDocInfo.jsp,1" routingType="0">
+    <AutomaticBendpoints>
+      <AbsolutePoint location="5108,3386" />
+      <AbsolutePoint location="5108,3486" />
+    </AutomaticBendpoints>
+  </StrutsTransition>
+  <StrutsTransition id="/outsideReqView.do,view,/outside/outsideReqView.jsp,1" routingType="0">
+    <AutomaticBendpoints>
+      <AbsolutePoint location="3273,4262" />
+      <AbsolutePoint location="3273,4362" />
+    </AutomaticBendpoints>
+  </StrutsTransition>
+  <StrutsTransition id="/formatLinePreview.do,formatLinePreview,/collmakedoc/formatLineFixedPreview.jsp,1" routingType="0">
+    <AutomaticBendpoints>
+      <AbsolutePoint location="271,3386" />
+      <AbsolutePoint location="271,3486" />
+    </AutomaticBendpoints>
+  </StrutsTransition>
+  <StrutsTransition id="/ldapMonitoringList.do,list,/mgrstat/ldapMonitoring.jsp,1" routingType="0">
+    <AutomaticBendpoints>
+      <AbsolutePoint location="2190,1011" />
+      <AbsolutePoint location="3027,1011" />
+      <AbsolutePoint location="3027,2087" />
+      <AbsolutePoint location="2234,2087" />
+      <AbsolutePoint location="2234,2626" />
+      <AbsolutePoint location="1760,2626" />
+      <AbsolutePoint location="1760,3165" />
+      <AbsolutePoint location="5710,3165" />
+      <AbsolutePoint location="5710,3961" />
+      <AbsolutePoint location="6417,3961" />
+      <AbsolutePoint location="6417,5665" />
+      <AbsolutePoint location="2241,5665" />
+      <AbsolutePoint location="2241,6050" />
+    </AutomaticBendpoints>
+  </StrutsTransition>
+  <StrutsTransition id="/noticeFileDel.do,back,/noticeWrite.do,1" routingType="0">
+    <AutomaticBendpoints>
+      <AbsolutePoint location="3786,2264" />
+      <AbsolutePoint location="3786,2364" />
+    </AutomaticBendpoints>
+  </StrutsTransition>
+  <StrutsTransition id="/formatBookFileDel.do,fileBookFrame,/fileBookFrame.do,1" routingType="0">
+    <AutomaticBendpoints>
+      <AbsolutePoint location="2051,2264" />
+      <AbsolutePoint location="2051,2364" />
+    </AutomaticBendpoints>
+  </StrutsTransition>
+  <StrutsTransition id="global_main;6,null,/main.do,1" routingType="0">
+    <AutomaticBendpoints>
+      <AbsolutePoint location="4016,284" />
+      <AbsolutePoint location="4016,392" />
+    </AutomaticBendpoints>
+  </StrutsTransition>
+  <StrutsTransition id="/formatGetUsed.do,formatGetUsed,/collmakedoc/formatGetUsed.jsp,1" routingType="0">
+    <AutomaticBendpoints>
+      <AbsolutePoint location="144,4554" />
+      <AbsolutePoint location="144,4654" />
+    </AutomaticBendpoints>
+  </StrutsTransition>
+  <StrutsTransition id="/researchResultToHwp.do,hwp,/research/researchResultToHwp.jsp,1" routingType="0">
+    <AutomaticBendpoints>
+      <AbsolutePoint location="3257,3678" />
+      <AbsolutePoint location="3257,3778" />
+    </AutomaticBendpoints>
+  </StrutsTransition>
+  <StrutsTransition id="login;6,null,/loginYN.do,1" routingType="0">
+    <AutomaticBendpoints>
+      <AbsolutePoint location="3286,88" />
+      <AbsolutePoint location="3286,196" />
+    </AutomaticBendpoints>
+  </StrutsTransition>
+  <StrutsTransition id="/formList.do,list,/sinchung/sinchungList.jsp,1" routingType="0">
+    <AutomaticBendpoints>
+      <AbsolutePoint location="940,1484" />
+      <AbsolutePoint location="940,1584" />
+    </AutomaticBendpoints>
+  </StrutsTransition>
+</FlowViewLayout>
+

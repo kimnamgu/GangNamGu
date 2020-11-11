@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="myFileMng">
+    
+<sql id="COMMON_PAGING_HEADER">
+		select R.* FROM(	
+	</sql>
+	
+	<sql id="COMMON_PAGING_TAIL">
+		) R
+		LIMIT #{rows, jdbcType=INTEGER} OFFSET #{start, jdbcType=INTEGER}
+	</sql>
+
+    
+    <select id="myFileList" parameterType="MyFileMngVO" resultType="map">
+      <include refid="COMMON_PAGING_HEADER"/>
+      <![CDATA[
+		    select fileIdx
+					,fileSeq
+					,fileName
+					,fileExtension
+					,fileRealName
+					,fileSize
+					,boardIdx
+					,id
+					,folderPath
+					,del_yn
+					,open_yn
+					,down_yn
+					,fileDescription
+					,ins_dt
+					,upt_dt
+		    from file_house
+		    where categoryCode = "imageBoard"
+		]]> 
+		<![CDATA[
+    		order by fileSeq desc
+		]]> 
+      <include refid="COMMON_PAGING_TAIL"/>
+    </select> 
+    
+	<select id="myFileListCnt" parameterType="MyFileMngVO" resultType="integer">
+      <![CDATA[
+		    select count(1) as cnt
+		    from file_house
+		]]> 
+    </select> 
+    
+	<update id="updateFileInfo" parameterType="MyFileMngVO">
+		<![CDATA[
+		UPDATE file_house 
+		SET fileName = #{fileName}
+			,del_yn = #{del_yn}
+			,open_yn = #{open_yn}
+			,down_yn = #{down_yn}
+			,fileDescription = #{fileDescription}
+			,upt_dt = sysdate()
+		WHERE  fileIdx = #{fileIdx}
+		]]>  
+    </update>  
+</mapper>

@@ -1,0 +1,273 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"	pageEncoding="UTF-8"%>
+<html>
+<head>
+<%@ include file="/WEB-INF/include/include-header.jspf"%>
+
+
+<script type="text/javascript">
+	var user_right = "${sessionScope.userinfo.userright}";
+
+	$(document).ready(function() {
+		fn_selectNoticeList(1);
+		
+		$("#TITLE").keydown(function (key) {
+			if(key.keyCode == 13){//키가 13이면 실행 (엔터는 13)
+				$("#PAGE_INDEX").val("1");
+				fn_selectNoticeList(1);
+			}
+		});
+		
+		$("#NAME").keydown(function (key) {
+
+			if(key.keyCode == 13){//키가 13이면 실행 (엔터는 13)
+				$("#PAGE_INDEX").val("1");
+				fn_selectNoticeList(1);
+			}
+		});
+		
+		$("#search").on("click", function(e){ //검색 버튼
+			e.preventDefault();
+			fn_selectNoticeList(1);
+		});
+		
+		$("#initial").on("click", function(e){ //초기화 버튼
+			e.preventDefault();
+			$("#form1").each(function() {				 
+				fn_initial_setting();
+		    });
+		});
+		
+		//전체 선택시
+		$('input[name=_selected_all_]').on('change', function(){
+			$('input[name=_selected_]').prop('checked', this.checked); 
+		}); 
+		
+		
+		$("#delete").on("click", function(e){ //초기화 버튼
+			e.preventDefault();
+			delChkRow();
+		});
+			
+
+	});
+	
+	//선택 로우 삭제
+    function delChkRow() {
+		
+    	var arr = $('input[name=_selected_]:checked').serializeArray().map(function(item) { return item.value });
+		
+		var checkedValue = [];
+		$('input[name=_selected_]:checked').each(function(index, item){
+			checkedValue.push($(item).val());   
+		});
+   	
+
+		if (arr.length ==0 ) {
+			alert("선택된 로우가 없습니다.");
+			return false;
+		} 
+		
+		if (confirm("선택 항목을 삭제 하시겠습니까?")) {
+
+			//견적서 파일 삭제
+			
+			$.ajax({
+		        type: "post",
+		        url : "/manpower/manage/deleteNoticeChk.do",
+		        data: {
+		        	val:checkedValue
+		        },
+		        contentType : "application/x-www-form-urlencoded; charset=utf-8",
+
+		        success:function (data) {//추천성공
+		        	alert("삭제가 완료되었습니다.");
+		        	fn_selectNoticeList(1);
+	            },
+
+		        error: function (data) {//추천실패
+		        	alert("삭제가 실패 하였습니다.관리자에게 문의 바랍니다.");
+	            }
+	     	});
+
+		} 
+	}
+	
+	//수정화면가기
+	function fn_noticeView(UID) {
+		var comSubmit = new ComSubmit();
+		
+		comSubmit.setUrl("<c:url value='/write/noticeView.do' />");
+		comSubmit.addParam("ID", UID);
+		comSubmit.submit();
+	}
+	
+	function fn_selectNoticeList(pageNo){
+		var comAjax = new ComAjax();
+		comAjax.setUrl("<c:url value='/manage/selectNoticeList.do' />");
+		comAjax.addParam("PAGE_INDEX",pageNo);
+		comAjax.addParam("PAGE_ROW", $("#RECORD_COUNT").val());			
+		comAjax.addParam("name", $("#NAME").val());
+		comAjax.addParam("title", $("#TITLE").val());
+		
+		comAjax.setCallback("fn_selectNoticeListCallback");
+		
+		comAjax.ajax();
+	}
+	
+	
+	function fn_selectNoticeListCallback(data){
+		var total = data.total;			
+		var body = $("#mytable");
+		var recordcnt = $("#RECORD_COUNT").val();
+		
+		
+		$("#tcnt").text(comma(total));
+		
+		body.empty();
+		if(total == 0){
+			var str = "<tr>" + 
+				  "<td colspan='32' style='text-align:center;'>조회된 결과가 없습니다.</td>" +
+				  "</tr>";
+			body.append(str);
+		}
+		else{
+			var params = {
+				divId : "PAGE_NAVI",
+				pageIndex : "PAGE_INDEX",
+				totalCount : total,
+				recordCount : recordcnt,
+				eventName : "fn_selectNoticeList"
+			};
+			gfn_renderPaging(params);
+			
+			var str = "";
+			var t_str = "";
+			var tr_class = "";
+			var jsonData = null;
+			var jsonStr = null;
+			
+			$.each(data.list, function(key, value){
+				       t_str = "";
+					
+				       if ((value.RNUM % 2) == 0 )
+							tr_class = "tr1";
+					   else
+							tr_class = "tr2";
+				      
+				       
+				       str += "<tr class='" + tr_class + "'>" + 
+				       			   "<td><input type='checkbox' name='_selected_' value='"+value.ID+"'></td>" +
+								   "<td align='center' style='color:#444444;'>" + value.RNUM + "</td>" +
+								   "<td align='center' style='color:blue;'>" +
+								   "	<a href='javascript:void(0);' onclick='fn_noticeView("+ value.ID +")' name='NAME'>" + NvlStr(value.TITLE) + "</a>"+
+								   "</td>" +
+								   "<td align='center' style='color:#444444;'>" + NvlStr(value.NAME) + "</td>" +
+								   "<td align='center' style='color:#444444;'>" + NvlStr(value.INS_DATE) + "</td>" +
+								   "<td align='center' style='color:#444444;'>" + NvlStr(value.READ_COUNT) + "</td>" +
+							   "</tr>";
+								   
+			});
+			body.append(str);
+		}
+	}	
+	
+</script>
+</head>
+
+<body>
+
+<form id="form1" name="form1">
+<input type="hidden" id="USER_ID" name="USER_ID" value="${sessionScope.userinfo.userId}">
+<c:set var="u_rt" value="${sessionScope.userinfo.userright}"/>
+
+
+<div style="background-color:#170B3B;color:white; margin-bottom:10px; width: 100%;">
+	<a href="#this" class="btn" id="logout">
+		<img src="/manpower/images/popup_title.gif" align="absmiddle">
+	</a>공지사항	
+</div>
+
+
+
+<div style="width:100%;padding-left:20px;padding-right:10px;">
+	<div class="card" style="width:100%;display: inline-block;padding-top:10px;">
+		<form action="" method="post">
+			<div class="card-body card-block">
+				<div>
+					<div class="form-group" style="width: 360;float:left;margin-left:5px;">
+						<div class="input-group">
+							<div class="input-group-addon" style="width: 80px;">제목</div>
+							<input type="text" id="TITLE" name="TITLE" value="" class="form-control">
+						</div>
+					</div>
+	
+					<div class="form-group" style="width: 360;float:left;margin-left:5px;">
+						<div class="input-group">
+							<div class="input-group-addon" style="width: 80px;">작성자</div>
+							<input type="text" id="NAME" name="NAME" value="" class="form-control">
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="form-actions form-group">
+				<div style="float: left;margin-left:15px;">
+					<a href="#this" class="btn btn-danger" id="initial"><i class="fa fa-ban"></i> 검색초기화</a> 
+					<a href="#this" class="btn btn-primary" id="search"><i class="fa fa-search"></i>검색</a>
+				</div>
+			</div>
+		</form>
+	</div>
+</div>
+		
+	<div style="float: left;margin-left:20px;">
+		<div style="float: left;">
+			<b>Total : <span id="tcnt"></span> 건</b> &nbsp;
+		</div> 
+		<div style="float: left;">
+			<select id="DISP_CNT" name="DISP_CNT" class="form-control" style="width:60px!important;height:30px;padding:3px;">
+	           	<option value="10">10</option>
+	           	<option value="20">20</option>
+				<option value="50">50</option>
+			</select>
+		</div>
+	</div>
+
+</form>
+
+<div class="contents" style="float:right;margin-right:22px;margin-bottom:10px;">
+	<a href="/manpower/write/noticeWrite.do" class="btn btn-primary btn-sm" id="insert">등록</a>
+	<a href="#this" class="btn btn-primary btn-sm" id="delete"><i class="fa fa-eraser"></i> 선택삭제</a>
+</div>
+<div align="left" style="width:100%;padding-right:20px;">
+	<div  style="margin-left:20px;" align="center">
+		<div class="table-responsive m-b-40">
+			 <table class="table table-borderless table-data3" id="selectable">
+			     <thead style="background-color:#0B2161;">
+			        <tr align="center">
+			        		<th style="width: 40px;"><input type="checkbox" name="_selected_all_"></th>
+							<th style="width: 80px;">NO</th>
+							<th>제목</th>
+							<th style="width: 150px;">작성자</th>
+							<th style="width: 200px;">작성일</th>
+							<th style="width: 150px;">조회수</th>
+						</tr>
+			      </thead>
+			      <tbody id='mytable'>     
+			      </tbody>
+		      </table>
+	      </div>
+	</div>
+
+	<div id="PAGE_NAVI" align='center'></div>
+	<input type="hidden" id="PAGE_INDEX" name="PAGE_INDEX"/>
+	<input type="hidden" id="RECORD_COUNT" name="RECORD_COUNT" value="20"/>	
+
+</div>	
+
+	<%@ include file="/WEB-INF/include/include-body.jspf" %>
+
+
+
+
+</body>
+</html>

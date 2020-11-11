@@ -1,0 +1,17 @@
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %> 
+
+<link rel="stylesheet" type="text/css" href="/corona/css/common.css" />
+<link rel="stylesheet" type="text/css" href="/corona/css/skin01.css" />
+<link rel="stylesheet" type="text/css" href="/corona/css/import.css" />
+<link rel="stylesheet" type="text/css" href="/corona/css/corona.css" />
+
+<!-- jQuery -->
+<link rel="stylesheet" type="text/css" href="/corona/css/jquery-ui.css" />
+<!-- <script src="http://code.jquery.com/jquery.min.js"></script>-->
+<script type="text/javascript" src="<c:url value='/js/jquery.min.js'/>"></script>
+<script type="text/javascript" src="<c:url value='/js/jquery-ui.js'/>"></script>
+<script type="text/javascript" src="<c:url value='/js/jquery.cookie.js'/>"></script>
+<script type="text/javascript" src="<c:url value='/js/jquery.form.js'/>"></script>
+<script src="<c:url value='/js/common.js'/>" charset="utf-8"></script>

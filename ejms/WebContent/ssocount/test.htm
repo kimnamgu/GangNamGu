@@ -1,0 +1,92 @@
+<html>
+<head>
+<title>SSO테스트</title>
+<script>
+function connect() {
+	var userid = infoForm.userid.value.replace(/(^\s*)|(\s*$)/gi, '');
+	var url = infoForm.url.value.replace(/(^\s*)|(\s*$)/gi, '');
+	if ( userid == "" || url == "" ) return;
+	_URL_.innerText = url + "?act=" + infoForm.act.value + "&userid=" + userid;
+	infoForm.userid.value = userid;
+	infoForm.url.value = "";
+	infoForm.action = url;
+	infoForm.submit();
+	infoForm.url.value = url;
+}
+function bodyOnload() {
+	infoForm.userid.value = "USERID";
+	infoForm.url.value = location.protocol + "//" + location.host + "/ssocount.do";
+	infoForm.userid.focus();
+}
+</script>
+</head>
+<body onload="bodyOnload()">
+<iframe name="actionFrame" width="170" height="110" frameborder="0" marginwidth="0" marginheight="0" scrolling="no" title="취합현황"></iframe>
+<form name="infoForm" target="actionFrame">
+	<select name="act" onchange="connect()">
+		<option value="mycount">현황</option>
+		<option value="input">입력대기</option>
+		<option value="deliv">배부대기</option>
+		<option value="proc">취합진행</option>
+		<option value="procend">마감대기</option>
+		<option value="approval">미결재</option>
+		<option value="myrch">내설문조사</option>
+		<option value="myform">내신청양식</option>
+		<option value="rchlist">설문조사참여목록</option>
+		<option value="reqlist">신청하기목록</option>
+		<option value="rch&num=설문번호">설문조사참여</option>
+		<option value="req&num=신청번호">신청서작성</option>
+	</select>
+	<input type="text" name="userid" onkeyup="if(event.keyCode!=13){connect();}"><br>
+	<input type="text" name="url" size="40" onkeypress="if(event.keyCode!=13){connect();}" onkeyup="connect()">
+</form>
+<pre>
+※ 삽입소스 (XML 데이터를 내려받을 때는 iframe src에 type=COUNT 추가 => ejms.jsp에서 XML데이터 사용)
+※ 현황프레임 : width="170" height="110"
+&lt;%
+	String _SSO_ORG_ID_ = (String)session.getAttribute("SSO_ORG_ID");
+	String _URL_ = "<span id="_URL_"></span>";
+</pre>
+<xmp>
+	java.net.URL ejmsURL = new java.net.URL(_URL_);
+	java.net.HttpURLConnection ejmsHttpURLConn = (java.net.HttpURLConnection)ejmsURL.openConnection();
+	int responseCode = 0;
+	try {
+		ejmsHttpURLConn.connect();
+		responseCode = ejmsHttpURLConn.getResponseCode();
+	} catch ( Exception e ) {
+		System.out.println("현황표시오류 : " + e);
+	} finally {
+		try { ejmsHttpURLConn.disconnect(); } catch ( Exception e ) {}
+	}
+	if ( responseCode == java.net.HttpURLConnection.HTTP_OK ) {
+		out.println("<iframe src='" + _URL_ + "' width='170' height='110' frameborder='0' marginwidth='0' marginheight='0' scrolling='no' title='취합현황'></iframe>");
+	} else {
+		out.println("<table width='170' height='70' border='0' cellpadding='0' cellspacing='1' bgcolor='#d6b892'>");
+		out.println("	<tr>");
+		out.println("		<td bgcolor='#FFFFFF'>");
+		out.println("			<table width='100%' border='0' cellspacing='0' cellpadding='0' align='center'>");
+		out.println("				<tr>");
+		out.println("					<td height='27' style='padding:5pt 0pt 0pt 10pt;font-size:9pt'><font color='#fb7e07'>▶</font>&nbsp;<b>"+nexti.ejms.common.appInfo.getAppName()+"</b></td>");
+		out.println("				</tr>");
+		out.println("				<tr>");
+		out.println("					<td height='36'>");
+		out.println("						<table width='130' height='25' border='0' cellspacing='0' cellpadding='0' align='center' bgcolor='#f4f4f4'>");
+		out.println("							<tr>");
+		out.println("								<td style='padding:2pt 0pt 0pt 10pt;font-size:9pt'><font color='#565656'>- 서비스 준비 중</font></td>");
+		out.println("							</tr>");
+		out.println("						</table>");
+		out.println("					</td>");
+		out.println("				</tr>");
+		out.println("				<tr>");
+		out.println("					<td bgcolor='#edead9' height='5'></td>");
+		out.println("				</tr>");
+		out.println("			</table>");
+		out.println("		</td>");
+		out.println("	</tr>");
+		out.println("</table>");
+	}
+%>
+</xmp>
+</body>
+</html>

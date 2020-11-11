@@ -1,0 +1,74 @@
+/* HTML Elements
+---------------------------------------------------------*/
+body {
+	font:9pt/1.5em Gulim;
+	color:#555;
+	background:#fff;
+	height:100%;
+	margin:0;
+}
+html {
+	height:100%; 
+}
+textarea {
+	ime-mode: active;
+}
+input { 
+	ime-mode: active; 
+}
+ul {list-style:none; padding:0; margin:0;}
+a:link, a:visited {color: #21528D;text-decoration: none;}
+a:hover, a:active {color: #0770FF;text-decoration: underline;}
+hr { display: none; }
+h1 { font-size:1.2em; margin:0; }
+img { border:none; vertical-align:bottom;}
+img.Lbtn { cursor:pointer; }
+select, input.Ltext, textarea { 
+	font-family:Dotum;
+	font-size:1em; 
+	padding:1px;
+	border:1px solid #CCC;
+}
+.readonly{
+	background:#EFEFEF;
+}
+option{padding-right: 0.5em;}
+legend { display:none; }
+fieldset { border:none; }
+.clear {clear:both;}
+.Lcheckbox {
+	margin:0 3px 0 4px;
+	*margin:-2px 1px 0 0;
+}
+.Lradio {
+	*margin:0 0 0 -4px; 
+}
+
+/* Global Classes
+---------------------------------------------------------*/
+.Lclear:after {
+	content:" ";
+	height:0;
+	visibility:hidden;
+	display:block;
+	clear:both;
+}
+.Lclear {*zoom:1; margin:0;} /* IE5.5~7 브라우저 대응 Hack */
+
+.Lhide { position:absolute; width:0; height:0; font-size:0; line-height:0; overflow:hidden; visibility:hidden; }
+.Lnodisplay { display:none; }
+.LtextLeft { text-align:left !important; }
+.LtextCenter { text-align:center !important; }
+.LtextRight { text-align:right !important;}
+.txtPoint { color:#ff6600; }
+.txtPointS { color:#ff6600; font-weight:bold; }
+.txtBlue { color:#5490cd; }
+.txtBlueS { color:#5490cd; font-weight:bold;}
+.txtBlue_s { color:#5490cd; font-size:0.9em; font-family:Dotum; }
+.txtPoint a:link, .txtPoint a:visited, .txtPoint a:hover, .txtPoint a:active {color: #ff6600; text-decoration: none;}
+.txtBlue a:link, .txtBlue a:visited, .txtBlue a:hover, .txtBlue a:active {color: #5490cd; text-decoration: none;}
+
+.checkbox_list dl{width: 100%;}
+.checkbox_list dd{float:left; width:120px; }
+.checkbox_list dd.w80{float:left; width:80px; }
+.checkbox_list dd.w60{float:left; width:60px; }

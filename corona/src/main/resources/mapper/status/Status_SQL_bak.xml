@@ -1,0 +1,1702 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="status_bak">
+
+<!-- 총괄 현황 -->
+<select id="selectTotalStatus" parameterType="hashmap" resultType="hashmap">
+		<![CDATA[
+			SELECT 
+					#{showdate} as showdate
+                    ,#{seldate} as seldate
+                    
+  			        ,(SELECT COUNT(1) FROM CORONA_CONFIRM_STATUS WHERE ORG_GUBUN = '강남구' AND DISCHARGE_DATE = #{seldate}) AS today_gangnam_cured_p
+			        ,(SELECT COUNT(1) FROM CORONA_CONFIRM_STATUS WHERE ORG_GUBUN = '강남구' AND DISCHARGE_DATE IS NULL AND CONFIRM_DATE = #{seldate}) AS today_gangnam_curing_p
+			        ,(SELECT COUNT(1) FROM CORONA_CONFIRM_STATUS WHERE ORG_GUBUN != '강남구' AND WRITE_DATE = #{seldate}) AS today_tasigu_p
+			        ,'' AS etc_p
+                    
+                    
+			        ,(SELECT COUNT(1) FROM CORONA_CONFIRM_STATUS WHERE ORG_GUBUN = '강남구' AND DISCHARGE_DATE IS NOT NULL) AS gangnam_cured_p
+			        ,(SELECT COUNT(1) FROM CORONA_CONFIRM_STATUS WHERE ORG_GUBUN = '강남구' AND DISCHARGE_DATE IS NULL) AS gangnam_curing_p
+			        ,(SELECT COUNT(1) FROM CORONA_CONFIRM_STATUS WHERE ORG_GUBUN != '강남구') AS tasigu_p
+			        ,'' AS etc_p
+			  FROM DUAL
+		]]>
+</select>
+
+ 
+<select id="selectTotalDtlList" parameterType="hashmap" resultType="hashmap">
+		<![CDATA[
+             SELECT COUNT(*) OVER() AS TOTAL_COUNT                                
+                    ,ID
+					,WRITE_DATE
+					,CELL_NUM
+					,PATIENT_NUM
+					,PATIENT_NAME
+					,CONTACT_NUM
+					,CONTACT_NAME
+					,CONFIRM_GRADE
+					,SEX
+					,BIRTH
+					,JOB
+					,ORG_GUBUN
+					,ORG_DONG
+					,ORG_ADDRESS
+					,ORG_ADDRESS_DTL
+					,INFECT_GUBUN
+					,INFECT_DONG
+					,INFECT_DAE
+					,INFECT_SO
+					,INFECT_ASFECT_AREA
+					,INFECT_ASFECT_AREA_DTL
+					,CONFIRM_DATE
+					,HOSPITAL
+					,DISCHARGE_DATE
+					,REMARK
+					,INS_ID
+                    ,TO_CHAR(INS_DATE, 'YYYY.MM.DD HH24:MI:SS') INS_DATE
+            FROM CORONA_CONFIRM_STATUS 
+            WHERE DEL_YN = 0              
+		]]>
+		
+			<if test="TOTAL_GUBUN !=''">
+				AND ORG_GUBUN =   #{TOTAL_GUBUN}
+			</if>
+			
+			<if test="TOTAL_CONDITION =='Y'">
+				AND DISCHARGE_DATE IS NOT NULL
+			</if>
+			
+			<if test="TOTAL_CONDITION =='N'">
+				AND AND DISCHARGE_DATE IS NULL
+			</if>
+			
+			<if test="TOTAL_GUBUN !='해외'">
+				<if test="TOTAL_DONG_GUBUN !=''">
+					AND ORG_DONG =   #{TOTAL_DONG_GUBUN}
+				</if>
+			</if>
+			
+			<if test="TOTAL_GUBUN =='해외'">
+				<if test="TOTAL_DONG_GUBUN !=''">
+					AND ORG_ADDRESS =   #{TOTAL_DONG_GUBUN}
+				</if>
+			</if>
+
+		ORDER BY WRITE_DATE,INS_DATE DESC		
+</select>
+
+
+<select id="selectConfirmStatisticlist" parameterType="hashmap" resultType="hashmap">
+<![CDATA[
+        SELECT
+            ST_DAY
+            ,(SELECT COUNT(1) FROM CORONA_CONFIRM_STATUS WHERE DEL_YN='0' AND CONFIRM_DATE=ST_DATE.ST_DAY AND ORG_GUBUN = '강남구') as GANGNAM_CNT
+        FROM
+        (
+            SELECT TO_CHAR(TO_DATE(to_char(add_months(sysdate,-1),'YYYYMMDD'), 'YYYYMMDD')+LEVEL-1, 'YYYYMMDD') ST_DAY
+              FROM DUAL
+            CONNECT BY LEVEL <= (TO_DATE(to_char(sysdate,'YYYYMMDD'), 'YYYYMMDD')-TO_DATE(to_char(add_months(sysdate,-1),'YYYYMMDD'), 'YYYYMMDD')+1)
+        )ST_DATE
+]]>
+</select>
+
+<select id="selectConfirmAccumStatisticlist" parameterType="hashmap" resultType="hashmap">
+<![CDATA[
+        SELECT
+            ST_DAY
+            ,(SELECT COUNT(1) FROM CORONA_CONFIRM_STATUS WHERE DEL_YN='0' AND CONFIRM_DATE<=ST_DATE.ST_DAY AND ORG_GUBUN = '강남구') as confirm_accum_gangnam
+        FROM
+        (
+            SELECT TO_CHAR(TO_DATE(to_char(add_months(sysdate,-1),'YYYYMMDD'), 'YYYYMMDD')+LEVEL-1, 'YYYYMMDD') ST_DAY
+              FROM DUAL
+            CONNECT BY LEVEL <= (TO_DATE(to_char(sysdate,'YYYYMMDD'), 'YYYYMMDD')-TO_DATE(to_char(add_months(sysdate,-1),'YYYYMMDD'), 'YYYYMMDD')+1)
+        )ST_DATE
+        ]]>
+</select>
+
+
+<select id="selectTotalMiddle" parameterType="hashmap" resultType="hashmap">
+		  SELECT '전체총계' AS ORG_DONG,
+		  		#{WRITE_DATE}  AS WRITE_DATE,
+		  		#{DEPART}  AS DEPART,
+		         null as  CURE_Y_CNT,
+		         null as CURE_N_CNT,
+		         COUNT (1) AS ORG_DONG_TOT
+		    FROM CORONA_CONFIRM_STATUS
+			WHERE del_yn = 0
+			<if test="DEPART == 'TODAY'">
+				AND CONFIRM_DATE = #{WRITE_DATE} 
+			</if>
+		   
+			UNION ALL
+            SELECT 
+                '총계' AS ORG_DONG
+                ,#{WRITE_DATE}  AS WRITE_DATE
+                ,#{DEPART}  AS DEPART
+                ,(SELECT COUNT(1) FROM  CORONA_CONFIRM_STATUS A WHERE A.ORG_GUBUN = '강남구' AND A.DISCHARGE_DATE IS NOT NULL
+           			<if test="DEPART == 'TODAY'">
+						AND CONFIRM_DATE = #{WRITE_DATE} 
+					</if>
+                ) CURE_Y_CNT
+                ,(SELECT COUNT(1) FROM  CORONA_CONFIRM_STATUS B WHERE B.ORG_GUBUN = '강남구' AND B.DISCHARGE_DATE IS NULL
+           			<if test="DEPART == 'TODAY'">
+						AND CONFIRM_DATE = #{WRITE_DATE} 
+					</if>
+                ) CURE_N_CNT
+                ,COUNT(1) AS ORG_DONG_TOT
+            FROM CORONA_CONFIRM_STATUS CCS
+            WHERE del_yn = 0
+            AND ORG_GUBUN = '강남구'
+            <if test="DEPART == 'TODAY'">
+				AND CONFIRM_DATE = #{WRITE_DATE} 
+			</if>
+            
+            GROUP BY ORG_GUBUN
+            
+            UNION ALL
+            
+            SELECT 
+                ORG_DONG
+                ,#{WRITE_DATE}  AS WRITE_DATE
+                ,#{DEPART}  AS DEPART
+                ,(SELECT COUNT(1) FROM  CORONA_CONFIRM_STATUS A WHERE A.ORG_GUBUN = '강남구' AND A.ORG_DONG = CCS.ORG_DONG  AND A.DISCHARGE_DATE IS NOT NULL
+           			<if test="DEPART == 'TODAY'">
+						AND CONFIRM_DATE = #{WRITE_DATE} 
+					</if>
+                
+                ) CURE_Y_CNT
+                ,(SELECT COUNT(1) FROM  CORONA_CONFIRM_STATUS B WHERE B.ORG_GUBUN = '강남구' AND B.ORG_DONG = CCS.ORG_DONG  AND B.DISCHARGE_DATE IS NULL
+           			<if test="DEPART == 'TODAY'">
+						AND CONFIRM_DATE = #{WRITE_DATE} 
+					</if>
+                
+                ) CURE_N_CNT
+                ,COUNT(1) AS ORG_DONG_TOT
+            FROM CORONA_CONFIRM_STATUS CCS
+            WHERE del_yn = 0
+            AND ORG_GUBUN = '강남구'
+			<if test="DEPART == 'TODAY'">
+				AND CONFIRM_DATE = #{WRITE_DATE} 
+			</if>
+            GROUP BY ORG_DONG 
+</select>
+
+	<select id="selectTotalStatisticsList" parameterType="hashmap" resultType="hashmap">
+		<![CDATA[
+        SELECT 
+                 ST_DAY
+                 ,(SELECT COUNT(1) FROM CORONA_CONFIRM_STATUS WHERE ORG_GUBUN = '강남구' AND CONFIRM_DATE <=ST_DATE.ST_DAY) AS accum_gangnam_p
+                 ,(SELECT COUNT(1) FROM CORONA_CONFIRM_STATUS WHERE ORG_GUBUN = '강남구' AND CONFIRM_DATE <=ST_DATE.ST_DAY AND DISCHARGE_DATE <= ST_DATE.ST_DAY) AS accum_gangnam_cured_p
+                 ,(SELECT COUNT(1) FROM CORONA_CONFIRM_STATUS WHERE ORG_GUBUN = '강남구' AND CONFIRM_DATE <=ST_DATE.ST_DAY AND DISCHARGE_DATE > ST_DATE.ST_DAY) AS accum_gangnam_curing_p
+                 ,(SELECT COUNT(1) FROM CORONA_CONFIRM_STATUS WHERE ORG_GUBUN = '타지역' AND CONFIRM_DATE <=ST_DATE.ST_DAY) AS accum_tasigu_p
+       FROM 
+        (
+            SELECT TO_CHAR(TO_DATE(to_char(add_months(sysdate,-1),'YYYYMMDD'), 'YYYYMMDD')+LEVEL-1, 'YYYYMMDD') ST_DAY
+              FROM DUAL
+            CONNECT BY LEVEL <= (TO_DATE(to_char(sysdate,'YYYYMMDD'), 'YYYYMMDD')-TO_DATE(to_char(add_months(sysdate,-1),'YYYYMMDD'), 'YYYYMMDD')+1)
+        )ST_DATE	
+		]]>
+	</select>
+	
+	
+	<select id="selectConsultStatisticsList" parameterType="hashmap" resultType="hashmap">
+		<![CDATA[
+        SELECT 
+            ST_DAY
+           ,(SELECT COUNT(1) FROM CORONA_CONSULT_STATUS WHERE DEL_YN='0' AND WRITE_DATE=ST_DATE.ST_DAY AND JUYA_GUBUN = '주간') AS CUR_JU 
+           ,(SELECT COUNT(1) FROM CORONA_CONSULT_STATUS WHERE DEL_YN='0' AND WRITE_DATE=ST_DATE.ST_DAY AND JUYA_GUBUN = '야간') AS CUR_YA
+           ,(SELECT COUNT(1) FROM CORONA_CONSULT_STATUS WHERE DEL_YN='0' AND WRITE_DATE=ST_DATE.ST_DAY) AS CUR_TOTAL
+        FROM
+        (
+            SELECT TO_CHAR(TO_DATE(to_char(add_months(sysdate,-1),'YYYYMMDD'), 'YYYYMMDD')+LEVEL-1, 'YYYYMMDD') ST_DAY
+              FROM DUAL
+            CONNECT BY LEVEL <= (TO_DATE(to_char(sysdate,'YYYYMMDD'), 'YYYYMMDD')-TO_DATE(to_char(add_months(sysdate,-1),'YYYYMMDD'), 'YYYYMMDD')+1)
+        )ST_DATE
+		]]>
+	</select>
+	
+	<select id="selectClinicStatisticsList" parameterType="hashmap" resultType="hashmap">
+		<![CDATA[
+        SELECT
+            ST_DAY
+            ,(SELECT COUNT(1) FROM CORONA_CLINIC_STATUS WHERE DEL_YN='0' AND CLINIC_VISIT_DATE=ST_DATE.ST_DAY) as clinic_total
+            ,(SELECT COUNT(1) FROM CORONA_CLINIC_STATUS WHERE DEL_YN='0' AND CLINIC_VISIT_DATE=ST_DATE.ST_DAY AND SUSPICION_GUBUN = '해외' ) as clinic_oversea
+            ,(SELECT COUNT(1) FROM CORONA_CLINIC_STATUS WHERE DEL_YN='0' AND CLINIC_VISIT_DATE=ST_DATE.ST_DAY AND SUSPICION_GUBUN = '강남구') as clinic_gangnam
+            ,(SELECT COUNT(1) FROM CORONA_CLINIC_STATUS WHERE DEL_YN='0' AND CLINIC_VISIT_DATE=ST_DATE.ST_DAY AND SUSPICION_GUBUN = '타지역') as clinic_tasigu
+            
+        FROM
+        (
+            SELECT TO_CHAR(TO_DATE(to_char(add_months(sysdate,-1),'YYYYMMDD'), 'YYYYMMDD')+LEVEL-1, 'YYYYMMDD') ST_DAY
+              FROM DUAL
+            CONNECT BY LEVEL <= (TO_DATE(to_char(sysdate,'YYYYMMDD'), 'YYYYMMDD')-TO_DATE(to_char(add_months(sysdate,-1),'YYYYMMDD'), 'YYYYMMDD')+1)
+        )ST_DATE
+		]]>
+	</select>
+
+<select id="selectTotalExMiddle" parameterType="hashmap" resultType="hashmap">
+          SELECT '' AS ORG_DONG,
+      			#{WRITE_DATE}  AS WRITE_DATE,
+                 COUNT (1) AS ORG_DONG_CNT,
+                 2 as ODR_ORG_DONG
+            FROM CORONA_CONFIRM_STATUS
+		   WHERE del_yn = 0
+			<if test="DEPART == 'TODAY'">
+				AND CONFIRM_DATE = #{WRITE_DATE} 
+			</if>
+		   
+		   UNION ALL
+            SELECT 
+                ORG_DONG
+                ,#{WRITE_DATE}  AS WRITE_DATE
+                ,COUNT(1) AS ORG_DONG_CNT
+                ,GROUPING(ORG_DONG) ODR_ORG_DONG
+            FROM CORONA_CONFIRM_STATUS CCS
+            WHERE del_yn = 0
+            AND ORG_GUBUN =  '타지역'
+			<if test="DEPART == 'TODAY'">
+				AND CONFIRM_DATE = #{WRITE_DATE} 
+			</if>
+            GROUP BY ROLLUP(ORG_DONG)
+            ORDER BY ODR_ORG_DONG DESC
+</select>
+
+<select id="selectTotalExOverseaMiddle" parameterType="hashmap" resultType="hashmap">
+            SELECT 
+                ORG_ADDRESS
+                ,COUNT(1) AS ORG_ADDRESS_CNT
+                ,GROUPING(ORG_ADDRESS) ODR_ORG_ADDRESS
+            FROM CORONA_CONFIRM_STATUS
+            WHERE del_yn = 0
+			AND ORG_GUBUN =  '해외'
+            GROUP BY ROLLUP(ORG_ADDRESS)
+            ORDER BY ODR_ORG_ADDRESS DESC
+</select>
+
+
+
+<!-- 확진자 현황 -->
+<select id="selectConfirmStatus_bak" parameterType="hashmap" resultType="hashmap">
+		<![CDATA[
+			SELECT 
+					#{showdate} as showdate
+					,#{seldate} as seldate
+			        ,(select count(1) from CORONA_CONFIRM_STATUS where write_date = #{seldate}) AS cur_total_cnt
+			        ,(select count(1) from CORONA_CONFIRM_STATUS where write_date = #{seldate} AND INFECT_GUBUN = '해외') AS oversea
+			        ,(select count(1) from CORONA_CONFIRM_STATUS where write_date = #{seldate} AND INFECT_DAE = '신천지') AS sincheonji
+			        ,(select count(1) from CORONA_CONFIRM_STATUS where write_date = #{seldate} AND INFECT_DAE = '대구') AS daegu
+			        ,(select count(1) from CORONA_CONFIRM_STATUS where write_date = #{seldate} AND INFECT_DAE = '콜센터') AS callcenter
+			        ,(select count(1) from CORONA_CONFIRM_STATUS where write_date = #{seldate} AND INFECT_DAE = '분당재생병원') AS bundanghos
+			        ,(select count(1) from CORONA_CONFIRM_STATUS where write_date = #{seldate} AND INFECT_DAE = '이태원') AS itaewon
+			        ,(select count(1) from CORONA_CONFIRM_STATUS where write_date = #{seldate} AND INFECT_DAE = '삼성서울병원') AS samsunghos
+			        ,(select count(1) from CORONA_CONFIRM_STATUS where write_date = #{seldate} AND INFECT_DAE = '확진자접촉자') AS infectcontact
+			        ,(select count(1) from CORONA_CONFIRM_STATUS where write_date = #{seldate} AND INFECT_GUBUN != '해외' AND INFECT_DAE not in('신천지','대구','콜센터','분당재생병원','이태원','삼성서울병원','확진자접촉자')) AS ETC
+			        ,(select count(1) from CORONA_CONFIRM_STATUS where DISCHARGE_DATE=#{seldate} ) AS DISCHARGE
+			  FROM DUAL
+		]]>
+</select>
+
+
+<select id="selectConfirmStatus" parameterType="hashmap" resultType="hashmap">
+			<![CDATA[
+			SELECT 
+					#{showdate} as showdate
+					,#{seldate} as seldate
+			        ,(select count(1) from CORONA_CONFIRM_STATUS where CONFIRM_DATE = #{seldate}) AS cur_total_cnt
+			        ,(select count(1) from CORONA_CONFIRM_STATUS where CONFIRM_DATE = #{seldate} AND INFECT_GUBUN = '해외') AS oversea
+			]]>
+		             <foreach collection="SHOW_LIST" item="i" index="index"> 
+		                    ,(select count(1) from CORONA_CONFIRM_STATUS where CONFIRM_DATE = #{seldate} AND INFECT_DAE = #{i}) AS "SHOW_${index}"
+		             </foreach>
+					<![CDATA[
+		             ,(select count(1) from CORONA_CONFIRM_STATUS where CONFIRM_DATE = #{seldate} AND INFECT_GUBUN != '해외' AND INFECT_DAE not in
+		             ]]>
+			        <foreach collection="SHOW_LIST" item="i" index="index"  open="(" close=")" separator=",">
+			            #{i}
+			        </foreach>
+
+					<![CDATA[
+						) AS ETC
+						
+			        ,(select count(1) from CORONA_CONFIRM_STATUS) AS accum_cur_total_cnt
+			        ,(select count(1) from CORONA_CONFIRM_STATUS where INFECT_GUBUN = '해외') AS accum_oversea
+					]]>
+		             <foreach collection="SHOW_LIST" item="i" index="index"> 
+		                    ,(select count(1) from CORONA_CONFIRM_STATUS where INFECT_DAE = #{i}) AS "ACCUM_SHOW_${index}"
+		             </foreach>
+					<![CDATA[
+		             ,(select count(1) from CORONA_CONFIRM_STATUS where INFECT_GUBUN != '해외' AND INFECT_DAE not in
+		             ]]>
+			        <foreach collection="SHOW_LIST" item="i" index="index"  open="(" close=")" separator=",">
+			            #{i}
+			        </foreach>
+
+					<![CDATA[
+						) AS ACCUM_ETC
+					]]>
+					
+			  FROM DUAL
+</select>
+
+<select id="selectConfirmStatusAccum" parameterType="hashmap" resultType="hashmap">
+		<![CDATA[
+			  SELECT 
+			        (select count(1) from CORONA_CONFIRM_STATUS) AS cur_total_cnt
+			        ,(select count(1) from CORONA_CONFIRM_STATUS where INFECT_GUBUN = '해외') AS oversea
+			        ,(select count(1) from CORONA_CONFIRM_STATUS where INFECT_DAE = '신천지') AS sincheonji
+			        ,(select count(1) from CORONA_CONFIRM_STATUS where INFECT_DAE = '대구') AS daegu
+			        ,(select count(1) from CORONA_CONFIRM_STATUS where INFECT_DAE = '콜센터') AS callcenter
+			        ,(select count(1) from CORONA_CONFIRM_STATUS where INFECT_DAE = '분당재생병원') AS bundanghos
+			        ,(select count(1) from CORONA_CONFIRM_STATUS where INFECT_DAE = '이태원') AS itaewon
+			        ,(select count(1) from CORONA_CONFIRM_STATUS where INFECT_DAE = '삼성서울병원') AS samsunghos
+			        ,(select count(1) from CORONA_CONFIRM_STATUS where INFECT_DAE = '확진자접촉자') AS infectcontact
+			        ,(select count(1) from CORONA_CONFIRM_STATUS where INFECT_GUBUN != '해외' AND INFECT_DAE not in('신천지','대구','콜센터','분당재생병원','이태원','삼성서울병원','확진자접촉자')) AS ETC
+			        ,(select count(1) from CORONA_CONFIRM_STATUS where DISCHARGE_DATE IS NOT NULL) AS DISCHARGE
+			  FROM DUAL           
+		]]>
+</select>
+
+<!-- 확진자 노출 -->
+<select id="selectConfirmShow" parameterType="hashmap" resultType="hashmap">
+		<![CDATA[
+			SELECT 
+					SHOW_GUBUN
+					,SHOW_LIST
+			  FROM CORONA_SHOW_LIST
+			  WHERE SHOW_GUBUN = 'CONFIRM'
+		]]>
+</select>
+
+<select id="selectConfirmDtlList" parameterType="hashmap" resultType="hashmap">
+		<![CDATA[
+             SELECT COUNT(*) OVER() AS TOTAL_COUNT                                
+                    ,ID
+					,WRITE_DATE
+					,CELL_NUM
+					,PATIENT_NUM
+					,PATIENT_NAME
+					,CONTACT_NUM
+					,CONTACT_NAME
+					,CONFIRM_GRADE
+					,SEX
+					,BIRTH
+					,JOB
+					,ORG_ADDRESS
+					,ORG_ADDRESS_DTL
+					,INFECT_GUBUN
+					,INFECT_DONG
+					,INFECT_DAE
+					,INFECT_SO
+					,INFECT_ASFECT_AREA
+					,INFECT_ASFECT_AREA_DTL
+					,CONFIRM_DATE
+					,HOSPITAL
+					,DISCHARGE_DATE
+					,REMARK
+					,INS_ID
+                    ,TO_CHAR(INS_DATE, 'YYYY.MM.DD HH24:MI:SS') INS_DATE
+            FROM CORONA_CONFIRM_STATUS 
+            WHERE DEL_YN = 0              
+		]]>
+		
+			<if test="INFECT_GUBUN =='해외'">
+				AND INFECT_GUBUN =   #{INFECT_GUBUN}
+			</if>
+		
+			<if test="INFECT_DAE != '' and INFECT_DAE != 'undefined'">
+				<if test="INFECT_DAE != 'other'">
+					AND INFECT_DAE =  #{INFECT_DAE}
+				</if>
+			
+				<if test="INFECT_DAE == 'other'">
+					AND INFECT_GUBUN != '해외' AND INFECT_DAE not in('신천지','대구','콜센터','분당재생병원','이태원','삼성서울병원','확진자접촉자')
+				</if>
+				
+				
+				<if test="INFECT_SO != ''">
+					AND INFECT_SO =  #{INFECT_SO}
+				</if>
+			</if>
+			
+		<if test="ETC_GUBUN == '병원'">
+			AND HOSPITAL =  #{ETC_GUBUN_CONDITION}
+		</if>
+
+		<if test="WRITE_DATE != null and WRITE_DATE !='' and WRITE_DATE !='누적'">
+		AND WRITE_DATE = #{WRITE_DATE}
+		</if>
+		ORDER BY WRITE_DATE,INS_DATE DESC		
+</select>
+
+
+ 
+<select id="selectConfirmMaplist" parameterType="hashmap" resultType="hashmap">
+  SELECT INFECT_DAE,
+         MAX (INFECT_ASFECT_AREA) AS INFECT_ASFECT_AREA,
+         NVL (SUM ( (SELECT 1 FROM CORONA_CONFIRM_STATUS WHERE INFECT_GUBUN != '타지역집단감염' AND ORG_GUBUN = '강남구' AND ID = CCONS.ID)),0) AS GANGNAM_CNT,
+         NVL (SUM ( (SELECT 1 FROM CORONA_CONFIRM_STATUS WHERE INFECT_GUBUN != '타지역집단감염' AND ORG_GUBUN != '강남구' AND ID = CCONS.ID)),0) AS TASIGU_CNT
+    FROM CORONA_CONFIRM_STATUS CCONS
+   WHERE INFECT_GUBUN = '강남구' 
+   AND DEL_YN = 0
+   AND INFECT_GUBUN != '타지역집단감염'
+GROUP BY INFECT_DAE
+</select>
+
+<select id="selectIsoMaplist" parameterType="hashmap" resultType="hashmap">
+	SELECT 
+	    NAME
+	    ,SEX
+	    ,SELF_ISO_AREA_DONG
+	    ,SELF_ISO_AREA_ADDRESS
+	    ,SELF_ISO_AREA_ADDRESS_DTL
+	    ,MONITOR_END AS FREE_DATE
+	    ,DAMDANG_NAME
+	    ,DAMDANG_CALL
+	FROM CORONA_DOMESTIC_CONTACT_STATUS
+	WHERE DEL_YN =0
+	AND MONITOR_END > TO_CHAR(SYSDATE,'YYYYMMDD')
+	
+	UNION ALL
+	
+	SELECT 
+	    NAME
+	    ,SEX
+	    ,SELF_ISO_AREA_DONG
+	    ,SELF_ISO_AREA_ADDRESS
+	    ,SELF_ISO_AREA_ADDRESS_DTL
+	    ,FREE_DATE
+	    ,DAMDANG_NAME
+	    ,DAMDANG_CALL
+	FROM CORONA_OVERSEA_STATUS
+	WHERE DEL_YN =0
+	AND FREE_DATE > TO_CHAR(SYSDATE,'YYYYMMDD')
+</select>
+ 
+
+ 
+
+<select id="selectConfirmMiddleOversea" parameterType="hashmap" resultType="hashmap">
+		<![CDATA[
+		  
+					SELECT
+						#{INFECT_GUBUN} as INFECT_GUBUN
+						,#{DEPART} as DEPART						
+						,REGEXP_REPLACE(WRITE_DATE, '(.{4})(.{2})(.{2})', '\1-\2-\3') as WRITE_DATE_SHOW
+						,WRITE_DATE
+                        ,INFECT_DAE
+                        , INFECT_SO
+                        , COUNT (1) AS INFECT_SO_CNT
+                        ,GROUPING(INFECT_DAE) ODR_DAE
+                        ,GROUPING(INFECT_SO) ODR_SO
+                    FROM CORONA_CONFIRM_STATUS
+                   WHERE del_yn = 0 
+                   ]]>
+                   
+					<if test="INFECT_GUBUN == '해외'">
+						AND INFECT_GUBUN = #{INFECT_GUBUN} 
+					</if>
+					
+					<if test="INFECT_DAE != '' and INFECT_DAE != 'undefined'">
+						<if test="INFECT_DAE != 'other'">
+							AND INFECT_DAE =  #{INFECT_DAE}
+						</if>
+					
+						<if test="INFECT_DAE == 'other'">
+							AND INFECT_GUBUN != '해외' AND INFECT_DAE not in('신천지','대구','콜센터','분당재생병원','이태원','삼성서울병원','확진자접촉자')
+						</if>
+						
+					</if>
+					
+					
+					<if test="DEPART != 'accum'">
+						AND write_date = #{WRITE_DATE} 
+					</if>
+                GROUP BY ROLLUP(WRITE_DATE,INFECT_DAE, INFECT_SO)
+            ORDER BY WRITE_DATE DESC,ODR_DAE DESC,INFECT_DAE
+			<if test="INFECT_GUBUN == '해외'">
+				,ODR_SO ASC
+			</if>
+			
+			<if test="INFECT_GUBUN != '해외'">
+				,ODR_SO DESC
+			</if>
+</select>
+
+
+<select id="selectConfirmAccumMiddleOversea" parameterType="hashmap" resultType="hashmap">
+		<![CDATA[
+		  
+					SELECT
+						#{INFECT_GUBUN} as INFECT_GUBUN
+						,'누적' as WRITE_DATE_SHOW
+						,'누적' as WRITE_DATE
+                        ,INFECT_DAE
+                        , INFECT_SO
+                        , COUNT (1) AS INFECT_SO_CNT
+                        ,GROUPING(INFECT_DAE) ODR_DAE
+                        ,GROUPING(INFECT_SO) ODR_SO
+                    FROM CORONA_CONFIRM_STATUS
+                   WHERE del_yn = 0 
+                   ]]>
+                   
+					<if test="INFECT_GUBUN == '해외'">
+						AND INFECT_GUBUN = #{INFECT_GUBUN} 
+					</if>
+					
+					<if test="INFECT_DAE != '' and INFECT_DAE != 'undefined'">
+						<if test="INFECT_DAE != 'other'">
+							AND INFECT_DAE =  #{INFECT_DAE}
+						</if>
+					
+						<if test="INFECT_DAE == 'other'">
+							AND INFECT_GUBUN != '해외' AND INFECT_DAE not in('신천지','대구','콜센터','분당재생병원','이태원','삼성서울병원','확진자접촉자')
+						</if>
+						
+					</if>
+					
+                GROUP BY ROLLUP(INFECT_DAE, INFECT_SO)
+            ORDER BY ODR_DAE DESC,INFECT_DAE
+			<if test="INFECT_GUBUN == '해외'">
+				,ODR_SO ASC
+			</if>
+			
+			<if test="INFECT_GUBUN != '해외'">
+				,ODR_SO DESC
+			</if>
+</select>
+
+
+
+<select id="selectConfirmMiddleHospital" parameterType="hashmap" resultType="hashmap">
+		<![CDATA[
+		SELECT
+			#{INFECT_GUBUN} as INFECT_GUBUN 
+			,#{INFECT_DAE} as INFECT_DAE
+			,REGEXP_REPLACE(WRITE_DATE, '(.{4})(.{2})(.{2})', '\1-\2-\3') as WRITE_DATE_SHOW
+			,WRITE_DATE
+		    ,HOSPITAL
+		    ,COUNT(1) HOSPITAL_CNT
+		    ,GROUPING(HOSPITAL) ODR_HOSPITAL
+		     fROM CORONA_CONFIRM_STATUS
+		WHERE del_yn = 0 
+		]]>
+		<if test="INFECT_GUBUN != ''">
+			AND INFECT_GUBUN = #{INFECT_GUBUN} 
+		</if>
+		<if test="INFECT_DAE != ''">
+			<if test="INFECT_DAE != 'other'">
+				AND INFECT_DAE = #{INFECT_DAE} 
+			</if>
+			<if test="INFECT_DAE == 'other'">
+				AND INFECT_GUBUN != '해외' AND INFECT_DAE not in('신천지','대구','콜센터','분당재생병원','이태원','삼성서울병원','확진자접촉자')
+			</if>
+		</if>
+			AND write_date = #{WRITE_DATE} 
+		GROUP BY ROLLUP(WRITE_DATE,HOSPITAL)
+		union all
+		SELECT '누계' AS INFECT_GUBUN,
+		       #{INFECT_DAE}  AS INFECT_DAE,
+		       '' AS WRITE_DATE_SHOW,
+		       ''  AS WRITE_DATE,
+		       '누계' AS HOSPITAL,
+		       (select count(1) from CORONA_CONFIRM_STATUS
+				WHERE del_yn = 0 
+				
+				<if test="INFECT_GUBUN != ''">
+					AND INFECT_GUBUN = #{INFECT_GUBUN} 
+				</if>
+				<if test="INFECT_DAE != ''">
+					<if test="INFECT_DAE != 'other'">
+						AND INFECT_DAE = #{INFECT_DAE} 
+					</if>
+					<if test="INFECT_DAE == 'other'">
+						AND INFECT_GUBUN != '해외' AND INFECT_DAE not in('신천지','대구','콜센터','분당재생병원','이태원','삼성서울병원','확진자접촉자')
+					</if>
+				</if>
+					AND write_date = #{WRITE_DATE} 
+
+				) AS HOSPITAL_SO_CNT,
+		       2 AS ODR_HOSPITAL
+		  FROM DUAL
+		
+		ORDER BY WRITE_DATE DESC,ODR_HOSPITAL DESC
+</select>
+
+
+<select id="selectConfirmAccumMiddleHospital" parameterType="hashmap" resultType="hashmap">
+		<![CDATA[
+		SELECT
+			#{INFECT_GUBUN} as INFECT_GUBUN 
+			,#{INFECT_DAE} as INFECT_DAE
+			,'누적' as WRITE_DATE_SHOW
+			,'누적' as WRITE_DATE
+		    ,HOSPITAL
+		    ,COUNT(1) HOSPITAL_CNT
+		    ,GROUPING(HOSPITAL) ODR_HOSPITAL
+		     fROM CORONA_CONFIRM_STATUS
+		WHERE del_yn = 0 
+		]]>
+		<if test="INFECT_GUBUN != ''">
+			AND INFECT_GUBUN = #{INFECT_GUBUN} 
+		</if>
+		<if test="INFECT_DAE != ''">
+			<if test="INFECT_DAE != 'other'">
+				AND INFECT_DAE = #{INFECT_DAE} 
+			</if>
+			<if test="INFECT_DAE == 'other'">
+				AND INFECT_GUBUN != '해외' AND INFECT_DAE not in('신천지','대구','콜센터','분당재생병원','이태원','삼성서울병원','확진자접촉자')
+			</if>
+		</if>
+		
+		<if test="DEPART != 'accum'">
+			AND write_date = #{WRITE_DATE} 
+		</if>
+		GROUP BY ROLLUP(HOSPITAL)
+		union all
+		SELECT '누계' AS INFECT_GUBUN,
+		       #{INFECT_DAE} AS INFECT_DAE,
+		       '' AS WRITE_DATE_SHOW,
+		       ''  AS WRITE_DATE,
+		       '누계' AS HOSPITAL,
+		       (select count(1) from CORONA_CONFIRM_STATUS
+				WHERE del_yn = 0 
+				
+				<if test="INFECT_GUBUN != ''">
+					AND INFECT_GUBUN = #{INFECT_GUBUN} 
+				</if>
+				<if test="INFECT_DAE != ''">
+					<if test="INFECT_DAE != 'other'">
+						AND INFECT_DAE = #{INFECT_DAE} 
+					</if>
+					<if test="INFECT_DAE == 'other'">
+						AND INFECT_GUBUN != '해외' AND INFECT_DAE not in('신천지','대구','콜센터','분당재생병원','이태원','삼성서울병원','확진자접촉자')
+					</if>
+				</if>
+
+
+				) AS HOSPITAL_SO_CNT,
+		       2 AS ODR_HOSPITAL
+		  FROM DUAL
+		
+		ORDER BY ODR_HOSPITAL DESC
+</select>
+
+
+<select id="selectIsoStatisticsList" parameterType="hashmap" resultType="hashmap">
+<![CDATA[
+			SELECT 
+			                 ST_DAY
+			                 ,(select count(1) from CORONA_DOMESTIC_CONTACT_STATUS where DEL_YN = '0' AND MONITOR_START <=ST_DATE.ST_DAY AND MONITOR_END > ST_DATE.ST_DAY)
+			                 + (select count(1) from CORONA_OVERSEA_STATUS where DEL_YN = '0' AND COME_DATE <=ST_DATE.ST_DAY AND FREE_DATE > ST_DATE.ST_DAY) AS due_iso
+			                 ,(select count(1) from CORONA_DOMESTIC_CONTACT_STATUS where DEL_YN = '0' AND MONITOR_START <=ST_DATE.ST_DAY AND MONITOR_END = ST_DATE.ST_DAY)
+			                 + (select count(1) from CORONA_OVERSEA_STATUS where DEL_YN = '0' AND COME_DATE <=ST_DATE.ST_DAY AND FREE_DATE = ST_DATE.ST_DAY) AS free_iso
+			                 ,(select count(1) from CORONA_DOMESTIC_CONTACT_STATUS where DEL_YN = '0' AND MONITOR_START <=ST_DATE.ST_DAY AND MONITOR_END <= ST_DATE.ST_DAY)
+			                 + (select count(1) from CORONA_OVERSEA_STATUS where DEL_YN = '0' AND COME_DATE <=ST_DATE.ST_DAY AND FREE_DATE <= ST_DATE.ST_DAY) AS accum_iso
+			                 ,(select count(1) from CORONA_DOMESTIC_CONTACT_STATUS where DEL_YN = '0' AND MONITOR_START <=ST_DATE.ST_DAY)
+			                 +(select count(1) from CORONA_OVERSEA_STATUS where DEL_YN = '0' AND COME_DATE <=ST_DATE.ST_DAY) AS total_iso
+			FROM
+	        (
+	            SELECT TO_CHAR(TO_DATE(to_char(add_months(sysdate,-1),'YYYYMMDD'), 'YYYYMMDD')+LEVEL-1, 'YYYYMMDD') ST_DAY
+	              FROM DUAL
+	            CONNECT BY LEVEL <= (TO_DATE(to_char(sysdate,'YYYYMMDD'), 'YYYYMMDD')-TO_DATE(to_char(add_months(sysdate,-1),'YYYYMMDD'), 'YYYYMMDD')+1)
+	        )ST_DATE
+	        ]]>
+</select>
+
+
+<!-- 자가격리자 현황 해외입국 -->
+<select id="selectIsoOverseaMiddle" parameterType="hashmap" resultType="hashmap">
+	  SELECT REGEXP_REPLACE(#{WRITE_DATE}, '(.{4})(.{2})(.{2})', '\1-\2-\3') as WRITE_DATE_SHOW,
+	         #{WRITE_DATE} AS WRITE_DATE,
+	         #{NAME} AS NAME,
+	         '해외' AS ISO_GUBUN,
+	         '' AS VISIT_NATION,
+             (	
+             	SELECT COUNT (1) 
+             	FROM CORONA_OVERSEA_STATUS 
+             	WHERE DEL_YN = 0 
+      	   		<if test="DEPART == 'TODAY'">
+					AND WRITE_DATE = #{WRITE_DATE}
+				</if>
+				
+		   		<if test="ISO_GUBUN == 'SELF'">
+					AND FREE_DATE <![CDATA[<]]> #{WRITE_DATE}
+				</if>	
+				
+		   		<if test="ISO_GUBUN == 'FREE'">
+					AND FREE_DATE = #{WRITE_DATE}
+				</if>	
+             
+             ) 
+	         + (
+	         	SELECT COUNT (1) 
+	         	FROM CORONA_DOMESTIC_CONTACT_STATUS 
+	         	WHERE DEL_YN = 0 
+  		   		<if test="DEPART == 'TODAY'">
+					AND WRITE_DATE = #{WRITE_DATE}
+				</if>
+				
+		   		<if test="ISO_GUBUN == 'SELF'">
+					AND MONITOR_END <![CDATA[<]]> #{WRITE_DATE}
+				</if>	
+				
+		   		<if test="ISO_GUBUN == 'FREE'">
+					AND MONITOR_END = #{WRITE_DATE}
+				</if>	
+         	)
+	         AS VISIT_NATION_CNT,
+	         2 ODR_VISIT_NATION
+	    FROM DUAL
+		UNION ALL
+
+		  SELECT    
+  					REGEXP_REPLACE(#{WRITE_DATE}, '(.{4})(.{2})(.{2})', '\1-\2-\3') as WRITE_DATE_SHOW
+					,#{WRITE_DATE} as WRITE_DATE
+					,#{NAME} as NAME
+	  				,'해외' AS ISO_GUBUN
+		            ,VISIT_NATION
+		         ,COUNT(1) AS VISIT_NATION_CNT
+		         ,GROUPING(VISIT_NATION) ODR_VISIT_NATION
+		    FROM CORONA_OVERSEA_STATUS
+		   WHERE DEL_YN = 0
+		   
+	   		<if test="DEPART == 'TODAY'">
+				AND WRITE_DATE = #{WRITE_DATE}
+			</if>
+			
+	   		<if test="ISO_GUBUN == 'SELF'">
+				AND FREE_DATE <![CDATA[>]]> #{WRITE_DATE}
+			</if>	
+			
+	   		<if test="ISO_GUBUN == 'FREE'">
+				AND FREE_DATE = #{WRITE_DATE}
+			</if>			
+
+		GROUP BY ROLLUP(VISIT_NATION)
+		ORDER BY ODR_VISIT_NATION DESC
+</select>
+
+<!-- 자가격리자 현황 국내-->
+<select id="selectIsoDomMiddle" parameterType="hashmap" resultType="hashmap">
+		  SELECT    
+					REGEXP_REPLACE(#{WRITE_DATE}, '(.{4})(.{2})(.{2})', '\1-\2-\3') as WRITE_DATE_SHOW
+					,#{WRITE_DATE} as WRITE_DATE
+					,#{NAME} as NAME
+		  			,'국내' AS ISO_GUBUN
+		            ,SELF_ISO_AREA_DONG
+		         ,COUNT(1) AS SELF_ISO_AREA_DONG_CNT
+		         ,GROUPING(SELF_ISO_AREA_DONG) ODR_SELF_ISO_AREA_DONG
+		    FROM CORONA_DOMESTIC_CONTACT_STATUS
+		   WHERE DEL_YN = 0
+
+		   
+	   		<if test="DEPART == 'TODAY'">
+				AND WRITE_DATE = #{WRITE_DATE}
+			</if>
+			
+	   		<if test="ISO_GUBUN == 'SELF'">
+				AND MONITOR_END <![CDATA[>]]> #{WRITE_DATE}
+			</if>	
+			
+	   		<if test="ISO_GUBUN == 'FREE'">
+				AND MONITOR_END = #{WRITE_DATE}
+			</if>			
+
+		GROUP BY ROLLUP(SELF_ISO_AREA_DONG)
+		ORDER BY ODR_SELF_ISO_AREA_DONG DESC
+</select>
+
+
+<!-- 상담민원 리스트-->
+<select id="selectConsultMiddle" parameterType="hashmap" resultType="hashmap">
+		  SELECT    
+					REGEXP_REPLACE(#{WRITE_DATE}, '(.{4})(.{2})(.{2})', '\1-\2-\3') as WRITE_DATE_SHOW
+	                ,#{WRITE_DATE} AS WRITE_DATE
+	                ,#{DEPART} AS DEPART
+	                ,#{JUYA_GUBUN}  AS JUYA_GUBUN
+	                ,'' as CONSULT_GUBUN
+	                ,COUNT(1) AS CONSULT_GUBUN_CNT
+	                ,2 as ODR_CONSULT_GUBUN
+	            FROM CORONA_CONSULT_STATUS
+	            WHERE del_yn = 0
+		   		<if test="DEPART == 'TODAY'">
+					AND WRITE_DATE = #{WRITE_DATE}
+				</if>
+			
+			UNION ALL
+
+		  SELECT    
+					REGEXP_REPLACE(#{WRITE_DATE}, '(.{4})(.{2})(.{2})', '\1-\2-\3') as WRITE_DATE_SHOW
+	                ,#{WRITE_DATE} AS WRITE_DATE
+	                ,#{DEPART} AS DEPART
+	                ,MAX(JUYA_GUBUN)  AS JUYA_GUBUN
+	                ,CONSULT_GUBUN
+	                ,COUNT(1) AS CONSULT_GUBUN_CNT
+	                ,GROUPING(CONSULT_GUBUN) ODR_CONSULT_GUBUN
+	            FROM CORONA_CONSULT_STATUS
+	            WHERE del_yn = 0
+		   
+	   		<if test="DEPART == 'TODAY'">
+				AND WRITE_DATE = #{WRITE_DATE}
+			</if>
+			
+	   		<if test="JUYA_GUBUN != ''">
+				AND JUYA_GUBUN = #{JUYA_GUBUN}
+			</if>	
+		GROUP BY ROLLUP(CONSULT_GUBUN)
+		ORDER BY CONSULT_GUBUN DESC
+</select>
+
+
+<!--선별진료소 중간 -->
+<select id="selectClinicMiddle" parameterType="hashmap" resultType="hashmap">
+		  SELECT    
+					REGEXP_REPLACE(#{WRITE_DATE}, '(.{4})(.{2})(.{2})', '\1-\2-\3') as WRITE_DATE_SHOW
+	                ,#{WRITE_DATE} AS WRITE_DATE
+	                ,#{DEPART} AS DEPART
+	                ,#{ISO} AS ISO
+					,NVL(sum((SELECT 1 FROM CORONA_CONFIRM_STATUS CCONFIRMS 
+                            WHERE CCONFIRMS.DEL_YN = 0
+                            AND CCONFIRMS.PATIENT_NAME = CCLINICS.NAME
+                            AND CCONFIRMS.BIRTH = CCLINICS.BIRTH
+                            AND CCONFIRMS.CELL_NUM = CCLINICS.CELL_NUM
+                            AND ROWNUM = 1
+                        )),0) as CONFIRM_CHECK_SUM
+	                ,#{SUSPICION_GUBUN}  AS SUSPICION_GUBUN
+	                ,'' as SUSPICION_DAE
+	                ,COUNT(1) AS SUSPICION_DAE_CNT
+	                ,2 as ODR_SUSPICION_DAE
+	            FROM CORONA_CLINIC_STATUS CCLINICS
+	            WHERE del_yn = 0
+		   		<if test="DEPART == 'TODAY'">
+					AND WRITE_DATE = #{WRITE_DATE}
+				</if>
+				
+		   		<if test="ISO == 'ISO_EX'">
+					AND INSPECTION_CASE != '자가격리해제자'
+				</if>
+				
+		   		<if test="ISO == 'ISO'">
+					AND INSPECTION_CASE = '자가격리해제자'
+				</if>
+				
+				UNION ALL
+				
+          		SELECT    
+                    REGEXP_REPLACE(#{WRITE_DATE}, '(.{4})(.{2})(.{2})', '\1-\2-\3') as WRITE_DATE_SHOW
+	                ,#{WRITE_DATE} AS WRITE_DATE
+	                ,#{DEPART} AS DEPART
+	                ,#{ISO} AS ISO
+					,NVL(sum((SELECT 1 FROM CORONA_CONFIRM_STATUS CCONFIRMS 
+                            WHERE CCONFIRMS.DEL_YN = 0
+                            AND CCONFIRMS.PATIENT_NAME = CCLINICS.NAME
+                            AND CCONFIRMS.BIRTH = CCLINICS.BIRTH
+                            AND CCONFIRMS.CELL_NUM = CCLINICS.CELL_NUM
+                            AND ROWNUM = 1
+                        )),0) as CONFIRM_CHECK_SUM
+	                ,MAX(SUSPICION_GUBUN)  AS SUSPICION_GUBUN
+                    ,SUSPICION_DAE
+                    ,COUNT(1) AS SUSPICION_DAE_CNT
+                    ,GROUPING(SUSPICION_DAE) ODR_SUSPICION_DAE
+                FROM CORONA_CLINIC_STATUS CCLINICS
+                WHERE del_yn = 0
+	   		<if test="DEPART == 'TODAY'">
+				AND WRITE_DATE = #{WRITE_DATE}
+			</if>
+			
+	   		<if test="SUSPICION_GUBUN != ''">
+				AND SUSPICION_GUBUN = #{SUSPICION_GUBUN}
+			</if>	
+			
+		   		<if test="ISO == 'ISO_EX'">
+					AND INSPECTION_CASE != '자가격리해제자'
+				</if>
+				
+		   		<if test="ISO == 'ISO'">
+					AND INSPECTION_CASE = '자가격리해제자'
+				</if>
+                GROUP BY ROLLUP(SUSPICION_DAE)
+                ORDER BY SUSPICION_DAE DESC
+</select>
+
+
+<select id="selectClinicMiddleSumStatus" parameterType="hashmap" resultType="hashmap">
+		<![CDATA[
+        SELECT
+             (SELECT COUNT(1) FROM CORONA_CLINIC_STATUS WHERE DEL_YN='0' AND CLINIC_VISIT_DATE=#{SELDATE} AND INSPECTION_CASE != '자가격리해제자') AS CUR_CLINIC_TOTAL 
+            ,(SELECT COUNT(1) FROM CORONA_CLINIC_STATUS WHERE DEL_YN='0' AND CLINIC_VISIT_DATE=#{SELDATE} AND INSPECTION_CASE != '자가격리해제자' AND SUSPICION_GUBUN = '강남구') AS CUR_CLINIC_GANGNAM_TOTAL
+            ,(SELECT COUNT(1) FROM CORONA_CLINIC_STATUS WHERE DEL_YN='0' AND CLINIC_VISIT_DATE=#{SELDATE} AND INSPECTION_CASE != '자가격리해제자' AND SUSPICION_GUBUN = '타지역') AS CUR_CLINIC_TASIGU_TOTAL
+            ,(SELECT COUNT(1) FROM CORONA_CLINIC_STATUS WHERE DEL_YN='0' AND CLINIC_VISIT_DATE=#{SELDATE} AND INSPECTION_CASE != '자가격리해제자' AND SUSPICION_GUBUN = '해외') AS CUR_CLINIC_OVERSEA_TOTAL
+            
+            ,(SELECT COUNT(1) FROM CORONA_CLINIC_STATUS WHERE DEL_YN='0' AND CLINIC_VISIT_DATE=#{SELDATE} AND INSPECTION_CASE = '자가격리해제자') AS CUR_CLINIC_ISO_TOTAL 
+            ,(SELECT COUNT(1) FROM CORONA_CLINIC_STATUS WHERE DEL_YN='0' AND CLINIC_VISIT_DATE=#{SELDATE} AND INSPECTION_CASE = '자가격리해제자' AND SUSPICION_GUBUN = '강남구') AS CUR_CLINIC_ISO_GANGNAM_TOTAL
+            ,(SELECT COUNT(1) FROM CORONA_CLINIC_STATUS WHERE DEL_YN='0' AND CLINIC_VISIT_DATE=#{SELDATE} AND INSPECTION_CASE = '자가격리해제자' AND SUSPICION_GUBUN = '타지역') AS CUR_CLINIC_ISO_TASIGU_TOTAL
+            ,(SELECT COUNT(1) FROM CORONA_CLINIC_STATUS WHERE DEL_YN='0' AND CLINIC_VISIT_DATE=#{SELDATE} AND INSPECTION_CASE = '자가격리해제자' AND SUSPICION_GUBUN = '해외') AS CUR_CLINIC_ISO_OVERSEA_TOTAL
+            
+            ,(SELECT COUNT(1) FROM CORONA_CLINIC_STATUS WHERE DEL_YN='0') AS CUR_ACCUM_CLINIC_TOTAL 
+            ,(SELECT COUNT(1) FROM CORONA_CLINIC_STATUS WHERE DEL_YN='0' AND SUSPICION_GUBUN = '강남구') AS CUR_ACCUM_CLINIC_GANGNAM_TOTAL
+            ,(SELECT COUNT(1) FROM CORONA_CLINIC_STATUS WHERE DEL_YN='0' AND SUSPICION_GUBUN = '타지역') AS CUR_ACCUM_CLINIC_TASIGU_TOTAL
+            ,(SELECT COUNT(1) FROM CORONA_CLINIC_STATUS WHERE DEL_YN='0' AND SUSPICION_GUBUN = '해외') AS CUR_ACCUM_CLINIC_OVERSEA_TOTAL
+
+            ,(SELECT COUNT(1) FROM CORONA_CLINIC_STATUS B WHERE DEL_YN='0' AND CLINIC_VISIT_DATE=#{SELDATE} AND INSPECTION_CASE != '자가격리해제자' AND ( B.NAME,B.BIRTH,B.CELL_NUM) IN (SELECT A.PATIENT_NAME,A.BIRTH,A.CELL_NUM FROM CORONA_CONFIRM_STATUS A WHERE A.DEL_YN = 0)) AS CUR_CONFIRM_TOTAL
+            ,(SELECT COUNT(1) FROM CORONA_CLINIC_STATUS B WHERE DEL_YN='0' AND CLINIC_VISIT_DATE=#{SELDATE} AND INSPECTION_CASE != '자가격리해제자' AND SUSPICION_GUBUN = '강남구' AND ( B.NAME,B.BIRTH,B.CELL_NUM) IN (SELECT A.PATIENT_NAME,A.BIRTH,A.CELL_NUM FROM CORONA_CONFIRM_STATUS A WHERE A.DEL_YN = 0)) AS CUR_CONFIRM_GANGNAM
+            ,(SELECT COUNT(1) FROM CORONA_CLINIC_STATUS B WHERE DEL_YN='0' AND CLINIC_VISIT_DATE=#{SELDATE} AND INSPECTION_CASE != '자가격리해제자' AND SUSPICION_GUBUN = '타지역' AND ( B.NAME,B.BIRTH,B.CELL_NUM) IN (SELECT A.PATIENT_NAME,A.BIRTH,A.CELL_NUM FROM CORONA_CONFIRM_STATUS A WHERE A.DEL_YN = 0)) AS CUR_CONFIRM_TASIGU
+            ,(SELECT COUNT(1) FROM CORONA_CLINIC_STATUS B WHERE DEL_YN='0' AND CLINIC_VISIT_DATE=#{SELDATE} AND INSPECTION_CASE != '자가격리해제자' AND SUSPICION_GUBUN = '해외' AND ( B.NAME,B.BIRTH,B.CELL_NUM) IN (SELECT A.PATIENT_NAME,A.BIRTH,A.CELL_NUM FROM CORONA_CONFIRM_STATUS A WHERE A.DEL_YN = 0)) AS CUR_CONFIRM_OVERSEA
+            
+            ,(SELECT COUNT(1) FROM CORONA_CLINIC_STATUS B WHERE DEL_YN='0' AND CLINIC_VISIT_DATE=#{SELDATE} AND INSPECTION_CASE = '자가격리해제자' AND ( B.NAME,B.BIRTH,B.CELL_NUM) IN (SELECT A.PATIENT_NAME,A.BIRTH,A.CELL_NUM FROM CORONA_CONFIRM_STATUS A WHERE A.DEL_YN = 0)) AS CUR_CONFIRM_ISO_TOTAL
+            ,(SELECT COUNT(1) FROM CORONA_CLINIC_STATUS B WHERE DEL_YN='0' AND CLINIC_VISIT_DATE=#{SELDATE} AND INSPECTION_CASE = '자가격리해제자' AND SUSPICION_GUBUN = '강남구' AND ( B.NAME,B.BIRTH,B.CELL_NUM) IN (SELECT A.PATIENT_NAME,A.BIRTH,A.CELL_NUM FROM CORONA_CONFIRM_STATUS A WHERE A.DEL_YN = 0)) AS CUR_CONFIRM_ISO_GANGNAM
+            ,(SELECT COUNT(1) FROM CORONA_CLINIC_STATUS B WHERE DEL_YN='0' AND CLINIC_VISIT_DATE=#{SELDATE} AND INSPECTION_CASE = '자가격리해제자' AND SUSPICION_GUBUN = '타지역' AND ( B.NAME,B.BIRTH,B.CELL_NUM) IN (SELECT A.PATIENT_NAME,A.BIRTH,A.CELL_NUM FROM CORONA_CONFIRM_STATUS A WHERE A.DEL_YN = 0)) AS CUR_CONFIRM_ISO_TASIGU
+            ,(SELECT COUNT(1) FROM CORONA_CLINIC_STATUS B WHERE DEL_YN='0' AND CLINIC_VISIT_DATE=#{SELDATE} AND INSPECTION_CASE = '자가격리해제자' AND SUSPICION_GUBUN = '해외' AND ( B.NAME,B.BIRTH,B.CELL_NUM) IN (SELECT A.PATIENT_NAME,A.BIRTH,A.CELL_NUM FROM CORONA_CONFIRM_STATUS A WHERE A.DEL_YN = 0)) AS CUR_CONFIRM_ISO_OVERSEA
+            
+            ,(SELECT COUNT(1) FROM CORONA_CLINIC_STATUS B WHERE DEL_YN='0' AND ( B.NAME,B.BIRTH,B.CELL_NUM) IN (SELECT A.PATIENT_NAME,A.BIRTH,A.CELL_NUM FROM CORONA_CONFIRM_STATUS A WHERE A.DEL_YN = 0)) AS CUR_CONFIRM_ACCUM_TOTAL
+            ,(SELECT COUNT(1) FROM CORONA_CLINIC_STATUS B WHERE DEL_YN='0' AND SUSPICION_GUBUN = '강남구' AND ( B.NAME,B.BIRTH,B.CELL_NUM) IN (SELECT A.PATIENT_NAME,A.BIRTH,A.CELL_NUM FROM CORONA_CONFIRM_STATUS A WHERE A.DEL_YN = 0)) AS CUR_CONFIRM_ACCUM_GANGNAM
+            ,(SELECT COUNT(1) FROM CORONA_CLINIC_STATUS B WHERE DEL_YN='0' AND SUSPICION_GUBUN = '타지역' AND ( B.NAME,B.BIRTH,B.CELL_NUM) IN (SELECT A.PATIENT_NAME,A.BIRTH,A.CELL_NUM FROM CORONA_CONFIRM_STATUS A WHERE A.DEL_YN = 0)) AS CUR_CONFIRM_ACCUM_TASIGU
+            ,(SELECT COUNT(1) FROM CORONA_CLINIC_STATUS B WHERE DEL_YN='0' AND SUSPICION_GUBUN = '해외' AND ( B.NAME,B.BIRTH,B.CELL_NUM) IN (SELECT A.PATIENT_NAME,A.BIRTH,A.CELL_NUM FROM CORONA_CONFIRM_STATUS A WHERE A.DEL_YN = 0)) AS CUR_CONFIRM_ACCUM_OVERSEA
+            
+        FROM DUAL
+		]]>
+</select>
+
+
+<select id="selectClinicGangnamMiddleList" parameterType="hashmap" resultType="hashmap">
+          		SELECT    
+					NVL(sum((SELECT 1 FROM CORONA_CONFIRM_STATUS CCONFIRMS 
+                            WHERE CCONFIRMS.DEL_YN = 0
+                            AND CCONFIRMS.PATIENT_NAME = CCLINICS.NAME
+                            AND CCONFIRMS.BIRTH = CCLINICS.BIRTH
+                            AND CCONFIRMS.CELL_NUM = CCLINICS.CELL_NUM
+                            AND ROWNUM = 1
+                        )),0) as CONFIRM_CHECK_SUM
+	                ,SUSPICION_GUBUN
+                    ,SUSPICION_DAE
+                    ,COUNT(1) AS SUSPICION_DAE_CNT
+                FROM CORONA_CLINIC_STATUS CCLINICS
+                WHERE del_yn = 0
+                AND SUSPICION_GUBUN = '강남구'
+                
+		   		<if test="SELDATE !=''">
+					AND CLINIC_VISIT_DATE = #{SELDATE}
+				</if>
+				
+		   		<if test="ISO == 'ISO_EX'">
+					AND INSPECTION_CASE != '자가격리해제자'
+				</if>
+				
+		   		<if test="ISO == 'ISO'">
+					AND INSPECTION_CASE = '자가격리해제자'
+				</if>
+               GROUP BY SUSPICION_GUBUN,SUSPICION_DAE
+               ORDER BY SUSPICION_GUBUN,SUSPICION_DAE DESC
+</select>
+
+
+
+<select id="selectClinicTasiguMiddleList" parameterType="hashmap" resultType="hashmap">
+			  SELECT 
+					NVL(sum((SELECT 1 FROM CORONA_CONFIRM_STATUS CCONFIRMS 
+                            WHERE CCONFIRMS.DEL_YN = 0
+                            AND CCONFIRMS.PATIENT_NAME = CCLINICS.NAME
+                            AND CCONFIRMS.BIRTH = CCLINICS.BIRTH
+                            AND CCONFIRMS.CELL_NUM = CCLINICS.CELL_NUM
+                            AND ROWNUM = 1
+                        )),0) as CONFIRM_CHECK_SUM,
+			         SUSPICION_DAE,
+			         SUSPICION_SO,
+			         COUNT (1) AS SUSPICION_SO_CNT
+			    FROM CORONA_CLINIC_STATUS CCLINICS
+			   WHERE     del_yn = 0
+			   AND SUSPICION_GUBUN = '타지역'
+			   
+		   		<if test="SELDATE !=''">
+					AND CLINIC_VISIT_DATE = #{SELDATE}
+				</if>
+				
+		   		<if test="ISO == 'ISO_EX'">
+					AND INSPECTION_CASE != '자가격리해제자'
+				</if>
+				
+		   		<if test="ISO == 'ISO'">
+					AND INSPECTION_CASE = '자가격리해제자'
+				</if>
+			
+			GROUP BY (SUSPICION_DAE,SUSPICION_SO)
+			ORDER BY SUSPICION_DAE,SUSPICION_SO DESC
+</select>
+
+<select id="selectClinicOverseaMiddleList" parameterType="hashmap" resultType="hashmap">
+			  SELECT 
+					NVL(sum((SELECT 1 FROM CORONA_CONFIRM_STATUS CCONFIRMS 
+                            WHERE CCONFIRMS.DEL_YN = 0
+                            AND CCONFIRMS.PATIENT_NAME = CCLINICS.NAME
+                            AND CCONFIRMS.BIRTH = CCLINICS.BIRTH
+                            AND CCONFIRMS.CELL_NUM = CCLINICS.CELL_NUM
+                            AND ROWNUM = 1
+                        )),0) as CONFIRM_CHECK_SUM,
+			         SUSPICION_DAE,
+			         SUSPICION_SO,
+			         COUNT (1) AS SUSPICION_SO_CNT
+			    FROM CORONA_CLINIC_STATUS CCLINICS
+			   WHERE     del_yn = 0
+			   AND SUSPICION_GUBUN = '해외'
+			   
+		   		<if test="SELDATE !=''">
+					AND CLINIC_VISIT_DATE = #{SELDATE}
+				</if>
+				
+		   		<if test="ISO == 'ISO_EX'">
+					AND INSPECTION_CASE != '자가격리해제자'
+				</if>
+				
+		   		<if test="ISO == 'ISO'">
+					AND INSPECTION_CASE = '자가격리해제자'
+				</if>
+			
+			GROUP BY (SUSPICION_DAE,SUSPICION_SO)
+			ORDER BY SUSPICION_DAE,SUSPICION_SO DESC
+</select>
+
+
+
+<select id="selectClinicMiddle2" parameterType="hashmap" resultType="hashmap">
+			SELECT REGEXP_REPLACE (#{WRITE_DATE}, '(.{4})(.{2})(.{2})', '\1-\2-\3')
+			          AS WRITE_DATE_SHOW,
+			       #{WRITE_DATE} AS WRITE_DATE,
+			       #{DEPART} AS DEPART,
+			       #{ISO} AS ISO,
+					NVL(sum((SELECT 1 FROM CORONA_CONFIRM_STATUS CCONFIRMS 
+                            WHERE CCONFIRMS.DEL_YN = 0
+                            AND CCONFIRMS.PATIENT_NAME = CCLINICS.NAME
+                            AND CCONFIRMS.BIRTH = CCLINICS.BIRTH
+                            AND CCONFIRMS.CELL_NUM = CCLINICS.CELL_NUM
+                            AND ROWNUM = 1
+                        )),0) as CONFIRM_CHECK_SUM,
+			       #{SUSPICION_GUBUN} AS SUSPICION_GUBUN,
+			       '' AS SUSPICION_DAE,
+			       '' AS SUSPICION_SO,
+			       COUNT (1) AS SUSPICION_SO_CNT,
+			       2 AS ODR_SUSPICION_DAE,
+			       2 AS ODR_SUSPICION_SO
+			  FROM CORONA_CLINIC_STATUS CCLINICS
+			 WHERE del_yn = 0 
+ 	   		<if test="DEPART == 'TODAY'">
+				AND WRITE_DATE = #{WRITE_DATE}
+			</if>
+			
+		   		<if test="ISO == 'ISO_EX'">
+					AND INSPECTION_CASE != '자가격리해제자'
+				</if>
+				
+		   		<if test="ISO == 'ISO'">
+					AND INSPECTION_CASE = '자가격리해제자'
+				</if>
+			UNION ALL
+			  SELECT REGEXP_REPLACE (#{WRITE_DATE}, '(.{4})(.{2})(.{2})', '\1-\2-\3') AS WRITE_DATE_SHOW,
+			         #{WRITE_DATE} AS WRITE_DATE,
+			         #{DEPART} AS DEPART,
+			         #{ISO} AS ISO,
+					NVL(sum((SELECT 1 FROM CORONA_CONFIRM_STATUS CCONFIRMS 
+                            WHERE CCONFIRMS.DEL_YN = 0
+                            AND CCONFIRMS.PATIENT_NAME = CCLINICS.NAME
+                            AND CCONFIRMS.BIRTH = CCLINICS.BIRTH
+                            AND CCONFIRMS.CELL_NUM = CCLINICS.CELL_NUM
+                            AND ROWNUM = 1
+                        )),0) as CONFIRM_CHECK_SUM,
+			         MAX (SUSPICION_GUBUN) AS SUSPICION_GUBUN,
+			         SUSPICION_DAE,
+			         SUSPICION_SO,
+			         COUNT (1) AS SUSPICION_SO_CNT,
+			         GROUPING (SUSPICION_DAE) ODR_SUSPICION_DAE,
+			         GROUPING (SUSPICION_SO) ODR_SUSPICION_SO
+			    FROM CORONA_CLINIC_STATUS CCLINICS
+			   WHERE     del_yn = 0
+	   		<if test="DEPART == 'TODAY'">
+				AND WRITE_DATE = #{WRITE_DATE}
+			</if>
+			
+	   		<if test="SUSPICION_GUBUN != ''">
+				AND SUSPICION_GUBUN = #{SUSPICION_GUBUN}
+			</if>	
+			
+	   		<if test="ISO == 'ISO_EX'">
+				AND INSPECTION_CASE != '자가격리해제자'
+			</if>
+			
+	   		<if test="ISO == 'ISO'">
+				AND INSPECTION_CASE = '자가격리해제자'
+			</if>
+			
+			GROUP BY ROLLUP (SUSPICION_DAE,SUSPICION_SO)
+			ORDER BY SUSPICION_DAE DESC,ODR_SUSPICION_SO DESC
+</select>
+
+
+
+
+<!-- 자가격리자 현황 해외입국 -->
+<select id="selectIsoOverseaAccumMiddle" parameterType="hashmap" resultType="hashmap">
+	  SELECT '' AS WRITE_DATE_SHOW,
+	         '' AS WRITE_DATE,
+	         '해제 누적인원' AS NAME,
+	         '해외' AS ISO_GUBUN,
+	         '' AS VISIT_NATION,
+             (SELECT COUNT (1) FROM CORONA_OVERSEA_STATUS WHERE DEL_YN = 0 AND FREE_DATE <![CDATA[<=]]> #{WRITE_DATE}) 
+	         + (SELECT COUNT (1) FROM CORONA_DOMESTIC_CONTACT_STATUS WHERE DEL_YN = 0 AND MONITOR_END <![CDATA[<=]]> #{WRITE_DATE})
+	         AS VISIT_NATION_CNT,
+	         2 ODR_VISIT_NATION
+	    FROM DUAL
+		UNION ALL
+
+		  SELECT    
+  					REGEXP_REPLACE(#{WRITE_DATE}, '(.{4})(.{2})(.{2})', '\1-\2-\3') as WRITE_DATE_SHOW
+					,#{WRITE_DATE} as WRITE_DATE
+					,#{NAME} as NAME
+	  				,'해외' AS ISO_GUBUN
+		            ,VISIT_NATION
+		         ,COUNT(1) AS VISIT_NATION_CNT
+		         ,GROUPING(VISIT_NATION) ODR_VISIT_NATION
+		    FROM CORONA_OVERSEA_STATUS
+		   WHERE DEL_YN = 0
+			AND FREE_DATE <![CDATA[<=]]> #{WRITE_DATE}		
+
+		GROUP BY ROLLUP(VISIT_NATION)
+		ORDER BY ODR_VISIT_NATION DESC
+</select>
+
+<!-- 자가격리자 현황 국내-->
+<select id="selectIsoDomAccumMiddle" parameterType="hashmap" resultType="hashmap">
+		  SELECT    
+					REGEXP_REPLACE(#{WRITE_DATE}, '(.{4})(.{2})(.{2})', '\1-\2-\3') as WRITE_DATE_SHOW
+					,#{WRITE_DATE} as WRITE_DATE
+					,#{NAME} as NAME
+		  			,'국내' AS ISO_GUBUN
+		            ,SELF_ISO_AREA_DONG
+		         ,COUNT(1) AS SELF_ISO_AREA_DONG_CNT
+		         ,GROUPING(SELF_ISO_AREA_DONG) ODR_SELF_ISO_AREA_DONG
+		    FROM CORONA_DOMESTIC_CONTACT_STATUS
+		   WHERE DEL_YN = 0
+			AND MONITOR_END <![CDATA[<=]]> #{WRITE_DATE}		
+
+		GROUP BY ROLLUP(SELF_ISO_AREA_DONG)
+		ORDER BY ODR_SELF_ISO_AREA_DONG DESC
+</select>
+
+<!--  -->
+<select id="selectIsoMiddleSumStatus" parameterType="hashmap" resultType="hashmap">
+		<![CDATA[
+		SELECT
+		    (SELECT COUNT(1) FROM CORONA_OVERSEA_STATUS WHERE DEL_YN='0' AND COME_DATE = #{SELDATE})
+		    + (SELECT COUNT(1) FROM CORONA_DOMESTIC_CONTACT_STATUS WHERE DEL_YN='0' AND MONITOR_START = #{SELDATE}) AS CUR_ISO_TOTAL
+		
+		    ,(SELECT COUNT(1) FROM CORONA_OVERSEA_STATUS WHERE DEL_YN='0'AND COME_DATE = #{SELDATE}) AS CUR_OVERSEA_SUM
+		    ,(SELECT COUNT(1) FROM CORONA_DOMESTIC_CONTACT_STATUS WHERE DEL_YN='0' AND MONITOR_START = #{SELDATE}) AS CUR_DOM_SUM
+		
+		    ,(SELECT COUNT(1) FROM CORONA_OVERSEA_STATUS WHERE DEL_YN='0' AND FREE_DATE > #{SELDATE})
+		    + (SELECT COUNT(1) FROM CORONA_DOMESTIC_CONTACT_STATUS WHERE DEL_YN='0' AND MONITOR_END > #{SELDATE}) AS DUE_ISO_TOTAL
+		
+		    ,(SELECT COUNT(1) FROM CORONA_OVERSEA_STATUS WHERE DEL_YN='0' AND FREE_DATE > #{SELDATE}) AS DUE_OVERSEA_SUM
+		    ,(SELECT COUNT(1) FROM CORONA_DOMESTIC_CONTACT_STATUS WHERE DEL_YN='0' AND MONITOR_END > #{SELDATE}) AS DUE_DOM_SUM
+		
+		    ,(SELECT COUNT(1) FROM CORONA_OVERSEA_STATUS WHERE DEL_YN='0' AND FREE_DATE = #{SELDATE})
+		    + (SELECT COUNT(1) FROM CORONA_DOMESTIC_CONTACT_STATUS WHERE DEL_YN='0' AND MONITOR_END = #{SELDATE}) AS FREE_ISO_TOTAL
+		
+		    ,(SELECT COUNT(1) FROM CORONA_OVERSEA_STATUS WHERE DEL_YN='0' AND FREE_DATE = #{SELDATE}) AS FREE_OVERSEA_SUM
+		    ,(SELECT COUNT(1) FROM CORONA_DOMESTIC_CONTACT_STATUS WHERE DEL_YN='0' AND MONITOR_END = #{SELDATE}) AS FREE_DOM_SUM
+		
+		    ,(SELECT COUNT(1) FROM CORONA_OVERSEA_STATUS WHERE DEL_YN='0' AND FREE_DATE <= #{SELDATE})
+		    + (SELECT COUNT(1) FROM CORONA_DOMESTIC_CONTACT_STATUS WHERE DEL_YN='0' AND MONITOR_END <= #{SELDATE}) AS ISO_TOTAL
+		
+		    ,(SELECT COUNT(1) FROM CORONA_OVERSEA_STATUS WHERE DEL_YN='0' AND FREE_DATE <= #{SELDATE}) AS OVERSEA_SUM
+		    ,(SELECT COUNT(1) FROM CORONA_DOMESTIC_CONTACT_STATUS WHERE DEL_YN='0' AND MONITOR_END <= #{SELDATE}) AS DOM_SUM
+		FROM DUAL
+		]]>
+</select>
+
+
+<!-- 자가격리자 현황요약 해외 -->
+<select id="selectIsoOverseaMiddleList" parameterType="hashmap" resultType="hashmap">
+		
+        SELECT 
+            SELF_ISO_AREA_DONG
+            ,COUNT(1) AS ISO_CNT
+        FROM CORONA_OVERSEA_STATUS
+        WHERE DEL_YN = 0 
+		<if test='CUR == "Y"'>
+			AND COME_DATE = #{SELDATE}
+		</if>
+		
+  		<if test='DUE == "Y"'>
+			AND FREE_DATE <![CDATA[>]]> #{SELDATE}
+		</if>
+		
+  		<if test='FREE == "Y"'>
+			AND FREE_DATE <![CDATA[=]]> #{SELDATE}
+		</if>
+		
+  		<if test='ACCUM == "Y"'>
+			AND FREE_DATE <![CDATA[<=]]> #{SELDATE}
+		</if>
+        GROUP BY SELF_ISO_AREA_DONG
+        
+</select>
+
+<!-- 자가격리자 현황 국내-->
+<select id="selectIsoDomMiddleList" parameterType="hashmap" resultType="hashmap">
+        SELECT 
+            SELF_ISO_AREA_DONG
+            ,COUNT(1) AS ISO_CNT
+        FROM CORONA_DOMESTIC_CONTACT_STATUS
+        WHERE DEL_YN = 0 
+		<if test='CUR == "Y"'>
+			AND MONITOR_START = #{SELDATE}
+		</if>
+		
+  		<if test='DUE == "Y"'>
+			AND MONITOR_END <![CDATA[>]]> #{SELDATE}
+		</if>
+		
+  		<if test='FREE == "Y"'>
+			AND MONITOR_END <![CDATA[=]]> #{SELDATE}
+		</if>
+		
+  		<if test='ACCUM == "Y"'>
+			AND MONITOR_END <![CDATA[<=]]> #{SELDATE}
+		</if>
+        GROUP BY SELF_ISO_AREA_DONG
+</select>
+
+
+<select id="selectDomesticStatus" parameterType="hashmap" resultType="hashmap">
+		<![CDATA[
+			SELECT 
+					#{showdate} as showdate
+					,#{seldate} as seldate
+		            ,(select count(1) from CORONA_DOMESTIC_CONTACT_STATUS where DEL_YN = '0' AND MONITOR_START = #{seldate}) as dom_cur_iso
+		            ,(select count(1) from CORONA_DOMESTIC_CONTACT_STATUS where DEL_YN = '0' AND MONITOR_END > #{seldate}) as dom_due_iso
+		            ,(select count(1) from CORONA_DOMESTIC_CONTACT_STATUS where DEL_YN = '0' AND MONITOR_END = #{seldate}) as dom_free_iso
+		            ,(select count(1) from CORONA_DOMESTIC_CONTACT_STATUS where DEL_YN = '0' AND MONITOR_END <= #{seldate}) as dom_accum_iso
+		            ,(select count(1) from CORONA_DOMESTIC_CONTACT_STATUS where DEL_YN = '0') as dom_total_iso
+			  FROM DUAL
+		]]>
+</select>
+
+<select id="selectOverseaStatus" parameterType="hashmap" resultType="hashmap">
+		<![CDATA[
+			SELECT 
+					#{showdate} as showdate
+					,#{seldate} as seldate
+		            ,(select count(1) from CORONA_OVERSEA_STATUS where DEL_YN = '0' AND COME_DATE = #{seldate}) as oversea_cur_iso
+		            ,(select count(1) from CORONA_OVERSEA_STATUS where DEL_YN = '0' AND FREE_DATE > #{seldate}) as oversea_due_iso
+		            ,(select count(1) from CORONA_OVERSEA_STATUS where DEL_YN = '0' AND FREE_DATE = #{seldate}) as oversea_free_iso
+		            ,(select count(1) from CORONA_OVERSEA_STATUS where DEL_YN = '0' AND FREE_DATE <= #{seldate}) as oversea_accum_iso
+		            ,(select count(1) from CORONA_OVERSEA_STATUS where DEL_YN = '0') as oversea_total_iso
+			  FROM DUAL
+		]]>
+</select>
+
+<select id="selectIsoOverseaDtlList" parameterType="hashmap" resultType="hashmap">
+		<![CDATA[
+             SELECT COUNT(*) OVER() AS TOTAL_COUNT                                
+                    ,ID
+					,WRITE_DATE
+					,CELL_NUM
+					,NAME
+					,SEX
+					,BIRTH
+					,JOB
+					,ORG_ADDRESS
+					,ORG_ADDRESS_DTL
+					,SELF_ISO_AREA_DONG
+					,SELF_ISO_AREA_ADDRESS
+					,SELF_ISO_AREA_ADDRESS_DTL
+					,COME_DATE
+					,FREE_DATE
+					,VISIT_NATION
+					,DAMDANG_DEPART
+					,DAMDANG_CLASS
+					,DAMDANG_POSITION
+					,DAMDANG_NAME
+					,DAMDANG_CALL
+                    ,TO_CHAR(INS_DATE, 'YYYY.MM.DD HH24:MI:SS') INS_DATE
+            FROM CORONA_OVERSEA_STATUS 
+            WHERE DEL_YN = 0              
+		]]>
+		<if test="ISO_GUBUN == 'CUR'">
+		AND COME_DATE = #{SELDATE}
+		</if>
+		
+		<if test="ISO_GUBUN == 'DUE'">
+		AND FREE_DATE <![CDATA[>]]> #{SELDATE}
+		</if>
+		
+		<if test="ISO_GUBUN == 'FREE'">
+		AND FREE_DATE = #{SELDATE}
+		</if>
+		
+		<if test="ISO_GUBUN == 'ACCUM'">
+		AND FREE_DATE <![CDATA[<=]]> #{SELDATE}
+		</if>
+		
+		<if test="ISO_DONG != ''">
+		AND SELF_ISO_AREA_DONG = #{ISO_DONG}
+		</if>
+		
+		
+		ORDER BY WRITE_DATE,INS_DATE DESC			
+</select>
+
+<select id="selectIsoDomesticDtlList" parameterType="hashmap" resultType="hashmap">
+		<![CDATA[
+             SELECT COUNT(*) OVER() AS TOTAL_COUNT                                
+	                    ,ID
+						,WRITE_DATE
+						,CELL_NUM
+						,NAME
+						,SEX
+						,BIRTH
+						,JOB
+						,ORG_ADDRESS
+						,ORG_ADDRESS_DTL
+						,SELF_ISO_AREA_DONG
+						,SELF_ISO_AREA_ADDRESS
+						,SELF_ISO_AREA_ADDRESS_DTL
+						,PATIENT_NUM
+						,PATIENT_NAME
+						,CONTACT_NUM
+						,CONTACT_NAME
+						,FINAL_CONTACT
+						,MONITOR_START
+						,MONITOR_END
+						,CONTACT_ADDRESS
+						,CONTACT_TYPE
+						,CONTACT_GUBUN
+						,PATIENT_YN
+						,BALGUB_YN
+						,DAMDANG_DEPART
+						,DAMDANG_CLASS
+						,DAMDANG_POSITION
+						,DAMDANG_NAME
+						,DAMDANG_CALL
+	            FROM CORONA_DOMESTIC_CONTACT_STATUS 
+            WHERE DEL_YN = 0              
+		]]>
+		<if test="ISO_GUBUN == 'CUR'">
+		AND MONITOR_START = #{SELDATE}
+		</if>
+		
+		<if test="ISO_GUBUN == 'DUE'">
+		AND MONITOR_END <![CDATA[>]]> #{SELDATE}
+		</if>
+		
+		<if test="ISO_GUBUN == 'FREE'">
+		AND MONITOR_END = #{SELDATE}
+		</if>
+		
+		<if test="ISO_GUBUN == 'ACCUM'">
+		AND MONITOR_END <![CDATA[<=]]> #{SELDATE}
+		</if>
+		
+		<if test="ISO_DONG != ''">
+		AND SELF_ISO_AREA_DONG = #{ISO_DONG}
+		</if>
+		
+		
+		ORDER BY WRITE_DATE,INS_DATE DESC		
+</select>
+
+<!-- 상담민원 현황 -->
+<select id="selectConsultStatus" parameterType="hashmap" resultType="hashmap">
+		<![CDATA[
+		SELECT
+		    #{showdate} as showdate
+		    ,#{seldate} as seldate
+		    ,(SELECT COUNT(1) FROM CORONA_CONSULT_STATUS WHERE DEL_YN='0' AND WRITE_DATE=#{seldate} AND JUYA_GUBUN = '주간') AS CUR_JU 
+		    ,(SELECT COUNT(1) FROM CORONA_CONSULT_STATUS WHERE DEL_YN='0' AND WRITE_DATE=#{seldate} AND JUYA_GUBUN = '야간') AS CUR_YA
+		    ,(SELECT COUNT(1) FROM CORONA_CONSULT_STATUS WHERE DEL_YN='0' AND JUYA_GUBUN = '주간') AS TOTAL_JU
+		    ,(SELECT COUNT(1) FROM CORONA_CONSULT_STATUS WHERE DEL_YN='0' AND JUYA_GUBUN = '야간') AS TOTAL_YA
+		FROM DUAL
+		]]>
+</select>
+
+<select id="selectConsultDtlList" parameterType="hashmap" resultType="hashmap">
+		<![CDATA[
+             SELECT COUNT(*) OVER() AS TOTAL_COUNT                                
+                    ,ID
+					,WRITE_DATE
+					,CONSULT_GUBUN
+					,JUYA_GUBUN
+					,CONSULT_TIME
+					,CONSULT_NAME
+					,MINWON_NAME
+					,SEX
+					,MINWON_PHONE
+					,DBMS_LOB.SUBSTR( MINWON_CONTENT, 4000, 1)  as MINWON_CONTENT 
+					,DBMS_LOB.SUBSTR( PROCESS_RESULT, 4000, 1)  as PROCESS_RESULT
+					,REMARK
+					,INS_ID
+                    ,TO_CHAR(INS_DATE, 'YYYY.MM.DD HH24:MI:SS') INS_DATE
+            FROM CORONA_CONSULT_STATUS 
+            WHERE DEL_YN = 0              
+		]]>
+		<if test="CONSULT_DEPART == 'TODAY'">
+		AND WRITE_DATE = #{WRITE_DATE}
+		</if>
+		
+		<if test="CONSULT_JUYA_GUBUN != ''">
+		AND JUYA_GUBUN = #{CONSULT_JUYA_GUBUN}
+		</if>
+		
+		<if test="CONSULT_CONSULT_GUBUN != ''">
+		AND CONSULT_GUBUN = #{CONSULT_CONSULT_GUBUN}
+		</if>
+		
+		ORDER BY WRITE_DATE,INS_DATE DESC		
+</select>
+
+<!-- 선별진료소 현황 -->
+<select id="selectClinicStatus" parameterType="hashmap" resultType="hashmap">
+		<![CDATA[
+		SELECT
+            #{showdate} as showdate
+            ,#{seldate} as seldate
+			,(SELECT COUNT(1) FROM CORONA_CLINIC_STATUS WHERE DEL_YN='0' AND CLINIC_VISIT_DATE=#{seldate} AND INSPECTION_CASE !='자가격리해제자' AND SUSPICION_GUBUN = '해외' ) as clinic_oversea
+			,(SELECT COUNT(1) FROM CORONA_CLINIC_STATUS WHERE DEL_YN='0' AND CLINIC_VISIT_DATE=#{seldate} AND INSPECTION_CASE !='자가격리해제자' AND SUSPICION_GUBUN = '해외' and SUSPICION_DAE = '유럽') as clinic_eu
+			,(SELECT COUNT(1) FROM CORONA_CLINIC_STATUS WHERE DEL_YN='0' AND CLINIC_VISIT_DATE=#{seldate} AND INSPECTION_CASE !='자가격리해제자' AND SUSPICION_GUBUN = '해외' and SUSPICION_DAE = '미국') as clinic_un
+			,(SELECT COUNT(1) FROM CORONA_CLINIC_STATUS WHERE DEL_YN='0' AND CLINIC_VISIT_DATE=#{seldate} AND INSPECTION_CASE !='자가격리해제자' AND SUSPICION_GUBUN = '해외' and SUSPICION_DAE not in('유럽','미국')) as clinic_over_etc
+			,(SELECT COUNT(1) FROM CORONA_CLINIC_STATUS WHERE DEL_YN='0' AND CLINIC_VISIT_DATE=#{seldate} AND INSPECTION_CASE !='자가격리해제자' AND SUSPICION_GUBUN != '해외') as clinic_domestic
+			,(SELECT COUNT(1) FROM CORONA_CLINIC_STATUS WHERE DEL_YN='0' AND CLINIC_VISIT_DATE=#{seldate} AND INSPECTION_CASE !='자가격리해제자' AND SUSPICION_GUBUN = '강남구') as gangnam_clinic_domestic
+			,(SELECT COUNT(1) FROM CORONA_CLINIC_STATUS WHERE DEL_YN='0' AND CLINIC_VISIT_DATE=#{seldate} AND INSPECTION_CASE !='자가격리해제자' AND SUSPICION_GUBUN = '타지역') as ta_clinic_domestic
+			,(
+				SELECT nvl(sum(CONFIRM_CHECK),0) as CONFIRM_CHECK_sum fROM (
+					SELECT 
+					    (SELECT 1 FROM CORONA_CONFIRM_STATUS CCONFIRMS 
+					        WHERE CCONFIRMS.DEL_YN = 0
+					        AND CCONFIRMS.PATIENT_NAME = CCLINICS.NAME
+					        AND CCONFIRMS.BIRTH = CCLINICS.BIRTH
+					        AND CCONFIRMS.CELL_NUM = CCLINICS.CELL_NUM
+					        AND ROWNUM = 1
+				        ) AS CONFIRM_CHECK
+					
+					  FROM CORONA_CLINIC_STATUS CCLINICS
+					 WHERE     DEL_YN = '0'
+				  	AND INSPECTION_CASE !='자가격리해제자'
+			       	AND CLINIC_VISIT_DATE=#{seldate}
+		       	) WHERE CONFIRM_CHECK = 1
+       		) as confirm_iso_ex_y
+			
+			
+			
+			,(SELECT COUNT(1) FROM CORONA_CLINIC_STATUS WHERE DEL_YN='0' AND CLINIC_VISIT_DATE=#{seldate} AND INSPECTION_CASE ='자가격리해제자' AND SUSPICION_GUBUN = '해외' ) as iso_clinic_oversea
+			,(SELECT COUNT(1) FROM CORONA_CLINIC_STATUS WHERE DEL_YN='0' AND CLINIC_VISIT_DATE=#{seldate} AND INSPECTION_CASE ='자가격리해제자' AND SUSPICION_GUBUN = '해외' and SUSPICION_DAE = '유럽') as iso_clinic_eu
+			,(SELECT COUNT(1) FROM CORONA_CLINIC_STATUS WHERE DEL_YN='0' AND CLINIC_VISIT_DATE=#{seldate} AND INSPECTION_CASE ='자가격리해제자' AND SUSPICION_GUBUN = '해외' and SUSPICION_DAE = '미국') as iso_clinic_un
+			,(SELECT COUNT(1) FROM CORONA_CLINIC_STATUS WHERE DEL_YN='0' AND CLINIC_VISIT_DATE=#{seldate} AND INSPECTION_CASE ='자가격리해제자' AND SUSPICION_GUBUN = '해외' and SUSPICION_DAE not in('유럽','미국')) as iso_clinic_over_etc
+			,(SELECT COUNT(1) FROM CORONA_CLINIC_STATUS WHERE DEL_YN='0' AND CLINIC_VISIT_DATE=#{seldate} AND INSPECTION_CASE ='자가격리해제자' AND SUSPICION_GUBUN != '해외') as iso_clinic_domestic
+			,(SELECT COUNT(1) FROM CORONA_CLINIC_STATUS WHERE DEL_YN='0' AND CLINIC_VISIT_DATE=#{seldate} AND INSPECTION_CASE ='자가격리해제자' AND SUSPICION_GUBUN = '강남구') as iso_gangnam_clinic_domestic
+			,(SELECT COUNT(1) FROM CORONA_CLINIC_STATUS WHERE DEL_YN='0' AND CLINIC_VISIT_DATE=#{seldate} AND INSPECTION_CASE ='자가격리해제자' AND SUSPICION_GUBUN = '타지역') as iso_ta_clinic_domestic
+			,(
+				SELECT nvl(sum(CONFIRM_CHECK),0) as CONFIRM_CHECK_sum fROM (
+					SELECT 
+					    (SELECT 1 FROM CORONA_CONFIRM_STATUS CCONFIRMS 
+					        WHERE CCONFIRMS.DEL_YN = 0
+					        AND CCONFIRMS.PATIENT_NAME = CCLINICS.NAME
+					        AND CCONFIRMS.BIRTH = CCLINICS.BIRTH
+					        AND CCONFIRMS.CELL_NUM = CCLINICS.CELL_NUM
+					        AND ROWNUM = 1
+				        ) AS CONFIRM_CHECK
+					
+					  FROM CORONA_CLINIC_STATUS CCLINICS
+					 WHERE     DEL_YN = '0'
+				  	AND INSPECTION_CASE ='자가격리해제자'
+			       	AND CLINIC_VISIT_DATE=#{seldate}
+		       	) WHERE CONFIRM_CHECK = 1
+       		) as confirm_iso_y
+			
+			,(SELECT COUNT(1) FROM CORONA_CLINIC_STATUS WHERE DEL_YN='0' AND SUSPICION_GUBUN = '해외' ) as total_clinic_oversea
+			,(SELECT COUNT(1) FROM CORONA_CLINIC_STATUS WHERE DEL_YN='0' AND SUSPICION_GUBUN = '해외' and SUSPICION_DAE = '유럽') as total_clinic_eu
+			,(SELECT COUNT(1) FROM CORONA_CLINIC_STATUS WHERE DEL_YN='0' AND SUSPICION_GUBUN = '해외' and SUSPICION_DAE = '미국') as total_clinic_un
+			,(SELECT COUNT(1) FROM CORONA_CLINIC_STATUS WHERE DEL_YN='0' AND SUSPICION_GUBUN = '해외' and SUSPICION_DAE not in('유럽','미국')) as total_clinic_over_etc
+			,(SELECT COUNT(1) FROM CORONA_CLINIC_STATUS WHERE DEL_YN='0' AND SUSPICION_GUBUN != '해외') as total_clinic_domestic
+			,(SELECT COUNT(1) FROM CORONA_CLINIC_STATUS WHERE DEL_YN='0' AND SUSPICION_GUBUN = '강남구') as gangnam_total_clinic_domestic
+			,(SELECT COUNT(1) FROM CORONA_CLINIC_STATUS WHERE DEL_YN='0' AND SUSPICION_GUBUN = '타지역') as ta_total_clinic_domestic
+			,(
+				SELECT nvl(sum(CONFIRM_CHECK),0) as CONFIRM_CHECK_sum fROM (
+					SELECT 
+					    (SELECT 1 FROM CORONA_CONFIRM_STATUS CCONFIRMS 
+					        WHERE CCONFIRMS.DEL_YN = 0
+					        AND CCONFIRMS.PATIENT_NAME = CCLINICS.NAME
+					        AND CCONFIRMS.BIRTH = CCLINICS.BIRTH
+					        AND CCONFIRMS.CELL_NUM = CCLINICS.CELL_NUM
+					        AND ROWNUM = 1
+				        ) AS CONFIRM_CHECK
+					
+					  FROM CORONA_CLINIC_STATUS CCLINICS
+					 WHERE     DEL_YN = '0'
+		       	) WHERE CONFIRM_CHECK = 1
+       		) as confirm_accum_y
+        FROM DUAL
+		]]>
+</select>
+
+<select id="selectClinicDtlList" parameterType="hashmap" resultType="hashmap">
+		<![CDATA[
+             SELECT COUNT(*) OVER() AS TOTAL_COUNT                                
+                    ,ID
+					,WRITE_DATE
+					,CLINIC_VISIT_DATE
+					,CELL_NUM
+					,NAME
+					,SEX
+					,BIRTH
+					,JOB
+					,INSPECTION_CASE
+					,SARAE_GUBUN
+					,SUSPICION_GUBUN
+					,SUSPICION_DAE
+					,SUSPICION_SO
+					,INS_ID
+                    ,TO_CHAR(INS_DATE, 'YYYY.MM.DD HH24:MI:SS') INS_DATE
+            FROM CORONA_CLINIC_STATUS 
+            WHERE DEL_YN = 0              
+		]]>
+		<if test="CLINIC_DEPART == 'TODAY'">
+		AND CLINIC_VISIT_DATE = #{WRITE_DATE}
+		</if>
+		
+		<if test="CLINIC_SUSPICION_GUBUN != ''">
+		AND SUSPICION_GUBUN = #{CLINIC_SUSPICION_GUBUN}
+		</if>
+		
+		<if test="CLINIC_SUSPICION_DAE != ''">
+		AND SUSPICION_DAE = #{CLINIC_SUSPICION_DAE}
+		</if>
+		
+		<if test="CLINIC_SUSPICION_SO != ''">
+		AND SUSPICION_SO = #{CLINIC_SUSPICION_SO}
+		</if>
+		
+   		<if test="ISO == 'ISO_EX'">
+			AND INSPECTION_CASE != '자가격리해제자'
+		</if>
+		
+   		<if test="ISO == 'ISO'">
+			AND INSPECTION_CASE = '자가격리해제자'
+		</if>
+		
+		ORDER BY WRITE_DATE,INS_DATE DESC		
+</select>
+
+<select id="selectClinicConfirmDtlList" parameterType="hashmap" resultType="hashmap">
+		<![CDATA[
+		SELECT * FROM (
+		
+             SELECT COUNT(*) OVER() AS TOTAL_COUNT                                
+                    ,ID
+					,WRITE_DATE
+					,CLINIC_VISIT_DATE
+					,CELL_NUM
+					,NAME
+					,SEX
+					,BIRTH
+					,JOB
+					,INSPECTION_CASE
+					,SARAE_GUBUN
+					,SUSPICION_GUBUN
+					,SUSPICION_DAE
+					,SUSPICION_SO
+					,INS_ID
+                    ,TO_CHAR(INS_DATE, 'YYYY.MM.DD HH24:MI:SS') INS_DATE
+  					,NVL((SELECT 1 FROM CORONA_CONFIRM_STATUS CCONFIRMS 
+                            WHERE CCONFIRMS.DEL_YN = 0
+                            AND CCONFIRMS.PATIENT_NAME = CCLINICS.NAME
+                            AND CCONFIRMS.BIRTH = CCLINICS.BIRTH
+                            AND CCONFIRMS.CELL_NUM = CCLINICS.CELL_NUM
+                            AND ROWNUM = 1
+                        ),0) as CONFIRM_CHECK
+            FROM CORONA_CLINIC_STATUS CCLINICS
+            WHERE DEL_YN = 0              
+		]]>
+		<if test="CLINIC_CONFIRM_DEPART == 'TODAY'">
+		AND WRITE_DATE = #{WRITE_DATE}
+		</if>
+		
+		<if test="CLINIC_CONFIRM_SUSPICION_GUBUN != ''">
+		AND SUSPICION_GUBUN = #{CLINIC_CONFIRM_SUSPICION_GUBUN}
+		</if>
+		
+		<if test="CLINIC_CONFIRM_SUSPICION_DAE != ''">
+		AND SUSPICION_DAE = #{CLINIC_CONFIRM_SUSPICION_DAE}
+		</if>
+		
+		<if test="CLINIC_CONFIRM_SUSPICION_SO != ''">
+		AND SUSPICION_SO = #{CLINIC_CONFIRM_SUSPICION_SO}
+		</if>
+		
+   		<if test="CONFIRM_ISO == 'ISO_EX'">
+			AND INSPECTION_CASE != '자가격리해제자'
+		</if>
+		
+   		<if test="CONFIRM_ISO == 'ISO'">
+			AND INSPECTION_CASE = '자가격리해제자'
+		</if>
+		)A 
+		WHERE A.CONFIRM_CHECK = 1
+		
+		ORDER BY WRITE_DATE,INS_DATE DESC		
+</select>
+
+
+
+<!-- 선별진료소 케이스현황 -->
+<select id="selectClinicCaseStatus" parameterType="hashmap" resultType="hashmap">
+		<![CDATA[
+        SELECT
+            #{showdate} as showdate
+            ,#{seldate} as seldate
+            ,(SELECT COUNT(1) FROM CORONA_CLINIC_STATUS WHERE DEL_YN='0' AND CLINIC_VISIT_DATE=#{seldate} AND SUSPICION_GUBUN='해외' AND INSPECTION_CASE = '자가격리해제자' ) as oversea_iso_clinc
+            ,(SELECT COUNT(1) FROM CORONA_CLINIC_STATUS WHERE DEL_YN='0' AND CLINIC_VISIT_DATE=#{seldate} AND INSPECTION_CASE in('학생','교직원') ) as stu_tec_clinc
+            ,(SELECT COUNT(1) FROM CORONA_CLINIC_STATUS WHERE DEL_YN='0' AND CLINIC_VISIT_DATE=#{seldate} AND INSPECTION_CASE = '운수업종사자' ) as driver_clinc
+            
+            ,(SELECT COUNT(1) FROM CORONA_CLINIC_STATUS WHERE DEL_YN='0' AND SUSPICION_GUBUN='해외' AND INSPECTION_CASE = '자가격리해제자' ) as tot_oversea_iso_clinc
+            ,(SELECT COUNT(1) FROM CORONA_CLINIC_STATUS WHERE DEL_YN='0' AND INSPECTION_CASE in('학생','교직원') ) as tot_stu_tec_clinc
+            ,(SELECT COUNT(1) FROM CORONA_CLINIC_STATUS WHERE DEL_YN='0' AND INSPECTION_CASE = '운수업종사자' ) as tot_driver_clinc
+
+        FROM DUAL
+		]]>
+</select>
+
+<select id="selectClinicCaseDtlList" parameterType="hashmap" resultType="hashmap">
+		<![CDATA[
+             SELECT COUNT(*) OVER() AS TOTAL_COUNT                                
+                    ,ID
+					,WRITE_DATE
+					,CLINIC_VISIT_DATE
+					,CELL_NUM
+					,NAME
+					,SEX
+					,BIRTH
+					,JOB
+					,INSPECTION_CASE
+					,SARAE_GUBUN
+					,SUSPICION_GUBUN
+					,SUSPICION_DAE
+					,SUSPICION_SO
+					,INS_ID
+                    ,TO_CHAR(INS_DATE, 'YYYY.MM.DD HH24:MI:SS') INS_DATE
+            FROM CORONA_CLINIC_STATUS 
+            WHERE DEL_YN = 0              
+		]]>
+		<if test="CLINIC_CASE_CONDITION != null and CLINIC_CASE_CONDITION == '해제'">
+			AND INSPECTION_CASE = '자가격리해제자'
+		</if>
+		<if test="CLINIC_CASE_CONDITION != null and CLINIC_CASE_CONDITION == '학생교직원'">
+			AND INSPECTION_CASE in('학생','교직원')
+		</if>
+		<if test="CLINIC_CASE_CONDITION != null and CLINIC_CASE_CONDITION == '운수업'">
+			AND INSPECTION_CASE = '운수업종사자'
+		</if>
+		
+		AND CLINIC_VISIT_DATE = #{CLINIC_CASE_SELDATE}
+		ORDER BY CLINIC_VISIT_DATE,INS_DATE DESC		
+</select>
+
+
+</mapper>

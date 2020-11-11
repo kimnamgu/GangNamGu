@@ -1,0 +1,47 @@
+package manpower.manage.service;
+
+import java.util.List;
+import java.util.Map;
+
+import javax.annotation.Resource;
+
+import org.apache.log4j.Logger;
+import org.springframework.stereotype.Service;
+
+import manpower.common.util.FileUtils;
+import manpower.manage.dao.ManageDAO;
+
+
+@Service("manageService")
+public class ManageServiceImpl implements ManageService{
+	Logger log = Logger.getLogger(this.getClass());
+	
+	@Resource(name="fileUtils")
+	private FileUtils fileUtils;
+	
+	@Resource(name="manageDAO")
+	private ManageDAO manageDAO;
+
+	/*공지사항*/
+	@Override
+	public List<Map<String, Object>> selectNoticeList(Map<String, Object> map) throws Exception {
+		return manageDAO.selectNoticeList(map);
+	}
+	
+	@Override
+	public void updateDelNoticeAllList(Map<String, Object> map) throws Exception {
+		manageDAO.updateDelNoticeAllList(map);
+	}
+	
+	/*은행코드관리*/
+	@Override
+	public List<Map<String, Object>> selectBankList(Map<String, Object> map) throws Exception {
+		return manageDAO.selectBankList(map);
+	}
+	
+	@Override
+	public void updateDelBankAllList(Map<String, Object> map) throws Exception {
+		manageDAO.updateDelBankAllList(map);
+	}
+	
+}

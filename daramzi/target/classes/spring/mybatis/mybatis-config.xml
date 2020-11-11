@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0/EN"
+"http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+	<!-- vo 별칭 설정을 이곳에다 해줍니다. -->
+	<typeAliases>
+		<typeAlias type="com.board.vo.BoardVO" alias="BoardVO"/>
+		<typeAlias type="com.board.vo.ReplyVO" alias="ReplyVO"/>
+		<typeAlias type="com.imageboard.vo.ImageBoardVO" alias="ImageBoardVO"/>
+		<typeAlias type="com.imageboard.vo.MyFileMngVO" alias="MyFileMngVO"/>
+		
+		<typeAlias type="com.user.vo.UserVO" alias="UserVO"/>
+		<typeAlias type="com.Amember.vo.AmemberVO" alias="AmemberVO"/>
+		
+		<typeAlias type="com.common.vo.FileVO" alias="FileVO"/>
+	</typeAliases>
+</configuration>

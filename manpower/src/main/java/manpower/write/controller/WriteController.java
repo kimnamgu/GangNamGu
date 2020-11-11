@@ -1,0 +1,183 @@
+package manpower.write.controller;
+
+import java.util.Map;
+
+import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
+
+import org.apache.log4j.Logger;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.servlet.ModelAndView;
+
+import manpower.common.common.CommandMap;
+import manpower.write.dao.WriteDAO;
+import manpower.write.service.WriteService;
+
+@Controller
+public class WriteController {
+	Logger log = Logger.getLogger(this.getClass());
+	
+	
+	@Resource(name="writeService")
+	private WriteService writeService;
+	
+	@Resource(name="writeDAO")
+	private WriteDAO writeDAO;
+	
+	/*공지사항*/
+	@RequestMapping(value="/write/noticeWrite.do")
+    public ModelAndView noticeWrite(CommandMap commandMap) throws Exception{
+    	System.out.println("noticeWrite탐");
+		ModelAndView mv = new ModelAndView("/write/noticeWrite");
+    	
+    	return mv;
+    }
+	
+	
+	@RequestMapping(value="/write/insertNoticeWrite.do")
+	public ModelAndView insertNoticeWrite(CommandMap commandMap, HttpServletRequest request) throws Exception{
+		System.out.println("insertNoticeWrite탐");
+		System.out.println("commandMap 확인 : " + commandMap.getMap()); 
+		
+		ModelAndView mv = new ModelAndView("redirect:/manage/noticeManage.do");
+		
+		writeService.insertNoticeWrite(commandMap.getMap(), request);
+		
+		return mv;
+	}
+	
+	@RequestMapping(value="/write/noticeView.do")
+	public ModelAndView noticeView(CommandMap commandMap, HttpServletRequest request) throws Exception{
+		System.out.println("noticeView탐");
+		System.out.println("commandMap 확인 : " + commandMap.getMap()); 
+		
+		ModelAndView mv = new ModelAndView("/write/noticeView");
+		
+		Map<String,Object> map = writeService.selectNoticeDetail(commandMap.getMap());
+		System.out.println("map 확인 : " + map.get("map"));
+		
+		mv.addObject("map", map.get("map"));
+				
+		return mv;
+	}
+	
+	@RequestMapping(value="/write/updateNotice.do")
+	public ModelAndView updateNotice(CommandMap commandMap, HttpServletRequest request) throws Exception{
+		System.out.println("updateNotice탐");
+		System.out.println("commandMap 확인 : " + commandMap.getMap()); 
+		
+		ModelAndView mv = new ModelAndView("redirect:/manage/noticeManage.do");
+
+		writeService.updateNotice(commandMap.getMap(), request);
+		
+		return mv;
+	}
+	
+	/*임금관리*/
+	@RequestMapping(value="/write/paymentWrite.do")
+    public ModelAndView paymentWrite(CommandMap commandMap) throws Exception{
+    	System.out.println("paymentWrite탐");
+		ModelAndView mv = new ModelAndView("/write/paymentWrite");
+    	
+    	return mv;
+    }
+	
+	/*인력관리*/
+	@RequestMapping(value="/write/workerWrite.do")
+    public ModelAndView workerWrite(CommandMap commandMap) throws Exception{
+    	System.out.println("workerWrite탐");
+		ModelAndView mv = new ModelAndView("/write/workerWrite");
+    	
+    	return mv;
+    }
+	
+	/*사업관리*/
+	@RequestMapping(value="/write/businessWrite.do")
+    public ModelAndView businessWrite(CommandMap commandMap) throws Exception{
+    	System.out.println("businessWrite탐");
+		ModelAndView mv = new ModelAndView("/write/businessWrite");
+    	
+    	return mv;
+    }
+	
+	/*은행코드관리*/
+	@RequestMapping(value="/write/bankWrite.do")
+    public ModelAndView bankWrite(CommandMap commandMap) throws Exception{
+    	System.out.println("bankWrite탐");
+		ModelAndView mv = new ModelAndView("/write/bankWrite");
+    	
+    	return mv;
+    }
+	
+
+	@RequestMapping(value="/write/insertBankWrite.do")
+	public ModelAndView insertBankWrite(CommandMap commandMap, HttpServletRequest request) throws Exception{
+		System.out.println("insertBankWrite탐");
+		System.out.println("commandMap 확인 : " + commandMap.getMap()); 
+		
+		ModelAndView mv = new ModelAndView("redirect:/manage/BankManage.do");
+		
+		writeService.insertBankWrite(commandMap.getMap(), request);
+		
+		return mv;
+	}
+	
+	@RequestMapping(value="/write/BankView.do")
+	public ModelAndView BankView(CommandMap commandMap, HttpServletRequest request) throws Exception{
+		System.out.println("BankView탐");
+		System.out.println("commandMap 확인 : " + commandMap.getMap()); 
+		
+		ModelAndView mv = new ModelAndView("/write/BankView");
+		
+		Map<String,Object> map = writeService.selectBankDetail(commandMap.getMap());
+		System.out.println("map 확인 : " + map.get("map"));
+		
+		mv.addObject("map", map.get("map"));
+				
+		return mv;
+	}
+	
+	@RequestMapping(value="/write/updateBank.do")
+	public ModelAndView updateBank(CommandMap commandMap, HttpServletRequest request) throws Exception{
+		System.out.println("updateBank탐");
+		System.out.println("commandMap 확인 : " + commandMap.getMap()); 
+		
+		ModelAndView mv = new ModelAndView("redirect:/manage/BankManage.do");
+
+		writeService.updateBank(commandMap.getMap(), request);
+		
+		return mv;
+	}
+	
+	
+	/*통계관리*/
+	@RequestMapping(value="/write/manpowerStatus.do")
+    public ModelAndView manpowerStatus(CommandMap commandMap) throws Exception{
+    	System.out.println("manpowerStatus탐");
+		ModelAndView mv = new ModelAndView("/write/manpowerStatus");
+    	
+    	return mv;
+    }
+	
+	/*권한관리*/
+	@RequestMapping(value="/write/authorityWrite.do")
+    public ModelAndView authorityWrite(CommandMap commandMap) throws Exception{
+    	System.out.println("authorityWrite탐");
+		ModelAndView mv = new ModelAndView("/write/authorityWrite");
+    	
+    	return mv;
+    }
+	
+	
+	/*소득세관리*/
+	@RequestMapping(value="/write/incomeWrite.do")
+    public ModelAndView incomeWrite(CommandMap commandMap) throws Exception{
+    	System.out.println("incomeWrite탐");
+		ModelAndView mv = new ModelAndView("/write/incomeWrite");
+    	
+    	return mv;
+    }
+	
+	
+}

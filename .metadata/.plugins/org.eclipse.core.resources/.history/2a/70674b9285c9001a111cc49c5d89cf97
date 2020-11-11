@@ -1,0 +1,27 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"	pageEncoding="UTF-8"%>
+<html>
+<head>
+<%@ include file="/WEB-INF/include/include-header.jspf"%>
+
+
+<script type="text/javascript">
+	var user_right = "${sessionScope.userinfo.userright}";
+
+	$(document).ready(
+		function() {
+		
+			
+		});
+</script>
+</head>
+
+<body>
+
+<div style="background-color:#170B3B;color:white; margin-bottom:10px; width: 100%;">
+	<a href="#this" class="btn" id="logout">
+		<img src="/service/images/popup_title.gif" align="absmiddle">
+	</a>스마트 출입관리 출입내역 조회
+</div>
+
+</body>
+</html>

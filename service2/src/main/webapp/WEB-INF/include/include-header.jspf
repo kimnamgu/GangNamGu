@@ -1,0 +1,77 @@
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<!-- 
+<link rel="stylesheet" type="text/css" href="/service/css/common.css" />
+<link rel="stylesheet" type="text/css" href="/service/css/skin01.css" />
+<link rel="stylesheet" type="text/css" href="/service/css/import.css" />
+<link rel="stylesheet" type="text/css" href="/service/css/service.css" />
+ -->
+ 
+<!-- Fontfaces CSS-->
+<link href="/service/bootstrap/css/font-face.css" rel="stylesheet" media="all">
+<link href="/service/bootstrap/vendor/font-awesome-4.7/css/font-awesome.min.css" rel="stylesheet" media="all">
+<link href="/service/bootstrap/vendor/font-awesome-5/css/fontawesome-all.min.css" rel="stylesheet" media="all">
+<link href="/service/bootstrap/vendor/mdi-font/css/material-design-iconic-font.min.css" rel="stylesheet" media="all">
+
+<!-- Bootstrap CSS-->
+<link href="/service/bootstrap/vendor/bootstrap-4.1/bootstrap.min.css" rel="stylesheet" media="all">
+
+<!-- Vendor CSS-->
+<link href="/service/bootstrap/vendor/animsition/animsition.min.css" rel="stylesheet" media="all">
+<link href="/service/bootstrap/vendor/bootstrap-progressbar/bootstrap-progressbar-3.3.4.min.css" rel="stylesheet" media="all">
+<link href="/service/bootstrap/vendor/wow/animate.css" rel="stylesheet" media="all">
+<link href="/service/bootstrap/vendor/css-hamburgers/hamburgers.min.css" rel="stylesheet" media="all">
+<link href="/service/bootstrap/vendor/slick/slick.css" rel="stylesheet" media="all">
+<link href="/service/bootstrap/vendor/select2/select2.min.css" rel="stylesheet" media="all">
+<link href="/service/bootstrap/vendor/perfect-scrollbar/perfect-scrollbar.css" rel="stylesheet" media="all">
+
+<!-- Main CSS-->
+<link href="/service/bootstrap/css/theme.css" rel="stylesheet" media="all">
+ 
+
+
+
+<!-- Jquery JS-->
+<script src="/service/bootstrap/vendor/jquery-3.2.1.min.js"></script>
+<!-- Bootstrap JS-->
+<script src="/service/bootstrap/vendor/bootstrap-4.1/popper.min.js"></script>
+<script src="/service/bootstrap/vendor/bootstrap-4.1/bootstrap.min.js"></script>
+<!-- Vendor JS       -->
+<script src="/service/bootstrap/vendor/slick/slick.min.js">
+</script>
+<script src="/service/bootstrap/vendor/wow/wow.min.js"></script>
+<script src="/service/bootstrap/vendor/animsition/animsition.min.js"></script>
+<script src="/service/bootstrap/vendor/bootstrap-progressbar/bootstrap-progressbar.min.js">
+</script>
+<script src="/service/bootstrap/vendor/counter-up/jquery.waypoints.min.js"></script>
+<script src="/service/bootstrap/vendor/counter-up/jquery.counterup.min.js">
+</script>
+<script src="/service/bootstrap/vendor/circle-progress/circle-progress.min.js"></script>
+<script src="/service/bootstrap/vendor/perfect-scrollbar/perfect-scrollbar.js"></script>
+<script src="/service/bootstrap/vendor/chartjs/Chart.bundle.min.js"></script>
+<script src="/service/bootstrap/vendor/select2/select2.min.js">
+</script>
+
+<!-- Main JS-->
+<script src="/service/bootstrap/js/main.js"></script>
+
+
+
+<!-- jQuery -->
+<link rel="stylesheet" type="text/css" href="/service/css/jquery-ui.css" />
+<!-- <script src="http://code.jquery.com/jquery.min.js"></script>-->
+<script type="text/javascript" src="<c:url value='/js/jquery.min.js'/>"></script>
+<script type="text/javascript" src="<c:url value='/js/jquery-ui.js'/>"></script>
+<script type="text/javascript" src="<c:url value='/js/jquery.cookie.js'/>"></script>
+<script type="text/javascript" src="<c:url value='/js/jquery.form.js'/>"></script>
+<script src="<c:url value='/js/common.js'/>" charset="utf-8"></script>
+
+<!-- alert -->
+<script src="/service/jquery.modal-master/js/DesignAlert.js"></script>
+<script src="/service/jquery.modal-master/js/jquery.modal.js"></script>
+<script src="/service/jquery.modal-master/js/jquery.modal.min.js"></script>
+
+<link href="/service/jquery.modal-master/css/jquery.modal.css" rel="stylesheet">
+<link href="/service/jquery.modal-master/css/jquery.modal.theme-atlant.css" rel="stylesheet">
+<link href="/service/jquery.modal-master/css/jquery.modal.theme-xenon.css" rel="stylesheet">

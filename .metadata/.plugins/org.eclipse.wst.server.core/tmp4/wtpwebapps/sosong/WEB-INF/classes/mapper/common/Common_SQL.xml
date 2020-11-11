@@ -1,0 +1,255 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="common">
+	
+	<select id="selectFileInfo" parameterType="hashmap" resultType="hashmap">
+		<![CDATA[
+			SELECT
+			    STORED_FILE_NAME,
+			    ORIGINAL_FILE_NAME
+			FROM
+			    TB_FILE
+			WHERE
+			    IDX = #{IDX}
+		]]>
+	</select>
+	
+	<sql id="pagingPre">
+		<![CDATA[
+   			SELECT 
+			    AAA.*
+			FROM(
+			    SELECT 
+			        COUNT(*) OVER() AS TOTAL_COUNT,
+			        AA.*
+			    FROM(  
+ 		]]>
+ 	</sql>
+ 	
+ 	<sql id="pagingPost">
+ 		<![CDATA[
+ 			 	) AA
+			) AAA
+			WHERE 
+			    AAA.RNUM BETWEEN #{START} AND #{END}
+ 		]]>
+ 	</sql>
+ 	
+ 	
+ 	
+ 	<insert id="insertFile" parameterType="hashmap">
+		<![CDATA[
+			INSERT INTO GIFT_ATTACH_FILE
+			(
+				ID,
+				BOARD_ID,
+				BD_LST_ID,
+				ORIGINAL_FILE_NAME,
+				STORED_FILE_NAME,
+				FILE_SIZE,
+				INS_DATE,
+				DEL_YN
+			)
+			VALUES
+			(
+				GIFT_ATTACH_FILE_SQ.NEXTVAL,
+				#{BOARD_ID},
+				#{BD_LST_ID},
+				#{ORIGINAL_FILE_NAME},
+				#{STORED_FILE_NAME},
+				#{FILE_SIZE},
+				SYSDATE,
+				'0'
+			)
+		]]>
+	</insert>
+	
+	
+	<select id="selectFileList" parameterType="hashmap" resultType="hashmap">
+		<![CDATA[
+			SELECT
+			    ID,
+			    ORIGINAL_FILE_NAME,
+			    STORED_FILE_NAME,
+			    ROUND(FILE_SIZE/1024,1) AS FILE_SIZE
+			FROM
+			    GIFT_ATTACH_FILE
+			WHERE
+			    BOARD_ID = #{BDID}
+			AND BD_LST_ID = #{ID}
+			AND DEL_YN = '0'
+		]]>
+	</select>
+		
+	<select id="selectIdApproveList" parameterType="hashmap" resultType="hashmap">
+		<include refid="common.pagingPre"/>	
+		<![CDATA[			
+			SELECT ROW_NUMBER() OVER (ORDER BY USER_ID DESC) RNUM,
+				   USER_ID, 
+				   USER_NAME, DEPT_NAME, CLASS_NAME, 
+				   POSITION_NAME, USER_TEL, APPLY_REASON 
+			FROM SOSONG_USER_MASTER
+			WHERE DEL_YN = '0'			
+			AND USER_STATUS = #{USER_STATUS}
+		]]>
+		<include refid="common.pagingPost"/>
+	</select>
+	
+	
+	<update id="updateIdApprove" parameterType="hashmap">
+		<![CDATA[
+			UPDATE SOSONG_USER_MASTER
+			SET
+				USER_STATUS = '0',				
+				APPROVE_DATE = SYSDATE
+			WHERE
+				USER_ID IN ( ${ID_LIST} )
+		]]>
+	</update>
+	
+	
+	<select id="idApproveListDetail" parameterType="hashmap" resultType="hashmap">
+		<![CDATA[
+			SELECT                
+                USER_ID, 
+				USER_NAME,
+				USER_RIGHT, 
+				DEPT_NAME, 
+				CLASS_NAME, 
+				POSITION_NAME, 
+				USER_TEL, 
+				APPLY_REASON				         
+            FROM
+              SOSONG_USER_MASTER
+            WHERE DEL_YN = '0'
+            AND USER_ID = #{USER_ID}				
+		]]>
+	</select>
+	
+	
+	<update id="updateIdApproveList" parameterType="hashmap">
+		<![CDATA[
+			UPDATE SOSONG_USER_MASTER
+			SET
+				USER_RIGHT = #{USER_RIGHT},							  
+			    MOD_DATE = SYSDATE
+			WHERE  
+				USER_ID = #{USER_ID}
+		]]>
+	</update>
+	
+	
+	<update id="deleteIdApproveList" parameterType="hashmap">
+		<![CDATA[
+			UPDATE SOSONG_USER_MASTER
+			SET
+				DEL_YN = '1',				
+				DEL_DATE = SYSDATE
+			WHERE
+				USER_ID = #{USER_ID}
+		]]>
+	</update>
+	
+	
+	
+	<select id="selectJudgmentList" parameterType="hashmap" resultType="hashmap">		
+		SELECT CODE, NAME
+		FROM SOSONG_CODE_LIST
+		WHERE GR_CD = #{GR_CD}			
+		AND DEL_YN = '0'			
+		<if test="SIM_GB != null and SIM_GB !=''">
+		AND CODE != '9'
+		</if>
+		ORDER BY ORD ASC
+	</select>
+	
+	
+	
+	
+	
+	<select id="getnBeforeDay" parameterType="hashmap" resultType="String">
+		<![CDATA[	
+			SELECT TO_CHAR(SYSDATE+${NDAY}, 'YYYYMMDD')  FROM DUAL         
+		]]>
+	</select>
+	
+	
+	
+	<select id="selectArimService" parameterType="hashmap" resultType="hashmap">		
+		<![CDATA[						
+			SELECT '1' GB, ICDNT_NO, MAST_ID, A.INCDNT_GB, ICDNT_TRIAL_NO, APPEAL_RESPONSE_DATE, APPEAL_REASON_DATE, ARGUE_SET_DATE, APPEAL_SUBMIT_DATE, PERFORM_USERID, PERFORM_USERHNO 
+            FROM SOSONG_SUB_LIST A, SOSONG_MASTER B
+            WHERE A.MAST_ID = B.ID 
+            AND A.DEL_YN = '0' 
+		    AND B.DEL_YN = '0'
+            AND A.ICDNT_TRIAL_NO IN ('11', '12', '21', '31')
+            AND A.APPEAL_RESPONSE_DATE IS NOT NULL
+            AND A.APPEAL_RESPONSE_DATE >= TO_CHAR(SYSDATE, 'YYYYMMDD')
+			AND B.LAST_RSLT_CONT IS NULL			
+            UNION ALL
+            SELECT '2' GB, ICDNT_NO, MAST_ID, A.INCDNT_GB, ICDNT_TRIAL_NO, APPEAL_RESPONSE_DATE, APPEAL_REASON_DATE, ARGUE_SET_DATE, APPEAL_SUBMIT_DATE, PERFORM_USERID, PERFORM_USERHNO 
+            FROM SOSONG_SUB_LIST A, SOSONG_MASTER B
+            WHERE A.MAST_ID = B.ID 
+            AND A.DEL_YN = '0'
+			AND B.DEL_YN = '0'            
+            AND A.ICDNT_TRIAL_NO IN ('21', '31')
+            AND A.APPEAL_REASON_DATE IS NOT NULL
+            AND A.APPEAL_REASON_DATE >= TO_CHAR(SYSDATE, 'YYYYMMDD')
+			AND B.LAST_RSLT_CONT IS NULL
+            UNION ALL            
+            SELECT '3' GB, ICDNT_NO, MAST_ID, A.INCDNT_GB, ICDNT_TRIAL_NO, APPEAL_RESPONSE_DATE, APPEAL_REASON_DATE, ARGUE_SET_DATE, APPEAL_SUBMIT_DATE, PERFORM_USERID, PERFORM_USERHNO 
+            FROM SOSONG_SUB_LIST A, SOSONG_MASTER B
+            WHERE A.MAST_ID = B.ID 
+            AND A.DEL_YN = '0'
+			AND B.DEL_YN = '0' 
+            AND A.ICDNT_TRIAL_NO IN ('11', '21')
+            AND A.APPEAL_SUBMIT_DATE IS NOT NULL
+            AND A.APPEAL_SUBMIT_DATE >= TO_CHAR(SYSDATE, 'YYYYMMDD')
+			AND B.LAST_RSLT_CONT IS NULL
+            UNION ALL
+            SELECT '4' GB, ICDNT_NO, MAST_ID,  A.INCDNT_GB, ICDNT_TRIAL_NO, APPEAL_RESPONSE_DATE, APPEAL_REASON_DATE, ARGUE_SET_DATE, APPEAL_SUBMIT_DATE, PERFORM_USERID, PERFORM_USERHNO 
+            FROM SOSONG_SUB_LIST A, SOSONG_MASTER B
+            WHERE A.MAST_ID = B.ID 
+            AND A.DEL_YN = '0'
+			AND B.DEL_YN = '0'        
+            AND A.ICDNT_TRIAL_NO IN ('11', '12', '21')			
+            AND A.ARGUE_SET_DATE IS NOT NULL
+            AND B.LAST_RSLT_CONT IS NULL
+            AND ( SUBSTR(A.ARGUE_SET_DATE,1,8) >= TO_CHAR(SYSDATE, 'YYYYMMDD') OR  
+      			  SUBSTR(A.ARGUE_SET_DATE,10, 17) >= TO_CHAR(SYSDATE, 'YYYYMMDD') OR 
+	  			  SUBSTR(A.ARGUE_SET_DATE,19, 26) >= TO_CHAR(SYSDATE, 'YYYYMMDD') OR 
+	  			  SUBSTR(A.ARGUE_SET_DATE,28, 35) >= TO_CHAR(SYSDATE, 'YYYYMMDD') OR 
+	  		      SUBSTR(A.ARGUE_SET_DATE,37, 44) >= TO_CHAR(SYSDATE, 'YYYYMMDD') )	  	   
+		]]>
+	</select>
+	
+	
+	
+	
+		<insert id="insertSendMsg" parameterType="hashmap" useGeneratedKeys="true" keyProperty="ID">	
+		<![CDATA[
+			INSERT INTO SOSONG_SUB_LIST
+			(
+				ICDNT_NO,        
+				MAST_ID,
+				INCDNT_GB,
+				ICDNT_TRIAL_NO,				
+				INS_ID,  
+				INS_DEPT,
+				INS_DATE			
+			)
+			VALUES
+			(				
+				TRIM(#{ICDNT_NO}),       
+				#{MAST_ID},
+				#{INCDNT_GB},
+				#{ICDNT_TRIAL_NO},				
+				#{INS_ID},  
+				#{INS_DEPT},			
+				SYSDATE				
+			)
+		]]>
+	</insert>
+	
+</mapper>

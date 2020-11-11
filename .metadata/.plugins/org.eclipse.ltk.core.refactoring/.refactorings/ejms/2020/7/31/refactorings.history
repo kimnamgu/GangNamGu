@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<session version="1.0">
+<refactoring comment="Copy element &apos;btn_excel.gif&apos; to &apos;common&apos;&#x0D;&#x0A;- Original project: &apos;ejms&apos;&#x0D;&#x0A;- Destination element: &apos;common&apos;&#x0D;&#x0A;- Original element: &apos;btn_excel.gif&apos;" description="Copy file" element1="WebContent/images/common/btn_excel.gif" files="1" flags="589830" folders="0" id="org.eclipse.jdt.ui.copy" policy="org.eclipse.jdt.ui.copyResources" stamp="1596109406056" target="/corona/src/main/webapp/images/common" units="0" version="1.0"/>
+</session>

@@ -1,0 +1,9 @@
+127.0.0.1 - - [26/Aug/2020:10:17:48 +0900] "GET / HTTP/1.1" 404 994
+0:0:0:0:0:0:0:1 - - [26/Aug/2020:11:26:47 +0900] "GET /bims/mbody.do HTTP/1.1" 404 1020
+127.0.0.1 - - [26/Aug/2020:15:10:53 +0900] "GET / HTTP/1.1" 404 994
+0:0:0:0:0:0:0:1 - - [26/Aug/2020:15:10:59 +0900] "POST /service/api/iljali/selectTermOfficialList.do HTTP/1.1" 200 563
+127.0.0.1 - - [26/Aug/2020:17:46:24 +0900] "GET / HTTP/1.1" 404 994
+0:0:0:0:0:0:0:1 - - [26/Aug/2020:17:46:29 +0900] "GET /service/welfare/welfareFootprintList.do HTTP/1.1" 302 -
+0:0:0:0:0:0:0:1 - - [26/Aug/2020:17:46:30 +0900] "GET /service/welfare/welfareLoginList.do HTTP/1.1" 500 20992
+127.0.0.1 - - [26/Aug/2020:17:46:51 +0900] "GET / HTTP/1.1" 404 994
+0:0:0:0:0:0:0:1 - - [26/Aug/2020:17:47:03 +0900] "GET /service/welfare/welfareLoginList.do HTTP/1.1" 500 20992
